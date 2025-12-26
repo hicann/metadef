@@ -12,29 +12,18 @@ GE支持源码编译。在源码编译前，请根据实际情况选择 **方式
 
    - Python3 >= 3.9.x
 
-     除了CANN开发套件包需要的Python依赖外，还需要额外安装coverage，并将Python3的bin路径添加到PATH环境变量中，命令示例如下：
-
-     ```bash
-     pip3 install coverage
-     # 修改下面的PYTHON3_HOME为实际的PYTHON安装目录
-     export PATH=$PATH:$PYTHON3_HOME/bin
-     ```
-
    - CMake >= 3.16.0 （建议使用3.20.0版本）
-   - bash >= 5.1.16 
-   - ccache/asan/autoconf/automake/libtool/gperf/graph-easy(可选)
+
+   - ccache/cov/asan
+   
+   - graph-easy(可选)
 
      ```bash
      # Ubuntu/Debian操作系统安装命令示例如下，其他操作系统请自行安装
-     sudo apt-get install cmake ccache bash libasan4 autoconf automake libtool gperf libgraph-easy-perl
+     # asan以gcc 7.5.0版本为例，其他版本请安装对应版本asan
+     sudo apt-get install cmake ccache lcov libasan4 libgraph-easy-perl
      ```
 
-   - python三方库依赖。
-
-     ```bash
-     # 编译依赖的python三方库在源码根目录下的requirements.txt
-     pip3 install -r requirements.txt
-     ```
 
 #### 方式二：使用 Docker 镜像
 
