@@ -1,0 +1,16 @@
+metadef:
+  commiter:
+    "xxx"
+  team: "metadef"
+  src:
+    release:
+      - inc
+      - error_manager
+      - base
+      - pkg_inc
+    unrelease:
+      - tests
+      - base/device_registry
+  llt:
+    ut_check:true
+    st_check:false

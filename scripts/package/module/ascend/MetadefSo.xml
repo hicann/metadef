@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<block name="MetadefSo" copy_type="delivery" src_path="lib/host" dst_path="" install_path="" install_own="$username:$usergroup" install_mod="550" install_type="run;devel">
+    <dir_info value="MetadefSo">
+        <path value="$(TARGET_ENV)/lib64/device"/>
+        <path value="$(TARGET_ENV)/lib64/device/lib64"/>
+        <path value="$(TARGET_ENV)/lib64/devlib" install_mod="555"/>
+        <path value="$(TARGET_ENV)/lib64/devlib/linux" install_mod="555"/>
+        <path value="$(TARGET_ENV)/lib64/devlib/linux/x86_64" install_mod="555"/>
+        <path value="$(TARGET_ENV)/lib64/devlib/linux/aarch64" install_mod="555"/>
+        <path value="$(TARGET_ENV)/lib64/devlib/aoskernel" install_mod="555"/>
+        <path value="$(TARGET_ENV)/lib64/devlib/aoskernel/aarch64" install_mod="555"/>
+        <path value="$(TARGET_ENV)/lib64/devlib/minios" install_mod="555"/>
+        <path value="$(TARGET_ENV)/lib64/devlib/minios/aarch64" install_mod="555"/>
+    </dir_info>
+    <file_info value="lib64" copy_type="delivery" src_path="lib/device" dst_path="lib64/device/lib64" install_path="$(TARGET_ENV)/lib64/device/lib64" pkg_feature="filter_florence">
+        <file value="libexe_meta_device.a" file_type="static"/>
+        <file value="libdevice_register.a" file_type="static"/>
+    </file_info>
+    <file_info value="lib64" copy_type="delivery" src_path="lib/host" dst_path="lib64" install_path="$(TARGET_ENV)/lib64" install_type="all" install_mod="440" feature="comm">
+        <file value="libexe_graph.so" file_type="shared"/>
+        <file value="libmetadef.so" file_type="shared"/>
+        <file value="libopp_registry.so" file_type="shared"/>
+        <file value="librt2_registry.a" file_type="static"/>
+    </file_info>
+    <file_info value="lib64" copy_type="delivery" src_path="lib/host/x86_64/stub" dst_path="lib64/stub/linux/x86_64" install_path="$(TARGET_ENV)/lib64/devlib/linux/x86_64" install_type="devel" install_mod="440" pkg_feature="filter_device;filter_as31xml_device" feature="comm">
+        <file value="librt2_registry.a" file_type="static"/>
+    </file_info>
+    <file_info value="lib64" copy_type="delivery" src_path="lib/host/${ARM}/stub" dst_path="lib64/stub/linux/aarch64" install_path="$(TARGET_ENV)/lib64/devlib/linux/aarch64" install_type="devel" install_mod="440" pkg_feature="filter_device;filter_as31xml_device" feature="comm">
+        <file value="librt2_registry.a" file_type="static"/>
+    </file_info>
+    <file_info value="lib64" copy_type="delivery" src_path="lib/device/${ARM}" dst_path="lib64/stub/aoskernel/aarch64" install_path="$(TARGET_ENV)/lib64/devlib/aoskernel/aarch64" install_type="devel" install_mod="440" pkg_feature="lite_aos" feature="comm">
+        <file value="librt2_registry.a" file_type="static"/>
+    </file_info>
+    <file_info value="lib64" copy_type="delivery" src_path="lib/host/x86_64/stub" dst_path="lib64/stub/linux/x86_64" install_path="$(TARGET_ENV)/lib64/devlib/linux/x86_64" install_type="devel" install_mod="440">
+        <file value="libexe_graph.so" file_type="shared"/>
+        <file value="libmetadef.so" file_type="shared"/>
+        <file value="libopp_registry.so" file_type="shared"/>
+    </file_info>
+    <file_info value="lib64" copy_type="delivery" src_path="lib/host/aarch64/stub" dst_path="lib64/stub/linux/aarch64" install_path="$(TARGET_ENV)/lib64/devlib/linux/aarch64" install_type="devel" install_mod="440" pkg_feature="filter_florence">
+        <file value="libexe_graph.so" file_type="shared"/>
+        <file value="libmetadef.so" file_type="shared"/>
+        <file value="libopp_registry.so" file_type="shared"/>
+    </file_info>
+    <file_info value="lib64" copy_type="delivery" src_path="lib/host/aarch64/stub" dst_path="lib64/stub/minios/aarch64" install_path="$(TARGET_ENV)/lib64/devlib/minios/aarch64" install_type="devel" install_mod="440" pkg_feature="filter_florence">
+        <file value="libexe_graph.so" file_type="shared"/>
+        <file value="libmetadef.so" file_type="shared"/>
+        <file value="libopp_registry.so" file_type="shared"/>
+    </file_info>
+    <file_info value="lib64" copy_type="delivery" src_path="lib/host/aarch64/stub" dst_path="lib64/stub/aoskernel/aarch64" install_path="$(TARGET_ENV)/lib64/devlib/aoskernel/aarch64" install_type="devel" install_mod="440" pkg_feature="lite_aos">
+        <file value="libexe_graph.so" file_type="shared"/>
+        <file value="libmetadef.so" file_type="shared"/>
+        <file value="libopp_registry.so" file_type="shared"/>
+    </file_info>
+    <file_info value="lib64" copy_type="delivery" src_path="lib/host/${ARM}/stub" dst_path="lib64/stub/linux/aarch64" install_path="$(TARGET_ENV)/lib64/devlib/linux/aarch64" install_type="devel" install_mod="440" feature="tiny">
+        <file value="libexe_graph.so" file_type="shared"/>
+        <file value="libmetadef.so" file_type="shared"/>
+        <file value="libopp_registry.so" file_type="shared"/>
+    </file_info>
+    <pkg_softlink>
+        <path value="lib/stub/librt2_registry.a" src_path="lib64/stub/linux/${ARCH}/librt2_registry.a" pkg_feature="filter_as31xml_device"/>
+    </pkg_softlink>
+</block>
