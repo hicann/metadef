@@ -421,6 +421,7 @@ class TilingContext : public ExtendedKernelContext {
    * 设置 local memory size, 默认值为0
    * @param local_memory_size
    * @return 成功返回ge::GRAPH_SUCCESS
+   * @deprecated SetLocalMemorySize 接口即将废弃，改用 SetDynUBufSize 接口；当前同时保留两个接口，后续整改完成后，删除废弃接口
    */
   ge::graphStatus SetLocalMemorySize(const uint32_t local_memory_size) {
     const auto p = GetOutputPointer<uint32_t>(kOutputLocalMemorySize);
@@ -431,10 +432,35 @@ class TilingContext : public ExtendedKernelContext {
     return ge::GRAPH_SUCCESS;
   }
   /**
+   * 设置 dynamic unified buffer size, 默认值为0
+   * @param dyn_ubuf_size
+   * @return 成功返回ge::GRAPH_SUCCESS
+   */
+  ge::graphStatus SetDynUBufSize(const uint32_t dyn_ubuf_size) {
+    const auto p = GetOutputPointer<uint32_t>(kOutputLocalMemorySize);
+    if (p == nullptr) {
+      return ge::GRAPH_FAILED;
+    }
+    *p = dyn_ubuf_size;
+    return ge::GRAPH_SUCCESS;
+  }
+  /**
    * 获取 local memory size，默认值为0
    * @return local memory size， 失败返回 std::numeric_limits<uint32_t>::max()
+   * @deprecated GetLocalMemorySize 接口即将废弃，改用 GetDynUBufSize 接口；当前同时保留两个接口，后续整改完成后，删除废弃接口
    */
   uint32_t GetLocalMemorySize() const {
+    const auto p = GetOutputPointer<uint32_t>(kOutputLocalMemorySize);
+    if (p == nullptr) {
+      return std::numeric_limits<uint32_t>::max();
+    }
+    return *p;
+  }
+  /**
+   * 获取 dynamic unified buffer size，默认值为0
+   * @return dynamic unified buffer size， 失败返回 std::numeric_limits<uint32_t>::max()
+   */
+  uint32_t GetDynUBufSize() const {
     const auto p = GetOutputPointer<uint32_t>(kOutputLocalMemorySize);
     if (p == nullptr) {
       return std::numeric_limits<uint32_t>::max();
