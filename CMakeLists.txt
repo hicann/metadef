@@ -11,6 +11,8 @@
 cmake_minimum_required(VERSION 3.16)
 project (MetaDef[CXX])
 
+set(CMAKE_C_FLAGS_RELEASE "")
+set(CMAKE_CXX_FLAGS_RELEASE "")
 set(PRODUCT_SIDE "host" CACHE STRING "Build target: host or device")
 set(METADEF_DEVICE_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/device_output)
 # 存在`.dev_env`文件说明是蓝区开发环境，并且调用了`prepare_dev_env.sh`完成了开发环境准备
