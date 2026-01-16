@@ -44,7 +44,7 @@ function(install_public_packages)
     set(SCRIPTS_FILES
         ${CMAKE_SOURCE_DIR}/scripts/package/common/sh/check_version_required.awk
         ${CMAKE_SOURCE_DIR}/scripts/package/common/sh/common_func.inc
-        ${CMAKE_SOURCE_DIR}/scripts/package/common/sh/common_interface.bash
+        ${CMAKE_SOURCE_DIR}/scripts/package/common/sh/common_interface.sh
         ${CMAKE_SOURCE_DIR}/scripts/package/common/sh/common_interface.csh
         ${CMAKE_SOURCE_DIR}/scripts/package/common/sh/common_interface.fish
         ${CMAKE_SOURCE_DIR}/scripts/package/common/sh/version_compatiable.inc
@@ -99,21 +99,13 @@ install(TARGETS exe_graph rt2_registry_static opp_registry metadef
         LIBRARY DESTINATION metadef/lib64
         ARCHIVE DESTINATION metadef/lib64
 )
-install(TARGETS rt2_registry_static opp_registry exe_graph metadef
-        LIBRARY DESTINATION metadef/lib64/stub/linux/x86_64
-        ARCHIVE DESTINATION metadef/lib64/stub/linux/x86_64
+install(TARGETS stub_exe_graph stub_metadef stub_opp_registry rt2_registry_static
+        LIBRARY DESTINATION metadef/lib64/stub/linux/${ARCH}
+        ARCHIVE DESTINATION metadef/lib64/stub/linux/${ARCH}
 )
-install(TARGETS rt2_registry_static opp_registry exe_graph metadef
-        LIBRARY DESTINATION metadef/lib64/stub/linux/aarch64
-        ARCHIVE DESTINATION metadef/lib64/stub/linux/aarch64
-)
-install(TARGETS rt2_registry_static opp_registry exe_graph metadef
+install(TARGETS stub_exe_graph stub_metadef stub_opp_registry rt2_registry_static
         LIBRARY DESTINATION metadef/lib64/stub/minios/aarch64
         ARCHIVE DESTINATION metadef/lib64/stub/minios/aarch64
-)
-install(TARGETS rt2_registry_static opp_registry exe_graph metadef
-        LIBRARY DESTINATION metadef/lib64/stub/aoskernel/aarch64
-        ARCHIVE DESTINATION metadef/lib64/stub/aoskernel/aarch64
 )
 install(FILES
         ${METADEF_DEVICE_OUTPUT}/lib/libexe_meta_device.a

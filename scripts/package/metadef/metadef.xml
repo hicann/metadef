@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<config name="metadef" copy_type="delivery" src_path="lib/" dst_path="metadef" install_type="all" install_mod="550" install_own="$username:$usergroup">
+<config name="metadef" copy_type="delivery" src_path="" dst_path="metadef" install_type="all" install_mod="550" install_own="$username:$usergroup">
     <package_info>
         <product_name>cann</product_name>
         <func_name>metadef</func_name>
@@ -20,13 +20,14 @@
         <arch>$(ARCH)</arch>
     </generate_info>
     <version_info install="true" install_path="metadef" install_own="$username:$usergroup" install_mod="440"/>
-    <file_info value="metadef_script" copy_type="source" src_path="" dst_path="share/info/metadef" install_path="share/info/metadef">
+    <file_info value="metadef_script" copy_type="source" dst_path="share/info/metadef" install_path="share/info/metadef">
         <file value="script" entity="true"/>
         <file value="version.info"/>
     </file_info>
     <block_info dependtree="false" dst_path="metadef" block_conf_path="ascend">
         <block name="EngineeringCommon"/>
         <block name="EngineeringFiles"/>
+        <block name="DevlibCommon"/>
         <block name="MetadefSo"/>
         <block name="MetadefInc"/>
     </block_info>
@@ -35,6 +36,8 @@
         <path value="share/info" install_mod="750"/>
         <path value="share/info/metadef" install_mod="750"/>
         <path value="share/info/metadef/script" install_mod="550"/>
-
+        <path value="runtime" install_mod="550"/>
+        <path value="runtime/include" install_mod="550"/>
+        <path value="runtime/include/graph" install_mod="550"/>
     </dir_info>
 </config>

@@ -388,6 +388,7 @@ def get_env_items_by_version(version: Optional[str]) -> Iterator[Tuple[str, str]
     """根据version获取环境字典条目。"""
     if version:
         yield 'ASCEND_VER', version
+        yield 'VERSION', version
 
         version_parts = version.split('.')
         for idx in range(1, len(version_parts) + 1):
@@ -1056,7 +1057,6 @@ def read_version_info() -> Tuple[str, str]:
     m = re.match(r'[.a-zA-Z0-9]+$', version) or re.match(r'[-a-zA-Z.0-9]+$', version)
     if not m:
         raise VersionFormatNotMatch()
-    
     return version, version_dir
 
 
