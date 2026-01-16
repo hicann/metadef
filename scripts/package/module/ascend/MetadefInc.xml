@@ -55,12 +55,12 @@
         <file value="tensor.h"/>
         <file value="ge_error_codes.h" feature="comm"/>
         <file value="infer_format_context.h" feature="comm"/>
-        <file value="c_types.h" feature="comm"/>
+        <file value="c_types.h" install_softlink="runtime/include/graph/c_types.h"/>
         <file value="compiler_def.h" feature="comm"/>
         <file value="ascend_string.h"/>
         <file value="attr_value.h"/>
         <file value="inference_context.h"/>
-        <file value="types.h"/>
+        <file value="types.h" install_softlink="runtime/include/graph/types.h"/>
     </file_info>
     <file_info value="include" copy_type="source" src_path="include/external/graph/utils" dst_path="include/graph/utils" install_path="$(TARGET_ENV)/include/graph/utils" install_type="devel" install_mod="440" feature="comm">
         <file value="type_utils.h"/>

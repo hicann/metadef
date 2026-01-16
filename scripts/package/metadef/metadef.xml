@@ -35,6 +35,8 @@
         <path value="share/info" install_mod="750"/>
         <path value="share/info/metadef" install_mod="750"/>
         <path value="share/info/metadef/script" install_mod="550"/>
-
+        <path value="runtime" install_mod="550"/>
+        <path value="runtime/include" install_mod="550"/>
+        <path value="runtime/include/graph" install_mod="550"/>
     </dir_info>
 </config>
