@@ -23,7 +23,7 @@
         <path value="$(TARGET_ENV)/include/external" install_mod="555"/>
         <path value="$(TARGET_ENV)/include/external/ge_common" install_mod="555"/>
     </dir_info>
-    <file_info value="include" copy_type="source" src_path="include/external/exe_graph/runtime" dst_path="include/exe_graph/runtime" install_path="$(TARGET_ENV)/include/exe_graph/runtime" install_type="devel" install_mod="440" feature="comm">
+    <file_info value="include" copy_type="source" dst_path="include/exe_graph/runtime" install_path="$(TARGET_ENV)/include/exe_graph/runtime" install_type="devel" install_mod="440">
         <file value="tiling_context.h"/>
         <file value="kernel_run_context.h"/>
         <file value="shape.h"/>
@@ -51,34 +51,34 @@
         <file value="tiling_data.h"/>
         <file value="extended_kernel_context.h"/>
     </file_info>
-    <file_info value="include" copy_type="source" src_path="include/external/graph" dst_path="include/graph" install_path="$(TARGET_ENV)/include/graph" install_type="devel" install_mod="440">
+    <file_info value="include" copy_type="source" dst_path="include/graph" install_path="$(TARGET_ENV)/include/graph" install_type="devel" install_mod="440">
         <file value="tensor.h"/>
-        <file value="ge_error_codes.h" feature="comm"/>
-        <file value="infer_format_context.h" feature="comm"/>
+        <file value="ge_error_codes.h"/>
+        <file value="infer_format_context.h"/>
         <file value="c_types.h" install_softlink="runtime/include/graph/c_types.h"/>
-        <file value="compiler_def.h" feature="comm"/>
+        <file value="compiler_def.h"/>
         <file value="ascend_string.h"/>
         <file value="attr_value.h"/>
         <file value="inference_context.h"/>
         <file value="types.h" install_softlink="runtime/include/graph/types.h"/>
     </file_info>
-    <file_info value="include" copy_type="source" src_path="include/external/graph/utils" dst_path="include/graph/utils" install_path="$(TARGET_ENV)/include/graph/utils" install_type="devel" install_mod="440" feature="comm">
+    <file_info value="include" copy_type="source" dst_path="include/graph/utils" install_path="$(TARGET_ENV)/include/graph/utils" install_type="devel" install_mod="440">
         <file value="type_utils.h"/>
     </file_info>
-    <file_info value="include" copy_type="source" src_path="include/external/utils" dst_path="include/utils" install_path="$(TARGET_ENV)/include/utils" install_type="devel" install_mod="440" feature="comm">
+    <file_info value="include" copy_type="source" dst_path="include/utils" install_path="$(TARGET_ENV)/include/utils" install_type="devel" install_mod="440">
         <file value="extern_math_util.h"/>
     </file_info>
-    <file_info value="include" copy_type="source" src_path="include/external/ge" dst_path="include/ge" install_path="$(TARGET_ENV)/include/ge" install_type="devel" install_mod="440" feature="comm">
+    <file_info value="include" copy_type="source" dst_path="include/ge" install_path="$(TARGET_ENV)/include/ge" install_type="devel" install_mod="440">
         <file value="ge_allocator.h"/>
     </file_info>
-    <file_info value="include" copy_type="source" src_path="include/external/ge_common" dst_path="include/external/ge_common" install_path="$(TARGET_ENV)/include/external/ge_common" install_type="devel" install_mod="440" feature="comm">
+    <file_info value="include" copy_type="source" dst_path="include/external/ge_common" install_path="$(TARGET_ENV)/include/external/ge_common" install_type="devel" install_mod="440">
         <file value="ge_api_types.h"/>
         <file value="ge_api_error_codes.h"/>
         <file value="ge_error_codes.h"/>
     </file_info>
-    <file_info value="include" copy_type="source" src_path="include/external/register" dst_path="include/register" install_path="$(TARGET_ENV)/include/register" install_type="devel" install_mod="440">
-        <file value="op_impl_registry.h" feature="comm"/>
-        <file value="op_impl_kernel_registry.h" feature="comm"/>
+    <file_info value="include" copy_type="source" dst_path="include/register" install_path="$(TARGET_ENV)/include/register" install_type="devel" install_mod="440">
+        <file value="op_impl_registry.h"/>
+        <file value="op_impl_kernel_registry.h"/>
         <file value="register_types.h"/>
         <file value="register_fmk_types.h"/>
         <file value="register_error_codes.h"/>
@@ -87,42 +87,42 @@
         <file value="device_op_impl_registry.h"/>
         <file value="register.h"/>
     </file_info>
-    <file_info value="include" copy_type="source" src_path="include/external/base/registry" dst_path="pkg_inc/base/registry" install_path="$(TARGET_ENV)/pkg_inc/base/registry" install_type="devel" install_mod="440">
-        <file value="op_impl_space_registry_v2.h" feature="comm"/>
-        <file value="opp_package_utils.h" feature="comm"/>
+    <file_info value="include" copy_type="source" dst_path="pkg_inc/base/registry" install_path="$(TARGET_ENV)/pkg_inc/base/registry" install_type="devel" install_mod="440">
+        <file value="op_impl_space_registry_v2.h"/>
+        <file value="opp_package_utils.h"/>
     </file_info>
-    <file_info value="include" copy_type="source" src_path="include/external/base/context_builder" dst_path="include/base/context_builder" install_path="$(TARGET_ENV)/include/base/context_builder" install_type="devel" install_mod="440">
-        <file value="context_holder.h" feature="comm"/>
-        <file value="op_context_builder_base.h" feature="comm"/>
-        <file value="op_tiling_context_builder.h" feature="comm"/>
-        <file value="op_tiling_parse_context_builder.h" feature="comm"/>
-        <file value="op_infer_datatype_context_builder.h" feature="comm"/>
-        <file value="op_infer_shape_context_builder.h" feature="comm"/>
-        <file value="op_infer_shape_range_context_builder.h" feature="comm"/>
-        <file value="op_kernel_run_context_builder.h" feature="comm"/>
+    <file_info value="include" copy_type="source" dst_path="include/base/context_builder" install_path="$(TARGET_ENV)/include/base/context_builder" install_type="devel" install_mod="440">
+        <file value="context_holder.h"/>
+        <file value="op_context_builder_base.h"/>
+        <file value="op_tiling_context_builder.h"/>
+        <file value="op_tiling_parse_context_builder.h"/>
+        <file value="op_infer_datatype_context_builder.h"/>
+        <file value="op_infer_shape_context_builder.h"/>
+        <file value="op_infer_shape_range_context_builder.h"/>
+        <file value="op_kernel_run_context_builder.h"/>
     </file_info>
-    <file_info value="include" copy_type="source" src_path="include/external/base/runtime" dst_path="include/base/runtime" install_path="$(TARGET_ENV)/include/base/runtime" install_type="devel" install_mod="440" feature="comm">
+    <file_info value="include" copy_type="source" dst_path="include/base/runtime" install_path="$(TARGET_ENV)/include/base/runtime" install_type="devel" install_mod="440">
         <file value="runtime_attrs_def.h"/>
     </file_info>
-    <file_info value="include" copy_type="source" src_path="/pkg_inc/base" dst_path="pkg_inc/base" install_path="$(TARGET_ENV)/pkg_inc/base" install_type="devel" install_mod="440">
-        <file value="err_mgr.h" feature="comm"/>
+    <file_info value="include" copy_type="source" dst_path="pkg_inc/base" install_path="$(TARGET_ENV)/pkg_inc/base" install_type="devel" install_mod="440">
+        <file value="err_mgr.h"/>
     </file_info>
-    <file_info value="include" copy_type="source" src_path="/pkg_inc/base/type" dst_path="pkg_inc/base/type" install_path="$(TARGET_ENV)/pkg_inc/base/type" install_type="devel" install_mod="440">
-        <file value="ascend_string_impl.h" pkg_inner_softlink="metadef:/pkg_inc/base/type/ascend_string_impl.h" feature="comm"/>
+    <file_info value="include" copy_type="source" dst_path="pkg_inc/base/type" install_path="$(TARGET_ENV)/pkg_inc/base/type" install_type="devel" install_mod="440">
+        <file value="ascend_string_impl.h" pkg_inner_softlink="metadef:/pkg_inc/base/type/ascend_string_impl.h"/>
     </file_info>
-    <file_info value="include" copy_type="source" src_path="/pkg_inc/base/utils" dst_path="pkg_inc/base/utils" install_path="$(TARGET_ENV)/pkg_inc/base/utils" install_type="devel" install_mod="440">
-        <file value="type_utils_impl.h" pkg_inner_softlink="metadef:/pkg_inc/base/utils/type_utils_impl.h" feature="comm"/>
+    <file_info value="include" copy_type="source" dst_path="pkg_inc/base/utils" install_path="$(TARGET_ENV)/pkg_inc/base/utils" install_type="devel" install_mod="440">
+        <file value="type_utils_impl.h" pkg_inner_softlink="metadef:/pkg_inc/base/utils/type_utils_impl.h"/>
     </file_info>
-    <file_info value="include" copy_type="source" src_path="/pkg_inc/common" dst_path="pkg_inc/common" install_path="$(TARGET_ENV)/pkg_inc/common" install_type="devel" install_mod="440">
-        <file value="checker.h" pkg_inner_softlink="metadef:/pkg_inc/common/checker.h" feature="comm"/>
+    <file_info value="include" copy_type="source" dst_path="pkg_inc/common" install_path="$(TARGET_ENV)/pkg_inc/common" install_type="devel" install_mod="440">
+        <file value="checker.h" pkg_inner_softlink="metadef:/pkg_inc/common/checker.h"/>
     </file_info>
-    <file_info value="include" copy_type="source" src_path="/pkg_inc/common/ge_common/debug" dst_path="pkg_inc/common/ge_common/debug" install_path="$(TARGET_ENV)/pkg_inc/common/ge_common/debug" install_type="devel" install_mod="440">
-        <file value="ge_log.h" pkg_inner_softlink="metadef:/pkg_inc/common/ge_common/debug/ge_log.h" feature="comm"/>
+    <file_info value="include" copy_type="source" dst_path="pkg_inc/common/ge_common/debug" install_path="$(TARGET_ENV)/pkg_inc/common/ge_common/debug" install_type="devel" install_mod="440">
+        <file value="ge_log.h" pkg_inner_softlink="metadef:/pkg_inc/common/ge_common/debug/ge_log.h"/>
     </file_info>
-    <file_info value="include" copy_type="source" src_path="/pkg_inc/graph" dst_path="pkg_inc/graph" install_path="$(TARGET_ENV)/pkg_inc/graph" install_type="devel" install_mod="440">
-        <file value="any_value.h" pkg_inner_softlink="metadef:/pkg_inc/graph/any_value.h" feature="comm"/>
-        <file value="def_types.h" pkg_inner_softlink="metadef:/pkg_inc/graph/def_types.h" feature="comm"/>
-        <file value="type_utils.h" pkg_inner_softlink="metadef:/pkg_inc/graph/type_utils.h" feature="comm"/>
-        <file value="op_so_bin.h" pkg_inner_softlink="metadef:/pkg_inc/graph/op_so_bin.h" feature="comm"/>
+    <file_info value="include" copy_type="source" dst_path="pkg_inc/graph" install_path="$(TARGET_ENV)/pkg_inc/graph" install_type="devel" install_mod="440">
+        <file value="any_value.h" pkg_inner_softlink="metadef:/pkg_inc/graph/any_value.h"/>
+        <file value="def_types.h" pkg_inner_softlink="metadef:/pkg_inc/graph/def_types.h"/>
+        <file value="type_utils.h" pkg_inner_softlink="metadef:/pkg_inc/graph/type_utils.h"/>
+        <file value="op_so_bin.h" pkg_inner_softlink="metadef:/pkg_inc/graph/op_so_bin.h"/>
     </file_info>
 </block>

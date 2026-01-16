@@ -83,19 +83,6 @@ output_progress() {
     log "INFO" "install upgradePercentage:$1%"
 }
 
-create_latest_linux_softlink() {
-    if [ "$pkg_is_multi_version" = "true" ]; then
-        local linux_path="$(realpath $common_parse_dir/..)"
-        local arch_path="$(basename $linux_path)"
-        local latest_path="$(realpath $linux_path/../..)/cann"
-        if [ -d "$latest_path" ]; then
-            if [ ! -e "$latest_path/$arch_path" ] || [ -L "$latest_path/$arch_path" ]; then
-                ln -srfn "$linux_path" "$latest_path"
-            fi
-        fi
-    fi
-}
-
 ##########################################################################
 log "INFO" "step into run_metadef_install.sh ......"
 log "INFO" "install target dir $common_parse_dir, type $common_parse_type."
@@ -122,8 +109,8 @@ new_install() {
         log "ERROR" "ERR_NO:0x0085;ERR_DES:failed to install package."
         return 1
     fi
-
-    create_latest_linux_softlink
+    # create softlinks for stub libs in devlib/linux/$(ARCH)
+    create_stub_softlink "$common_parse_dir"
     return 0
 }
 
