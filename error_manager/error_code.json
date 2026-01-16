@@ -1707,7 +1707,7 @@
     },
     {
       "errClass": "RTS Errors",
-      "errTitle": "Stream_synchronize_timeout",
+      "errTitle": "Execution_Error_Stream_Synchronize_Timeout",
       "ErrCode": "EE1002",
       "ErrMessage": "Stream synchronize timeout. %s",
       "Arglist": "extend_info",
@@ -1715,6 +1715,104 @@
         "Possible Cause": "1. The timeout interval may be improperly set.",
         "Solution": "1. Check whether the timeout interval is properly set. 2. Check whether the network is normal."
       }
+    },
+    {
+      "errClass": "RTS Errors",
+      "errTitle": "Invalid_Argument",
+      "ErrCode": "EE1003",
+      "ErrMessage": "%s failed because value %s for parameter %s is invalid. Expected value: %s.",
+      "Arglist": "func, value, param, expect",
+      "suggestion": {
+        "Possible Cause": "N/A",
+        "Solution": "1.Check the input parameter range of the function. 2.Check the function invocation relationship."
+      }
+    },
+    {
+      "errClass": "RTS Errors",
+      "errTitle": "Invalid_Argument_Null_Pointer",
+      "ErrCode": "EE1004",
+      "ErrMessage": "%s failed because %s cannot be a NULL pointer.",
+      "Arglist": "func, param",
+      "suggestion": {
+        "Possible Cause": "N/A",
+        "Solution": "Try again with a correct pointer argument."
+      }
+    },
+    {
+      "errClass": "RTS Errors",
+      "errTitle": "Not_Supported",
+      "ErrCode": "EE1005",
+      "ErrMessage": "The current system or device does not support %s.",
+      "Arglist": "func"
+    },
+    {
+      "errClass": "RTS Errors",
+      "errTitle": "Not_Supported",
+      "ErrCode": "EE1006",
+      "ErrMessage": "%s execution failed because %s is not supported.",
+      "Arglist": "func, type"
+    },
+    {
+      "errClass": "RTS Errors",
+      "errTitle": "Resource_Error_Bind_Stream",
+      "ErrCode": "EE1007",
+      "ErrMessage": "Failed to bind stream with ID %s. Reason: %s.",
+      "Arglist": "id, reason",
+      "suggestion": {
+        "Possible Cause": "N/A",
+        "Solution": "Unbind the stream from the already bound model and then rebind it to the current model."
+      }
+    },
+    {
+      "errClass": "RTS Errors",
+      "errTitle": "Execution_Error_Load_OP_Kernel",
+      "ErrCode": "EE1008",
+      "ErrMessage": "OP kernel loading failed. Reason: %s.",
+      "Arglist": "reason",
+      "suggestion": {
+        "Possible Cause": "N/A",
+        "Solution": "NA"
+      }
+    },
+    {
+      "errClass": "RTS Errors",
+      "errTitle": "Execution_Error_Model",
+      "ErrCode": "EE1009",
+      "ErrMessage": "Failed to execute model with ID %s. Reason: %s.",
+      "Arglist": "id, reason",
+      "suggestion": {
+        "Possible Cause": "N/A",
+        "Solution": "NA"
+      }
+    },
+    {
+      "errClass": "RTS Errors",
+      "errTitle": "Execution_Error_Invalid_Context",
+      "ErrCode": "EE1010",
+      "ErrMessage": "%s execution failed because %s does not belong to the current context.",
+      "Arglist": "func, object",
+      "suggestion": {
+        "Possible Cause": "N/A",
+        "Solution": "NA"
+      }
+    },
+    {
+      "errClass": "RTS Errors",
+      "errTitle": "Invalid_Argument",
+      "ErrCode": "EE1011",
+      "ErrMessage": "%s failed. Value %s for parameter %s is invalid. Reason: %s.",
+      "Arglist": "func, value, param, reason",
+      "suggestion": {
+        "Possible Cause": "N/A",
+        "Solution": "1.Check the input parameter range of the function. 2.Check the function invocation relationship."
+      }
+    },
+    {
+      "errClass": "RTS Errors",
+      "errTitle": "Config_Error_Invalid_Environment_Variable",
+      "ErrCode": "EE2002",
+      "ErrMessage": "Value %s for environment variable %s is invalid. Expected value: %s.",
+      "Arglist": "value, env, expect"
     },
     {
       "errClass": "RTS Errors",
