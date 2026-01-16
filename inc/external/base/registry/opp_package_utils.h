@@ -11,6 +11,7 @@
 #ifndef INC_BASE_OPP_PACKAGE_UTILS_H_
 #define INC_BASE_OPP_PACKAGE_UTILS_H_
 #include "graph/ascend_string.h"
+#include "graph/ge_error_codes.h"
 
 namespace gert {
 enum class OppImplVersionTag {
@@ -42,7 +43,7 @@ class OppPackageUtils {
   /**
    * 加载所有的安装目录下的so，优先级：自定义算子 > 内置安装目录算子
    */
-  static void LoadAllOppPackage();
+  static ge::graphStatus LoadAllOppPackage();
 };
 }  // namespace gert
 #endif  // INC_BASE_OPP_PACKAGE_UTILS_H_

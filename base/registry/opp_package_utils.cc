@@ -69,8 +69,9 @@ ge::AscendString OppSoDesc::GetPackageName() const {
   return impl_->package_name;
 }
 
-void OppPackageUtils::LoadAllOppPackage() {
+ge::graphStatus OppPackageUtils::LoadAllOppPackage() {
   ge::OppSoManager::GetInstance().LoadOppPackage();
+  return ge::GRAPH_SUCCESS;
 }
 
 }  // namespace gert
