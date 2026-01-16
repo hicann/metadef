@@ -1368,8 +1368,8 @@
       "errClass": "FE Errors",
       "errTitle": "File_Operation_Error_Open",
       "ErrCode": "E21001",
-      "ErrMessage": "Failed to open file %s. Reason: %s.",
-      "Arglist": "file_name,reason",
+      "ErrMessage": "Failed to open file %s.",
+      "Arglist": "file_name",
       "suggestion": {
         "Possible Cause": "1. The file does not exist. 2. Insufficient file permissions. 3. Package installation error.",
         "Solution": "1. Configure the file path correctly.  2. Configure the file permissions correctly. 3. Reinstall the package."
@@ -1600,7 +1600,7 @@
       "errTitle": "Config_Error_Invalid_Environment_Variable",
       "ErrCode": "E40001",
       "ErrMessage": "Value %s for environment variable %s is invalid when %s. Reason: %s.",
-      "Arglist": "value,env,situation",
+      "Arglist": "value,env,situation,reason",
       "suggestion": {
         "Possible Cause": "N/A",
         "Solution": "Reset the environment variable by referring to the installation guide."
