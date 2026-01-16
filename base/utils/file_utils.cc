@@ -20,8 +20,9 @@
 #include "graph/utils/file_utils.h"
 
 namespace {
-const int32_t kFileSuccess = 0;
-const uint32_t kMaxWriteSize = 1 * 1024 * 1024 * 1024U;  // 1G
+constexpr int32_t kFileSuccess = 0;
+constexpr uint32_t kMaxWriteSize = 1U * 1024U * 1024U * 1024U;  // 1G
+constexpr size_t kMaxErrorStrLen = 128U;
 }  // namespace
 namespace ge {
 std::string RealPath(const char_t *path) {
@@ -73,10 +74,12 @@ inline int32_t CheckAndMkdir(const char_t *tmp_dir_path, mmMode_t mode) {
   if (mmAccess2(tmp_dir_path, M_F_OK) != EN_OK) {
     const int32_t ret = mmMkdir(tmp_dir_path, mode);
     if (ret != 0) {
-      REPORT_INNER_ERR_MSG("E18888",
-                           "Can not create directory %s. Make sure the directory "
-                           "exists and writable. errmsg:%s",
-                           tmp_dir_path, strerror(errno));
+      char_t err_buf[kMaxErrorStrLen + 1U] = {};
+      const auto err_msg = mmGetErrorFormatMessage(mmGetErrorCode(), &err_buf[0], kMaxErrorStrLen);
+      std::string reason =
+          "Directory creation failed. [Errno " + std::to_string(mmGetErrorCode()) + "] " + err_msg + ".";
+      (void) REPORT_PREDEFINED_ERR_MSG("E10001", std::vector<const char_t *>({"parameter", "value", "reason"}),
+          std::vector<const char_t *>({"filepath", tmp_dir_path, reason.c_str()}));
       GELOGW("[Util][mkdir] Create directory %s failed, reason:%s. Make sure the "
              "directory exists and writable.",
              tmp_dir_path, strerror(errno));
@@ -299,8 +302,8 @@ Status GetAscendWorkPath(std::string &ascend_work_path) {
     if (mmAccess(work_path) != EN_OK) {
       if (ge::CreateDir(work_path) != 0) {
         std::string reason = "The path doesn't exist, create path failed.";
-        REPORT_PREDEFINED_ERR_MSG("E10001", std::vector<const char_t *>({"parameter", "value", "reason"}),
-                                  std::vector<const char_t *>({"ASCEND_WORK_PATH", work_path, reason.c_str()}));
+        (void)REPORT_PREDEFINED_ERR_MSG("E10001", std::vector<const char_t *>({"parameter", "value", "reason"}),
+            std::vector<const char_t *>({"ASCEND_WORK_PATH", work_path, reason.c_str()}));
         return FAILED;
       }
     }
