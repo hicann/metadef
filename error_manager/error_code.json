@@ -4057,8 +4057,8 @@
       "Arglist": ""
     },
     {
-      "errClass": "TBE Pass Compilation Tool Errors(Back-End)",
-      "errTitle": "Invalid_IR",
+      "errClass": "TBE Pass Compiler Errors",
+      "errTitle": "Compilation_Error",
       "ErrCode": "EB0000",
       "ErrMessage": "Failed to compile the operator. Reason:%s, %s",
       "Arglist": "message,traceback",
@@ -4069,7 +4069,7 @@
     },
     {
       "errClass": "TBE Pass Compiler Errors",
-      "errTitle": "Primitives_Error",
+      "errTitle": "Compilation_Error_Invalid_Primitives",
       "ErrCode": "EB1000",
       "ErrMessage": "Primitives check failed. Reason: %s",
       "Arglist": "reason",
@@ -4080,7 +4080,7 @@
     },
     {
       "errClass": "TBE Pass Compiler Errors",
-      "errTitle": "Memory_Error",
+      "errTitle": "Compilation_Error",
       "ErrCode": "EB3000",
       "ErrMessage": "Memory allocation check failed. Reason: %s",
       "Arglist": "reason",
@@ -4091,7 +4091,7 @@
     },
     {
       "errClass": "TBE Pass Compiler Errors",
-      "errTitle": "Emit_Insn_Error",
+      "errTitle": "Compilation_Error_Invalid_Emit_Insn",
       "ErrCode": "EB4000",
       "ErrMessage": "Insn check failed. Reason: %s",
       "Arglist": "reason",
@@ -4102,7 +4102,7 @@
     },
     {
       "errClass": "TBE Pass Compiler Errors",
-      "errTitle": "Common_Compilation_Optimization_Error",
+      "errTitle": "Compilation_Error",
       "ErrCode": "EB9000",
       "ErrMessage": "Compiler Error check failed. Reason: %s",
       "Arglist": "reason",
@@ -4113,7 +4113,7 @@
     },
     {
       "errClass": "TBE Pass Compiler Errors",
-      "errTitle": "Common_Compilation_Python_Error",
+      "errTitle": "Compilation_Error",
       "ErrCode": "EB0500",
       "ErrMessage": "Compiler Error check failed. Reason: %s",
       "Arglist": "reason",
