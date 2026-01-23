@@ -11,6 +11,7 @@
 #include "common/ge_common/debug/ge_log.h"
 #include "register/op_ct_impl_registry_api.h"
 #include "register/op_ct_impl_registry.h"
+#include "common/plugin/plugin_manager.h"
 
 namespace gert {
 namespace {
@@ -141,10 +142,16 @@ extern "C" {
 #endif
 
 size_t GetRegisteredOpCtNum(void) {
+  GELOGI("LocalCtRegistry path[%s] all impl size : %zu",
+         ge::GetSoRealPathByAddr(&gert::OpCtImplRegistry::GetInstance()).c_str(),
+         gert::OpCtImplRegistry::GetInstance().GetAllTypesToImpl().size());
   return gert::OpCtImplRegistry::GetInstance().GetAllTypesToImpl().size();
 }
 int32_t GetOpCtImplFunctions(TypesToCtImpl *impl, size_t impl_num) {
   const auto types_to_impl = gert::OpCtImplRegistry::GetInstance().GetAllTypesToImpl();
+  GELOGI("LocalCtRegistry path[%s] all impl size : %zu",
+         ge::GetSoRealPathByAddr(&gert::OpCtImplRegistry::GetInstance()).c_str(),
+         types_to_impl.size());
   if (impl_num != types_to_impl.size()) {
     GELOGE(ge::FAILED, "Get types_to_impl_ failed, impl_num[%zu] and map size[%zu] not match",
            impl_num, types_to_impl.size());

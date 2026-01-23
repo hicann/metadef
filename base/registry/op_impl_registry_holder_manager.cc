@@ -201,7 +201,7 @@ ge::graphStatus OpImplRegistryHolder::GetOpImplFunctionsByHandle(const void *han
       return ge::GRAPH_FAILED;
     }
     size_t impl_num = get_impl_num();
-    GELOGI("%s: %zu", impl_menu.get_reg_num_func.c_str(), impl_num);
+    GELOGI("so_path: %s, get_reg_num_func: %s, get_impl_num: %zu", so_path.c_str(), impl_menu.get_reg_num_func.c_str(), impl_num);
     if ((impl_num == 0U) && !impl_menu.need_check_empty) {
       continue;
     }
