@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
-# ----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------
 # Copyright (c) 2025 Huawei Technologies Co., Ltd.
 # This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
 # CANN Open Software License Agreement Version 2.0 (the "License").
@@ -8,7 +8,7 @@
 # THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
 # INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 # See LICENSE in the root of the software repository for the full text of the License.
-# ----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------
 
 import copy
 import glob
@@ -326,7 +326,6 @@ def render_semver(package_name: str, version: str) -> Iterator[Tuple[str, str]]:
         'beta': 200,  # beta次之
         'alpha': 300,  # alpha最低
     }
-    
     def calc_pre_release() -> Tuple[int, int]:
         """计算预发布版本。"""
         if '.' in pre_release:
@@ -615,7 +614,7 @@ def evaluate_info(info: Dict[str, str],
 
     def replace_pkg_inner_softlink(key: str, value: str) -> Tuple[str, str]:
         if key == 'pkg_inner_softlink':
-            # 禁用 pkg_inner_softlink
+            # 禁用pkg_inner_softlink
             return key, 'NA'
         return key, value
 
@@ -1057,6 +1056,7 @@ def read_version_info() -> Tuple[str, str]:
     m = re.match(r'[.a-zA-Z0-9]+$', version) or re.match(r'[-a-zA-Z.0-9]+$', version)
     if not m:
         raise VersionFormatNotMatch()
+
     return version, version_dir
 
 

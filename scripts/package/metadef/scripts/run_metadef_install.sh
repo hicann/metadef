@@ -1,5 +1,5 @@
 #!/bin/bash
-# ----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------
 # Copyright (c) 2025 Huawei Technologies Co., Ltd.
 # This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
 # CANN Open Software License Agreement Version 2.0 (the "License").
@@ -7,7 +7,7 @@
 # THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
 # INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 # See LICENSE in the root of the software repository for the full text of the License.
-# ----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------
 
 username="$(id -un)"
 usergroup="$(id -gn)"
@@ -20,10 +20,12 @@ sourcedir="$PWD/metadef"
 curpath=$(dirname $(readlink -f "$0"))
 common_func_path="${curpath}/common_func.inc"
 pkg_version_path="${curpath}/../version.info"
+metadef_func_path="${curpath}/metadef_func.sh"
 chip_type="all"
 feature_type="all"
 
 . "${common_func_path}"
+. "${metadef_func_path}"
 
 if [ "$1" ]; then
     input_install_dir="${2}"
@@ -109,8 +111,10 @@ new_install() {
         log "ERROR" "ERR_NO:0x0085;ERR_DES:failed to install package."
         return 1
     fi
+
     # create softlinks for stub libs in devlib/linux/$(ARCH)
     create_stub_softlink "$common_parse_dir"
+
     return 0
 }
 

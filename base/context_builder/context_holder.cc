@@ -19,9 +19,7 @@ void *ContextHolderVoid::GetContext() const {
 
 ContextHolderVoid::ContextHolderVoid() = default;
 ContextHolderVoid::~ContextHolderVoid() = default;
-ContextHolderVoid::ContextHolderVoid(ContextHolderVoid &&other) noexcept {
-  ctx_holder_impl_ = std::move(other.ctx_holder_impl_);
-}
+ContextHolderVoid::ContextHolderVoid(ContextHolderVoid &&other) noexcept = default;
 ContextHolderVoid &ContextHolderVoid::operator=(ContextHolderVoid &&other) noexcept {
   if (this != &other) {
     ctx_holder_impl_ = std::move(other.ctx_holder_impl_);

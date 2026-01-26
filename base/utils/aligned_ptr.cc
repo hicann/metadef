@@ -10,7 +10,7 @@
 
 #include "graph/aligned_ptr.h"
 #include "common/util/mem_utils.h"
-#include "graph/debug/ge_log.h"
+#include "common/ge_common/debug/ge_log.h"
 #include "graph/def_types.h"
 
 namespace ge {

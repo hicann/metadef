@@ -12,7 +12,6 @@
 #ifndef INC_COMMON_GE_INNER_ERROR_CODES_H_
 #define INC_COMMON_GE_INNER_ERROR_CODES_H_
 
-#include <map>
 #include <string>
 #include "external/ge_common/ge_api_error_codes.h"
 
@@ -62,11 +61,6 @@
              ge::InnErrorLevel::COMMON_LEVEL, ge::InnSystemIdType::SYSID_GE, \
              ge::InnSubModuleId::GENERATOR_MODULE, name, (value), (desc))
 
-#define LLM_ERRORNO_COMMON(name, value, desc)                                \
-  GE_ERRORNO(ge::InnLogRuntime::RT_HOST, ge::InnErrorCodeType::ERROR_CODE,   \
-             ge::InnErrorLevel::COMMON_LEVEL, ge::InnSystemIdType::SYSID_GE, \
-             ge::InnSubModuleId::LLM_ENGINE_MODULE, name, (value), (desc))
-
 // Get error code description
 #define GE_GET_ERRORNO_STR(value) ge::StatusFactory::Instance()->GetErrDesc(value)
 
@@ -74,15 +68,15 @@
 
 namespace ge {
 // System ID
-enum class InnSystemIdType { SYSID_GE = 8 };
+enum class InnSystemIdType : std::uint8_t { SYSID_GE = 8 };
 // Runtime location
-enum class InnLogRuntime {
+enum class InnLogRuntime : std::uint8_t {
   RT_HOST = 0b01,
   RT_DEVICE = 0b10,
 };
 
 // Sub model
-enum class InnSubModuleId {
+enum class InnSubModuleId : std::uint8_t {
   COMMON_MODULE = 0,
   CLIENT_MODULE = 1,
   INIT_MODULE = 2,
@@ -98,13 +92,13 @@ enum class InnSubModuleId {
 };
 
 // Error code type
-enum class InnErrorCodeType {
+enum class InnErrorCodeType : std::uint8_t {
   ERROR_CODE = 0b01,
   EXCEPTION_CODE = 0b10,
 };
 
 // Error level
-enum class InnErrorLevel {
+enum class InnErrorLevel : std::uint8_t {
   COMMON_LEVEL = 0b000,
   SUGGESTION_LEVEL = 0b001,
   MINOR_LEVEL = 0b010,
@@ -336,30 +330,6 @@ GE_ERRORNO_GENERATOR(GE_GENERATOR_GRAPH_MANAGER_ADD_GRAPH_FAILED, 2, "Graph mana
 GE_ERRORNO_GENERATOR(GE_GENERATOR_GRAPH_MANAGER_BUILD_GRAPH_FAILED, 3, "Graph manager build graph failed.");
 GE_ERRORNO_GENERATOR(GE_GENERATOR_GRAPH_MANAGER_FINALIZE_FAILED, 4, "Graph manager finalize failed.");
 GE_ERRORNO_GENERATOR(GE_GENERATOR_GRAPH_MANAGER_SAVE_MODEL_FAILED, 5, "Graph manager save model failed.");
-
-// 分步将错误码移动到air仓llm目录，完成后删除该宏
-#ifndef LLM_ERROR_CODES
-#define LLM_ERROR_CODES
-LLM_ERRORNO_COMMON(LLM_WAIT_PROC_TIMEOUT, 1, "request wait to be processed timeout!");
-LLM_ERRORNO_COMMON(LLM_KV_CACHE_NOT_EXIST, 2, "kv cache not exit!");
-LLM_ERRORNO_COMMON(LLM_REPEAT_REQUEST, 3, "repeat request!");
-LLM_ERRORNO_COMMON(LLM_REQUEST_ALREADY_COMPLETED, 4, "request already complete!");
-LLM_ERRORNO_COMMON(LLM_PARAM_INVALID, 5, "parameter is invalid!");
-LLM_ERRORNO_COMMON(LLM_ENGINE_FINALIZED, 6, "llm engine finalized!");
-LLM_ERRORNO_COMMON(LLM_NOT_YET_LINK, 7, "local cluster is not linked with remote cluster!");
-LLM_ERRORNO_COMMON(LLM_ALREADY_LINK, 8, "local cluster is already linked with remote cluster!");
-LLM_ERRORNO_COMMON(LLM_LINK_FAILED, 9, "local cluster link with remote cluster failed!");
-LLM_ERRORNO_COMMON(LLM_UNLINK_FAILED, 10, "local cluster unlink with remote cluster failed!");
-LLM_ERRORNO_COMMON(LLM_NOTIFY_PROMPT_UNLINK_FAILED, 11, "local cluster notify remote cluster do unlink failed!");
-LLM_ERRORNO_COMMON(LLM_CLUSTER_NUM_EXCEED_LIMIT, 12, "cluster num exceed limit!");
-LLM_ERRORNO_COMMON(LLM_PROCESSING_LINK, 13, "link is current processing, try again later!");
-LLM_ERRORNO_COMMON(LLM_DEVICE_OUT_OF_MEMORY, 14, "device out of memory!");
-LLM_ERRORNO_COMMON(LLM_PREFIX_ALREADY_EXIST, 15, "Prefix has already existed.");
-LLM_ERRORNO_COMMON(LLM_PREFIX_NOT_EXIST, 16, "Prefix does not exist.");
-LLM_ERRORNO_COMMON(LLM_SEQ_LEN_OVER_LIMIT, 17, "Sequence length exceed limit.");
-LLM_ERRORNO_COMMON(LLM_NO_FREE_BLOCK, 18, "No free block.");
-LLM_ERRORNO_COMMON(LLM_BLOCKS_OUT_OF_MEMORY, 19, "Block is out of memory.");
-#endif
 }  // namespace ge
 
 #endif  // INC_COMMON_GE_INNER_ERROR_CODES_H_

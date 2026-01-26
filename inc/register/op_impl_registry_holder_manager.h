@@ -14,7 +14,6 @@
 #include <string>
 #include <map>
 #include <mutex>
-#include "graph/op_so_bin.h"
 #include "register/op_impl_registry_api.h"
 #include "register/op_ct_impl_registry_api.h"
 
@@ -65,14 +64,10 @@ class OmOpImplRegistryHolder : public OpImplRegistryHolder {
 
   virtual ~OmOpImplRegistryHolder() override = default;
 
-  ge::graphStatus LoadSo(const std::shared_ptr<ge::OpSoBin> &so_bin);
-
  private:
   ge::graphStatus CreateOmOppDir(std::string &opp_dir) const;
 
   ge::graphStatus RmOmOppDir(const std::string &opp_dir) const;
-
-  ge::graphStatus SaveToFile(const std::shared_ptr<ge::OpSoBin> &so_bin, const std::string &opp_path) const;
 };
 
 class OpImplRegistryHolderManager {

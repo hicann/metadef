@@ -19,6 +19,7 @@
 #include "graph/ascend_string.h"
 
 namespace optiling {
+class TilingDefImpl;
 struct CharPtrCmp {
   bool operator()(const char *strLeft, const char *strRight) const
   {
@@ -100,6 +101,7 @@ protected:
   bool inited_data_ptr = false;
   uint32_t feature_bit_flag = 0;
   uint8_t reserved_buf[128] = {0};
+  friend class TilingDefImpl;
 };
 
 using TilingDataConstructor = std::shared_ptr<TilingDef> (*)();

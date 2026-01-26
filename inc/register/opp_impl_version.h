@@ -11,10 +11,12 @@
 #ifndef PKG_INC_OPP_IMP_VERSION_H
 #define PKG_INC_OPP_IMP_VERSION_H
 
+#include <cstdint>
+
 namespace ge {
-enum class OppImplVersion {
-  kOpp,
-  kOppKernel,
+enum class OppImplVersion : uint32_t {
+  kOpp = 0,
+  kOppKernel = 1,
   // add new version definitions here
   kVersionEnd = 4
  };

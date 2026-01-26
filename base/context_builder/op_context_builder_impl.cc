@@ -14,7 +14,7 @@
 #include "graph/debug/ge_util.h"
 #include "base/attr/attrs_to_buffer.h"
 namespace gert {
-ge::graphStatus ContextBuilderImpl::SetCompileTimeTd(const ContextTensorDesc &desc, CompileTimeTensorDesc &td) {
+ge::graphStatus ContextBuilderImpl::SetCompileTimeTd(const ContextTensorDesc &desc, CompileTimeTensorDesc &td) const {
   td.SetDataType(desc.dtype);
   td.SetOriginFormat(desc.origin_format);
   td.SetStorageFormat(desc.storage_format);
@@ -25,17 +25,17 @@ ge::graphStatus ContextBuilderImpl::SetCompileTimeTd(const ContextTensorDesc &de
 ge::graphStatus ContextBuilderImpl::InitIOInstanceInfo(ComputeNodeInfo &compute_node_info) {
   size_t input_index = 0U;
   for (size_t i = 0U; i < op_info_.input_instance.size(); ++i) {
-    size_t instance_num = op_info_.input_instance[i];
-    compute_node_info.MutableInputInstanceInfo(i)->SetInstantiationNum(instance_num);
-    compute_node_info.MutableInputInstanceInfo(i)->SetInstanceStart(input_index);
+    const size_t instance_num = op_info_.input_instance[i];
+    compute_node_info.MutableInputInstanceInfo(i)->SetInstantiationNum(static_cast<uint32_t>(instance_num));
+    compute_node_info.MutableInputInstanceInfo(i)->SetInstanceStart(static_cast<uint32_t>(input_index));
     input_index += instance_num;
   }
 
   size_t output_index = 0U;
   for (size_t i = 0U; i < op_info_.output_instance.size(); ++i) {
-    size_t instance_num = op_info_.output_instance[i];
-    compute_node_info.MutableOutputInstanceInfo(i)->SetInstantiationNum(instance_num);
-    compute_node_info.MutableOutputInstanceInfo(i)->SetInstanceStart(output_index);
+    const size_t instance_num = op_info_.output_instance[i];
+    compute_node_info.MutableOutputInstanceInfo(i)->SetInstantiationNum(static_cast<uint32_t>(instance_num));
+    compute_node_info.MutableOutputInstanceInfo(i)->SetInstanceStart(static_cast<uint32_t>(output_index));
     output_index += instance_num;
   }
   return ge::GRAPH_SUCCESS;
@@ -46,14 +46,14 @@ ge::graphStatus ContextBuilderImpl::InitCompileTimeTD(ComputeNodeInfo &compute_n
     const auto &ctx_io_desc = op_info_.input_tensor_descs[i];
     auto td = compute_node_info.MutableInputTdInfo(i);
     GE_ASSERT_NOTNULL(td, "tensor desc in compute node info is null");
-    SetCompileTimeTd(ctx_io_desc, *td);
+    (void) SetCompileTimeTd(ctx_io_desc, *td);
   }
 
   for (size_t i = 0U; i < compute_node_info.GetOutputsNum(); ++i) {
     const auto &ctx_io_desc = op_info_.output_tensor_descs[i];
     auto td = compute_node_info.MutableOutputTdInfo(i);
     GE_ASSERT_NOTNULL(td, "tensor desc in compute node info is null");
-    SetCompileTimeTd(ctx_io_desc, *td);
+    (void) SetCompileTimeTd(ctx_io_desc, *td);
   }
   return ge::SUCCESS;
 }
@@ -74,14 +74,12 @@ std::unique_ptr<uint8_t[]> ContextBuilderImpl::CreateComputeNodeInfoImpl(const s
   auto compute_node_info_holder = ge::ComGraphMakeUnique<uint8_t[]>(total_size);
   GE_ASSERT_NOTNULL(compute_node_info_holder, "Create compute node info holder failed");
 
-  auto idx = string_pool.size();
-  string_pool.emplace_back(op_info.op_name);
-  string_pool.emplace_back(op_info.op_type);
-  auto name_ptr = string_pool[idx].c_str();
-  auto type_ptr = string_pool[idx + 1].c_str();
+  const auto idx = string_pool.size();
+  (void) string_pool.emplace_back(op_info.op_name);
+  (void) string_pool.emplace_back(op_info.op_type);
 
   auto compute_node_info = ge::PtrToPtr<uint8_t, ComputeNodeInfo>(compute_node_info_holder.get());
-  compute_node_info->Init(ir_input_num, ir_output_num, input_num, output_num, attr_size, name_ptr, type_ptr);
+  compute_node_info->Init(ir_input_num, ir_output_num, input_num, output_num, attr_size, string_pool[idx].c_str(), string_pool[idx + 1].c_str());
 
   auto ret = InitIOInstanceInfo(*compute_node_info);
   GE_ASSERT_SUCCESS(ret, "Init input instance info for node:%s failed.", op_info.op_name.c_str());
@@ -90,16 +88,16 @@ std::unique_ptr<uint8_t[]> ContextBuilderImpl::CreateComputeNodeInfoImpl(const s
   GE_ASSERT_SUCCESS(ret, "Init compile time tensor desc for node:%s failed.", op_info.op_name.c_str());
 
   auto attr = compute_node_info->MutableAttrs();
-  const auto offset = ge::PtrToPtr<RuntimeAttrs, uint8_t>(attr) - compute_node_info_holder.get();
+  const uint64_t offset = ge::PtrToPtr<RuntimeAttrs, uint8_t>(attr) - compute_node_info_holder.get();
   GE_ASSERT_TRUE(
       static_cast<size_t>(offset) <= total_size,
       "Failed to create kernel context extend info, the offset of attr %zu beyond the total size of ExtendInfo %zu",
       offset, total_size);
-  const auto outputs_ins_info_size = compute_node_info->GetIrOutputsNum() * sizeof(AnchorInstanceInfo);
-  ret = memcpy_s(ge::PtrToPtr<RuntimeAttrs, uint8_t>(attr), (total_size - offset - outputs_ins_info_size),
+  const uint64_t outputs_ins_info_size = compute_node_info->GetIrOutputsNum() * sizeof(AnchorInstanceInfo);
+  ret = memcpy_s(ge::PtrToPtr<RuntimeAttrs, uint8_t>(attr), static_cast<uint64_t>(total_size - offset - outputs_ins_info_size),
                  attr_buf.get(), attr_size);
   GE_ASSERT_SUCCESS(ret, "memcpy_s failed, copy size is %zu, dst size is %zu", attr_size,
-                    (total_size - offset - outputs_ins_info_size));
+                    static_cast<uint64_t>(total_size - offset - outputs_ins_info_size));
   GELOGI("Node %s, compute_node_info attr_size %zu, outputs_ins_info_size:%zu, offset:%zu, total_size:%zu.",
          op_info.op_name.c_str(), attr_size, outputs_ins_info_size, offset, total_size);
   return compute_node_info_holder;
@@ -120,9 +118,9 @@ ge::graphStatus ContextBuilderImpl::CreateComputeNodeInfo(ContextHolderImpl &hol
 ge::graphStatus ContextBuilderImpl::BuildCtx(ContextHolderImpl &holder) {
   const auto in_size = input_values_.size();
   const auto out_size = output_values_.size();
-  const auto io_size = in_size + out_size;
-  const auto size = sizeof(KernelRunContext) + sizeof(Chain *) * (io_size);
-  holder.context_holder_.reset(new (std::nothrow) uint8_t[size]);
+  const uint64_t io_size = in_size + out_size;
+  const uint64_t size = sizeof(KernelRunContext) + sizeof(Chain *) * (io_size);
+  holder.context_holder_ = std::make_unique<uint8_t[]>(size);
   GE_ASSERT_NOTNULL(holder.context_holder_, "Create context holder failed.");
 
   holder.context_ = ge::PtrToPtr<uint8_t, KernelContext>(holder.context_holder_.get());

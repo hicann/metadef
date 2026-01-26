@@ -19,7 +19,7 @@ bool FileExist(const std::string& filename);
 bool DirectoryExists(const std::string& path);
 std::string GetCurrentTimestamp();
 bool CheckWritePermission(const std::string& path);
-bool GetBasePathByEnv(std::string& basePath, const char *ascendWorkPathEnv, std::string& currentTimestamp);
+bool GetBasePathByEnv(std::string& basePath, const char *ascendWorkPathEnv, const std::string& currentTimestamp);
 bool GetBasePath(std::string& basePath, const std::string& opType);
 bool CreateDirectory(const std::string& path);
 void WriteBinaryFile(const std::string& path, const uint8_t* start, const uint8_t* end);
@@ -29,7 +29,7 @@ bool GetSystemArchitecture(std::string& arch);
 bool RemoveDirectoryRecursively(const std::string& path);
 bool IsDirectoryEmpty(const std::string& dirPath);
 void CheckCloseDir(DIR* dir, const char* file, int32_t line, const char* func);
-void DestroyCustomOpRegistry(std::string& basePath);
+void DestroyCustomOpRegistry(const std::string& basePath);
 bool CheckBasePathWritePermission(std::string &basePath, const char *resolvedPath, const std::string &currentTimestamp);
 }
 #endif

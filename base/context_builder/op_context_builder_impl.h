@@ -16,7 +16,7 @@
 #include "exe_graph/runtime/tiling_parse_context.h"
 #include "exe_graph/runtime/compute_node_info.h"
 #include "exe_graph/runtime/continuous_vector.h"
-#include "graph/debug/ge_log.h"
+#include "common/ge_common/debug/ge_log.h"
 #include "common/checker.h"
 #include "op_info.h"
 #include "base/runtime/runtime_attrs_def.h"
@@ -35,20 +35,22 @@ struct TilingParseInfo {
 class ContextHolderImpl {
  public:
   ContextHolderImpl() = default;
-  ContextHolderImpl(ContextHolderImpl &&holder) {
+  ContextHolderImpl(ContextHolderImpl &&holder) noexcept {
     context_holder_ = std::move(holder.context_holder_);
     value_holder_ = std::move(holder.value_holder_);
     compute_node_info_holder_ = std::move(holder.compute_node_info_holder_);
     string_pool_ = holder.string_pool_;
     context_ = holder.context_;
+    holder.context_ = nullptr;
   }
 
-  ContextHolderImpl &operator=(ContextHolderImpl &&holder) {
+  ContextHolderImpl &operator=(ContextHolderImpl &&holder) noexcept {
     context_holder_ = std::move(holder.context_holder_);
     value_holder_ = std::move(holder.value_holder_);
     compute_node_info_holder_ = std::move(holder.compute_node_info_holder_);
     string_pool_ = std::move(holder.string_pool_);
     context_ = holder.context_;
+    holder.context_ = nullptr;
     return *this;
   }
 
@@ -58,7 +60,7 @@ class ContextHolderImpl {
     }
   }
   template<typename T>
-  T *GetContext() {
+  auto GetContext() const -> T* {
     return reinterpret_cast<T *>(context_);
   }
 
@@ -106,34 +108,32 @@ class ContextBuilderImpl {
 
   void Inputs(std::vector<void *> inputs) {
     for (auto i : inputs) {
-      input_values_.emplace_back(std::make_pair(i, nullptr));
+      (void) input_values_.emplace_back(std::make_pair(i, nullptr));
     }
   }
 
   void Outputs(std::vector<void *> outputs) {
     for (auto i : outputs) {
-      output_values_.emplace_back(std::make_pair(i, nullptr));
+      (void) output_values_.emplace_back(std::make_pair(i, nullptr));
     }
   }
 
  protected:
   ge::graphStatus BuildCtx(ContextHolderImpl &holder);
-  ge::graphStatus BuildRtTensor(const ContextTensorDesc &td, std::unique_ptr<uint8_t[]> &rt_tensor_holder) const;
-  ge::graphStatus BuildRTInputTensors(ContextHolderImpl &holder);
-  ge::graphStatus BuildRTOutputShapes(ContextHolderImpl &holder);
   ge::graphStatus InitCompileTimeTD(ComputeNodeInfo &compute_node_info);
   std::unique_ptr<uint8_t[]> CreateComputeNodeInfoImpl(const std::unique_ptr<uint8_t[]> &attr_buf,
                                                        size_t attr_size, const OpInfo &op_info,
                                                        std::vector<std::string> &string_pool, size_t &total_size);
   ge::graphStatus CreateComputeNodeInfo(ContextHolderImpl &holder);
   ge::graphStatus InitIOInstanceInfo(ComputeNodeInfo &compute_node_info);
-  ge::graphStatus SetCompileTimeTd(const ContextTensorDesc &desc, CompileTimeTensorDesc &td);
+  ge::graphStatus SetCompileTimeTd(const ContextTensorDesc &desc, CompileTimeTensorDesc &td) const;
 
   OpInfo op_info_;
   TilingInfo tiling_info_;
   TilingParseInfo tiling_parse_info_;
   std::vector<std::pair<const void *, gert::Chain::Deleter>> input_values_;
   std::vector<std::pair<const void *, gert::Chain::Deleter>> output_values_;
+ private:
   bool use_data_type_ptr_{false};
 };
 }  // namespace gert

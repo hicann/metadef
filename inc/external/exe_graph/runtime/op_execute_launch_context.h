@@ -20,7 +20,7 @@ enum class OpExecuteLaunchInputIndex {
   kWorkspaceAddr,
   kWorkspaceSize,
   kStream,
-  kFwkData,
+  kFwkData,  // 框架预留字段，算子开发者无需关注，新增字段向后追加
   // add new extend input here
   kNum
 };

@@ -27,11 +27,6 @@ class OpImplSpaceRegistry : public std::enable_shared_from_this<OpImplSpaceRegis
 
   ~OpImplSpaceRegistry() = default;
 
-  ge::graphStatus GetOrCreateRegistry(const std::vector<ge::OpSoBinPtr> &bins, const ge::SoInOmInfo &so_info);
-  // 兼容air，待air合入后删除
-  ge::graphStatus GetOrCreateRegistry(const std::vector<ge::OpSoBinPtr> &bins, const ge::SoInOmInfo &so_info,
-                                      const std::string &opp_path_identifier);
-
   ge::graphStatus AddRegistry(const std::shared_ptr<OpImplRegistryHolder> &registry_holder);
 
   const OpImplKernelRegistry::OpImplFunctionsV2 *GetOpImpl(const std::string &op_type) const;

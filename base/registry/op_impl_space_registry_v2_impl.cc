@@ -13,7 +13,6 @@
 #include "base/registry/op_impl_space_registry_v2.h"
 #include "common/checker.h"
 #include "common/util/mem_utils.h"
-#include "graph/op_so_bin.h"
 #include "mmpa/mmpa_api.h"
 #include "common/ge_common/util.h"
 #include "graph/debug/ge_util.h"
@@ -77,7 +76,7 @@ ge::graphStatus OpImplSpaceRegistryImpl::AddSoToRegistry(const OppSoDesc &so_des
     uint32_t len = 0U;
     const auto so_data = ge::GetBinDataFromFile(std::string(so_path), len);
     GE_ASSERT_NOTNULL(so_data);
-    const auto create_func = [&]() -> OpImplRegistryHolderPtr {
+    const auto create_func = [&types_to_impl_from_holder, so_path]() -> OpImplRegistryHolderPtr {
       void *const handle = mmDlopen(
           so_path,
           static_cast<int32_t>(static_cast<uint32_t>(MMPA_RTLD_NOW) | static_cast<uint32_t>(MMPA_RTLD_GLOBAL)));
@@ -103,7 +102,7 @@ ge::graphStatus OpImplSpaceRegistryImpl::AddSoToRegistry(const OppSoDesc &so_des
       return om_registry_holder;
     };
 
-    const std::string str_so_data(so_data.get(), len);
+    const std::string str_so_data(so_data.get(), static_cast<size_t>(len));
     const auto registry_holder =
         OpImplRegistryHolderManager::GetInstance().GetOrCreateOpImplRegistryHolder(str_so_data, create_func);
     if (registry_holder == nullptr) {
@@ -114,7 +113,9 @@ ge::graphStatus OpImplSpaceRegistryImpl::AddSoToRegistry(const OppSoDesc &so_des
     GELOGI("Save so symbol and handle in path[%s] successfully!", so_path);
   }
 
-  if (strcmp(so_desc.GetPackageName().GetString(), kBuiltIn) == 0) {
+  const auto package_name = so_desc.GetPackageName().GetString();
+  // package_name为空或为"built-in"时，不进行算子交付件校验
+  if (package_name == nullptr || package_name[0] == '\0' || strcmp(package_name, kBuiltIn) == 0) {
     return ge::GRAPH_SUCCESS;
   }
   GELOGI("Start to check missing implementation for custom op package [%s]", so_desc.GetPackageName().GetString());
@@ -124,7 +125,6 @@ ge::graphStatus OpImplSpaceRegistryImpl::AddSoToRegistry(const OppSoDesc &so_des
     const char *op_type_str = op_type.GetString();
 
     if (funcs.tiling == nullptr) {
-      REPORT_PREDEFINED_ERR_MSG("W11003", std::vector<const char *>({"optype", "func"}), std::vector<const char *>({op_type_str, "tiling"}));
       GELOGW("[MissOpImplementation] op [%s] has no tiling", op_type_str);
     }
   }
@@ -225,7 +225,7 @@ void OpImplSpaceRegistryImpl::MergeFunctions(OpImplKernelRegistry::OpImplFunctio
   }
 }
 
-void OpImplSpaceRegistryImpl::MergeTypesToImpl(OpTypesToImplMap &merged_impl, OpTypesToImplMap &src_impl) const {
+void OpImplSpaceRegistryImpl::MergeTypesToImpl(OpTypesToImplMap &merged_impl, const OpTypesToImplMap &src_impl) const {
   for (const auto &iter : src_impl) {
     const auto op_type = iter.first;
     GELOGD("Merge types to impl, op type %s", op_type.GetString());
@@ -284,7 +284,7 @@ void OpImplSpaceRegistryImpl::MergeTypesToCtImpl(OpTypesToImplMap &merged_impl,
 
 ge::graphStatus OpImplSpaceRegistryImpl::AddRegistry(const std::shared_ptr<OpImplRegistryHolder> &registry_holder) {
   if (registry_holder != nullptr) {
-    op_impl_registries_.emplace_back(registry_holder);
+    (void)op_impl_registries_.emplace_back(registry_holder);
     MergeTypesToImpl(merged_types_to_impl_, registry_holder->GetTypesToImpl());
     MergeTypesToCtImpl(merged_types_to_impl_, registry_holder->GetTypesToCtImpl());
   }

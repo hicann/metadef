@@ -25,9 +25,9 @@
 #include "op_bin_info_utils.h"
 #include "dlog_pub.h"
 #include "common/ge_common/debug/ge_log.h"
+#include "graph/utils/file_utils.h"
 
 namespace ops {
-constexpr uint32_t kRegisterPathMax = 4096;
 constexpr uint32_t kOpsFour = 4;
 constexpr uint32_t kOpsBufLen = 64;
 
@@ -79,19 +79,19 @@ bool CheckBasePathWritePermission(std::string &basePath, const char *resolvedPat
   return true;
 }
 
-bool GetBasePathByEnv(std::string& basePath, const char *ascendWorkPathEnv, std::string& currentTimestamp) {
+bool GetBasePathByEnv(std::string& basePath, const char *ascendWorkPathEnv, const std::string& currentTimestamp) {
   GELOGD("Running GetBasePathByEnv.");
-  char resolvedPath[kRegisterPathMax];
-  if (std::strlen(ascendWorkPathEnv) > kRegisterPathMax || realpath(ascendWorkPathEnv, resolvedPath) == nullptr) {
+  std::string resolvedPath = ge::RealPath(ascendWorkPathEnv);
+  if (resolvedPath.empty()) {
     GELOGE(ge::FAILED, "Invalid ASCEND_WORK_PATH: %s", ascendWorkPathEnv);
     return false;
   }
-  return CheckBasePathWritePermission(basePath, resolvedPath, currentTimestamp);
+  return CheckBasePathWritePermission(basePath, resolvedPath.c_str(), currentTimestamp);
 }
 
 bool GetBasePath(std::string &basePath, const std::string &opType) {
   GELOGD("Running GetBasePath.");
-  const char *ascendWorkPathEnv = std::getenv("ASCEND_WORK_PATH");
+  const char *ascendWorkPathEnv = getenv("ASCEND_WORK_PATH");
   std::string currentTimestamp = GetCurrentTimestamp();
   if (ascendWorkPathEnv != nullptr) {
     return GetBasePathByEnv(basePath, ascendWorkPathEnv, currentTimestamp);
@@ -173,7 +173,7 @@ bool CreateSymlink(const std::string &targetPath, const std::string &linkPath) {
 }
 
 bool GetSystemArchitecture(std::string &arch) {
-  const char *systemArch = std::getenv("SYSTEM_PROCESSOR");
+  const char *systemArch = getenv("SYSTEM_PROCESSOR");
   if (systemArch != nullptr) {
     arch = std::string(systemArch);
     return true;
@@ -252,7 +252,7 @@ bool IsDirectoryEmpty(const std::string &dirPath) {
   return true;
 }
 
-void DestroyCustomOpRegistry(std::string &basePath) {
+void DestroyCustomOpRegistry(const std::string &basePath) {
   GELOGD("Running removed directory.");
   const size_t lastSlashPos = (basePath).rfind('/');
   const size_t secondLastSlashPos = (basePath).rfind('/', lastSlashPos - 1U);
@@ -309,12 +309,12 @@ uint32_t OpBinInfo::Generate(ge::AscendString *opLibPath, const std::string &tar
     return 1;
   }
 
-  char resolvedPath[kRegisterPathMax];
-  if (targetPath.size() > kRegisterPathMax || realpath(targetPath.c_str(), resolvedPath) == nullptr) {
+  std::string resolvedPath = ge::RealPath(targetPath.c_str());
+  if (resolvedPath.empty()) {
     GELOGE(ge::FAILED, "Failed to resolve libcust_opapi.so path.");
     return 1;
   }
-  std::string targetResPath = std::string(resolvedPath);
+  std::string targetResPath = resolvedPath;
   GELOGI("Resolve libcust_opapi.so path is: %s", targetResPath.c_str());
   std::string opmasterPath =
       basePath_ + opType_ + "/op_impl/ai_core/tbe/op_tiling/lib/linux/" + arch + "/libcust_opmaster_rt2.0.so";

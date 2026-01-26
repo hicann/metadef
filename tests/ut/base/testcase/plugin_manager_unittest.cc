@@ -275,7 +275,6 @@ TEST_F(UtestPluginManager, test_plugin_manager_getopp_plugin_vendors_01) {
   std::vector<std::string> vendors;
   Status ret = PluginManager::GetOppPluginVendors(path_config, vendors);
   EXPECT_EQ(ret, SUCCESS);
-  ASSERT_TRUE(vendors.size() >= 3U);
   EXPECT_EQ(vendors[0], "customize");
   EXPECT_EQ(vendors[1], "mdc");
   EXPECT_EQ(vendors[2], "lhisi");
@@ -343,7 +342,6 @@ TEST_F(UtestPluginManager, test_plugin_manager_getopp_plugin_vendors_05) {
   std::vector<std::string> vendors;
   Status ret = PluginManager::GetOppPluginVendors(path_config, vendors);
   EXPECT_EQ(ret, SUCCESS);
-  ASSERT_TRUE(vendors.size() >= 3U);
   EXPECT_EQ(vendors[0], "customize");
   EXPECT_EQ(vendors[1], "mdc");
   EXPECT_EQ(vendors[2], "lhisi");

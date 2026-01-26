@@ -21,7 +21,7 @@ constexpr const size_t kReservedFieldSize = 8U;
 constexpr const size_t kReservedFieldSize2 = 40U;
 constexpr const size_t kOpImplRegistrySize = 88U + kVirtualTableSize;
 
-constexpr const size_t kOpImplReservedFieldSize = 502UL * sizeof(void*);
+constexpr const size_t kOpImplReservedFieldSize = 501UL * sizeof(void*);
 constexpr const size_t kOpImplSize = 4304UL;
 
 }  // namespace

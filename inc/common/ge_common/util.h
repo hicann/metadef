@@ -16,9 +16,10 @@
 #include <string>
 
 #include "graph/types.h"
-#include "common/ge_common/debug/log.h"
+#include "common/ge_common/debug/ge_log.h"
 #include "common/ge_common/scope_guard.h"
-#include "common/ge_common/inner_error_codes.h"
+#include "common/ge_common/string_util.h"
+#include "common/ge_common/error_codes_define.h"
 
 #define GE_CHECK_POSITIVE_SIZE_RANGE(size)                             \
   do {                                                                 \

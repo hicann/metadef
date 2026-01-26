@@ -1,5 +1,5 @@
 #!/bin/sh
-# ----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------
 # Copyright (c) 2025 Huawei Technologies Co., Ltd.
 # This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
 # CANN Open Software License Agreement Version 2.0 (the "License").
@@ -7,7 +7,7 @@
 # THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
 # INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 # See LICENSE in the root of the software repository for the full text of the License.
-# ----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------
 
 # 多版本函数库
 # 创建版本目录
@@ -124,9 +124,11 @@ notify_latest_manager() {
     if [ ! -f "$var_path/manager.sh" ]; then
         return 1
     fi
+
     if [ "$USE_SHARE_INFO" = "y" ]; then
-      ext_params="$ext_params --use-share-info"
+        ext_params="$ext_params --use-share-info"
     fi
+
     get_package_dir package_dir "$package"
     get_install_for_all_param "install_for_all_param" "$install_for_all"
     get_docker_root_param "docker_root_param" "$docker_root"

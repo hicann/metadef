@@ -19,21 +19,19 @@
 namespace gert {
 class OpInferDataTypeContextBuilderImpl : public ContextBuilderImpl {
  public:
-  OpInferDataTypeContextBuilderImpl() : ContextBuilderImpl() {}
+  using ContextBuilderImpl::ContextBuilderImpl;
   ~OpInferDataTypeContextBuilderImpl() override = default;
 
   std::unique_ptr<ContextHolderImpl> BuildInferDataTypeContext() {
     auto holder = ge::ComGraphMakeUnique<ContextHolderImpl>();
     GE_ASSERT_NOTNULL(holder, "Create ContextHolderImpl failed.");
     GE_ASSERT_SUCCESS(CreateComputeNodeInfo(*holder), "Create compute node info failed.");
-    std::vector<std::pair<void *, gert::Chain::Deleter>> tmp_outputs;
     for (size_t i = 0U; i < op_info_.input_instance_num; ++i) {
-      input_values_.emplace_back(std::make_pair<void *, gert::Chain::Deleter>(
+      (void)input_values_.emplace_back(std::make_pair<void *, gert::Chain::Deleter>(
           ge::ValueToPtr(MutableOpInfo().input_tensor_descs[i].dtype), nullptr));
     }
-    for (size_t i = 0U; i < op_info_.output_instance_num; ++i) {
-      output_values_.emplace_back(std::make_pair<void *, gert::Chain::Deleter>(ge::ValueToPtr(ge::DT_MAX), nullptr));
-    }
+    output_values_.resize(op_info_.output_instance_num, 
+                          std::make_pair<void *, gert::Chain::Deleter>(ge::ValueToPtr(ge::DT_MAX), nullptr));
     GE_ASSERT_SUCCESS(BuildCtx(*holder), "BuildCtx failed.");
     return holder;
   }

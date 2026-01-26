@@ -12,7 +12,6 @@
 #define INC_BASE_UTILS_TYPE_UTILS_IMPL_H_
 
 #include <map>
-#include <set>
 #include <unordered_set>
 #include <string>
 #include "graph/types.h"

@@ -13,6 +13,7 @@
 
 #include "register/op_impl_registry.h"
 #include "register/op_impl_registry_holder_manager.h"
+#include "base/registry/opp_package_utils.h"
 
 namespace gert {
 using OpTypesToImplMap = std::map<OpImplRegisterV2::OpType, OpImplKernelRegistry::OpImplFunctionsV2>;
@@ -34,7 +35,7 @@ class OpImplSpaceRegistryImpl {
   OpImplKernelRegistry::OpImplFunctionsV2 *CreateOrGetOpImpl(const std::string &op_type);
 
  private:
-  void MergeTypesToImpl(OpTypesToImplMap &merged_impl, OpTypesToImplMap &src_impl) const;
+  void MergeTypesToImpl(OpTypesToImplMap &merged_impl, const OpTypesToImplMap &src_impl) const;
   void MergeFunctions(OpImplKernelRegistry::OpImplFunctionsV2 &merged_funcs,
                       const OpImplKernelRegistry::OpImplFunctionsV2 &src_funcs, const std::string &op_type) const;
   void MergeTypesToCtImpl(OpTypesToImplMap &merged_impl, const OpTypesToCtImplMap &src_impl) const;

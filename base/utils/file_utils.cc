@@ -10,8 +10,10 @@
 
 #include <cerrno>
 #include <fstream>
+#include <algorithm>
 #include "graph/types.h"
-#include "graph/debug/ge_log.h"
+#include "common/ge_common/debug/ge_log.h"
+#include "common/ge_common/scope_guard.h"
 #include "mmpa/mmpa_api.h"
 #include "graph/def_types.h"
 #include "common/checker.h"
@@ -20,8 +22,9 @@
 #include "graph/utils/file_utils.h"
 
 namespace {
-const int32_t kFileSuccess = 0;
-const uint32_t kMaxWriteSize = 1 * 1024 * 1024 * 1024U;  // 1G
+constexpr int32_t kFileSuccess = 0;
+constexpr uint32_t kMaxWriteSize = 1U * 1024U * 1024U * 1024U;  // 1G
+constexpr size_t kMaxErrorStrLen = 128U;
 }  // namespace
 namespace ge {
 std::string RealPath(const char_t *path) {
@@ -58,7 +61,7 @@ std::string GetSanitizedName(const std::string &input) {
   const std::string illegal_chars = "/\\:*?\"<>|";
   std::string sanitized;
   sanitized.reserve(input.size());
-  for (char c : input) {
+  for (const char c : input) {
     if (illegal_chars.find(c) != std::string::npos) {
       sanitized += '_';
     } else {
@@ -69,14 +72,16 @@ std::string GetSanitizedName(const std::string &input) {
   return sanitized;
 }
 
-inline int32_t CheckAndMkdir(const char_t *tmp_dir_path, mmMode_t mode) {
+static inline int32_t CheckAndMkdir(const char_t *tmp_dir_path, mmMode_t mode) {
   if (mmAccess2(tmp_dir_path, M_F_OK) != EN_OK) {
     const int32_t ret = mmMkdir(tmp_dir_path, mode);
     if (ret != 0) {
-      REPORT_INNER_ERR_MSG("E18888",
-                           "Can not create directory %s. Make sure the directory "
-                           "exists and writable. errmsg:%s",
-                           tmp_dir_path, strerror(errno));
+      std::vector<char_t> err_buf(kMaxErrorStrLen + 1U, '\0');
+      const auto err_msg = mmGetErrorFormatMessage(mmGetErrorCode(), err_buf.data(), kMaxErrorStrLen);
+      std::string reason =
+          "Directory creation failed. [Errno " + std::to_string(mmGetErrorCode()) + "] " + err_msg + ".";
+      (void) REPORT_PREDEFINED_ERR_MSG("E10001", std::vector<const char_t *>({"parameter", "value", "reason"}),
+                                       std::vector<const char_t *>({"filepath", tmp_dir_path, reason.c_str()}));
       GELOGW("[Util][mkdir] Create directory %s failed, reason:%s. Make sure the "
              "directory exists and writable.",
              tmp_dir_path, strerror(errno));
@@ -100,12 +105,13 @@ int32_t CreateDir(const std::string &directory_path, uint32_t mode) {
   GE_CHK_BOOL_EXEC(dir_path_len < static_cast<size_t>(MMPA_MAX_PATH), return -1,
                    "[Util][mkdir] Path %s len is too long, it must be less than %d", directory_path.c_str(),
                    MMPA_MAX_PATH);
-  char_t tmp_dir_path[MMPA_MAX_PATH] = {};
+  std::string current_path;
+  current_path.reserve(dir_path_len);
   const auto mkdir_mode = static_cast<mmMode_t>(mode);
-  for (size_t i = 0U; i < dir_path_len; i++) {
-    tmp_dir_path[i] = directory_path[i];
-    if ((tmp_dir_path[i] == '\\') || (tmp_dir_path[i] == '/')) {
-      const int32_t ret = CheckAndMkdir(&(tmp_dir_path[0U]), mkdir_mode);
+  for (const char c : directory_path) {
+    current_path += c;
+    if (c == '\\' || c == '/') {
+      const int32_t ret = CheckAndMkdir(current_path.c_str(), mkdir_mode);
       if (ret != 0) {
         return ret;
       }
@@ -122,7 +128,9 @@ int32_t CreateDir(const std::string &directory_path, uint32_t mode) {
  *  @return 0 success
  */
 int32_t CreateDir(const std::string &directory_path) {
-  constexpr auto mkdir_mode = static_cast<uint32_t>(M_IRUSR | M_IWUSR | M_IXUSR);
+  constexpr uint32_t mkdir_mode = static_cast<uint32_t>(M_IRUSR) |
+                              static_cast<uint32_t>(M_IWUSR) |
+                              static_cast<uint32_t>(M_IXUSR);
   return CreateDir(directory_path, mkdir_mode);
 }
 
@@ -143,8 +151,9 @@ std::unique_ptr<char_t[]> GetBinFromFile(std::string &path, uint32_t &data_len) 
 
 std::unique_ptr<char_t[]> GetBinDataFromFile(const std::string &path, uint32_t &data_len) {
   GE_ASSERT_TRUE(!path.empty());
-
-  std::ifstream ifs(path, std::ifstream::binary);
+  const std::string real_path = RealPath(path.c_str());	
+  GE_ASSERT_TRUE(!real_path.empty(), "Path: %s is invalid, file or directory does not exist", path.c_str());
+  std::ifstream ifs(real_path, std::ifstream::binary);
   if (!ifs.is_open()) {
     GELOGW("path:%s not open", path.c_str());
     return nullptr;
@@ -166,8 +175,9 @@ std::unique_ptr<char_t[]> GetBinDataFromFile(const std::string &path, uint32_t &
 }
 
 std::unique_ptr<char[]> GetBinFromFile(const std::string &path, size_t offset, size_t data_len) {
+  GE_ASSERT_TRUE(!path.empty());
   const std::string real_path = RealPath(path.c_str());
-  GE_ASSERT_TRUE(!real_path.empty(), "Failed to get real path of %s", path.c_str());
+  GE_ASSERT_TRUE(!real_path.empty(), "Path: %s is invalid, file or directory does not exist", path.c_str());
   std::ifstream ifs(real_path, std::ifstream::binary);
   GE_ASSERT_TRUE(ifs.is_open(), "Read file %s failed.", real_path.c_str());
   GE_MAKE_GUARD(close_ifs, [&ifs]() { ifs.close(); });
@@ -213,8 +223,18 @@ graphStatus GetBinFromFile(const std::string &path, char_t *buffer, size_t &data
 
 graphStatus WriteBinToFile(std::string &path, char_t *data, uint32_t &data_len) {
   GE_ASSERT_TRUE(!path.empty());
-  std::ofstream ofs(path, std::ios::out | std::ifstream::binary);
-  GE_ASSERT_TRUE(ofs.is_open(), "path:%s open failed", path.c_str());
+  std::string dir_path;
+  std::string file_name;
+  SplitFilePath(path, dir_path, file_name);
+  std::string check_dir = dir_path.empty() ? "." : dir_path;
+  std::string real_dir_path = RealPath(check_dir.c_str());
+  GE_ASSERT_TRUE(!real_dir_path.empty(), "Dir path of %s is invalid or does not exist", path.c_str());
+  std::string secure_path = real_dir_path + "/" + file_name;
+  std::ofstream ofs(secure_path, std::ios::out | std::ifstream::binary); 
+  if (!ofs.is_open()) {
+      GELOGE(GRAPH_FAILED, "Open file failed. Path: %s (Real: %s)", path.c_str(), secure_path.c_str());
+      return GRAPH_FAILED;
+  }
   (void) ofs.write(data, static_cast<std::streamsize>(data_len));
   ofs.close();
   return GRAPH_SUCCESS;
@@ -229,13 +249,13 @@ graphStatus WriteBinToFile(const int32_t fd, const char_t *const data, size_t da
   size_t remain_size = data_len;
   auto seek = static_cast<void *>(const_cast<char_t *>(data));
   do {
-    size_t copy_size = remain_size > kMaxWriteSize ? kMaxWriteSize : remain_size;
+    const size_t copy_size = remain_size > kMaxWriteSize ? kMaxWriteSize : remain_size;
     write_count = mmWrite(fd, seek, static_cast<uint32_t>(copy_size));
     GE_ASSERT_TRUE(((write_count != EN_INVALID_PARAM) && (write_count != EN_ERROR)),
                    "Write data failed, data_len: %llu", data_len);
     seek = PtrAdd<uint8_t>(PtrToPtr<void, uint8_t>(seek), remain_size, static_cast<size_t>(write_count));
     remain_size -= static_cast<size_t>(write_count);
-  } while (remain_size > 0U);
+  }while (remain_size > 0U);
   return GRAPH_SUCCESS;
 }
 
@@ -254,8 +274,8 @@ void SplitFilePath(const std::string &file_path, std::string &dir_path, std::str
     file_name = file_path;
     return;
   }
-  dir_path = std::string(file_path).substr(0U, static_cast<size_t>(split_pos));
-  file_name = std::string(file_path.substr(split_pos + 1U, file_path.length()));
+  dir_path = file_path.substr(0U, static_cast<size_t>(split_pos));
+  file_name = file_path.substr(static_cast<size_t>(split_pos) + 1UL, file_path.length());
   return;
 }
 
@@ -275,10 +295,10 @@ graphStatus SaveBinToFile(const char *const data, size_t length, const std::stri
   GE_ASSERT_TRUE(!real_path.empty(), "Path: %s is empty", file_path.c_str());
   real_path = real_path + "/" + file_name;
   // Open file
-  const mmMode_t mode = static_cast<mmMode_t>(static_cast<uint32_t>(M_IRUSR) | static_cast<uint32_t>(M_IWUSR));
-  const int32_t open_flag = static_cast<int32_t>(static_cast<uint32_t>(M_RDWR) | static_cast<uint32_t>(M_CREAT) |
+  constexpr mmMode_t mode = static_cast<mmMode_t>(static_cast<uint32_t>(M_IRUSR) | static_cast<uint32_t>(M_IWUSR));
+  constexpr int32_t open_flag = static_cast<int32_t>(static_cast<uint32_t>(M_RDWR) | static_cast<uint32_t>(M_CREAT) |
                                                  static_cast<uint32_t>(O_TRUNC));
-  int32_t fd = mmOpen2(&real_path[0UL], open_flag, mode);
+  const int32_t fd = mmOpen2(&real_path[0UL], open_flag, mode);
   GE_ASSERT_TRUE(((fd != EN_INVALID_PARAM) && (fd != EN_ERROR)), "Open file failed, path: %s", real_path.c_str());
   Status ret = GRAPH_SUCCESS;
   if (WriteBinToFile(fd, data, length) != GRAPH_SUCCESS) {
@@ -299,8 +319,8 @@ Status GetAscendWorkPath(std::string &ascend_work_path) {
     if (mmAccess(work_path) != EN_OK) {
       if (ge::CreateDir(work_path) != 0) {
         std::string reason = "The path doesn't exist, create path failed.";
-        REPORT_PREDEFINED_ERR_MSG("E10001", std::vector<const char_t *>({"parameter", "value", "reason"}),
-                                  std::vector<const char_t *>({"ASCEND_WORK_PATH", work_path, reason.c_str()}));
+        (void)REPORT_PREDEFINED_ERR_MSG("E10001", std::vector<const char_t *>({"parameter", "value", "reason"}),
+                                         std::vector<const char_t *>({"ASCEND_WORK_PATH", work_path, reason.c_str()}));
         return FAILED;
       }
     }

@@ -26,7 +26,7 @@ inline void *ValueToPtr(const uint64_t value) {
 inline std::vector<uint64_t> VPtrToValue(const std::vector<void *> v_ptr) {
   std::vector<uint64_t> v_value;
   for (const auto &ptr : v_ptr) {
-    v_value.emplace_back(PtrToValue(ptr));
+    (void) v_value.emplace_back(PtrToValue(ptr));
   }
   return v_value;
 }

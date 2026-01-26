@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -91,7 +91,7 @@ void RegisterOpImplToRegistry(const OpImplRegisterV2Impl *rd) {
     ss << "[InferFormat]";
     funcs.infer_format_func = rd->functions.infer_format_func;
   }
-  if (rd->functions.calc_op_param != 0U) {
+  if (rd->functions.calc_op_param != nullptr) {
     ss << "[CalcOpParam]";
     funcs.calc_op_param = rd->functions.calc_op_param;
   }
@@ -107,6 +107,11 @@ void RegisterOpImplToRegistry(const OpImplRegisterV2Impl *rd) {
     ss << "[OpSelectFormat]";
     funcs.op_select_format = rd->functions.op_select_format;
   }
+  if (rd->functions.exception_func != nullptr) {
+    ss << "[ExceptionFunc]";
+    funcs.exception_func = rd->functions.exception_func;
+  }
+
   GELOGI("LocalRegistry[%zu] Op type[%s] register OP_IMPL : %s",
          std::hash<std::string>()(ge::GetModelPathByAddr(&OpImplRegistry::GetInstance())),
          rd->op_type.GetString(), ss.str().c_str());
@@ -130,6 +135,16 @@ ge::graphStatus InferOutDataTypeSameWithFirstInputFunc(InferDataTypeContext *con
 }
 } // namespace
 
+OpImplRegisterV2 &OpImplRegisterV2::ExceptionDumpParseFunc(ExcepitonDumpFunc exception_func) {
+  if (impl_ != nullptr && exception_func != nullptr) {
+    impl_->functions.exception_func = exception_func;
+    GELOGI("Register exception function for op type %s", impl_->op_type.GetString());
+  } else {
+    GELOGW("Failed to register exception function for op type%s", impl_->op_type.GetString());
+  }
+  return *this;
+}
+
 gert::OpImplKernelRegistry::OpImplFunctions &gert::OpImplKernelRegistry::OpImplFunctions::operator=(
     gert::OpImplKernelRegistry::OpImplFunctionsV2 &func) {
   *this = static_cast<OpImplFunctions &>(func);
@@ -143,14 +158,12 @@ gert::OpImplKernelRegistry::OpImplFunctionsV2 &gert::OpImplKernelRegistry::OpImp
 }
 
 gert::OpImplKernelRegistry::OpImplFunctionsV2::OpImplFunctionsV2(
-    gert::OpImplKernelRegistry::OpImplFunctions &func) {
-  static_cast<gert::OpImplKernelRegistry::OpImplFunctions&>(*this) = func;
-}
+    gert::OpImplKernelRegistry::OpImplFunctions &func) :
+    gert::OpImplKernelRegistry::OpImplFunctions(func) {}
 
 gert::OpImplKernelRegistry::OpImplFunctionsV2::OpImplFunctionsV2 (
-    const gert::OpImplKernelRegistry::OpImplFunctions &func) {
-  static_cast<gert::OpImplKernelRegistry::OpImplFunctions&>(*this) = func;
-}
+    const gert::OpImplKernelRegistry::OpImplFunctions &func) :
+    gert::OpImplKernelRegistry::OpImplFunctions(func) {}
 
 OpImplRegistry &OpImplRegistry::GetInstance() {
   static OpImplRegistry instance;
@@ -205,6 +218,7 @@ OpImplRegisterV2::OpImplRegisterV2(const ge::char_t *op_type) : impl_(new(std::n
   impl_->functions.gen_task = nullptr;
   impl_->functions.check_support = nullptr;
   impl_->functions.op_select_format = nullptr;
+  impl_->functions.exception_func = nullptr;
   // two fields controlled by tiling func
   impl_->functions.tiling = nullptr;
   impl_->functions.max_tiling_data_size = std::numeric_limits<size_t>::max();
@@ -383,7 +397,7 @@ OpImplRegisterV2 &OpImplRegisterV2::PrivateAttr(const ge::char_t *private_attr, 
   if (impl_ != nullptr) {
     impl_->is_private_attr_registered = true;
     if (impl_->functions.unique_private_attrs.insert(private_attr).second) {
-      impl_->functions.private_attrs.emplace_back(std::make_pair(private_attr, std::move(private_attr_av)));
+      (void)impl_->functions.private_attrs.emplace_back(std::make_pair(private_attr, std::move(private_attr_av)));
     } else {
       GELOGW("The private attr name: %s has already existed.", private_attr);
     }

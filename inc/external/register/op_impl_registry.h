@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -31,6 +31,17 @@
 namespace ge {
 class AnyValue;
 }  // namespace ge
+
+//直接引入rts的头文件会引入额外的include path，导致用户侧代码编译失败，因此重新定义了rts头文件中的结构体
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+typedef struct rtExceptionInfo aclrtExceptionInfo;
+
+#ifdef __cplusplus
+}
+#endif
 
 namespace gert {
 enum TilingPlacement {
@@ -71,6 +82,7 @@ class OpImplRegisterV2 {
                                          std::vector<std::vector<uint8_t>> &tasks);
   using OP_CHECK_FUNC_V2 = ge::graphStatus (*)(const OpCheckContext *context,
                                                ge::AscendString &result);
+  using ExcepitonDumpFunc = void (*) (aclrtExceptionInfo *exception_info, void *reserved);
 
  public:
   OpImplRegisterV2 &InferShape(InferShapeKernelFunc infer_shape_func);
@@ -113,6 +125,7 @@ class OpImplRegisterV2 {
   OpImplRegisterV2 &GenerateTask(OpGenTaskKernelFunc gen_task_func);
   OpImplRegisterV2 &CheckSupport(OP_CHECK_FUNC_V2 check_support_func);
   OpImplRegisterV2 &OpSelectFormat(OP_CHECK_FUNC_V2 op_select_format_func);
+  OpImplRegisterV2 &ExceptionDumpParseFunc(ExcepitonDumpFunc exception_func);
 
  private:
   OpImplRegisterV2 &TilingParse(KernelFunc tiling_parse_func,

@@ -14,7 +14,7 @@
 #include "common/checker.h"
 #include "common/util/mem_utils.h"
 #include "graph/any_value.h"
-#include "graph/debug/ge_log.h"
+#include "common/ge_common/debug/ge_log.h"
 #include "register/op_impl_registry.h"
 #include "register/op_impl_registry_holder_manager.h"
 #include "mmpa/mmpa_api.h"
@@ -22,45 +22,14 @@
 #include "base/registry/opp_package_utils.h"
 #include "graph/ascend_string.h"
 #include "common/plugin/plugin_manager.h"
+#include "common/ge_common/util.h"
 
 namespace gert {
-OpImplSpaceRegistry::OpImplSpaceRegistry() {
-  impl_ = std::make_shared<OpImplSpaceRegistryV2>();
-}
+OpImplSpaceRegistry::OpImplSpaceRegistry() : std::enable_shared_from_this<OpImplSpaceRegistry>(),
+                                             impl_(std::make_shared<OpImplSpaceRegistryV2>()) {}
 
-OpImplSpaceRegistry::OpImplSpaceRegistry(OpImplSpaceRegistryV2Ptr ptr) : impl_(std::move(ptr)) {}
-
-ge::graphStatus OpImplSpaceRegistry::GetOrCreateRegistry(const std::vector<ge::OpSoBinPtr> &bins,
-                                                         const ge::SoInOmInfo &so_info) {
-  return GetOrCreateRegistry(bins, so_info, "/opp/");
-}
-
-ge::graphStatus OpImplSpaceRegistry::GetOrCreateRegistry(const std::vector<ge::OpSoBinPtr> &bins,
-                                                         const ge::SoInOmInfo &so_info,
-                                                         const std::string &opp_path_identifier) {
-  (void)opp_path_identifier;
-  for (const auto &so_bin : bins) {
-    GE_ASSERT_NOTNULL(so_bin, "so bin must not be nullptr");
-    std::string so_data(so_bin->GetBinData(), so_bin->GetBinData() + so_bin->GetBinDataSize());
-    const auto create_func = [&so_bin]() -> OpImplRegistryHolderPtr {
-      auto om_registry_holder = std::make_shared<OmOpImplRegistryHolder>();
-      if (om_registry_holder == nullptr) {
-        GELOGE(ge::FAILED, "make_shared om op impl registry holder failed");
-        return nullptr;
-      }
-      if ((om_registry_holder->LoadSo(so_bin)) != ge::GRAPH_SUCCESS) {
-        GELOGE(ge::FAILED, "om registry holder load so failed");
-        return nullptr;
-      }
-      return om_registry_holder;
-    };
-    const auto registry_holder =
-        OpImplRegistryHolderManager::GetInstance().GetOrCreateOpImplRegistryHolder(so_data, create_func);
-    GE_CHECK_NOTNULL(registry_holder);
-    GE_ASSERT_SUCCESS(AddRegistry(registry_holder));
-  }
-  return ge::GRAPH_SUCCESS;
-}
+OpImplSpaceRegistry::OpImplSpaceRegistry(OpImplSpaceRegistryV2Ptr ptr) :
+  std::enable_shared_from_this<OpImplSpaceRegistry>(), impl_(std::move(ptr)) {}
 
 ge::graphStatus OpImplSpaceRegistry::AddRegistry(const std::shared_ptr<OpImplRegistryHolder> &registry_holder) {
   GE_ASSERT_NOTNULL(impl_);
@@ -112,14 +81,14 @@ ge::graphStatus OpImplSpaceRegistry::ConvertSoToRegistry(const std::string &so_p
                                                          ge::OppImplVersion opp_impl_version) {
   GELOGI("Convert so to registry, so path:%s, opp_impl_version: %d", so_path.c_str(),
          static_cast<int32_t>(opp_impl_version));
-  auto opp_version_tag = static_cast<gert::OppImplVersionTag>(opp_impl_version);
+  const auto opp_version_tag = static_cast<gert::OppImplVersionTag>(opp_impl_version);
   GE_ASSERT_TRUE(opp_version_tag < gert::OppImplVersionTag::kVersionEnd);
   auto space_registry_v2 =
       gert::DefaultOpImplSpaceRegistryV2::GetInstance().GetSpaceRegistry(opp_version_tag);
   if (space_registry_v2 == nullptr) {
     space_registry_v2 = std::make_shared<gert::OpImplSpaceRegistryV2>();
     GE_CHECK_NOTNULL(space_registry_v2);
-    gert::DefaultOpImplSpaceRegistryV2::GetInstance().SetSpaceRegistry(space_registry_v2, opp_version_tag);
+    (void)gert::DefaultOpImplSpaceRegistryV2::GetInstance().SetSpaceRegistry(space_registry_v2, opp_version_tag);
   }
   OppSoDesc opp_so_desc({ge::AscendString(so_path.c_str())},
     ge::AscendString(ge::PluginManager::GetSoPackageName(so_path).c_str()));
@@ -145,7 +114,7 @@ OpImplSpaceRegistryPtr &DefaultOpImplSpaceRegistry::GetDefaultSpaceRegistry(ge::
   if (opp_impl_version > ge::OppImplVersion::kVersionEnd) {
     return null_ptr;
   }
-  auto version = static_cast<gert::OppImplVersionTag>(opp_impl_version);
+  const auto version = static_cast<gert::OppImplVersionTag>(opp_impl_version);
   if (space_registries_[static_cast<size_t>(version)] != nullptr) {
     return space_registries_[static_cast<size_t>(version)];
   }
@@ -165,7 +134,7 @@ void DefaultOpImplSpaceRegistry::SetDefaultSpaceRegistry(const OpImplSpaceRegist
   (void) DefaultOpImplSpaceRegistryV2::GetInstance().SetSpaceRegistry(
       space_registry != nullptr ? space_registry->impl_ : nullptr,
       static_cast<gert::OppImplVersionTag>(opp_impl_version));
-  auto version = static_cast<gert::OppImplVersionTag>(opp_impl_version);
+  const auto version = static_cast<gert::OppImplVersionTag>(opp_impl_version);
   auto space_registry_v2 = DefaultOpImplSpaceRegistryV2::GetInstance().GetSpaceRegistry(version);
   space_registries_[static_cast<size_t>(version)] =
       space_registry_v2 == nullptr ? nullptr : ge::MakeShared<OpImplSpaceRegistry>(space_registry_v2);

@@ -116,7 +116,7 @@ int32_t ReportInnerErrorMessage(const char *file_name, const char *func, uint32_
 }
 
 std::unique_ptr<error_message::char_t[]> CreateUniquePtrFromString(const std::string &str) {
-  const size_t buf_size = str.empty() ? 1 : (str.size() + 1);
+  const size_t buf_size = str.empty() ? 1UL : (str.size() + 1UL);
   auto uni_ptr = std::unique_ptr<error_message::char_t[]>(new (std::nothrow) error_message::char_t[buf_size]);
   if (uni_ptr == nullptr) {
     return nullptr;
@@ -126,7 +126,7 @@ std::unique_ptr<error_message::char_t[]> CreateUniquePtrFromString(const std::st
     uni_ptr[0U] = '\0';
   } else {
     // 当src size < dst size时，strncpy_s会在末尾str.size()位置添加'\0'
-    if (strncpy_s(uni_ptr.get(), str.size() + 1, str.c_str(), str.size()) != EOK) {
+    if (strncpy_s(uni_ptr.get(), str.size() + 1UL, str.c_str(), str.size()) != EOK) {
       return nullptr;
     }
   }
@@ -135,7 +135,7 @@ std::unique_ptr<error_message::char_t[]> CreateUniquePtrFromString(const std::st
 
 void ClearMessageContainerByWorkId(std::map<uint64_t, std::vector<ErrorManager::ErrorItem>> &message_container,
                                    const uint64_t work_stream_id) {
-  const std::map<uint64_t, std::vector<ErrorManager::ErrorItem>>::const_iterator err_iter =
+  const std::map<uint64_t, std::vector<ErrorManager::ErrorItem>>::iterator err_iter =
       message_container.find(work_stream_id);
   if (err_iter != message_container.cend()) {
     (void) message_container.erase(err_iter);
@@ -264,7 +264,7 @@ void Trim(std::string &s) {
 ///
 std::string GetSelfLibraryDir(void) {
   mmDlInfo dl_info{nullptr, nullptr, nullptr, nullptr, 0, 0, 0};
-  if (mmDladdr(reinterpret_cast<void *>(GetSelfLibraryDir), &dl_info) != EN_OK) {
+  if (mmDladdr(reinterpret_cast<void *>(&GetSelfLibraryDir), &dl_info) != EN_OK) {
     const error_message::char_t *error = mmDlerror();
     error = (error == nullptr) ? "" : error;
     GELOGW("Failed to read the shared library file path! reason:%s", error);
@@ -292,7 +292,7 @@ std::vector<std::string> SplitByDelim(const std::string &str, const error_messag
   std::vector<std::string> elems;
 
   if (str.empty()) {
-    elems.emplace_back("");
+    (void)elems.emplace_back("");
     return elems;
   }
 
@@ -305,7 +305,7 @@ std::vector<std::string> SplitByDelim(const std::string &str, const error_messag
   }
   const auto str_size = str.size();
   if ((str_size > 0U) && (str[str_size - 1U] == delim)) {
-    elems.emplace_back("");
+    (void)elems.emplace_back("");
   }
 
   return elems;
@@ -405,12 +405,12 @@ int32_t ErrorManager::ReportInterErrMessage(const std::string error_code, const 
   if (error_code[0UL] == 'W') {
     const auto it = find(warning_messages.begin(), warning_messages.end(), item);
     if (it == warning_messages.end()) {
-      warning_messages.emplace_back(item);
+      (void)warning_messages.emplace_back(item);
     }
   } else {
     const auto it = find(error_messages.begin(), error_messages.end(), item);
     if (it == error_messages.end()) {
-      error_messages.emplace_back(item);
+      (void)error_messages.emplace_back(item);
     }
   }
   return 0;
@@ -437,6 +437,7 @@ int32_t ErrorManager::ReportErrMessage(const std::string error_code,
     GenWorkStreamIdDefault();
   }
 
+  const std::unique_lock<std::mutex> lock(mutex_);
   GELOGI("report error_message, error_code:%s, work_stream_id:%lu, error_mode:%u.",
     error_code.c_str(), error_context_.work_stream_id, error_mode_);
   const std::map<std::string, ErrorManager::ErrorInfoConfig>::const_iterator iter = error_map_.find(error_code);
@@ -466,7 +467,6 @@ int32_t ErrorManager::ReportErrMessage(const std::string error_code,
     (void)error_message.replace(index, kLength, arg_value);
   }
 
-  const std::unique_lock<std::mutex> lock(mutex_);
   auto &error_messages = GetErrorMsgContainer(error_context_.work_stream_id);
   auto &warning_messages = GetWarningMsgContainer(error_context_.work_stream_id);
 
@@ -479,12 +479,12 @@ int32_t ErrorManager::ReportErrMessage(const std::string error_code,
   if (error_code[0UL] == 'W') {
     const auto it = find(warning_messages.begin(), warning_messages.end(), error_item);
     if (it == warning_messages.end()) {
-      warning_messages.emplace_back(error_item);
+      (void)warning_messages.emplace_back(error_item);
     }
   } else {
     const auto it = find(error_messages.begin(), error_messages.end(), error_item);
     if (it == error_messages.end()) {
-      error_messages.emplace_back(error_item);
+      (void)error_messages.emplace_back(error_item);
     }
   }
   return 0;
@@ -520,7 +520,7 @@ int32_t ErrorManager::ReportErrMsgWithoutTpl(const std::string &error_code, cons
   ErrorItem error_item{final_error_code, "", errmsg, "", "", {}, report_time};
   const auto it = find(error_messages.begin(), error_messages.end(), error_item);
   if (it == error_messages.end()) {
-    error_messages.emplace_back(error_item);
+    (void)error_messages.emplace_back(error_item);
   }
   return 0;
 }
@@ -800,7 +800,7 @@ void ErrorManager::ClassifyCompileFailedMsg(const std::map<std::string, std::str
       (void)classified_msg.emplace(itr.first, std::vector<std::string>{itr.second});
     } else {
       std::vector<std::string> &op_name_list = err_code_itr->second;
-      op_name_list.emplace_back(itr.second);
+      (void)op_name_list.emplace_back(itr.second);
     }
   }
 }
@@ -973,10 +973,10 @@ void ErrorManager::SetStage(const std::string &first_stage, const std::string &s
 }
 
 bool ErrorManager::IsInnerErrorCode(const std::string &error_code) const {
-  const std::string kInterErrorCodePrefix = "9999";
   if (!IsValidErrorCode(error_code)) {
     return false;
   } else {
+    const std::string kInterErrorCodePrefix = "9999";
     return (error_code.substr(2U, 4U) == kInterErrorCodePrefix) || IsParamCheckErrorId(error_code);
   }
 }
@@ -1030,8 +1030,8 @@ namespace error_message {
 int32_t RegisterFormatErrorMessage(const char_t *error_msg, size_t error_msg_len) {
   nlohmann::json j;
   try {
-    j = nlohmann::json::parse(error_msg, error_msg + error_msg_len);
-  } catch (const nlohmann::json::parse_error& e) {
+    j = nlohmann::json::parse(std::string(error_msg, error_msg_len));
+  } catch (const nlohmann::json::parse_error&) {
     return -1;
   }
   GELOGI("RegisterFormatErrorMessage, try to register error message");
@@ -1115,11 +1115,11 @@ std::vector<ErrMsgRawItem> GetErrMgrRawErrorMessages() {
     raw_item.possible_cause = CreateUniquePtrFromString(item.possible_cause);
     raw_item.solution = CreateUniquePtrFromString(item.solution);
     for (const auto &arg : item.args_map) {
-      raw_item.args_key.emplace_back(CreateUniquePtrFromString(arg.first));
-      raw_item.args_value.emplace_back(CreateUniquePtrFromString(arg.second));
+      (void)raw_item.args_key.emplace_back(CreateUniquePtrFromString(arg.first));
+      (void)raw_item.args_value.emplace_back(CreateUniquePtrFromString(arg.second));
     }
     raw_item.report_time = CreateUniquePtrFromString(item.report_time);
-    raw_items.emplace_back(std::move(raw_item));
+    (void)raw_items.emplace_back(std::move(raw_item));
   }
   return raw_items;
 }

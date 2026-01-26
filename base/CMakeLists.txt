@@ -21,6 +21,7 @@ file(GLOB_RECURSE OPP_REGISTRY_SRC_LIST
         registry/op_impl_space_registry_v2_impl.cc
         registry/opp_package_utils.cc
         registry/opp_so_manager.cc
+        asc/tilingdata_base_impl.cc
 )
 
 ############ libopp_registry.so ############
@@ -29,7 +30,7 @@ add_library(opp_registry SHARED
 )
 
 target_compile_options(opp_registry PRIVATE
-        $<$<OR:$<STREQUAL:${TARGET_SYSTEM_NAME},Linux>,$<STREQUAL:${TARGET_SYSTEM_NAME},Android>>: -fno-common -Wextra -Wfloat-equal -Wno-array-bounds>
+        $<$<OR:$<STREQUAL:${TARGET_SYSTEM_NAME},Linux>,$<STREQUAL:${TARGET_SYSTEM_NAME},Android>>: -fno-common -Wextra -Wfloat-equal>
         $<$<STREQUAL:${TARGET_SYSTEM_NAME},Windows>:/utf-8>
         $<$<AND:$<STREQUAL:${TARGET_SYSTEM_NAME},Windows>,$<STREQUAL:${CMAKE_CONFIGURATION_TYPES},Debug>>:/MTd>
         $<$<AND:$<STREQUAL:${TARGET_SYSTEM_NAME},Windows>,$<STREQUAL:${CMAKE_CONFIGURATION_TYPES},Release>>:/MT>
@@ -131,6 +132,7 @@ install(TARGETS rt2_registry_static
 set(STUB_HEADER_LIST
     ${METADEF_DIR}/inc/external/base/registry/op_impl_space_registry_v2.h
     ${METADEF_DIR}/inc/external/base/registry/opp_package_utils.h
+    ${METADEF_DIR}/inc/external/register/tilingdata_base.h
 )
 
 if (NOT "${PRODUCT}" STREQUAL "ascend031")
@@ -220,7 +222,7 @@ add_library(metadef SHARED
 )
 
 target_compile_options(metadef PRIVATE
-    $<$<OR:$<STREQUAL:${TARGET_SYSTEM_NAME},Linux>,$<STREQUAL:${TARGET_SYSTEM_NAME},Android>>: -fno-common -Wextra -Wfloat-equal -Wno-array-bounds>
+    $<$<OR:$<STREQUAL:${TARGET_SYSTEM_NAME},Linux>,$<STREQUAL:${TARGET_SYSTEM_NAME},Android>>: -fno-common -Wextra -Wfloat-equal>
     $<$<STREQUAL:${TARGET_SYSTEM_NAME},Windows>:/utf-8>
     $<$<AND:$<STREQUAL:${TARGET_SYSTEM_NAME},Windows>,$<STREQUAL:${CMAKE_CONFIGURATION_TYPES},Debug>>:/MTd>
     $<$<AND:$<STREQUAL:${TARGET_SYSTEM_NAME},Windows>,$<STREQUAL:${CMAKE_CONFIGURATION_TYPES},Release>>:/MT>
@@ -250,7 +252,7 @@ target_include_directories(metadef PRIVATE
     ${METADEF_DIR}/inc/common/ge_common/debug
     ${METADEF_DIR}/inc/graph
     ${METADEF_DIR}/inc/graph/debug
-    
+
     ${METADEF_DIR}/inc/external
     ${METADEF_DIR}/inc/external/base/context_builder
     ${METADEF_DIR}/inc/external/graph
@@ -366,7 +368,7 @@ if (NOT ENABLE_OPEN_SRC)
     add_dependencies(stub_metadef_static metadef_stub)
 
     target_compile_options(stub_metadef_static PRIVATE
-        $<$<STREQUAL:${TARGET_SYSTEM_NAME},Linux>:-O2 -fPIC -Wextra -Wfloat-equal -Wno-array-bounds>)
+        $<$<STREQUAL:${TARGET_SYSTEM_NAME},Linux>:-O2 -fPIC -Wextra -Wfloat-equal>)
 
     set_target_properties(stub_metadef_static PROPERTIES
         OUTPUT_NAME metadef
@@ -546,6 +548,9 @@ target_compile_options(device_register PRIVATE
     -fvisibility=hidden
     -frename-registers
     -fpeel-loops
+    -Wextra
+    -fno-common
+    -Wfloat-equal
 )
 
 target_link_options(device_register PRIVATE
@@ -590,6 +595,65 @@ set_target_properties(stub_exe_graph PROPERTIES
         LIBRARY_OUTPUT_DIRECTORY stub
         )
 
+##################tilingdata_base##########################
+add_library(tilingdata_base STATIC
+  "${METADEF_DIR}/base/asc/tilingdata_base_impl.cc"
+)
+
+target_include_directories(tilingdata_base PRIVATE
+  ${METADEF_DIR}/pkg_inc/
+  ${METADEF_DIR}/inc/external
+)
+
+target_link_libraries(tilingdata_base PRIVATE
+  $<$<BOOL:${ENABLE_GCOV}>:-lgcov>
+  -lpthread
+  -Wl,--no-as-needed
+  c_sec
+)
+
+target_compile_definitions(tilingdata_base PRIVATE
+    ASCENDC_DEVICE_REG_STATIC
+    _FORTIFY_SOURCE=2
+    $<$<CONFIG:Release>:CFG_BUILD_NDEBUG>
+    $<$<CONFIG:Debug>:CFG_BUILD_DEBUG>
+    LINUX=0
+    $<$<BOOL:${ENABLE_TEST}>:SUPPORT_LARGE_MODEL_ENABLE=1>
+    $<$<BOOL:${ENABLE_METADEF_UT}>:_GLIBCXX_USE_CXX11_ABI=0>
+)
+
+target_compile_options(tilingdata_base PRIVATE
+    -O2
+    -std=c++17
+    -fvisibility-inlines-hidden
+    -fvisibility=hidden
+    -frename-registers
+    -fpeel-loops
+    -fPIC
+    -Wextra
+    -Wfloat-equal
+    $<IF:$<STREQUAL:${CMAKE_SYSTEM_NAME},centos>,-fstack-protector-all,-fstack-protector-strong>
+    $<$<CONFIG:Debug>:-g>
+    $<$<BOOL:${ENABLE_ASAN}>:-fsanitize=address -fsanitize=leak -fsanitize-recover=address,all -fno-stack-protector -fno-omit-frame-pointer -g>
+    $<$<BOOL:${ENABLE_GCOV}>:-fprofile-arcs -ftest-coverage>
+)
+
+target_link_options(tilingdata_base PRIVATE
+    -Wl,-z,relro,-z,now
+    -Wl,-z,noexecstack
+    -Wl,-Bsymbolic
+    -Wl,--no-undefined
+    $<$<CONFIG:Release>:-Wl,--build-id=none>
+    $<$<CONFIG:Release>:-s>
+    $<$<BOOL:${ENABLE_ASAN}>:-fsanitize=address -fsanitize=leak -fsanitize-recover=address>
+    $<$<BOOL:${ENABLE_GCOV}>:-fprofile-arcs -ftest-coverage>
+)
+
+install(TARGETS tilingdata_base OPTIONAL
+  ARCHIVE DESTINATION ${INSTALL_LIBRARY_DIR}
+  COMPONENT metadef_device
+)
+
 ############ stub/libexe_graph.a ############
 if (NOT ENABLE_OPEN_SRC)
     target_clone(stub_exe_graph stub_exe_graph_static STATIC)
@@ -619,3 +683,4 @@ install(TARGETS stub_exe_graph OPTIONAL
 add_custom_target(metadef_device)
 add_dependencies(metadef_device exe_meta_device)
 add_dependencies(metadef_device device_register)
+add_dependencies(metadef_device tilingdata_base)

@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -84,6 +84,14 @@ ge::graphStatus TestOpExecutePrepareFunc(gert::OpExecutePrepareContext *) {
 
 ge::graphStatus TestOpExecuteLaunchFunc(gert::OpExecuteLaunchContext *) {
   return ge::GRAPH_SUCCESS;
+}
+
+void TestExceptionFunc1(aclrtExceptionInfo *exception_info, void *user_data) {
+  // 测试实现
+}
+
+void TestExceptionFunc2(aclrtExceptionInfo *exception_info, void *user_data) {
+  // 测试实现
 }
 
 struct TilingParseCompileInfo {
@@ -948,5 +956,59 @@ TEST_F(OpImplRegistryUT, register_gen_task_and_calc_running_param_success) {
     EXPECT_EQ(impl_funcs[i].funcs.check_support, &TestCheckSupportKernelFunc);
     EXPECT_EQ(impl_funcs[i].funcs.op_select_format, &TestOpSelectFormatKernelFunc);
   }
+}
+
+TEST_F(OpImplRegistryUT, RegisterExceptionFuncTest) {
+  auto funcs = gert::OpImplRegistry::GetInstance().GetOpImpl("TestExceptionOp");
+  ASSERT_EQ(funcs, nullptr);
+
+  IMPL_OP(TestExceptionOp)
+      .InferShape(TestInferShapeFunc1)
+      .ExceptionDumpParseFunc(TestExceptionFunc1);
+
+  funcs = gert::OpImplRegistry::GetInstance().GetOpImpl("TestExceptionOp");
+  ASSERT_NE(funcs, nullptr);
+  EXPECT_EQ(funcs->exception_func, &TestExceptionFunc1);
+
+  IMPL_OP(TestExceptionOp)
+      .ExceptionDumpParseFunc(TestExceptionFunc2);
+
+  funcs = gert::OpImplRegistry::GetInstance().GetOpImpl("TestExceptionOp");
+  ASSERT_NE(funcs, nullptr);
+  EXPECT_EQ(funcs->exception_func, &TestExceptionFunc2);
+  EXPECT_EQ(funcs->infer_shape, &TestInferShapeFunc1);
+}
+
+TEST_F(OpImplRegistryUT, RegisterExceptionFuncWithNullTest) {
+  auto funcs = gert::OpImplRegistry::GetInstance().GetOpImpl("TestExceptionOpNull");
+  ASSERT_EQ(funcs, nullptr);
+
+  IMPL_OP(TestExceptionOpNull)
+      .InferShape(TestInferShapeFunc1)
+      .ExceptionDumpParseFunc(nullptr);
+
+  funcs = gert::OpImplRegistry::GetInstance().GetOpImpl("TestExceptionOpNull");
+  ASSERT_NE(funcs, nullptr);
+  EXPECT_EQ(funcs->exception_func, nullptr);
+  EXPECT_EQ(funcs->infer_shape, &TestInferShapeFunc1);
+}
+
+TEST_F(OpImplRegistryUT, GetOpImplFunctionsWithExceptionFuncTest) {
+  IMPL_OP(TestExceptionOpForApi).ExceptionDumpParseFunc(TestExceptionFunc1);
+
+  auto impl_num = GetRegisteredOpNum();
+  auto impl_funcs = std::unique_ptr<TypesToImplV2[]>(new(std::nothrow) TypesToImplV2[impl_num]);
+  auto ret = GetOpImplFunctionsV2(reinterpret_cast<TypesToImplV2 *>(impl_funcs.get()), impl_num);
+  EXPECT_NE(ret, ge::GRAPH_FAILED);
+
+  bool found = false;
+  for (uint32_t i = 0; i < impl_num; i++) {
+    if (std::string(impl_funcs[i].op_type) == "TestExceptionOpForApi") {
+      found = true;
+      EXPECT_EQ(impl_funcs[i].funcs.exception_func, &TestExceptionFunc1);
+      break;
+    }
+  }
+  EXPECT_TRUE(found);
 }
 }  // namespace gert_test

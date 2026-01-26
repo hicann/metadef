@@ -21,7 +21,8 @@ class PlatFormInfos;
 namespace gert {
 enum class OpExecutePrepareInputExtendIndex {
   kExecuteOption,
-  kFwkData,
+  kFwkData,  // 框架预留字段，算子开发者无需关注，新增字段向后追加
+  kStream,
   // add new extend input here
   kNum
 };

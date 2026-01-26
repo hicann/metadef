@@ -49,12 +49,12 @@ T &OpContextBuilderBase<T>::IONum(size_t input_ir_num, size_t output_ir_num) {
     GELOGW("IO has been set. Set IO Num failed!");
     return static_cast<T &>(*this);  // 已经设置过输入输出， 无需不允许再次设置
   }
-  op_info.input_ir_num = input_ir_num;
-  op_info.output_ir_num = output_ir_num;
-  op_info.input_tensor_descs.resize(op_info.input_ir_num, ContextTensorDesc());
-  op_info.output_tensor_descs.resize(op_info.output_ir_num, ContextTensorDesc());
-  op_info.input_instance.resize(op_info.input_ir_num, 1);
-  op_info.output_instance.resize(op_info.output_ir_num, 1);
+  op_info.input_ir_num = static_cast<uint32_t>(input_ir_num);
+  op_info.output_ir_num = static_cast<uint32_t>(output_ir_num);
+  op_info.input_tensor_descs.resize(static_cast<size_t>(op_info.input_ir_num), ContextTensorDesc());
+  op_info.output_tensor_descs.resize(static_cast<size_t>(op_info.output_ir_num), ContextTensorDesc());
+  op_info.input_instance.resize(static_cast<size_t>(op_info.input_ir_num), 1);
+  op_info.output_instance.resize(static_cast<size_t>(op_info.output_ir_num), 1);
   op_info.input_instance_num = op_info.input_ir_num;
   op_info.output_instance_num = op_info.output_ir_num;
   return static_cast<T &>(*this);
@@ -67,18 +67,22 @@ T &OpContextBuilderBase<T>::IOInstanceNum(const std::vector<uint32_t> &input_ins
   auto &op_info = impl_->MutableOpInfo();
   op_info.input_instance = input_instance_num;
   op_info.output_instance = output_instance_num;
-  op_info.input_ir_num = input_instance_num.size();
-  op_info.output_ir_num = output_instance_num.size();
+  op_info.input_ir_num = static_cast<uint32_t>(input_instance_num.size());
+  op_info.output_ir_num = static_cast<uint32_t>(output_instance_num.size());
   op_info.input_instance_num = 0U;
   op_info.output_instance_num = 0U;
   for (const auto &num : op_info.input_instance) {
-    op_info.input_instance_num += num;
+    if (op_info.input_instance_num <= (UINT32_MAX - num)) {
+      op_info.input_instance_num += num;
+    }
   }
-  op_info.input_tensor_descs.resize(op_info.input_instance_num, ContextTensorDesc());
+  op_info.input_tensor_descs.resize(static_cast<size_t>(op_info.input_instance_num), ContextTensorDesc());
   for (const auto &num : op_info.output_instance) {
-    op_info.output_instance_num += num;
+    if (op_info.output_instance_num <= (UINT32_MAX - num)) {
+      op_info.output_instance_num += num;
+    }
   }
-  op_info.output_tensor_descs.resize(op_info.output_instance_num, ContextTensorDesc());
+  op_info.output_tensor_descs.resize(static_cast<size_t>(op_info.output_instance_num), ContextTensorDesc());
   return static_cast<T &>(*this);
 }
 
@@ -173,49 +177,49 @@ gert::ExpandDimsType &OpContextBuilderBase<T>::MutableOutputExpandDimsType(size_
 template<typename T>
 T &OpContextBuilderBase<T>::AppendAttr(bool attr) {
   GE_CHECK_NOTNULL_EXEC(impl_, return static_cast<T &>(*this));
-  impl_->MutableOpInfo().attrs.emplace_back(ge::AnyValue::CreateFrom<bool>(attr));
+  (void)impl_->MutableOpInfo().attrs.emplace_back(ge::AnyValue::CreateFrom<bool>(attr));
   return static_cast<T &>(*this);
 }
 
 template<typename T>
 T &OpContextBuilderBase<T>::AppendAttr(int64_t attr) {
   GE_CHECK_NOTNULL_EXEC(impl_, return static_cast<T &>(*this));
-  impl_->MutableOpInfo().attrs.emplace_back(ge::AnyValue::CreateFrom<int64_t>(attr));
+  (void)impl_->MutableOpInfo().attrs.emplace_back(ge::AnyValue::CreateFrom<int64_t>(attr));
   return static_cast<T &>(*this);
 }
 
 template<typename T>
 T &OpContextBuilderBase<T>::AppendAttr(float attr) {
   GE_CHECK_NOTNULL_EXEC(impl_, return static_cast<T &>(*this));
-  impl_->MutableOpInfo().attrs.emplace_back(ge::AnyValue::CreateFrom<float>(attr));
+  (void)impl_->MutableOpInfo().attrs.emplace_back(ge::AnyValue::CreateFrom<float>(attr));
   return static_cast<T &>(*this);
 }
 
 template<typename T>
 T &OpContextBuilderBase<T>::AppendAttr(const ge::AscendString &attr) {
   GE_CHECK_NOTNULL_EXEC(impl_, return static_cast<T &>(*this));
-  impl_->MutableOpInfo().attrs.emplace_back(ge::AnyValue::CreateFrom<std::string>(attr.GetString()));
+  (void)impl_->MutableOpInfo().attrs.emplace_back(ge::AnyValue::CreateFrom<std::string>(attr.GetString()));
   return static_cast<T &>(*this);
 }
 
 template<typename T>
 T &OpContextBuilderBase<T>::AppendAttr(const std::vector<bool> &attr) {
   GE_CHECK_NOTNULL_EXEC(impl_, return static_cast<T &>(*this));
-  impl_->MutableOpInfo().attrs.emplace_back(ge::AnyValue::CreateFrom<std::vector<bool>>(attr));
+  (void)impl_->MutableOpInfo().attrs.emplace_back(ge::AnyValue::CreateFrom<std::vector<bool>>(attr));
   return static_cast<T &>(*this);
 }
 
 template<typename T>
 T &OpContextBuilderBase<T>::AppendAttr(const std::vector<int64_t> &attr) {
   GE_CHECK_NOTNULL_EXEC(impl_, return static_cast<T &>(*this));
-  impl_->MutableOpInfo().attrs.emplace_back(ge::AnyValue::CreateFrom<std::vector<int64_t>>(attr));
+  (void)impl_->MutableOpInfo().attrs.emplace_back(ge::AnyValue::CreateFrom<std::vector<int64_t>>(attr));
   return static_cast<T &>(*this);
 }
 
 template<typename T>
 T &OpContextBuilderBase<T>::AppendAttr(const std::vector<float> &attr) {
   GE_CHECK_NOTNULL_EXEC(impl_, return static_cast<T &>(*this));
-  impl_->MutableOpInfo().attrs.emplace_back(ge::AnyValue::CreateFrom<std::vector<float>>(attr));
+  (void)impl_->MutableOpInfo().attrs.emplace_back(ge::AnyValue::CreateFrom<std::vector<float>>(attr));
   return static_cast<T &>(*this);
 }
 
@@ -224,16 +228,16 @@ T &OpContextBuilderBase<T>::AppendAttr(const std::vector<ge::AscendString> &attr
   GE_CHECK_NOTNULL_EXEC(impl_, return static_cast<T &>(*this));
   std::vector<std::string> attr_str;
   for (auto &item : attr) {
-    attr_str.emplace_back(item.GetString());
+    (void)attr_str.emplace_back(item.GetString());
   }
-  impl_->MutableOpInfo().attrs.emplace_back(ge::AnyValue::CreateFrom<std::vector<std::string>>(attr_str));
+  (void)impl_->MutableOpInfo().attrs.emplace_back(ge::AnyValue::CreateFrom<std::vector<std::string>>(attr_str));
   return static_cast<T &>(*this);
 }
 
 template<typename T>
 T &OpContextBuilderBase<T>::AppendAttr(const std::vector<std::vector<int64_t>> &attr) {
   GE_CHECK_NOTNULL_EXEC(impl_, return static_cast<T &>(*this));
-  impl_->MutableOpInfo().attrs.emplace_back(ge::AnyValue::CreateFrom<std::vector<std::vector<int64_t>>>(attr));
+  (void)impl_->MutableOpInfo().attrs.emplace_back(ge::AnyValue::CreateFrom<std::vector<std::vector<int64_t>>>(attr));
   return static_cast<T &>(*this);
 }
 template class OpContextBuilderBase<OpTilingContextBuilder>;

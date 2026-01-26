@@ -11,7 +11,7 @@
 #include "register/op_impl_registry_holder_manager.h"
 #include "register/op_impl_registry.h"
 #include <fstream>
-#include "graph/debug/ge_log.h"
+#include "common/ge_common/debug/ge_log.h"
 #include "graph/utils/file_utils.h"
 #include "mmpa/mmpa_api.h"
 #include "graph/any_value.h"
@@ -19,7 +19,6 @@
 
 namespace gert {
 namespace {
-constexpr size_t kGByteSize = 1073741824U; // 1024 * 1024 * 1024
 static thread_local uint32_t load_so_count = 0;
 using GetImplNum = size_t (*)();
 using GetImplFunctions = ge::graphStatus (*)(TypesToImpl *imp, size_t impl_num);
@@ -93,31 +92,6 @@ ge::graphStatus OmOpImplRegistryHolder::RmOmOppDir(const std::string &opp_dir) c
     return ge::GRAPH_FAILED;
   }
 
-  return ge::GRAPH_SUCCESS;
-}
-
-ge::graphStatus OmOpImplRegistryHolder::SaveToFile(const std::shared_ptr<ge::OpSoBin> &so_bin,
-                                                   const std::string &opp_path) const {
-  constexpr mmMode_t kAccess = static_cast<mmMode_t>(static_cast<uint32_t>(M_IRUSR) |
-      static_cast<uint32_t>(M_IWUSR) |
-      static_cast<uint32_t>(M_UMASK_USREXEC));
-  const int32_t fd = mmOpen2(opp_path.c_str(),
-                             static_cast<int32_t>(static_cast<uint32_t>(M_WRONLY) |
-                                 static_cast<uint32_t>(M_CREAT) |
-                                 static_cast<uint32_t>(O_TRUNC)),
-                             kAccess);
-  if (fd < 0) {
-    GELOGE(ge::FAILED, "Failed to open file, path = %s", opp_path.c_str());
-    return ge::GRAPH_FAILED;
-  }
-  const int32_t write_count = mmWrite(fd, const_cast<uint8_t *>(so_bin->GetBinData()),
-                                      static_cast<uint32_t>(so_bin->GetBinDataSize()));
-  if ((write_count == EN_INVALID_PARAM) || (write_count == EN_ERROR)) {
-    GELOGE(ge::FAILED, "Write data failed. mmpa error no is %d", write_count);
-    GE_ASSERT_TRUE(mmClose(fd) == EN_OK);
-    return ge::GRAPH_FAILED;
-  }
-  GE_ASSERT_TRUE(mmClose(fd) == EN_OK);
   return ge::GRAPH_SUCCESS;
 }
 
@@ -282,43 +256,6 @@ void OpImplRegistryHolder::AddTypesToImpl(const gert::OpImplRegisterV2::OpType o
   types_v2_to_impl_[op_type] = funcs;
 }
 
-ge::graphStatus OmOpImplRegistryHolder::LoadSo(const std::shared_ptr<ge::OpSoBin> &so_bin) {
-  if (so_bin->GetBinDataSize() > kGByteSize) {
-    GELOGE(ge::FAILED, "The size of so bin is %zu, more than %zu", so_bin->GetBinDataSize(), kGByteSize);
-    return ge::GRAPH_FAILED;
-  }
-
-  std::string opp_dir;
-  GE_ASSERT_SUCCESS(CreateOmOppDir(opp_dir));
-
-  const std::string so_path = opp_dir + so_bin->GetSoName();
-  if (SaveToFile(so_bin, so_path) != ge::GRAPH_SUCCESS) {
-    GE_ASSERT_SUCCESS(RmOmOppDir(opp_dir));
-    return ge::GRAPH_FAILED;
-  }
-
-  void *handle = mmDlopen(so_path.c_str(),
-                          static_cast<int32_t>(static_cast<uint32_t>(MMPA_RTLD_NOW) |
-                              static_cast<uint32_t>(MMPA_RTLD_GLOBAL)));
-  if (handle == nullptr) {
-    const ge::char_t *error = mmDlerror();
-    error = (error == nullptr) ? "" : error;
-    GELOGE(ge::FAILED, "Failed to dlopen %s, errmsg: %s", so_path.c_str(), error);
-    GE_ASSERT_SUCCESS(RmOmOppDir(opp_dir));
-    return ge::GRAPH_FAILED;
-  }
-  const auto ret = GetOpImplFunctionsByHandle(handle, so_path);
-  if (ret != ge::GRAPH_SUCCESS) {
-    CloseHandle(handle);
-    GE_ASSERT_SUCCESS(RmOmOppDir(opp_dir));
-    return ge::GRAPH_FAILED;
-  }
-  GE_ASSERT_SUCCESS(RmOmOppDir(opp_dir));
-  handle_ = handle;
-
-  return ge::GRAPH_SUCCESS;
-}
-
 OpImplRegistryHolderManager &OpImplRegistryHolderManager::GetInstance() {
   static OpImplRegistryHolderManager instance;
   return instance;
@@ -387,7 +324,7 @@ OpImplRegistryHolderManager::~OpImplRegistryHolderManager() {
    * 此处临时地显示地指定这些自注册机制的static变量的析构时机(operator_infer_axis_type_info_funcs等static变量，默认在进程退出前析构)，
    * 显示地指定其在so句柄关闭之前进行析构。
    * */
-  void (*func)() = (void (*)()) mmDlsym(nullptr, "ReleaseOpsRegInfo");
+  void (*func)() = reinterpret_cast<void(*)()>(mmDlsym(nullptr, "ReleaseOpsRegInfo"));
   if (func != nullptr) {
     func();
   }

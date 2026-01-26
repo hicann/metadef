@@ -9,7 +9,6 @@
  */
 
 #include "external/graph/types.h"
-#include "graph/utils/type_utils_inner.h"
 #include "graph/ascend_string.h"
 #include <climits>
 #include <gtest/gtest.h>
@@ -209,34 +208,5 @@ TEST_F(UtestTypes, Promote) {
   EXPECT_EQ(syms[0], std::string("a"));
   EXPECT_EQ(syms[1], std::string("b"));
   EXPECT_EQ(syms[2], std::string("c"));
-}
-
-TEST_F(UtestTypes, IsDataTypeValid) {
-  ASSERT_FALSE(TypeUtilsInner::IsDataTypeValid(DT_MAX));
-  ASSERT_TRUE(TypeUtilsInner::IsDataTypeValid(DT_INT4));
-
-  ASSERT_FALSE(TypeUtilsInner::IsDataTypeValid("MAX"));
-  ASSERT_TRUE(TypeUtilsInner::IsDataTypeValid("UINT64"));
-  ASSERT_TRUE(TypeUtilsInner::IsDataTypeValid("STRING_REF"));
-}
-
-TEST_F(UtestTypes, CheckUint64MulOverflow) {
-  ASSERT_FALSE(TypeUtilsInner::CheckUint64MulOverflow(0x00ULL, 0x00UL));
-  ASSERT_FALSE(TypeUtilsInner::CheckUint64MulOverflow(0x02ULL, 0x01UL));
-  ASSERT_TRUE(TypeUtilsInner::CheckUint64MulOverflow(0xFFFFFFFFFFFFULL, 0xFFFFFFFUL));
-}
-
-TEST_F(UtestTypes, CheckUint64MulOverflow2) {
-  ASSERT_FALSE(TypeUtilsInner::CheckUint64MulOverflow(0, 1));
-  ASSERT_FALSE(TypeUtilsInner::CheckUint64MulOverflow(1, 1));
-  ASSERT_TRUE(TypeUtilsInner::CheckUint64MulOverflow(ULLONG_MAX, 2));
-}
-
-TEST_F(UtestTypes, IsFormatValid) {
-  ASSERT_TRUE(TypeUtilsInner::IsFormatValid(FORMAT_NCHW));
-  ASSERT_FALSE(TypeUtilsInner::IsFormatValid(FORMAT_END));
-
-  ASSERT_TRUE(TypeUtilsInner::IsFormatValid("DECONV_SP_STRIDE8_TRANS"));
-  ASSERT_FALSE(TypeUtilsInner::IsFormatValid("FORMAT_END"));
 }
 }

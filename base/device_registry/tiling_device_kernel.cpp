@@ -15,7 +15,7 @@
 
 #include "tiling_device_kernel.h"
 #include "device_op_impl_registry_impl.h"
-#include "graph/debug/ge_log.h"
+#include "common/ge_common/debug/ge_log.h"
 #include "tiling_aicpu_task.h"
 
 extern "C" {

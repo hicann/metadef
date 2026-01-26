@@ -18,7 +18,7 @@
 namespace gert {
 class OpTilingParseContextBuilderImpl : public ContextBuilderImpl {
  public:
-  OpTilingParseContextBuilderImpl() : ContextBuilderImpl() {}
+  using ContextBuilderImpl::ContextBuilderImpl;
   ~OpTilingParseContextBuilderImpl() override = default;
 
   std::unique_ptr<ContextHolderImpl> BuildTilingParseContext() {
@@ -32,11 +32,9 @@ class OpTilingParseContextBuilderImpl : public ContextBuilderImpl {
     GE_ASSERT_SUCCESS(CreateComputeNodeInfo(*holder), "Create compute node info failed.");
     auto compute_node_info = ge::PtrToPtr<uint8_t, ComputeNodeInfo>(holder->compute_node_info_holder_.get());
     input_values_.clear();
-    input_values_.emplace_back(reinterpret_cast<void *>(const_cast<ge::char_t *>(tiling_parse_info_.compiled_json_)),
-                               static_cast<Chain::Deleter>(nullptr));
-    input_values_.emplace_back(tiling_info_.platform_info_, nullptr);
-    input_values_.emplace_back(reinterpret_cast<void *>(const_cast<ge::char_t *>(compute_node_info->GetNodeType())),
-                               nullptr);
+    (void)input_values_.emplace_back(tiling_parse_info_.compiled_json_, static_cast<Chain::Deleter>(nullptr));
+    (void)input_values_.emplace_back(tiling_info_.platform_info_, nullptr);
+    (void)input_values_.emplace_back(compute_node_info->GetNodeType(), nullptr);
     GE_ASSERT_SUCCESS(BuildCtx(*holder), "BuildCtx failed.");
     return holder;
   }

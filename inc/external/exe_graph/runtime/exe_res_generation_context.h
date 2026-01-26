@@ -114,6 +114,8 @@ static_assert(std::is_standard_layout<ExeResGenerationContext>::value && std::is
 
 class OpCheckContext : public ExtendedKernelContext {
  public:
+   // get input with index is const data
+  bool IsConstInput(const ge::AscendString &name) const;
   const StorageShape* GetInputShape(int64_t index) const;
   const StorageShape* GetOutputShape(int64_t index) const;
  private:

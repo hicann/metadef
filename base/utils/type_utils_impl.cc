@@ -10,7 +10,6 @@
 
 #include "base/utils/type_utils_impl.h"
 #include "graph/utils/type_utils.h"
-#include "graph/utils/type_utils_inner.h"
 #include <algorithm>
 
 #include "graph/debug/ge_util.h"
@@ -273,10 +272,11 @@ AscendString TypeUtilsImpl::FormatToAscendString(const Format format) {
   }
 }
 
+graphStatus SplitFormatFromStr(const std::string &str, std::string &primary_format_str, int32_t &sub_format);
 Format TypeUtilsImpl::AscendStringToFormat(const AscendString &str) {
   std::string primary_format_str = str.GetString();
   int32_t sub_format = 0;
-  if (TypeUtilsInner::SplitFormatFromStr(str.GetString(), primary_format_str, sub_format) != GRAPH_SUCCESS) {
+  if (SplitFormatFromStr(str.GetString(), primary_format_str, sub_format) != GRAPH_SUCCESS) {
     GELOGE(GRAPH_FAILED, "[Split][Format] from %s failed", str.GetString());
     return FORMAT_RESERVED;
   }
@@ -294,7 +294,7 @@ Format TypeUtilsImpl::AscendStringToFormat(const AscendString &str) {
 Format TypeUtilsImpl::DataFormatToFormat(const AscendString &str) {
   std::string primary_format_str = str.GetString();
   int32_t sub_format = 0;
-  if (TypeUtilsInner::SplitFormatFromStr(str.GetString(), primary_format_str, sub_format) != GRAPH_SUCCESS) {
+  if (SplitFormatFromStr(str.GetString(), primary_format_str, sub_format) != GRAPH_SUCCESS) {
     GELOGE(GRAPH_FAILED, "[Split][Format] from %s failed", str.GetString());
     return FORMAT_RESERVED;
   }
@@ -327,56 +327,18 @@ bool TypeUtilsImpl::GetDataTypeLength(const ge::DataType data_type, uint32_t &le
   }
 }
 
-bool TypeUtilsInner::IsDataTypeValid(const DataType dt) {
-  const uint32_t num = static_cast<uint32_t>(dt);
-  GE_CHK_BOOL_EXEC((num < DT_MAX),
-                   REPORT_INNER_ERR_MSG("E18888", "param dt:%u >= DT_MAX:%d, check invalid", num, DT_MAX);
-                   return false, "[Check][Param] The DataType is invalid, dt:%u >= DT_MAX:%d", num, DT_MAX);
-  return true;
-}
-
-bool TypeUtilsInner::IsFormatValid(const Format format) {
-  const uint32_t num = static_cast<uint32_t>(GetPrimaryFormat(format));
-  GE_CHK_BOOL_EXEC((num <= FORMAT_RESERVED),
-                   REPORT_INNER_ERR_MSG("E18888", "The Format is invalid, num:%u > FORMAT_RESERVED:%d",
-                                      num, FORMAT_RESERVED);
-                   return false,
-                   "[Check][Param] The Format is invalid, num:%u > FORMAT_RESERVED:%d", num, FORMAT_RESERVED);
-  return true;
-}
-
-bool TypeUtilsInner::IsDataTypeValid(std::string dt) {
-  (void)transform(dt.begin(), dt.end(), dt.begin(), &::toupper);
-  const std::string key = "DT_" + dt;
-  const auto it = kStringTodataTypeMap.find(key);
-  if (it == kStringTodataTypeMap.end()) {
-    return false;
-  }
-  return true;
-}
-
-bool TypeUtilsInner::IsFormatValid(std::string format) {
-  (void)transform(format.begin(), format.end(), format.begin(), &::toupper);
-  const auto it = kStringToFormatMap.find(format);
-  if (it == kStringToFormatMap.end()) {
-    return false;
-  }
-  return true;
-}
-
-graphStatus TypeUtilsInner::SplitFormatFromStr(const std::string &str,
-                                               std::string &primary_format_str, int32_t &sub_format) {
+graphStatus SplitFormatFromStr(const std::string &str, std::string &primary_format_str, int32_t &sub_format) {
   const size_t split_pos = str.find_first_of(':');
   if (split_pos != std::string::npos) {
     const std::string sub_format_str = str.substr(split_pos + 1U);
     try {
       primary_format_str = str.substr(0U, split_pos);
       if (std::any_of(sub_format_str.cbegin(), sub_format_str.cend(),
-                      [](const char_t c) { return !static_cast<bool>(isdigit(static_cast<uint32_t>(c))); })) {
+                      [](const char_t c) { return !static_cast<bool>(isdigit(static_cast<char_t>(c))); })) {
         REPORT_INNER_ERR_MSG("E18888", "sub_format: %s is not digital.", sub_format_str.c_str());
         GELOGE(GRAPH_FAILED, "[Check][Param] sub_format: %s is not digital.", sub_format_str.c_str());
         return GRAPH_FAILED;
-      }
+                      }
       sub_format = std::stoi(sub_format_str);
     } catch (std::invalid_argument &) {
       REPORT_INNER_ERR_MSG("E18888", "sub_format: %s is invalid.", sub_format_str.c_str());
@@ -398,17 +360,6 @@ graphStatus TypeUtilsInner::SplitFormatFromStr(const std::string &str,
     }
   }
   return GRAPH_SUCCESS;
-}
-
-bool TypeUtilsInner::CheckUint64MulOverflow(const uint64_t a, const uint32_t b) {
-  // Not overflow
-  if (a == 0U) {
-    return false;
-  }
-  if (b <= (std::numeric_limits<uint64_t>::max() / a)) {
-    return false;
-  }
-  return true;
 }
 
 std::string TypeUtils::DataTypeToSerialString(const DataType data_type) {

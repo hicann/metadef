@@ -101,8 +101,8 @@ class MmpaStubApi {
 class MmpaStub {
  public:
   static MmpaStub& GetInstance() {
-    static MmpaStub instance;
-    return instance;
+    static MmpaStub* instance = new MmpaStub();
+    return *instance;
   }
 
   void SetImpl(const std::shared_ptr<MmpaStubApi> &impl) {

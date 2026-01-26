@@ -44,6 +44,7 @@ target_link_libraries(ut_register
     msprof_headers
     metadef exe_graph mmpa
     opp_registry
+    tilingdata_base
     GTest::gtest
     GTest::gtest_main
     pthread

@@ -31,6 +31,7 @@ enum class OpExecuteInputExtendIndex{
   kStream,
   kExecuteOption,
   kExecuteFunc,
+  kFwkData,  // 框架预留字段，算子开发者无需关注，新增字段向后追加
   // add new extend input here
   kNum
 };

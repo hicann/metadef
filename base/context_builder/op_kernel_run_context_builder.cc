@@ -18,7 +18,7 @@
 namespace gert {
 class OpKernelRunContextBuilderImpl : public ContextBuilderImpl {
  public:
-  OpKernelRunContextBuilderImpl() : ContextBuilderImpl() {}
+  using ContextBuilderImpl::ContextBuilderImpl;
   ~OpKernelRunContextBuilderImpl() override = default;
 
   std::unique_ptr<ContextHolderImpl> BuildKernelRunContext() {

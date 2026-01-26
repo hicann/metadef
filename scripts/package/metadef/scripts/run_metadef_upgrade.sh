@@ -24,6 +24,9 @@ in_install_for_all=n
 docker_root=""
 sourcedir="$PWD/metadef"
 curpath=$(dirname $(readlink -f "$0"))
+
+
+
 common_func_path="${curpath}/common_func.inc"
 pkg_version_path="${curpath}/../version.info"
 metadef_func_path="${curpath}/metadef_func.sh"
@@ -119,6 +122,7 @@ new_upgrade() {
 
     # create softlinks for stub libs in devlib/linux/$(ARCH)
     create_stub_softlink "$common_parse_dir"
+
     return 0
 }
 

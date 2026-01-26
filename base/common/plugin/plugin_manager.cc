@@ -21,44 +21,45 @@
 #include <sys/stat.h>
 
 #include "common/checker.h"
-#include "common/ge_common/debug/log.h"
+#include "common/ge_common/debug/ge_log.h"
 #include "common/ge_common/util.h"
 #include "graph/def_types.h"
 #include "graph/utils/file_utils.h"
+#include "common/ge_common/string_util.h"
 
 namespace ge {
 namespace {
-const int32_t kMaxNumOfSo = 64;
-const int32_t kMaxSizeOfSo = 838860800;        // = 800M(unit is Byte)
-const int32_t kMaxSizeOfLoadedSo = 1048576000; // = 1000M(unit is Byte)
-const char_t *const kExt = ".so";              // supported extension of shared object
-const char_t *const kBuiltIn = "built-in";     // opp built-in directory name
-const char_t *const kVendors = "vendors";      // opp vendors directory name
-const char_t *const kConfig = "config.ini";    // opp vendors config file name
-const size_t kVendorConfigPartsCount = 2U;
-const char_t *kHostCpuLibRelativePathV01 = "/op_impl/built-in/host_cpu";
-const char_t *kHostCpuLibRelativePathV02 = "/built-in/op_impl/host_cpu";
-const size_t kMaxErrorStrLen = 128U;
-const uint32_t kLibFirstLayer = 0U;
-const uint32_t kLibSecondLayer = 1U;
-const char_t *const kOppPath = "opp/";
-const char_t *const kRuntimePath = "runtime/";
-const char_t *const kCompilerPath = "compiler/";
-const char_t *const kScene = "scene.info";
-const size_t kSceneValueCount = 2U;
-const size_t kSceneKeyIndex = 0U;
-const size_t kSceneValueIndex = 1U;
-const char_t *const kSceneOs = "os";
-const char_t *const kSceneArch = "arch";
-const char_t *const kRtSoSuffix = "rt.so";
-const char_t *const kRequiredOppAbiVersion = "required_opp_abi_version=";
-const char_t *const kCompilerVersion = "compiler_version=";
-const char_t *const kVersionInfo = "/version.info";
-const char_t *const kOppVersion = "Version=";
-const size_t kEffectiveVersionNum = 2U;
-const char_t *const kOpMasterDeviceLib = "/op_impl/ai_core/tbe/op_master_device/lib/";
-const char_t *const kOpTilingDeviceLib = "/op_impl/ai_core/tbe/op_tiling_device/lib/";
-const char_t *const kOppLatest = "opp_latest";
+constexpr int32_t kMaxNumOfSo = 64;
+constexpr int32_t kMaxSizeOfSo = 838860800;        // = 800M(unit is Byte)
+constexpr int32_t kMaxSizeOfLoadedSo = 1048576000; // = 1000M(unit is Byte)
+const std::string kExt = ".so";                    // supported extension of shared object
+const std::string kBuiltIn = "built-in";           // opp built-in directory name
+const std::string kVendors = "vendors";            // opp vendors directory name
+const std::string kConfig = "config.ini";          // opp vendors config file name 
+constexpr size_t kVendorConfigPartsCount = 2U;
+const std::string kHostCpuLibRelativePathV01 = "/op_impl/built-in/host_cpu";
+const std::string kHostCpuLibRelativePathV02 = "/built-in/op_impl/host_cpu";
+constexpr size_t kMaxErrorStrLen = 128U;
+constexpr uint32_t kLibFirstLayer = 0U;
+constexpr uint32_t kLibSecondLayer = 1U;
+const std::string kOppPath = "opp/";
+const std::string kRuntimePath = "runtime/";
+const std::string  kCompilerPath = "compiler/";
+const std::string kScene = "scene.info";
+constexpr size_t kSceneValueCount = 2U;
+constexpr size_t kSceneKeyIndex = 0U;
+constexpr size_t kSceneValueIndex = 1U;
+const std::string kSceneOs = "os";
+const std::string kSceneArch = "arch";
+const std::string kRtSoSuffix = "rt.so";
+const std::string kRequiredOppAbiVersion = "required_opp_abi_version=";
+const std::string kCompilerVersion = "compiler_version=";
+const std::string kVersionInfo = "/version.info";
+const std::string kOppVersion = "Version=";
+constexpr size_t kEffectiveVersionNum = 2U;
+const std::string kOpMasterDeviceLib = "/op_impl/ai_core/tbe/op_master_device/lib/";
+const std::string kOpTilingDeviceLib = "/op_impl/ai_core/tbe/op_tiling_device/lib/";
+const std::string kOppLatest = "opp_latest";
 
 std::string TransRequiredOppAbiVersionToString(const std::vector<std::pair<uint32_t, uint32_t>> &required_version) {
   std::stringstream ss;
@@ -84,7 +85,7 @@ bool IsVersionWithInRequiredRange(const uint32_t effective_version,
 // GCC has a bug with std::regex in versions after 12, so we use std::string::find instead of std::regex.
 // See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105562
 std::string ReplaceFirst(const std::string &str, const std::string &from, const std::string &to) {
-  size_t start_pos = str.find(from);
+  const size_t start_pos = str.find(from);
   if (start_pos == std::string::npos) {
     return str; // 如果找不到 %s，就返回原字符串
   }
@@ -209,7 +210,7 @@ Status PluginManager::GetOppPluginVendors(const std::string &vendors_config, std
     return FAILED;
   }
   std::string content;
-  std::getline(config, content);
+  (void) std::getline(config, content);
   config.close();
   GE_ASSERT_TRUE(!content.empty(), "Content of file '%s' is empty!", vendors_config.c_str());
   std::vector<std::string> v_parts;
@@ -307,10 +308,10 @@ bool PluginManager::GetRequiredOppAbiVersion(std::vector<std::pair<uint32_t, uin
 
   // valid required_opp_abi_version: ">=6.3, <=6.4, 6.4"
   version = StringUtils::ReplaceAll(version, "\"", "");
-  StringUtils::Trim(version);
+  (void) StringUtils::Trim(version);
   std::queue<std::string> split_version;
   for (auto &it : StringUtils::Split(version, ',')) {
-    split_version.emplace(StringUtils::Trim(it));
+    (void) split_version.emplace(StringUtils::Trim(it));
   }
   while (!split_version.empty()) {
     auto first = split_version.front();
@@ -335,14 +336,14 @@ bool PluginManager::GetRequiredOppAbiVersion(std::vector<std::pair<uint32_t, uin
         GELOGW("[InvalidVersion] Format of required_opp_abi_version [%s] is not invalid", version.c_str());
         return false;
       }
-      required_opp_abi_version.emplace_back(first_num, second_num);
+      (void) required_opp_abi_version.emplace_back(first_num, second_num);
     } else {
       uint32_t tmp_num = 0U;
       if (!GetEffectiveVersion(first, tmp_num)) {
         GELOGW("[InvalidVersion] Format of required_opp_abi_version [%s] is not invalid", version.c_str());
         return false;
       }
-      required_opp_abi_version.emplace_back(tmp_num, tmp_num);
+      (void) required_opp_abi_version.emplace_back(tmp_num, tmp_num);
     }
   }
   return true;
@@ -411,7 +412,6 @@ void PluginManager::GetOppAndCompilerVersion(const std::string &vendor_path, std
 
 bool PluginManager::CheckOppAndCompilerVersions(const std::string &opp_version, const std::string &compiler_version,
                                                 const std::vector<std::pair<uint32_t, uint32_t>> &required_version) {
-  std::vector<uint32_t> effective_opp_versions;
   if (!opp_version.empty()) {
     uint32_t effective_opp_version = 0U;
     if (!GetEffectiveVersion(opp_version, effective_opp_version)) {
@@ -455,7 +455,7 @@ void PluginManager::GetPackageSoPath(std::vector<std::string> &vendors) {
   ge::PluginManager::GetPluginPathFromCustomOppPath("", custom_opp_path);
   if (!custom_opp_path.empty()) {
     std::vector<std::string> split_custom_opp_path = ge::StringUtils::Split(custom_opp_path, ':');
-    vendors.insert(vendors.end(), split_custom_opp_path.begin(), split_custom_opp_path.end());
+    (void) vendors.insert(vendors.end(), split_custom_opp_path.begin(), split_custom_opp_path.end());
   }
 
   std::string opp_path;
@@ -464,7 +464,7 @@ void PluginManager::GetPackageSoPath(std::vector<std::string> &vendors) {
     (void) ge::PluginManager::GetOppPluginPathNew(opp_path, "%s", vendors_path, "");
     if (!vendors_path.empty()) {
       auto split_vendors_path = ge::StringUtils::Split(vendors_path, ':');
-      vendors.insert(vendors.end(), split_vendors_path.begin(), split_vendors_path.end());
+      (void) vendors.insert(vendors.end(), split_vendors_path.begin(), split_vendors_path.end());
     }
   }
   return;
@@ -509,8 +509,8 @@ bool PluginManager::IsSplitOpp() {
   std::vector<std::string> so_list;
   std::vector<std::string> path_vec;
   opp_path += "built-in/";
-  path_vec.emplace_back(opp_path + "op_proto/lib/" + os_type + "/" + cpu_type + "/");
-  path_vec.emplace_back(opp_path + "op_impl/ai_core/tbe/op_tiling/lib/" + os_type + "/" + cpu_type + "/");
+  (void) path_vec.emplace_back(opp_path + "op_proto/lib/" + os_type + "/" + cpu_type + "/");
+  (void) path_vec.emplace_back(opp_path + "op_impl/ai_core/tbe/op_tiling/lib/" + os_type + "/" + cpu_type + "/");
   for (const auto &path : path_vec) {
     GetFileListWithSuffix(path, kRtSoSuffix, so_list);
     if (so_list.empty()) {
@@ -659,7 +659,9 @@ Status PluginManager::GetCustomCaffeProtoPath(std::string &customcaffe_path) {
       customcaffe_path += opp_path + "framework/custom/caffe/";
     } else {
       for (const auto &vendor : vendors) {
-        customcaffe_path += (customcaffe_path.empty() || (customcaffe_path.back() == ':')) ? "" : ":";
+        if ((!customcaffe_path.empty()) && (customcaffe_path.back() != ':')) {
+          customcaffe_path += ":";
+        }
         customcaffe_path += opp_path + kVendors + "/" + vendor + "/framework/caffe/";
       }
     }
@@ -694,7 +696,7 @@ Status PluginManager::GetOpTilingPath(std::string &op_tiling_path) {
 Status PluginManager::GetConstantFoldingOpsPath(const std::string &path_base, std::string &constant_folding_ops_path) {
   GELOGI("Enter GetConstantFoldingOpsPath schedule");
   std::string opp_path;
-  Status ret = GetOppPath(opp_path);
+  const Status ret = GetOppPath(opp_path);
   if (ret != SUCCESS) {
     GELOGW("Failed to get opp path from env and so file! use path_base as opp path");
     opp_path = path_base;
@@ -723,7 +725,7 @@ void PluginManager::SplitPath(const std::string &mutil_path, std::vector<std::st
 }
 
 Status PluginManager::LoadSo(const std::string &path, const std::vector<std::string> &func_check_list) {
-  const int32_t flags = static_cast<int32_t>(static_cast<uint32_t>(MMPA_RTLD_NOW) |
+  constexpr int32_t flags = static_cast<int32_t>(static_cast<uint32_t>(MMPA_RTLD_NOW) |
       static_cast<uint32_t>(MMPA_RTLD_GLOBAL));
   return LoadSoWithFlags(path, flags, func_check_list);
 }
@@ -805,7 +807,7 @@ Status PluginManager::LoadSoWithFlags(const std::string &path, const int32_t fla
 
     // add file to list
     size_of_loaded_so += file_size;
-    so_list_.emplace_back(file_name);
+    (void) so_list_.emplace_back(file_name);
     handles_[std::string(file_name)] = handle;
     num_of_loaded_so++;
   }
@@ -853,7 +855,7 @@ Status PluginManager::ValidateSo(const std::string &file_path,
 }
 
 Status PluginManager::Load(const std::string &path, const std::vector<std::string> &func_check_list) {
-  const int32_t flags = static_cast<int32_t>(static_cast<uint32_t>(MMPA_RTLD_NOW) |
+  constexpr int32_t flags = static_cast<int32_t>(static_cast<uint32_t>(MMPA_RTLD_NOW) |
       static_cast<uint32_t>(MMPA_RTLD_GLOBAL));
   return LoadWithFlags(path, flags, func_check_list);
 }
@@ -862,7 +864,7 @@ Status PluginManager::LoadWithFlags(const std::string &path, const int32_t flags
     const std::vector<std::string> &func_check_list) {
   uint32_t num_of_loaded_so = 0U;
   int64_t size_of_loaded_so = 0;
-  const uint32_t is_folder = 0x4U;
+  constexpr uint32_t is_folder = 0x4U;
   const std::string ext = kExt;
   so_list_.clear();
   ClearHandles_();
@@ -961,7 +963,7 @@ Status PluginManager::LoadWithFlags(const std::string &path, const int32_t flags
 
     // add file to list
     size_of_loaded_so += file_size;
-    so_list_.emplace_back(file_name);
+    (void) so_list_.emplace_back(file_name);
     handles_[std::string(file_name)] = handle;
     num_of_loaded_so++;
   }
@@ -1021,7 +1023,7 @@ void PluginManager::GetOppSupportedOsAndCpuType(
         GetOppSupportedOsAndCpuType(opp_supported_os_cpu, opp_path + dir_name, dir_name, 1U);
       }
       if (layer == kLibSecondLayer) {
-        opp_supported_os_cpu[os_name].emplace(dir_name);
+        (void) opp_supported_os_cpu[os_name].emplace(dir_name);
         GELOGD("Get supported os[%s] -> cpu[%s]", os_name.c_str(), dir_name.c_str());
       }
     }
@@ -1113,7 +1115,7 @@ bool PluginManager::ParseVersion(std::string &line, std::string &version, const 
     return false;
   }
 
-  std::string::size_type pos = line.find(version_name);
+  const std::string::size_type pos = line.find(version_name);
   if (pos == std::string::npos) {
     GELOGW("Incorrect line [%s], it must include [%s].", line.c_str(), version_name.c_str());
     return false;
@@ -1225,17 +1227,17 @@ Status PluginManager::GetOpMasterDeviceSoPath(std::string &op_master_device_path
   std::string opp_path;
   GE_ASSERT_TRUE(GetOppPath(opp_path) == SUCCESS, "Failed to get opp path!");
   GetPluginPathFromCustomOppPath(kOpMasterDeviceLib, op_master_device_path);
-  std::string sub_pkg_builtin_path = opp_path + "built-in" + std::string(kOpTilingDeviceLib);
+  std::string sub_pkg_builtin_path = opp_path + "built-in" + kOpTilingDeviceLib;
   if (mmAccess(sub_pkg_builtin_path.c_str()) == EN_OK) {
     GELOGI("[GetOpMasterDeviceSoPath] Sub pkg builtin path exists.");
-    GE_ASSERT_SUCCESS(GetOppPluginPathNew(opp_path, "%s" + std::string(kOpTilingDeviceLib), op_master_device_path, "", "%s" + std::string(kOpMasterDeviceLib)));
+    GE_ASSERT_SUCCESS(GetOppPluginPathNew(opp_path, "%s" + kOpTilingDeviceLib, op_master_device_path, "", "%s" + kOpMasterDeviceLib));
   } else {
     // 兼容老CANN包
     GELOGI("[GetOpMasterDeviceSoPath] Sub pkg builtin path does not exist.");
-    GE_ASSERT_SUCCESS(GetOppPluginPathNew(opp_path, "%s" + std::string(kOpMasterDeviceLib), op_master_device_path, "", "%s" + std::string(kOpMasterDeviceLib)));
+    GE_ASSERT_SUCCESS(GetOppPluginPathNew(opp_path, "%s" + kOpMasterDeviceLib, op_master_device_path, "", "%s" + kOpMasterDeviceLib));
   }
   std::string opp_kernel_path;
-  (void)GetUpgradedOppPath(opp_kernel_path);
+  (void) GetUpgradedOppPath(opp_kernel_path);
   if (!opp_kernel_path.empty()) {
     op_master_device_path = opp_kernel_path + kBuiltIn + kOpMasterDeviceLib + ":" + op_master_device_path;
   }
@@ -1283,7 +1285,7 @@ std::string PluginManager::GetSoPackageName(const std::string &path) {
 std::string PluginManager::GetOppPkgPath(const std::string &opp_built_in_path, const std::string &whole_pkg_path,
                                          const std::string &sub_pkg_path, const std::string &os_cpu_type,
                                          bool &is_sub_pkg) {
-  const auto built_in_op = (opp_built_in_path.find(kBuiltIn) != std::string::npos);
+  const bool built_in_op = (opp_built_in_path.find(kBuiltIn) != std::string::npos);
   is_sub_pkg = false;
   if (built_in_op) {
     std::string opp_sub_pkg_path = opp_built_in_path + sub_pkg_path + os_cpu_type;

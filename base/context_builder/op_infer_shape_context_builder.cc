@@ -18,14 +18,14 @@
 namespace gert {
 class OpInferShapeContextBuilderImpl : public ContextBuilderImpl {
  public:
-  OpInferShapeContextBuilderImpl() : ContextBuilderImpl() {}
+  using ContextBuilderImpl::ContextBuilderImpl;
   ~OpInferShapeContextBuilderImpl() override = default;
 
   std::unique_ptr<ContextHolderImpl> BuildInferShapeContext() {
     auto holder = ge::ComGraphMakeUnique<ContextHolderImpl>();
     GE_ASSERT_NOTNULL(holder, "Create ContextHolderImpl failed.");
     GE_ASSERT_SUCCESS(CreateComputeNodeInfo(*holder), "Create compute node info failed.");
-    input_values_.emplace_back(std::make_pair(nullptr, nullptr));  // FindInferShapeFunc
+    (void)input_values_.emplace_back(std::make_pair(nullptr, nullptr));  // FindInferShapeFunc
     std::vector<std::pair<void *, gert::Chain::Deleter>> tmp_outputs;
     static auto shape_deleter = [](void *p) {
       if (p == nullptr) {
@@ -34,7 +34,7 @@ class OpInferShapeContextBuilderImpl : public ContextBuilderImpl {
       delete static_cast<gert::Shape *>(p);
     };
     for (size_t i = 0U; i < op_info_.output_instance_num; ++i) {
-      output_values_.emplace_back(new (std::nothrow) gert::Shape(), shape_deleter);
+      (void)output_values_.emplace_back(new (std::nothrow) gert::Shape(), shape_deleter);
     }
     GE_ASSERT_SUCCESS(BuildCtx(*holder), "BuildCtx failed.");
     return holder;
@@ -70,7 +70,7 @@ OpInferShapeContextBuilder &OpInferShapeContextBuilder::InputTensors(const std::
     MutableInputOriginalFormat(i) = inputs[i]->GetOriginFormat();
     MutableInputStorageFormat(i) = inputs[i]->GetStorageFormat();
     MutableInputExpandDimsType(i) = inputs[i]->GetExpandDimsType();
-    tmp_inputs.emplace_back(inputs[i]);
+    (void)tmp_inputs.emplace_back(inputs[i]);
   }
   impl_->Inputs(std::move(tmp_inputs));
   return *this;

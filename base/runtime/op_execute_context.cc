@@ -41,7 +41,7 @@ namespace gert {
     auto gert_allocator = GetInputValue<GertAllocator *>(
         GetComputeNodeInputNum() + GetComputeNodeOutputNum() +
             static_cast<size_t>(OpExecuteInputExtendIndex::kAllocate));
-    auto stream_id = gert_allocator->GetStreamId();
+    const auto stream_id = gert_allocator->GetStreamId();
     if (memory_vec == nullptr) {
       return;
     }

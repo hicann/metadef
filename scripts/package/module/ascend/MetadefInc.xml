@@ -10,12 +10,15 @@
         <path value="$(TARGET_ENV)/include/register" install_mod="555"/>
         <path value="$(TARGET_ENV)/pkg_inc" install_mod="555"/>
         <path value="$(TARGET_ENV)/pkg_inc/base" install_mod="555"/>
+        <path value="$(TARGET_ENV)/pkg_inc/base/asc" install_mod="555"/>
         <path value="$(TARGET_ENV)/pkg_inc/base/registry" install_mod="555"/>
         <path value="$(TARGET_ENV)/pkg_inc/base/type" install_mod="555"/>
         <path value="$(TARGET_ENV)/pkg_inc/base/utils" install_mod="555"/>
         <path value="$(TARGET_ENV)/pkg_inc/common" install_mod="555"/>
         <path value="$(TARGET_ENV)/pkg_inc/common/ge_common" install_mod="555"/>
         <path value="$(TARGET_ENV)/pkg_inc/common/ge_common/debug" install_mod="555"/>
+        <path value="$(TARGET_ENV)/pkg_inc/exe_graph" install_mod="555"/>
+        <path value="$(TARGET_ENV)/pkg_inc/exe_graph/runtime" install_mod="555"/>
         <path value="$(TARGET_ENV)/pkg_inc/graph" install_mod="555"/>
         <path value="$(TARGET_ENV)/include/base" install_mod="555"/>
         <path value="$(TARGET_ENV)/include/base/runtime" install_mod="555"/>
@@ -87,6 +90,9 @@
         <file value="device_op_impl_registry.h"/>
         <file value="register.h"/>
     </file_info>
+    <file_info value="include" copy_type="source" dst_path="pkg_inc/base/asc" install_path="$(TARGET_ENV)/pkg_inc/base/asc" install_type="devel" install_mod="440">
+        <file value="tilingdata_base_impl.h"/>
+    </file_info>
     <file_info value="include" copy_type="source" dst_path="pkg_inc/base/registry" install_path="$(TARGET_ENV)/pkg_inc/base/registry" install_type="devel" install_mod="440">
         <file value="op_impl_space_registry_v2.h"/>
         <file value="opp_package_utils.h"/>
@@ -116,13 +122,21 @@
     <file_info value="include" copy_type="source" dst_path="pkg_inc/common" install_path="$(TARGET_ENV)/pkg_inc/common" install_type="devel" install_mod="440">
         <file value="checker.h" pkg_inner_softlink="metadef:/pkg_inc/common/checker.h"/>
     </file_info>
+    <file_info value="include" copy_type="source" dst_path="pkg_inc/common/ge_common" install_path="$(TARGET_ENV)/pkg_inc/common/ge_common" install_type="devel" install_mod="440">
+        <file value="error_codes_define.h" pkg_inner_softlink="metadef:/pkg_inc/common/ge_common/error_codes_define.h"/>
+        <file value="scope_guard.h" pkg_inner_softlink="metadef:/pkg_inc/common/ge_common/scope_guard.h"/>
+    </file_info>
     <file_info value="include" copy_type="source" dst_path="pkg_inc/common/ge_common/debug" install_path="$(TARGET_ENV)/pkg_inc/common/ge_common/debug" install_type="devel" install_mod="440">
         <file value="ge_log.h" pkg_inner_softlink="metadef:/pkg_inc/common/ge_common/debug/ge_log.h"/>
+    </file_info>
+    <file_info value="include" copy_type="source" dst_path="pkg_inc/exe_graph/runtime" install_path="$(TARGET_ENV)/pkg_inc/exe_graph/runtime" install_type="devel" install_mod="440">
+        <file value="gert_mem_allocator.h" pkg_inner_softlink="metadef:/pkg_inc/exe_graph/runtime/gert_mem_allocator.h"/>
+        <file value="gert_mem_block.h" pkg_inner_softlink="metadef:/pkg_inc/exe_graph/runtime/gert_mem_block.h"/>
+        <file value="gert_tensor_data.h" pkg_inner_softlink="metadef:/pkg_inc/exe_graph/runtime/gert_tensor_data.h"/>
     </file_info>
     <file_info value="include" copy_type="source" dst_path="pkg_inc/graph" install_path="$(TARGET_ENV)/pkg_inc/graph" install_type="devel" install_mod="440">
         <file value="any_value.h" pkg_inner_softlink="metadef:/pkg_inc/graph/any_value.h"/>
         <file value="def_types.h" pkg_inner_softlink="metadef:/pkg_inc/graph/def_types.h"/>
         <file value="type_utils.h" pkg_inner_softlink="metadef:/pkg_inc/graph/type_utils.h"/>
-        <file value="op_so_bin.h" pkg_inner_softlink="metadef:/pkg_inc/graph/op_so_bin.h"/>
     </file_info>
 </block>

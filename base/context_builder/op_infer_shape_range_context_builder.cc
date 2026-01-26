@@ -19,14 +19,13 @@
 namespace gert {
 class OpInferShapeRangeContextBuilderImpl : public ContextBuilderImpl {
  public:
-  OpInferShapeRangeContextBuilderImpl() : ContextBuilderImpl() {}
+  using ContextBuilderImpl::ContextBuilderImpl;
   ~OpInferShapeRangeContextBuilderImpl() override = default;
 
   std::unique_ptr<ContextHolderImpl> BuildInferShapeRangeContext() {
     auto holder = ge::ComGraphMakeUnique<ContextHolderImpl>();
     GE_ASSERT_NOTNULL(holder, "Create ContextHolderImpl failed.");
     GE_ASSERT_SUCCESS(CreateComputeNodeInfo(*holder), "Create compute node info failed.");
-    std::vector<std::pair<void *, gert::Chain::Deleter>> tmp_outputs;
     static auto shape_range_deleter = [](void *p) {
       if (p == nullptr) {
         return;
@@ -35,14 +34,16 @@ class OpInferShapeRangeContextBuilderImpl : public ContextBuilderImpl {
       delete static_cast<Range<gert::Shape>*>(p)->GetMax();
       delete static_cast<Range<gert::Shape>*>(p);
     };
-    for (size_t i = 0U; i < op_info_.output_instance_num; ++i) {
+    size_t i = 0U;
+    while (i < op_info_.output_instance_num) {
       auto min_shape = ge::ComGraphMakeUnique<gert::Shape>();
       GE_ASSERT_NOTNULL(min_shape, "Create min shape failed.");
       auto max_shape = ge::ComGraphMakeUnique<gert::Shape>();
       GE_ASSERT_NOTNULL(max_shape, "Create max shape failed.");
       auto range = ge::ComGraphMakeUnique<Range<gert::Shape>>(min_shape.release(), max_shape.release());
       GE_ASSERT_NOTNULL(range, "Create range failed.");
-      output_values_.emplace_back(range.release(), shape_range_deleter);
+      (void)output_values_.emplace_back(range.release(), shape_range_deleter);
+      ++i;
     }
     GE_ASSERT_SUCCESS(BuildCtx(*holder), "BuildCtx failed.");
     return holder;
@@ -79,7 +80,7 @@ OpInferShapeRangeContextBuilder &OpInferShapeRangeContextBuilder::InputTensorsRa
     MutableInputOriginalFormat(i) = inputs[i]->GetMin()->GetOriginFormat();
     MutableInputStorageFormat(i) = inputs[i]->GetMin()->GetStorageFormat();
     MutableInputExpandDimsType(i) = inputs[i]->GetMin()->GetExpandDimsType();
-    tmp_inputs.emplace_back(inputs[i]);
+    (void)tmp_inputs.emplace_back(inputs[i]);
   }
   impl_->Inputs(std::move(tmp_inputs));
   return *this;

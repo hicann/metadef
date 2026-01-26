@@ -543,6 +543,7 @@ const char_t *const OO_DEAD_CODE_ELIMINATION = "ge.oo.deadCodeElimination";
 // Configure statistics of the graph compiler
 const char_t *const OPTION_EXPORT_COMPILE_STAT = "ge.exportCompileStat";
 const char_t *const OPTIMIZATION_SWITCH = "ge.optimizationSwitch";
+const char_t *const OPTION_OUTPUT_REUSE_INPUT_MEM_INDEXES = "ge.exec.outputReuseInputMemIndexes";
 
 // Graph run mode
 enum GraphRunMode : std::int32_t { PREDICTION = 0, TRAIN };
@@ -671,6 +672,7 @@ static const char_t *const OO_DEAD_CODE_ELIMINATION = ge::OO_DEAD_CODE_ELIMINATI
 static const char_t *const OPTION_EXPORT_COMPILE_STAT = ge::OPTION_EXPORT_COMPILE_STAT;
 static const char_t *const OPTIMIZATION_SWITCH = ge::OPTIMIZATION_SWITCH;
 static const char_t *const INPUT_HINT_SHAPE = ge::INPUT_HINT_SHAPE;
+static const char_t *const OPTION_OUTPUT_REUSE_INPUT_MEM_INDEXES = ge::OPTION_OUTPUT_REUSE_INPUT_MEM_INDEXES;
 // for interface: aclgrphBuildModel
 #ifdef __GNUC__
 const std::set<std::string> ir_builder_suppported_options = {INPUT_FORMAT,
@@ -721,7 +723,8 @@ const std::set<std::string> ir_builder_suppported_options = {INPUT_FORMAT,
                                                              OO_DEAD_CODE_ELIMINATION,
                                                              OPTION_EXPORT_COMPILE_STAT,
                                                              OPTIMIZATION_SWITCH,
-                                                             INPUT_HINT_SHAPE};
+                                                             INPUT_HINT_SHAPE,
+                                                             OPTION_OUTPUT_REUSE_INPUT_MEM_INDEXES};
 
 // for interface: aclgrphParse
 const std::set<std::string> ir_parser_suppported_options = {

@@ -94,34 +94,77 @@ class AnyValue {
   }
 
   template<class T>
-  static AnyValue CreateFrom(T &&value);
+  static AnyValue CreateFrom(T &&value) {
+    AnyValue av;
+    av.InnerSet(std::forward<T>(value));
+    return av;
+  }
   // 如果只有万能引用，那么Set<int>(左值)这种调用方法会出错，因此有了这个函数
   template<typename T>
-  static AnyValue CreateFrom(const T &value);
+  static AnyValue CreateFrom(const T &value) {
+    AnyValue av;
+    av.InnerSet(value);
+    return av;
+  }
 
   template<class T>
-  graphStatus SetValue(T &&value);
+  graphStatus SetValue(T &&value) {
+    Clear();
+    InnerSet(std::forward<T>(value));
+    return GRAPH_SUCCESS;
+  }
 
   // 如果只有万能引用，那么Set<int>(左值)这种调用方法会出错，因此有了这个函数
   template<typename T>
-  graphStatus SetValue(const T &value);
+  graphStatus SetValue(const T &value) {
+    Clear();
+    InnerSet(value);
+    return GRAPH_SUCCESS;
+  }
 
   template<typename T>
-  graphStatus SetValue(std::initializer_list<T> values);
+  graphStatus SetValue(std::initializer_list<T> values) {
+    Clear();
+    InnerSet(std::vector<T>(std::move(values)));
+    return GRAPH_SUCCESS;
+  }
 
   template<typename T>
-  graphStatus GetValue(T &value) const;
+  graphStatus GetValue(T &value) const {
+    auto *const p = Get<T>();
+    if (p == nullptr) {
+      return GRAPH_FAILED;
+    }
+    value = *p;
+    return GRAPH_SUCCESS;
+  }
+
   template<class T>
-  const T *Get() const;
+  const T *Get() const {
+    if (!SameType<T>()) {
+      return nullptr;
+    }
+    if (IsEmpty()) {
+      return nullptr;
+    }
+    return PtrToPtr<const void, const T>(GetAddr());
+  }
   template<class T>
   T *MutableGet();
 
   template<class T>
-  bool SameType() const noexcept;
+  bool SameType() const noexcept {
+    if (operate_ == nullptr) {
+      return false;
+    }
+    TypeId tid = kInvalidTypeId;
+    operate_(OperateType::kGetTypeId, this, &tid);
+    return tid == GetTypeId<T>();
+  }
 
   void Swap(AnyValue &other) noexcept;
 
-  void Clear() {
+  void Clear() noexcept {
     if (operate_ == nullptr) {
       return;
     }
@@ -138,23 +181,39 @@ class AnyValue {
 
  private:
   template<typename T>
-  void InnerSet(T &&value);
+  void InnerSet(T &&value) {
+    using PureT = typename std::remove_cv<typename std::remove_reference<T>::type>::type;
+    using Inline = std::integral_constant<bool, sizeof(PureT) <= sizeof(holder_)>;
+    using Operations =
+        typename std::conditional<Inline{}, AnyValue::InlineOperations<PureT>, AnyValue::AllocateOperations<PureT>>::type;
+
+    Operations::Construct(std::forward<T>(value), this);
+  }
   const void *GetAddr() const;
 
-  enum class OperateType { kOpClear, kOpGetAddr, kOpClone, kOpMove, kGetTypeId, kOperateTypeEnd };
-
-  template<typename T>
-  struct InlineOperations {
-    static void Operate(const OperateType ot, const AnyValue *const av, void *const out);
-    static void Construct(const T &value, AnyValue *const av);
-    static void Construct(T &&value, AnyValue *const av);
+  enum class OperateType : uint32_t {
+    kOpClear,
+    kOpGetAddr,
+    kOpClone,
+    kOpMove,
+    kGetTypeId,
+    kOperateTypeEnd
   };
 
   template<typename T>
-  struct AllocateOperations {
-    static void Operate(const OperateType ot, const AnyValue *const av, void *const out);
-    static void Construct(const T &value, AnyValue *const av);
-    static void Construct(T &&value, AnyValue *const av);
+  class InlineOperations {
+    public:
+      static void Operate(const OperateType ot, const AnyValue *const av, void *const out);
+      static void Construct(const T &value, AnyValue *const av);
+      static void Construct(T &&value, AnyValue *const av);
+  };
+
+  template<typename T>
+  class AllocateOperations {
+    public:
+      static void Operate(const OperateType ot, const AnyValue *const av, void *const out);
+      static void Construct(const T &value, AnyValue *const av);
+      static void Construct(T &&value, AnyValue *const av);
   };
 
   using ValueBuf = std::aligned_storage<sizeof(void *)>::type;
@@ -256,65 +315,7 @@ void AnyValue::InlineOperations<T>::Operate(const AnyValue::OperateType ot, cons
 }
 
 template<class T>
-AnyValue AnyValue::CreateFrom(T &&value) {
-  AnyValue av;
-  av.InnerSet(std::forward<T>(value));
-  return av;
-}
-template<typename T>
-AnyValue AnyValue::CreateFrom(const T &value) {
-  AnyValue av;
-  av.InnerSet(value);
-  return av;
-}
-template<typename T>
-void AnyValue::InnerSet(T &&value) {
-  using PureT = typename std::remove_cv<typename std::remove_reference<T>::type>::type;
-  using Inline = std::integral_constant<bool, sizeof(PureT) <= sizeof(holder_)>;
-  using Operations =
-      typename std::conditional<Inline{}, AnyValue::InlineOperations<PureT>, AnyValue::AllocateOperations<PureT>>::type;
-
-  Operations::Construct(std::forward<T>(value), this);
-}
-template<class T>
-graphStatus AnyValue::SetValue(T &&value) {
-  Clear();
-  InnerSet(std::forward<T>(value));
-  return GRAPH_SUCCESS;
-}
-template<typename T>
-graphStatus AnyValue::SetValue(const T &value) {
-  Clear();
-  InnerSet(value);
-  return GRAPH_SUCCESS;
-}
-template<typename T>
-graphStatus AnyValue::SetValue(std::initializer_list<T> values) {
-  Clear();
-  InnerSet(std::vector<T>(std::move(values)));
-  return GRAPH_SUCCESS;
-}
-template<class T>
-const T *AnyValue::Get() const {
-  if (!SameType<T>()) {
-    return nullptr;
-  }
-  if (IsEmpty()) {
-    return nullptr;
-  }
-  return PtrToPtr<const void, const T>(GetAddr());
-}
-template<typename T>
-graphStatus AnyValue::GetValue(T &value) const {
-  auto *const p = Get<T>();
-  if (p == nullptr) {
-    return GRAPH_FAILED;
-  }
-  value = *p;
-  return GRAPH_SUCCESS;
-}
-template<class T>
-T *AnyValue::MutableGet() {
+auto AnyValue::MutableGet() -> T* {
   if (!SameType<T>()) {
     return nullptr;
   }
@@ -324,15 +325,6 @@ T *AnyValue::MutableGet() {
   void *addr = nullptr;
   operate_(OperateType::kOpGetAddr, this, &addr);
   return PtrToPtr<void, T>(addr);
-}
-template<class T>
-bool AnyValue::SameType() const noexcept {
-  if (operate_ == nullptr) {
-    return false;
-  }
-  TypeId tid = kInvalidTypeId;
-  operate_(OperateType::kGetTypeId, this, &tid);
-  return tid == GetTypeId<T>();
 }
 }  // namespace ge
 

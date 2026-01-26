@@ -10,8 +10,7 @@
 
 #include <string>
 #include "common/plugin/plugin_manager.h"
-#include "common/util/error_manager/error_manager.h"
-#include "graph/debug/ge_log.h"
+#include "common/ge_common/debug/ge_log.h"
 #include "mmpa/mmpa_api.h"
 #include "register/op_impl_space_registry.h"
 #include "register/opp_so_manager.h"
@@ -66,7 +65,7 @@ void GetOppSoList(const std::string &opp_so_path, const std::vector<std::string>
     PluginManager::GetFileListWithSuffix(opp_so_path, so_suffix, so_list);
   }
   // 排序，将"_legacy.so"移到到最后
-  std::stable_partition(so_list.begin(), so_list.end(), [](const std::string &so_name) {
+  (void)std::stable_partition(so_list.begin(), so_list.end(), [](const std::string &so_name) {
     return so_name.size() < std::strlen(kLegacySoSuffix) ||
            so_name.compare((so_name.size() - std::strlen(kLegacySoSuffix)), std::strlen(kLegacySoSuffix), kLegacySoSuffix) != 0;
   });
@@ -82,7 +81,7 @@ void GetOppSoList(const std::string &opp_so_path, const std::vector<std::string>
   }
   std::vector<ge::AscendString> new_so_path_vector;
   new_so_path_vector.reserve(so_list.size());
-  std::transform(so_list.begin(), so_list.end(),
+  (void)std::transform(so_list.begin(), so_list.end(),
                  std::back_inserter(new_so_path_vector),
                  [](const std::string &s) {
                      return ge::AscendString(s.c_str());
@@ -94,13 +93,13 @@ void GetOppSoList(const std::string &opp_so_path, const std::vector<std::string>
            package_name.c_str(), new_so_path_vector.size(), static_cast<int32_t>(opp_version_tag));
     // 无则创建
     gert::OppSoDesc opp_so_desc = gert::OppSoDesc(new_so_path_vector, AscendString(package_name.c_str()));
-    package_to_opp_so_desc.emplace_back(package_name, opp_so_desc);
+    (void)package_to_opp_so_desc.emplace_back(package_name, opp_so_desc);
   } else {
     GELOGI("Merged opp so list for package [%s], so num is [%zu], opp_impl_version: [%d]",
            package_name.c_str(), so_list.size(), static_cast<int32_t>(opp_version_tag));
     // 有则追加合并
     auto existing_so_path_vector = opp_so_desc_ptr->GetSoPaths();
-    existing_so_path_vector.insert(existing_so_path_vector.end(),
+    (void)existing_so_path_vector.insert(existing_so_path_vector.end(),
                                    new_so_path_vector.begin(),
                                    new_so_path_vector.end());
     *opp_so_desc_ptr = gert::OppSoDesc(existing_so_path_vector, AscendString(package_name.c_str()));
@@ -115,7 +114,7 @@ void OppSoManager::LoadSoAndInitDefault(const std::vector<AscendString> &so_list
       gert::DefaultOpImplSpaceRegistryV2::GetInstance().GetSpaceRegistry(opp_version_tag);
   if (space_registry_v2 == nullptr) {
     space_registry_v2 = std::make_shared<gert::OpImplSpaceRegistryV2>();
-    gert::DefaultOpImplSpaceRegistryV2::GetInstance().SetSpaceRegistry(space_registry_v2, opp_version_tag);
+    (void)gert::DefaultOpImplSpaceRegistryV2::GetInstance().SetSpaceRegistry(space_registry_v2, opp_version_tag);
   }
 
   if (space_registry_v2->AddSoToRegistry(opp_so_desc) != ge::SUCCESS) {
@@ -125,12 +124,12 @@ void OppSoManager::LoadSoAndInitDefault(const std::vector<AscendString> &so_list
 
 void OppSoManager::LoadOpsProtoPackage() const {
   const std::lock_guard<std::mutex> lock(mutex_);
-  const bool is_split = PluginManager::IsSplitOpp();
+  bool is_split = PluginManager::IsSplitOpp();
   GELOGI("Start to load ops proto package, is_split:[%d].", is_split);
-  for (auto v = 0; v < static_cast<int32_t>(gert::OppImplVersionTag::kVersionEnd); ++v) {
-    auto version = static_cast<gert::OppImplVersionTag>(v);
+  for (int32_t v = 0; v < static_cast<int32_t>(gert::OppImplVersionTag::kVersionEnd); ++v) {
+    const auto version = static_cast<gert::OppImplVersionTag>(v);
     std::vector<std::pair<std::string, gert::OppSoDesc>> package_to_opp_so_desc;
-    const bool is_split = PluginManager::IsSplitOpp();
+    is_split = PluginManager::IsSplitOpp();
     if (version == gert::OppImplVersionTag::kOppKernel && !is_split) {
       // 非拆分模式下，无需加载OppKernel目录下so
       continue;
@@ -147,7 +146,7 @@ void OppSoManager::LoadOpsProtoPackage() const {
 void OppSoManager::LoadOppPackage() const {
   const std::lock_guard<std::mutex> lock(mutex_);
   for (int32_t v = 0; v < static_cast<int32_t>(gert::OppImplVersionTag::kVersionEnd); ++v) {
-    auto version = static_cast<gert::OppImplVersionTag>(v);
+    const auto version = static_cast<gert::OppImplVersionTag>(v);
     std::vector<std::pair<std::string, gert::OppSoDesc>> package_to_opp_so_desc_opp;
     const bool is_split = PluginManager::IsSplitOpp();
     if (version == gert::OppImplVersionTag::kOppKernel && !is_split) {
@@ -188,9 +187,9 @@ void OppSoManager::LoadOpsProtoSo(gert::OppImplVersionTag version, std::vector<s
     if (v_path[i].back() != '/') {
        v_path[i] += '/';
     }
-    char_t resolved_path[MMPA_MAX_PATH] = {};
+    std::array<char_t, MMPA_MAX_PATH> resolved_path{};
     // 加载自定义算子so
-    auto idx = v_path[i].find(kBuiltIn);
+    const auto idx = v_path[i].find(kBuiltIn);
     if (idx == std::string::npos) {
       std::string path = v_path[i] + "lib/" + os_type + "/" + cpu_type + "/";
       const INT32 result = mmRealPath(path.c_str(), &(resolved_path[0U]), MMPA_MAX_PATH);
@@ -245,8 +244,8 @@ void OppSoManager::LoadOpMasterSo(gert::OppImplVersionTag version, std::vector<s
       path += '/';
     }
     // 加载自定义算子so
-    char_t resolved_path[MMPA_MAX_PATH] = {};
-    auto idx = path.find(kBuiltIn);
+    std::array<char_t, MMPA_MAX_PATH> resolved_path{};
+    const auto idx = path.find(kBuiltIn);
     if (idx == std::string::npos) {
       std::string root_path = path + "op_master/lib/" + os_type + "/" + cpu_type + "/";
       if (mmRealPath(root_path.c_str(), &(resolved_path[0U]), MMPA_MAX_PATH) != EN_OK) {

@@ -16,6 +16,7 @@
 #include "exe_graph/runtime/shape.h"
 #include "graph/ascend_string.h"
 #include "graph/any_value.h"
+#include "exe_graph/runtime/expand_dims_type.h"
 
 using namespace ge;
 namespace gert {

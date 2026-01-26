@@ -18,7 +18,7 @@
 namespace gert {
 class OpTilingContextBuilderImpl : public ContextBuilderImpl {
  public:
-  OpTilingContextBuilderImpl() : ContextBuilderImpl() {}
+  using ContextBuilderImpl::ContextBuilderImpl;
   ~OpTilingContextBuilderImpl() override = default;
 
   std::unique_ptr<ContextHolderImpl> BuildTilingContext() {
@@ -29,12 +29,12 @@ class OpTilingContextBuilderImpl : public ContextBuilderImpl {
     GE_ASSERT_NOTNULL(holder, "Create ContextHolderImpl failed.");
     GE_ASSERT_SUCCESS(CreateComputeNodeInfo(*holder), "Create compute node info failed.");
     for (auto& outvaue : output_values_) {
-      input_values_.emplace_back(outvaue.first, outvaue.second);
+      (void)input_values_.emplace_back(outvaue.first, outvaue.second);
     }
-    input_values_.emplace_back(tiling_info_.compile_info_, nullptr);   // TilingCompileInfo
-    input_values_.emplace_back(tiling_info_.platform_info_, nullptr);  // PlatformInfo
-    input_values_.emplace_back(nullptr, nullptr);                      // PrepareTilingFrameworkData
-    input_values_.emplace_back(
+    (void)input_values_.emplace_back(tiling_info_.compile_info_, nullptr);   // TilingCompileInfo
+    (void)input_values_.emplace_back(tiling_info_.platform_info_, nullptr);  // PlatformInfo
+    (void)input_values_.emplace_back(nullptr, nullptr);                      // PrepareTilingFrameworkData
+    (void)input_values_.emplace_back(
         reinterpret_cast<void *>(tiling_info_.deterministic_), nullptr);  // Deterministic
     output_values_.resize(TilingContext::kOutputNum);
     output_values_[TilingContext::kOutputTilingData] =
@@ -106,7 +106,7 @@ OpTilingContextBuilder &OpTilingContextBuilder::InputTensors(const std::vector<g
     MutableInputOriginalFormat(i) = inputs[i]->GetOriginFormat();
     MutableInputStorageFormat(i) = inputs[i]->GetStorageFormat();
     MutableInputExpandDimsType(i) = inputs[i]->GetExpandDimsType();
-    tmp_inputs.emplace_back(inputs[i]);
+    (void)tmp_inputs.emplace_back(inputs[i]);
   }
   impl_->Inputs(std::move(tmp_inputs));
   return *this;
@@ -120,7 +120,7 @@ OpTilingContextBuilder &OpTilingContextBuilder::OutputTensors(const std::vector<
     MutableOutputOriginalFormat(i) = outputs[i]->GetOriginFormat();
     MutableOutputStorageFormat(i) = outputs[i]->GetStorageFormat();
     MutableOutputExpandDimsType(i) = outputs[i]->GetExpandDimsType();
-    tmp_outputs.emplace_back(outputs[i]);
+    (void)tmp_outputs.emplace_back(outputs[i]);
   }
   impl_->Outputs(std::move(tmp_outputs));
   return *this;
