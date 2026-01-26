@@ -107,12 +107,15 @@ install(TARGETS stub_exe_graph stub_metadef stub_opp_registry rt2_registry_stati
         LIBRARY DESTINATION metadef/lib64/stub/minios/aarch64
         ARCHIVE DESTINATION metadef/lib64/stub/minios/aarch64
 )
-install(FILES
-        ${METADEF_DEVICE_OUTPUT}/lib/libexe_meta_device.a
-        ${METADEF_DEVICE_OUTPUT}/lib/libdevice_register.a
-        ${METADEF_DEVICE_OUTPUT}/lib/libtilingdata_base.a
-        DESTINATION metadef/lib64/device/lib64
-)
+ if(ENABLE_BUILD_DEVICE)
+    # 非MDC编译
+    install(FILES
+            ${METADEF_DEVICE_OUTPUT}/lib/libtilingdata_base.a
+            ${METADEF_DEVICE_OUTPUT}/lib/libexe_meta_device.a
+            ${METADEF_DEVICE_OUTPUT}/lib/libdevice_register.a
+            DESTINATION metadef/lib64/device/lib64
+    )
+endif()
 
 set(EXTERNAL_RUNTIME_FILES
     ${CMAKE_SOURCE_DIR}/inc/external/exe_graph/runtime/tiling_context.h

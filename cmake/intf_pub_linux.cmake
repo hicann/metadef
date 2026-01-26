@@ -26,7 +26,7 @@ target_compile_options(intf_pub_base INTERFACE
 )
 
 target_compile_definitions(intf_pub_base INTERFACE
-    _GLIBCXX_USE_CXX11_ABI=0
+    _GLIBCXX_USE_CXX11_ABI=${USE_CXX11_ABI}
     $<$<CONFIG:Release>:CFG_BUILD_NDEBUG>
     $<$<CONFIG:Debug>:CFG_BUILD_DEBUG>
     LINUX=0

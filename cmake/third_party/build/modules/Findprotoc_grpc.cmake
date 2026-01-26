@@ -22,7 +22,7 @@ else ()
     set(REQ_URL "https://gitee.com/src-openeuler/grpc/raw/master/grpc-1.60.0.tar.gz")
 endif ()
 
-set(GRPC_CXX_FLAGS "-Wl,-z,relro,-z,now,-z,noexecstack -D_FORTIFY_SOURCE=2 -O2 -fstack-protector-all -s -D_GLIBCXX_USE_CXX11_ABI=0")
+set(GRPC_CXX_FLAGS "-Wl,-z,relro,-z,now,-z,noexecstack -D_FORTIFY_SOURCE=2 -O2 -fstack-protector-all -s -D_GLIBCXX_USE_CXX11_ABI=${USE_CXX11_ABI}")
 
 ExternalProject_Add(protoc_grpc_build
                     URL ${REQ_URL}

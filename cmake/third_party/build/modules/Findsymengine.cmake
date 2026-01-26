@@ -20,7 +20,7 @@ else ()
     set(REQ_URL "https://gitcode.com/cann-src-third-party/symengine/releases/download/v0.12.0/symengine-0.12.0.zip")
 endif ()
 
-set(SYMENGINE_CXXFLAGS "-O2 -fPIC -fstack-protector-all -Wl,-z,relro,-z,now,-z,noexecstack -s -D_FORTIFY_SOURCE=2 -Wno-maybe-uninitialized -Wno-unused-parameter -D_GLIBCXX_USE_CXX11_ABI=0 -Wl,-Bsymbolic")
+set(SYMENGINE_CXXFLAGS "-O2 -fPIC -fstack-protector-all -Wl,-z,relro,-z,now,-z,noexecstack -s -D_FORTIFY_SOURCE=2 -Wno-maybe-uninitialized -Wno-unused-parameter -D_GLIBCXX_USE_CXX11_ABI=${USE_CXX11_ABI} -Wl,-Bsymbolic")
 
 ExternalProject_Add(symengine_build
         URL ${REQ_URL}

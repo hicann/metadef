@@ -16,6 +16,11 @@ OUTPUT_PATH="${BASEPATH}/output"
 BUILD_OUT_PATH="${BASEPATH}/build_out"
 BUILD_RELATIVE_PATH="build"
 
+# MDC build para
+ENABLE_BUILD_DEVICE=ON
+USE_CXX11_ABI=0
+CMAKE_TOOLCHAIN_FILE_VAL=""
+
 # print usage message
 usage() {
   echo "Usage:"
@@ -43,6 +48,51 @@ usage() {
   echo ""
 }
 
+parse_cmake_extra_args() {
+    echo "Parse cmake extra args."
+    # para check
+    local args_str="$1"
+    if [[ -z "$args_str" ]]; then
+        echo "The parsed parameter string is empty."
+        return 0
+    fi
+
+    IFS=',' read -ra kv_pairs <<< "$args_str"
+
+    for kv_pair in "${kv_pairs[@]}"; do
+        if [[ -z "$kv_pair" ]]; then
+            continue
+        fi
+
+        local key="${kv_pair%%=*}"
+        local value="${kv_pair#*=}"
+
+        case "$key" in
+            "ENABLE_BUILD_DEVICE")
+                ENABLE_BUILD_DEVICE="$value"
+                echo "Set ENABLE_BUILD_DEVICE to ${ENABLE_BUILD_DEVICE}."
+                ;;
+            "USE_CXX11_ABI")
+                USE_CXX11_ABI="$value"
+                echo "Set USE_CXX11_ABI to ${USE_CXX11_ABI}."
+                ;;
+            "CMAKE_TOOLCHAIN_FILE")
+                CMAKE_TOOLCHAIN_FILE_VAL=$(realpath -s "$value")
+                echo "Set CMAKE_TOOLCHAIN_FILE_VAL to ${CMAKE_TOOLCHAIN_FILE_VAL}."
+                ;;
+            *)
+                echo "invalid parameter key: $key"
+                ;;
+        esac
+    done
+
+    if [[ "X$(echo "$USE_CXX11_ABI" | tr '[:upper:]' '[:lower:]')" == "xon" || "$USE_CXX11_ABI" == "1" ]]; then
+      USE_CXX11_ABI=1
+    elif [[ "X$(echo "$USE_CXX11_ABI" | tr '[:upper:]' '[:lower:]')" == "xoff" || "$USE_CXX11_ABI" == "0" ]]; then
+      USE_CXX11_ABI=0
+    fi
+}
+
 # parse and set options
 checkopts() {
   VERBOSE=""
@@ -58,7 +108,7 @@ checkopts() {
   CMAKE_BUILD_TYPE="Release"
 
   # Process the options
-  parsed_args=$(getopt -a -o j:hv -l help,verbose,enable_symengine,ascend_install_path:,ascend_3rd_lib_path:,cann_3rd_lib_path:,build-type:,asan,cov,output_path: -- "$@") || {
+  parsed_args=$(getopt -a -o j:hv -l help,verbose,enable_symengine,ascend_install_path:,ascend_3rd_lib_path:,cann_3rd_lib_path:,extra-cmake-args:,build-type:,asan,cov,output_path: -- "$@") || {
     usage
     exit 1
   }
@@ -107,6 +157,10 @@ checkopts() {
         CMAKE_BUILD_TYPE="$2"
         shift 2
         ;;
+      --extra-cmake-args)
+        parse_cmake_extra_args "$2"
+        shift 2
+        ;;
       --asan)
         ENABLE_ASAN="on"
         shift
@@ -153,6 +207,25 @@ cmake_generate_make() {
   fi
 }
 
+copy_pkg() {
+  if [ "${ENABLE_BUILD_DEVICE}" = "ON" ]; then
+    mv ${BUILD_PATH}_CPack_Packages/makeself_staging/cann-*.run ${BUILD_OUT_PATH}/
+  elif [[ ${CMAKE_TOOLCHAIN_FILE_VAL} == "${BASEPATH}/cmake/llvm_toolchain.cmake" ]]; then
+    local aoskernel_file=$(basename "$(echo "$(ls ${BUILD_PATH}_CPack_Packages/makeself_staging/cann-*.run)" | sed 's/_linux-/-aoskernel./g')")
+    mv ${BUILD_PATH}_CPack_Packages/makeself_staging/cann-*.run ${BUILD_OUT_PATH}/${aoskernel_file}
+  else
+    if [ -f "/etc/lsb-release" ]; then
+      ubuntu_version=$(grep -E '^DISTRIB_RELEASE=' /etc/lsb-release | cut -d'=' -f2 | xargs)
+      ubuntu_version="-ubuntu${ubuntu_version}."
+      local runtime_file=$(basename "$(echo "$(ls ${BUILD_PATH}_CPack_Packages/makeself_staging/cann-*.run)" | sed "s/_linux-/${ubuntu_version}/g")")
+      mv ${BUILD_PATH}_CPack_Packages/makeself_staging/cann-*.run ${BUILD_OUT_PATH}/${runtime_file}
+    else
+      echo "Error: operate enviroment is not ubuntu."
+      exit 1
+    fi
+  fi
+}
+
 # create build path
 build_metadef() {
   echo "create build directory and build Metadef"
@@ -173,6 +246,9 @@ build_metadef() {
               -D CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
               -D CMAKE_INSTALL_PREFIX=${OUTPUT_PATH} \
               -D ENABLE_SYMENGINE=${ENABLE_SYMENGINE} \
+              -D ENABLE_BUILD_DEVICE=${ENABLE_BUILD_DEVICE} \
+              -D USE_CXX11_ABI=${USE_CXX11_ABI} \
+              -D CMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE_VAL} \
               -D FORCE_REBUILD_CANN_3RD=False"
 
   echo "CMAKE_ARGS is: $CMAKE_ARGS"
@@ -185,7 +261,7 @@ build_metadef() {
     echo "execute command: make ${VERBOSE} -j${THREAD_NUM} && make install failed."
     return 1
   fi
-  mv ${BUILD_PATH}_CPack_Packages/makeself_staging/cann-*.run ${BUILD_OUT_PATH}/
+  copy_pkg
   echo "Metadef build success!"
 }
 

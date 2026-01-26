@@ -92,6 +92,7 @@ cmake_print_variables(CMAKE_INSTALL_PREFIX)
 cmake_print_variables(CMAKE_PREFIX_PATH)
 cmake_print_variables(CMAKE_MODULE_PATH)
 cmake_print_variables(ENABLE_OPEN_SRC ENABLE_METADEF_UT ENABLE_METADEF_ST ENABLE_METADEF_COV ENABLE_BENCHMARK GE_ONLY)
+cmake_print_variables(ENABLE_BUILD_DEVICE USE_CXX11_ABI CMAKE_TOOLCHAIN_FILE)
 
 set(INSTALL_BASE_DIR "")
 set(INSTALL_LIBRARY_DIR lib)
@@ -104,6 +105,41 @@ include(CMakePackageConfigHelpers)
 set(METADEF_DIR ${CMAKE_CURRENT_LIST_DIR})
 
 option(ENABLE_OPEN_SRC "Enable graphengine compile in opensource." FALSE)
+
+if(ENABLE_BUILD_DEVICE)
+    # 非MDC编译流程
+    set(USE_CXX11_ABI 0)
+else()
+    if(CMAKE_TOOLCHAIN_FILE STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}/cmake/llvm_toolchain.cmake")
+        # MDC编译运行态
+        message("MDC compile runtime state.")
+        add_compile_definitions(_GLIBCXX_USE_CXX11_ABI=${USE_CXX11_ABI})
+    else()
+        # MDC编译开发态
+        message("MDC compile develop state.")
+        set(USE_CXX11_ABI 0)
+    endif()
+endif()
+
+# 针对 Clang 编译器，关闭特定警告（避免 -Werror 触发编译错误）
+if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    message(STATUS "Add compile option for Clang.")
+    
+    add_compile_options(-Wno-error=unknown-warning-option)
+    
+    add_compile_options(-Wno-unused)
+    add_compile_options(-Wno-unused-private-field)
+    
+    add_compile_options(-Wno-inconsistent-missing-override)
+    add_compile_options(-Wno-vla)
+    
+    add_compile_options(-Wno-error=inconsistent-missing-override)
+    add_compile_options(-Wno-error=vla)
+    add_compile_options(-Wno-error=unused)
+    add_compile_options(-Wno-error=unused-private-field)
+
+    add_compile_options(-Wno-error)
+endif()
 
 if (ENABLE_OPEN_SRC)
     set(HI_PYTHON python3)
@@ -191,7 +227,7 @@ if (PACKAGE STREQUAL "opensdk")
     )
 endif()
 
-if (ENABLE_OPEN_SRC AND "${PRODUCT_SIDE}" STREQUAL "host")
+if (ENABLE_OPEN_SRC AND "${PRODUCT_SIDE}" STREQUAL "host" AND ENABLE_BUILD_DEVICE)
     set(TOOLCHAIN_DIR ${ASCEND_INSTALL_PATH}/toolkit/toolchain/hcc)
     include(ExternalProject)
     ExternalProject_add(metadef_device_ep

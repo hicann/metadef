@@ -19,7 +19,7 @@ target_compile_options(ut_sc_check PRIVATE
     -g --coverage -fprofile-arcs -ftest-coverage
     -Wno-deprecated-declarations
     -Wall -Wfloat-equal -Werror
-    -D_GLIBCXX_USE_CXX11_ABI=0
+    -D_GLIBCXX_USE_CXX11_ABI=${USE_CXX11_ABI}
 )
 
 target_compile_definitions(ut_sc_check PRIVATE

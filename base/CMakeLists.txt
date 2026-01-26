@@ -619,7 +619,7 @@ target_compile_definitions(tilingdata_base PRIVATE
     $<$<CONFIG:Debug>:CFG_BUILD_DEBUG>
     LINUX=0
     $<$<BOOL:${ENABLE_TEST}>:SUPPORT_LARGE_MODEL_ENABLE=1>
-    $<$<BOOL:${ENABLE_METADEF_UT}>:_GLIBCXX_USE_CXX11_ABI=0>
+    $<$<BOOL:${ENABLE_METADEF_UT}>:_GLIBCXX_USE_CXX11_ABI=${USE_CXX11_ABI}>
 )
 
 target_compile_options(tilingdata_base PRIVATE
