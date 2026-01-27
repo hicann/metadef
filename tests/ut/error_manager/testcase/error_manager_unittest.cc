@@ -106,8 +106,37 @@ namespace {
   ]
 }
 )";
+  std::string g_msg3 = R"(
+{
+  "error_info_list": [
+    {
+      "errClass": "GE Errors",
+      "errTitle": "Invalid_Argument",
+      "ErrCode": "E10001",
+      "ErrMessage": "Value [%s] for parameter [%s] is invalid. Reason: %s",
+      "Arglist": "value,parameter,reason",
+      "suggestion": {
+        "Possible Cause": "N/A",
+        "Solution": "Try again with a valid argument."
+      }
+    },
+    {
+      "errClass": "GE Errors",
+      "errTitle": "Config_Error_Weight_Configuration",
+      "ErrCode": "W11002",
+      "ErrMessage": "In the compression weight configuration file [%s], some nodes do not exist in graph: %s.",
+      "Arglist": "filename, opnames",
+      "suggestion": {
+        "Possible Cause": "N/A",
+        "Solution": "Check whether the weight file matches the model file."
+      }
+    }
+  ]
+}
+)";
 REG_FORMAT_ERROR_MSG(g_msg1.c_str(), g_msg1.size());
 REG_FORMAT_ERROR_MSG(g_msg2.c_str(), g_msg2.size());
+REG_FORMAT_ERROR_MSG(g_msg3.c_str(), g_msg3.size());
 }
 
   class UtestErrorManager : public testing::Test {

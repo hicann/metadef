@@ -21,6 +21,7 @@ using namespace std;
 namespace ge {
 namespace {
 const char *const kEnvName = "ASCEND_OPP_PATH";
+const char *const kCustOppPath = "ASCEND_CUSTOM_OPP_PATH";
 const char *const kAscendHomePath = "ASCEND_HOME_PATH";
 const char_t *const kBuiltIn = "built-in";
 const char_t *const kVendors = "vendors";
@@ -1883,6 +1884,19 @@ TEST_F(UtestPluginManager, FindSoFilesInCustomPassDirs_04) {
 
   system(("rm -rf " + path).c_str());
 }
+
+TEST_F(UtestPluginManager, FindSoFilesInCustomPassDirs_05) {
+  PluginManager::SetCustomOpLibPath("");
+  std::string path = __FILE__;
+  path = path.substr(0, path.rfind('/') + 0);
+  mmSetEnv(kCustOppPath, path.c_str(), 1);
+  std::string plugin_path;
+  PluginManager::GetPluginPathFromCustomOppPath("", plugin_path);
+  unsetenv(kCustOppPath);
+  PluginManager::SetCustomOpLibPath("");
+  ASSERT_NE(plugin_path.size(), 0);
+}
+
 TEST_F(UtestPluginManager, ReplaceFirst_NotMatch) {
   std::string path;
   ASSERT_EQ(PluginManager::GetOppPluginPathOld("/path/to/opp/", "abc", path), ge::GRAPH_SUCCESS);

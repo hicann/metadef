@@ -251,8 +251,13 @@ void PluginManager::SetCustomOpLibPath(const std::string &custom_op_Lib_path) {
 void PluginManager::GetPluginPathFromCustomOppPath(const std::string &sub_path, std::string &plugin_path) {
   plugin_path = "";
   if (custom_op_lib_path_.empty()) {
-    GELOGI("custom_op_lib_path_ is empty.");
-    return;
+    const char_t *custom_opp_path_env = nullptr;
+    MM_SYS_GET_ENV(MM_ENV_ASCEND_CUSTOM_OPP_PATH, custom_opp_path_env);
+    if (custom_opp_path_env == nullptr) {
+      GELOGI("custom_op_lib_path_ is empty.");
+      return;
+    }
+    custom_op_lib_path_ = std::string(custom_opp_path_env);
   }
   GELOGI("value of env custom_op_lib_path_ is %s.", custom_op_lib_path_.c_str());
   std::vector<std::string> custom_paths = StringUtils::Split(custom_op_lib_path_, ':');
