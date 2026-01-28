@@ -14,6 +14,7 @@
 #include "register/opp_impl_version.h"
 #include "register/op_impl_registry_holder_manager.h"
 #include "graph/any_value.h"
+#include "base/registry/opp_package_utils.h"
 
 namespace gert {
 using OpTypesToImplMap = std::map<OpImplRegisterV2::OpType, OpImplKernelRegistry::OpImplFunctionsV2>;
@@ -60,6 +61,8 @@ class DefaultOpImplSpaceRegistry {
   const OpImplSpaceRegistryArray &GetDefaultSpaceRegistries();
 
   OpImplSpaceRegistryPtr &GetDefaultSpaceRegistry(ge::OppImplVersion opp_impl_version = ge::OppImplVersion::kOpp);
+
+  OpImplSpaceRegistryPtr &GetDefaultSpaceRegistry(OppImplVersionTag opp_impl_version_tag);
 
   void SetDefaultSpaceRegistry(const OpImplSpaceRegistryPtr &space_registry,
                                ge::OppImplVersion opp_impl_version = ge::OppImplVersion::kOpp);

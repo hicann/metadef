@@ -126,6 +126,11 @@ OpImplSpaceRegistryPtr &DefaultOpImplSpaceRegistry::GetDefaultSpaceRegistry(ge::
   return space_registries_[static_cast<size_t>(version)];
 }
 
+OpImplSpaceRegistryPtr &DefaultOpImplSpaceRegistry::GetDefaultSpaceRegistry(OppImplVersionTag opp_impl_version_tag) {
+  size_t opp_impl_version = static_cast<size_t>(opp_impl_version_tag);
+  return GetDefaultSpaceRegistry(static_cast<ge::OppImplVersion>(opp_impl_version));
+}
+
 void DefaultOpImplSpaceRegistry::SetDefaultSpaceRegistry(const OpImplSpaceRegistryPtr &space_registry,
                                                          ge::OppImplVersion opp_impl_version) {
   if (opp_impl_version > ge::OppImplVersion::kVersionEnd) {

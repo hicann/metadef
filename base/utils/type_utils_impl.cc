@@ -272,61 +272,6 @@ AscendString TypeUtilsImpl::FormatToAscendString(const Format format) {
   }
 }
 
-graphStatus SplitFormatFromStr(const std::string &str, std::string &primary_format_str, int32_t &sub_format);
-Format TypeUtilsImpl::AscendStringToFormat(const AscendString &str) {
-  std::string primary_format_str = str.GetString();
-  int32_t sub_format = 0;
-  if (SplitFormatFromStr(str.GetString(), primary_format_str, sub_format) != GRAPH_SUCCESS) {
-    GELOGE(GRAPH_FAILED, "[Split][Format] from %s failed", str.GetString());
-    return FORMAT_RESERVED;
-  }
-  int32_t primary_format;
-  const auto it = kStringToFormatMap.find(primary_format_str);
-  if (it != kStringToFormatMap.end()) {
-    primary_format = it->second;
-  } else {
-    GELOGW("[Check][Param] Format not support %s", str.GetString());
-    return FORMAT_RESERVED;
-  }
-  return static_cast<Format>(GetFormatFromSub(primary_format, sub_format));
-}
-
-Format TypeUtilsImpl::DataFormatToFormat(const AscendString &str) {
-  std::string primary_format_str = str.GetString();
-  int32_t sub_format = 0;
-  if (SplitFormatFromStr(str.GetString(), primary_format_str, sub_format) != GRAPH_SUCCESS) {
-    GELOGE(GRAPH_FAILED, "[Split][Format] from %s failed", str.GetString());
-    return FORMAT_RESERVED;
-  }
-  int32_t primary_format;
-  const auto it = kDataFormatMap.find(primary_format_str);
-  if (it != kDataFormatMap.end()) {
-    primary_format = it->second;
-  } else {
-    GELOGW("[Check][Param] Format not support %s", str.GetString());
-    return FORMAT_RESERVED;
-  }
-  return static_cast<Format>(GetFormatFromSub(primary_format, sub_format));
-}
-
-bool TypeUtilsImpl::GetDataTypeLength(const ge::DataType data_type, uint32_t &length) {
-  const auto it = kDataTypeToLength.find(data_type);
-  if (it != kDataTypeToLength.end()) {
-    length = it->second;
-    return true;
-  }
-
-  const int32_t size = GetSizeByDataType(data_type);
-  if (size > 0) {
-    length = static_cast<uint32_t>(size);
-    return true;
-  } else {
-    REPORT_INNER_ERR_MSG("E18888", "data_type not support [%s]", DataTypeToAscendString(data_type).GetString());
-    GELOGE(GRAPH_FAILED, "[Check][Param] data_type not support [%s]", DataTypeToAscendString(data_type).GetString());
-    return false;
-  }
-}
-
 graphStatus SplitFormatFromStr(const std::string &str, std::string &primary_format_str, int32_t &sub_format) {
   const size_t split_pos = str.find_first_of(':');
   if (split_pos != std::string::npos) {
@@ -334,7 +279,7 @@ graphStatus SplitFormatFromStr(const std::string &str, std::string &primary_form
     try {
       primary_format_str = str.substr(0U, split_pos);
       if (std::any_of(sub_format_str.cbegin(), sub_format_str.cend(),
-                      [](const char_t c) { return !static_cast<bool>(isdigit(static_cast<char_t>(c))); })) {
+                      [](const char_t c) { return !(isdigit(static_cast<char_t>(c))!=0); })) {
         REPORT_INNER_ERR_MSG("E18888", "sub_format: %s is not digital.", sub_format_str.c_str());
         GELOGE(GRAPH_FAILED, "[Check][Param] sub_format: %s is not digital.", sub_format_str.c_str());
         return GRAPH_FAILED;
@@ -405,4 +350,59 @@ Format TypeUtils::AscendStringToFormat(const AscendString &str) {
 Format TypeUtils::DataFormatToFormat(const AscendString &str) {
   return TypeUtilsImpl::DataFormatToFormat(str);
 }
+
+Format TypeUtilsImpl::AscendStringToFormat(const AscendString &str) {
+  std::string primary_format_str = str.GetString();
+  int32_t sub_format = 0;
+  if (SplitFormatFromStr(str.GetString(), primary_format_str, sub_format) != GRAPH_SUCCESS) {
+    GELOGE(GRAPH_FAILED, "[Split][Format] from %s failed", str.GetString());
+    return FORMAT_RESERVED;
+  }
+  int32_t primary_format;
+  const auto it = kStringToFormatMap.find(primary_format_str);
+  if (it != kStringToFormatMap.end()) {
+    primary_format = it->second;
+  } else {
+    GELOGW("[Check][Param] Format not support %s", str.GetString());
+    return FORMAT_RESERVED;
+  }
+  return static_cast<Format>(GetFormatFromSub(primary_format, sub_format));
+}
+
+Format TypeUtilsImpl::DataFormatToFormat(const AscendString &str) {
+  std::string primary_format_str = str.GetString();
+  int32_t sub_format = 0;
+  if (SplitFormatFromStr(str.GetString(), primary_format_str, sub_format) != GRAPH_SUCCESS) {
+    GELOGE(GRAPH_FAILED, "[Split][Format] from %s failed", str.GetString());
+    return FORMAT_RESERVED;
+  }
+  int32_t primary_format;
+  const auto it = kDataFormatMap.find(primary_format_str);
+  if (it != kDataFormatMap.end()) {
+    primary_format = it->second;
+  } else {
+    GELOGW("[Check][Param] Format not support %s", str.GetString());
+    return FORMAT_RESERVED;
+  }
+  return static_cast<Format>(GetFormatFromSub(primary_format, sub_format));
+}
+
+bool TypeUtilsImpl::GetDataTypeLength(const ge::DataType data_type, uint32_t &length) {
+  const auto it = kDataTypeToLength.find(data_type);
+  if (it != kDataTypeToLength.end()) {
+    length = it->second;
+    return true;
+  }
+
+  const int32_t size = GetSizeByDataType(data_type);
+  if (size > 0) {
+    length = static_cast<uint32_t>(size);
+    return true;
+  } else {
+    REPORT_INNER_ERR_MSG("E18888", "data_type not support [%s]", DataTypeToAscendString(data_type).GetString());
+    GELOGE(GRAPH_FAILED, "[Check][Param] data_type not support [%s]", DataTypeToAscendString(data_type).GetString());
+    return false;
+  }
+}
+
 }  // namespace ge

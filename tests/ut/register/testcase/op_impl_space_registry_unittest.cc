@@ -181,6 +181,18 @@ TEST_F(OpImplSpaceRegistryUT, DefaultOpImplSpaceRegistry_SetSpaceRegistry_null) 
   EXPECT_EQ(gert::DefaultOpImplSpaceRegistry::GetInstance().space_registries_[static_cast<size_t>(ge::OppImplVersion::kOpp)].use_count(), 0);
 }
 
+TEST_F(OpImplSpaceRegistryUT, DefaultOpImplSpaceRegistry_SetSpaceRegistry_null_1) {
+  auto space_registry = std::make_shared<gert::OpImplSpaceRegistry>();
+  gert::DefaultOpImplSpaceRegistry::GetInstance().SetDefaultSpaceRegistry(space_registry, ge::OppImplVersion::kOpp);
+  EXPECT_NE(gert::DefaultOpImplSpaceRegistry::GetInstance().GetDefaultSpaceRegistry(gert::OppImplVersionTag::kOpp), nullptr);
+
+  gert::DefaultOpImplSpaceRegistry::GetInstance().SetDefaultSpaceRegistry(nullptr, ge::OppImplVersion::kOpp);
+  EXPECT_EQ(gert::DefaultOpImplSpaceRegistry::GetInstance().GetDefaultSpaceRegistry(gert::OppImplVersionTag::kOpp), nullptr);
+  // 通过校验原始类成员变量中space_registries_中存储的智能指针引用计数判断是否析构
+  // 不能通过GetDefaultSpaceRegistry接口，该接口里做了封装，如果获取DefaultOpImplSpaceRegistryV2中为nullptr，直接返回nullptr
+  EXPECT_EQ(gert::DefaultOpImplSpaceRegistry::GetInstance().space_registries_[static_cast<size_t>(ge::OppImplVersion::kOpp)].use_count(), 0);
+}
+
 TEST_F(OpImplSpaceRegistryUT, LoadSoAndSaveToRegistry_success) {
   ge::MmpaStub::GetInstance().SetImpl(std::make_shared<MockMmpa>());
   mock_handle = (void *) 0xffffffff;
