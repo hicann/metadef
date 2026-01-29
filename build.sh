@@ -103,12 +103,11 @@ checkopts() {
   ENABLE_METADEF_COV="off"
   ENABLE_BENCHMARK="off"
   GE_ONLY="on"
-  ASCEND_INSTALL_PATH="$ASCEND_HOME_PATH"
   CANN_3RD_LIB_PATH="$BASEPATH/output/third_party"
   CMAKE_BUILD_TYPE="Release"
 
   # Process the options
-  parsed_args=$(getopt -a -o j:hv -l help,verbose,enable_symengine,ascend_install_path:,ascend_3rd_lib_path:,cann_3rd_lib_path:,extra-cmake-args:,build-type:,asan,cov,output_path: -- "$@") || {
+  parsed_args=$(getopt -a -o j:hv -l help,verbose,enable_symengine,cann_3rd_lib_path:,extra-cmake-args:,build-type:,asan,cov,output_path: -- "$@") || {
     usage
     exit 1
   }
@@ -129,16 +128,7 @@ checkopts() {
         VERBOSE="VERBOSE=1"
         shift
         ;;
-      --ascend_install_path)
-        ASCEND_INSTALL_PATH="$(realpath $2)"
-        shift 2
-        ;;
-      --ascend_3rd_lib_path)
-        CANN_3RD_LIB_PATH="$(realpath $2)"
-        shift 2
-        ;;
       --cann_3rd_lib_path)
-        ASCEND_INSTALL_PATH="$ASCEND_HOME_PATH"
         CANN_3RD_LIB_PATH="$(realpath $2)"
         shift 2
         ;;
@@ -185,6 +175,13 @@ checkopts() {
         ;;
     esac
   done
+
+  if [ -n "$ASCEND_HOME_PATH" ]; then
+    ASCEND_INSTALL_PATH="$ASCEND_HOME_PATH"
+  else
+    echo "Error: No environment variable 'ASCEND_HOME_PATH' was found, please check the cann environment configuration."
+    exit 1
+  fi
 }
 
 mk_dir() {

@@ -45,11 +45,11 @@ checkopts() {
   ENABLE_METADEF_COV="off"
   ENABLE_BENCHMARK="off"
   GE_ONLY="on"
-  ASCEND_3RD_LIB_PATH="$BASEPATH/output/third_party"
+  CANN_3RD_LIB_PATH="$BASEPATH/output/third_party"
   CMAKE_BUILD_TYPE="Release"
 
   # Process the options
-  parsed_args=$(getopt -a -o ubcj:hv -l ut,benchmark,cov,help,verbose,ascend_install_path:,ascend_3rd_lib_path:,cann_3rd_lib_path: -- "$@") || {
+  parsed_args=$(getopt -a -o ubcj:hv -l ut,benchmark,cov,help,verbose,cann_3rd_lib_path: -- "$@") || {
     usage
     exit 1
   }
@@ -85,17 +85,8 @@ checkopts() {
         VERBOSE="VERBOSE=1"
         shift
         ;;
-      --ascend_install_path)
-        ASCEND_INSTALL_PATH="$(realpath $2)"
-        shift 2
-        ;;
-      --ascend_3rd_lib_path)
-        ASCEND_3RD_LIB_PATH="$(realpath $2)"
-        shift 2
-        ;;
       --cann_3rd_lib_path)
-        ASCEND_3RD_LIB_PATH="$(realpath $2)"
-        ENABLE_PKG="on"
+        CANN_3RD_LIB_PATH="$(realpath $2)"
         shift 2
         ;;
       --)
@@ -110,12 +101,11 @@ checkopts() {
     esac
   done
 
-  if [ -n "$ASCEND_INSTALL_PATH" ]; then
-    ASCEND_INSTALL_PATH="$ASCEND_INSTALL_PATH"
-  elif [ -n "$ASCEND_HOME_PATH" ]; then
+  if [ -n "$ASCEND_HOME_PATH" ]; then
     ASCEND_INSTALL_PATH="$ASCEND_HOME_PATH"
   else
-    ASCEND_INSTALL_PATH="/usr/local/Ascend/ascend-toolkit/latest"
+    echo "Error: No environment variable 'ASCEND_HOME_PATH' was found, please check the cann environment configuration."
+    exit 1
   fi
 }
 
@@ -156,10 +146,9 @@ build_metadef() {
               -D ENABLE_METADEF_ST=${ENABLE_METADEF_ST} \
               -D ENABLE_METADEF_COV=${ENABLE_METADEF_COV} \
               -D ENABLE_BENCHMARK=${ENABLE_BENCHMARK} \
-              -D ENABLE_PKG=${ENABLE_PKG} \
               -D BUILD_WITHOUT_AIR=True \
               -D ASCEND_INSTALL_PATH=${ASCEND_INSTALL_PATH} \
-              -D ASCEND_3RD_LIB_PATH=${ASCEND_3RD_LIB_PATH} \
+              -D ASCEND_3RD_LIB_PATH=${CANN_3RD_LIB_PATH} \
               -D CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
               -D CMAKE_INSTALL_PREFIX=${OUTPUT_PATH}"
 
