@@ -360,4 +360,23 @@ TEST_F(OppSoManagerUT, LoadOpsProtoPackage_suc) {
   space_registry = gert::DefaultOpImplSpaceRegistry::GetInstance().GetDefaultSpaceRegistry(OppImplVersion::kOppKernel);
   EXPECT_NE(space_registry, nullptr);
 }
+
+TEST_F(OppSoManagerUT, LoadAllOppPackage_dlopen_fail) {
+  mock_handle = nullptr;
+  ge::MmpaStub::GetInstance().SetImpl(std::make_shared<MockMmpa>());
+  std::set<std::string> opp_path;
+  SetOpHostAndGraphSo(opp_path);
+
+  std::stringstream capture_cout;
+  auto origin_cout_buffer = std::cout.rdbuf();
+  std::cout.rdbuf(capture_cout.rdbuf());
+
+  gert::OppPackageUtils::LoadAllOppPackage();
+
+  std::cout.rdbuf(origin_cout_buffer);
+  const std::string expect_log = "[ERROR] Failed to load";
+  EXPECT_EQ(capture_cout.str().find(expect_log) != std::string::npos, true);
+
+  RemoveTempPaths({opp_path});
+}
 }  // namespace ge

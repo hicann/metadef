@@ -76,12 +76,27 @@ ge::graphStatus OpImplSpaceRegistryImpl::AddSoToRegistry(const OppSoDesc &so_des
     uint32_t len = 0U;
     const auto so_data = ge::GetBinDataFromFile(std::string(so_path), len);
     GE_ASSERT_NOTNULL(so_data);
-    const auto create_func = [&types_to_impl_from_holder, so_path]() -> OpImplRegistryHolderPtr {
+    const auto create_func = [&types_to_impl_from_holder, so_path, so_desc]() -> OpImplRegistryHolderPtr {
       void *const handle = mmDlopen(
           so_path,
           static_cast<int32_t>(static_cast<uint32_t>(MMPA_RTLD_NOW) | static_cast<uint32_t>(MMPA_RTLD_GLOBAL)));
       if (handle == nullptr) {
-        GELOGW("Failed to dlopen %s! errmsg:%s", so_path, mmDlerror());
+        // 为兼顾兼容性和维测能力，此处算子so加载失败打印ERROR日志，并打屏提示用户
+        std::stringstream ss;
+        ss << "Failed to load " << so_desc.GetPackageName().GetString() << " library `" << so_path << "` via dlopen."
+           << std::endl;
+        ss << "This may cause missing functionality or reduced precision in related operations." << std::endl;
+        ss << "Next steps:" << std::endl;
+        ss << "  1. Diagnose: Review the specific error cause below." << std::endl;
+        ss << "  2. Resolve: Ensure correct path, version, and dependencies (e.g., missing libraries)." << std::endl;
+        ss << "  3. Refer to: "
+              "https://gitcode.com/cann/ge/wiki/"
+              "GE%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%AE%9A%E4%BD%8D%E6%89%8B%E5%86%8C.md#4-%E7%AE%97%E5%AD%90so%E5%"
+              "8A%A0%E8%BD%BD%E5%A4%B1%E8%B4%A5%E7%B1%BB%E9%97%AE%E9%A2%98 for further troubleshooting."
+           << std::endl;
+        ss << "Error detail: " << mmDlerror() << std::endl;
+        GELOGE(ge::GRAPH_FAILED, "%s", ss.str().c_str());
+        std::cout << "[ERROR] " << ss.str() << std::endl;
         return nullptr;
       }
       const std::function<void()> callback = [&handle]() { CloseHandle(handle); };
