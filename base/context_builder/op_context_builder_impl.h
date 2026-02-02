@@ -27,6 +27,7 @@ struct TilingInfo {
   const void *platform_info_ = nullptr;
   std::pair<const void *, gert::Chain::Deleter> tiling_data_ = {nullptr, nullptr};
   int32_t deterministic_ = 0;
+  int32_t deterministic_level_ = 0;
   const gert::ContinuousVector *workspace_ = nullptr;
 };
 struct TilingParseInfo {
@@ -89,6 +90,10 @@ class ContextBuilderImpl {
   }
   void SetDeterministic(int32_t deterministic) {
     tiling_info_.deterministic_ = deterministic;
+  }
+
+  void SetDeterministicLevel(int32_t deterministic_level) {
+    tiling_info_.deterministic_level_ = deterministic_level;
   }
 
   void SetCompiledJson(const ge::char_t *compiled_json) {

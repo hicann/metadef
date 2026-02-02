@@ -507,6 +507,7 @@ TEST_F(UtestContextBuilder, CreateTilingContextViewWithTensorV2OK) {
   uint8_t tmp_compile_info[] = {1, 2, 3, 4, 5, 6, 7};
   uint8_t tmp_platform_info[] = {1, 2, 3, 4, 5, 6, 7};
   int32_t deterministic = 1;
+  int32_t deterministic_level = 1;
 
   OpTilingContextBuilder ctx_builder;
   auto holder = ctx_builder.OpName("tmp")
@@ -525,6 +526,7 @@ TEST_F(UtestContextBuilder, CreateTilingContextViewWithTensorV2OK) {
                     .Workspace(ws_ptr)
                     .CompileInfo(tmp_compile_info)
                     .Deterministic(deterministic)
+                    .DeterministicLevel(deterministic_level)
                     .PlatformInfo(tmp_platform_info)
                     .InputTensors({reinterpret_cast<gert::Tensor*>(&x_tensor),
                                    reinterpret_cast<gert::Tensor*>(&resultIn_tensor),
@@ -901,4 +903,77 @@ TEST_F(UtestContextBuilder, CreateTilingParseContextExpandDimsTypeFailed) {
   EXPECT_NE(ctx_compute_node_info, nullptr);
   EXPECT_EQ(ctx->GetInputDesc(0)->GetExpandDimsType(), expand_dims_type11);
   EXPECT_EQ(ctx->GetInputDesc(1)->GetExpandDimsType(), expand_dims_type12);
+}
+
+TEST_F(UtestContextBuilder, SetDeterministicLevelTest) {
+  auto workspace_size_holer = gert::ContinuousVector::Create<size_t>(4096);
+  auto ws_ptr = reinterpret_cast<gert::ContinuousVector *>(workspace_size_holer.get());
+
+  gert::StorageShape x({1, 1, 1, 1, 1}, {1, 1, 1, 1, 1});
+  gert::StorageShape resultIn({10, 10, 10, 10, 20}, {10, 10, 10, 10, 20});
+  gert::StorageShape gamma({1, 1, 1, 1, 1}, {1, 1, 1, 1, 1});
+  gert::StorageShape beta({10, 10, 10, 10, 20}, {10, 10, 10, 10, 20});
+  gert::StorageShape result({10, 10, 10, 10, 20}, {10, 10, 10, 10, 20});
+
+  uint8_t data_x[1] = {9};
+  gert::Tensor x_tensor(x, {ge::FORMAT_NCDHW, ge::FORMAT_RESERVED, ExpandDimsType()}, TensorPlacement::kOnHost,
+                        ge::DT_FLOAT, (void *) data_x);
+  gert::Tensor resultIn_tensor(resultIn, {ge::FORMAT_NCDHW, ge::FORMAT_RESERVED, ExpandDimsType()},
+                               TensorPlacement::kOnHost, ge::DT_FLOAT, nullptr);
+  gert::Tensor gammax_tensor(gamma, {ge::FORMAT_NCDHW, ge::FORMAT_RESERVED, ExpandDimsType()}, TensorPlacement::kOnHost,
+                             ge::DT_FLOAT, nullptr);
+  gert::Tensor beta_tensor(beta, {ge::FORMAT_NCDHW, ge::FORMAT_RESERVED, ExpandDimsType()}, TensorPlacement::kOnHost,
+                           ge::DT_FLOAT, nullptr);
+  gert::Tensor result_tensor(result, {ge::FORMAT_NCDHW, ge::FORMAT_RESERVED, ExpandDimsType()},
+                             TensorPlacement::kOnHost, ge::DT_FLOAT, nullptr);
+
+  auto tmp_tiling_data = gert::TilingData::CreateCap(100);
+  uint8_t tmp_compile_info[] = {1, 2, 3, 4, 5, 6, 7};
+  uint8_t tmp_platform_info[] = {1, 2, 3, 4, 5, 6, 7};
+  int32_t deterministic = 1;
+
+  auto BuildContext = [&](OpTilingContextBuilder &builder) {
+    (void)builder.OpName("tmp")
+        .OpType("DIY")
+        .IONum(4, 1)
+        .AppendAttr(int64_t(1))
+        .AppendAttr(bool(true))
+        .AppendAttr(float(0.3))
+        .AppendAttr(AscendString("my_info"))
+        .AppendAttr(std::vector<bool>({true, false, true}))
+        .AppendAttr(std::vector<int64_t>({1, 2, 3}))
+        .AppendAttr(std::vector<float>({0.1, 0.2, 0.3}))
+        .AppendAttr(std::vector<AscendString>({"123", "234"}))
+        .AppendAttr(std::vector<std::vector<int64_t>>({{1, 2, 3}, {4, 5, 6}}))
+        .TilingData(reinterpret_cast<gert::TilingData *>(tmp_tiling_data.get()))
+        .Workspace(ws_ptr)
+        .CompileInfo(tmp_compile_info)
+        .Deterministic(deterministic)
+        .PlatformInfo(tmp_platform_info)
+        .InputTensors({&x_tensor, &resultIn_tensor, &gammax_tensor, &beta_tensor})
+        .OutputTensors({&result_tensor});
+  };
+
+  OpTilingContextBuilder ctx_builder1;
+  BuildContext(ctx_builder1);
+  ctx_builder1.DeterministicLevel(1);
+  auto holder1 = ctx_builder1.Build();
+  EXPECT_EQ(holder1.GetContext()->GetDeterministicLevel(), 1);
+
+  OpTilingContextBuilder ctx_builder2;
+  BuildContext(ctx_builder2);
+  auto ret = gert_TilingContextBuilder_SetDeterministicLevel(nullptr, 1);
+  EXPECT_EQ(ret, GRAPH_PARAM_INVALID);
+  ret = gert_TilingContextBuilder_SetDeterministicLevel(reinterpret_cast<void *>(&ctx_builder2), 4);
+  EXPECT_EQ(ret, GRAPH_PARAM_INVALID);
+  ret = gert_TilingContextBuilder_SetDeterministicLevel(reinterpret_cast<void *>(&ctx_builder2), 2);
+  EXPECT_EQ(ret, 0);
+  auto holder2 = ctx_builder2.Build();
+  EXPECT_EQ(holder2.GetContext()->GetDeterministicLevel(), 2);
+
+  OpTilingContextBuilder ctx_builder3;
+  BuildContext(ctx_builder3);
+  ctx_builder3.DeterministicLevel(4);
+  auto holder3 = ctx_builder3.Build();
+  EXPECT_EQ(holder3.GetContext()->GetDeterministicLevel(), 0);
 }

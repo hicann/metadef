@@ -36,6 +36,8 @@ class OpTilingContextBuilderImpl : public ContextBuilderImpl {
     (void)input_values_.emplace_back(nullptr, nullptr);                      // PrepareTilingFrameworkData
     (void)input_values_.emplace_back(
         reinterpret_cast<void *>(tiling_info_.deterministic_), nullptr);  // Deterministic
+    (void)input_values_.emplace_back(
+        reinterpret_cast<void *>(tiling_info_.deterministic_level_), nullptr);  // DeterministicLevel
     output_values_.resize(TilingContext::kOutputNum);
     output_values_[TilingContext::kOutputTilingData] =
         std::make_pair(tiling_info_.tiling_data_.first, tiling_info_.tiling_data_.second);
@@ -70,6 +72,17 @@ OpTilingContextBuilder &OpTilingContextBuilder::Deterministic(int32_t determinis
   }
   GE_CHECK_NOTNULL_EXEC(impl_, return *this);
   impl_->SetDeterministic(deterministic);
+  return *this;
+}
+
+OpTilingContextBuilder &OpTilingContextBuilder::DeterministicLevel(int32_t deterministic_level) {
+  if (deterministic_level != 0 && deterministic_level != 1 && deterministic_level != 2) {
+    GELOGE(ge::PARAM_INVALID, "Deterministic level value is invalid, expect 0 or 1 or 2, but got %d",
+           deterministic_level);
+    return *this;
+  }
+  GE_CHECK_NOTNULL_EXEC(impl_, return *this);
+  impl_->SetDeterministicLevel(deterministic_level);
   return *this;
 }
 
@@ -134,3 +147,28 @@ ContextHolder<TilingContext> OpTilingContextBuilder::Build() {
 }
 
 }  // namespace gert
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+uint32_t gert_TilingContextBuilder_SetDeterministicLevel(void *builder, int32_t deterministic_level) {
+  if (builder == nullptr) {
+    GELOGE(ge::PARAM_INVALID, "Builder is null");
+    return ge::GRAPH_PARAM_INVALID;
+  }
+
+  if (deterministic_level < 0 || deterministic_level > 2) {
+    GELOGE(ge::PARAM_INVALID, "Deterministic level value is invalid, expect 0, 1 or 2, but got %d", deterministic_level);
+    return ge::GRAPH_PARAM_INVALID;
+  }
+
+  auto *tiling_builder = static_cast<gert::OpTilingContextBuilder *>(builder);
+  (void)tiling_builder->DeterministicLevel(deterministic_level);
+
+  return ge::GRAPH_SUCCESS;
+}
+
+#ifdef __cplusplus
+}
+#endif
