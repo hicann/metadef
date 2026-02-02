@@ -61,8 +61,6 @@
         <file value="c_types.h" install_softlink="runtime/include/graph/c_types.h"/>
         <file value="compiler_def.h"/>
         <file value="ascend_string.h"/>
-        <file value="attr_value.h"/>
-        <file value="inference_context.h"/>
         <file value="types.h" install_softlink="runtime/include/graph/types.h"/>
     </file_info>
     <file_info value="include" copy_type="source" dst_path="include/graph/utils" install_path="$(TARGET_ENV)/include/graph/utils" install_type="devel" install_mod="440">

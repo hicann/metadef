@@ -155,8 +155,6 @@ set(EXTERNAL_GRAPH_FILES
     ${CMAKE_SOURCE_DIR}/inc/external/graph/infer_format_context.h
     ${CMAKE_SOURCE_DIR}/inc/external/graph/compiler_def.h
     ${CMAKE_SOURCE_DIR}/inc/external/graph/ascend_string.h
-    ${CMAKE_SOURCE_DIR}/inc/external/graph/attr_value.h
-    ${CMAKE_SOURCE_DIR}/inc/external/graph/inference_context.h
     ${CMAKE_SOURCE_DIR}/inc/external/graph/types.h
 )
 install(FILES ${EXTERNAL_GRAPH_FILES}
