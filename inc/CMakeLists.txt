@@ -33,6 +33,7 @@ target_include_directories(metadef_headers INTERFACE
     # 下列头文件包含路径是非法的，需要在后续整改中删掉
     # --------------------start------------------------
     $<BUILD_INTERFACE:${TOP_DIR}/ace/npuruntime/runtime/platform/inc>
+    $<BUILD_INTERFACE:${TOP_DIR}/runtime/pkg_inc>
     # ---------------------end-----------------------
 
     $<INSTALL_INTERFACE:include>
