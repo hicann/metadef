@@ -47,12 +47,22 @@ if(json_FOUND AND NOT FORCE_REBUILD_CANN_3RD)
     target_include_directories(json INTERFACE ${JSON_INCLUDE_DIR})
 else()
     message(STATUS "[ThirdPartyLib][json] json not found in ${JSON_INSTALL_PATH}.")
-    set(REQ_URL "https://gitcode.com/cann-src-third-party/json/releases/download/v3.11.3/include.zip")
+    set(REQ_URL "${CMAKE_THIRD_PARTY_LIB_DIR}/json/json-3.11.3.tar.gz")
+    set(JSON_EXTRA_ARGS "")
+    if(EXISTS ${REQ_URL})
+        message(STATUS "[json] ${REQ_URL} found.")
+    else()
+        message(STATUS "[json] ${REQ_URL} not found, need download.")
+        set(REQ_URL "https://gitcode.com/cann-src-third-party/json/releases/download/v3.11.3/json-3.11.3.tar.gz")
+        list(APPEND JSON_EXTRA_ARGS
+             DOWNLOAD_DIR ${JSON_DOWNLOAD_PATH}
+        )
+    endif()
     include(ExternalProject)
     ExternalProject_Add(third_party_json
             URL ${REQ_URL}
             TLS_VERIFY OFF
-            DOWNLOAD_DIR ${JSON_DOWNLOAD_PATH}
+            ${JSON_EXTRA_ARGS}
             SOURCE_DIR ${JSON_INSTALL_PATH}
             CONFIGURE_COMMAND ""
             BUILD_COMMAND ""
