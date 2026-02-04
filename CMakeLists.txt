@@ -93,6 +93,7 @@ cmake_print_variables(CMAKE_PREFIX_PATH)
 cmake_print_variables(CMAKE_MODULE_PATH)
 cmake_print_variables(ENABLE_OPEN_SRC ENABLE_METADEF_UT ENABLE_METADEF_ST ENABLE_METADEF_COV ENABLE_BENCHMARK GE_ONLY)
 cmake_print_variables(ENABLE_BUILD_DEVICE USE_CXX11_ABI CMAKE_TOOLCHAIN_FILE)
+cmake_print_variables(CMAKE_CXX_COMPILER_ID)
 
 set(INSTALL_BASE_DIR "")
 set(INSTALL_LIBRARY_DIR lib)
@@ -110,7 +111,9 @@ if(ENABLE_BUILD_DEVICE)
     # 非MDC编译流程
     set(USE_CXX11_ABI 0)
 else()
-    if(CMAKE_TOOLCHAIN_FILE STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}/cmake/llvm_toolchain.cmake")
+    string(FIND "${CMAKE_TOOLCHAIN_FILE}" "ubuntu18.04-x86_64-llvm-toolchain.cmake" SUBSTRING_FOUND)
+    if(SUBSTRING_FOUND GREATER_EQUAL 0)
+        set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY false)
         # MDC编译运行态
         message("MDC compile runtime state.")
         add_compile_definitions(_GLIBCXX_USE_CXX11_ABI=${USE_CXX11_ABI})
@@ -124,20 +127,15 @@ endif()
 # 针对 Clang 编译器，关闭特定警告（避免 -Werror 触发编译错误）
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     message(STATUS "Add compile option for Clang.")
-    
     add_compile_options(-Wno-error=unknown-warning-option)
-    
     add_compile_options(-Wno-unused)
     add_compile_options(-Wno-unused-private-field)
-    
     add_compile_options(-Wno-inconsistent-missing-override)
     add_compile_options(-Wno-vla)
-    
     add_compile_options(-Wno-error=inconsistent-missing-override)
     add_compile_options(-Wno-error=vla)
     add_compile_options(-Wno-error=unused)
     add_compile_options(-Wno-error=unused-private-field)
-
     add_compile_options(-Wno-error)
 endif()
 
