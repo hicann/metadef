@@ -74,7 +74,7 @@ ge::graphStatus OpImplSpaceRegistryImpl::AddSoToRegistry(const OppSoDesc &so_des
     auto so_path = so_path_ascend_string.GetString();
     GELOGI("Start to AddSoToRegistry so_path:%s, package name %s", so_path, so_desc.GetPackageName().GetString());
     uint32_t len = 0U;
-    const auto so_data = ge::GetBinDataFromFile(std::string(so_path), len);
+    const auto so_data = metadef::GetBinDataFromFile(std::string(so_path), len);
     GE_ASSERT_NOTNULL(so_data);
     const auto create_func = [&types_to_impl_from_holder, so_path, so_desc]() -> OpImplRegistryHolderPtr {
       void *const handle = mmDlopen(

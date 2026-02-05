@@ -26,11 +26,11 @@ constexpr int32_t kFileSuccess = 0;
 constexpr uint32_t kMaxWriteSize = 1U * 1024U * 1024U * 1024U;  // 1G
 constexpr size_t kMaxErrorStrLen = 128U;
 }  // namespace
-namespace ge {
-std::string RealPath(const char_t *path) {
+namespace metadef {
+std::string RealPath(const ge::char_t *path) {
   if (path == nullptr) {
     REPORT_INNER_ERR_MSG("E18888", "path is nullptr, check invalid");
-    GELOGE(FAILED, "[Check][Param] path pointer is NULL.");
+    GELOGE(ge::FAILED, "[Check][Param] path pointer is NULL.");
     return "";
   }
   GE_ASSERT_TRUE((strnlen(path, static_cast<size_t>(MMPA_MAX_PATH)) < static_cast<size_t>(MMPA_MAX_PATH)),
@@ -39,7 +39,7 @@ std::string RealPath(const char_t *path) {
   // Nullptr is returned when the path does not exist or there is no permission
   // Return absolute path when path is accessible
   std::string res;
-  char_t resolved_path[MMPA_MAX_PATH] = {};
+  ge::char_t resolved_path[MMPA_MAX_PATH] = {};
   if (mmRealPath(path, &(resolved_path[0U]), MMPA_MAX_PATH) == EN_OK) {
     res = &(resolved_path[0]);
   } else {
@@ -72,16 +72,16 @@ std::string GetSanitizedName(const std::string &input) {
   return sanitized;
 }
 
-static inline int32_t CheckAndMkdir(const char_t *tmp_dir_path, mmMode_t mode) {
+static inline int32_t CheckAndMkdir(const ge::char_t *tmp_dir_path, mmMode_t mode) {
   if (mmAccess2(tmp_dir_path, M_F_OK) != EN_OK) {
     const int32_t ret = mmMkdir(tmp_dir_path, mode);
     if (ret != 0) {
-      std::vector<char_t> err_buf(kMaxErrorStrLen + 1U, '\0');
+      std::vector<ge::char_t> err_buf(kMaxErrorStrLen + 1U, '\0');
       const auto err_msg = mmGetErrorFormatMessage(mmGetErrorCode(), err_buf.data(), kMaxErrorStrLen);
       std::string reason =
           "Directory creation failed. [Errno " + std::to_string(mmGetErrorCode()) + "] " + err_msg + ".";
-      (void) REPORT_PREDEFINED_ERR_MSG("E10001", std::vector<const char_t *>({"parameter", "value", "reason"}),
-                                       std::vector<const char_t *>({"filepath", tmp_dir_path, reason.c_str()}));
+      (void) REPORT_PREDEFINED_ERR_MSG("E10001", std::vector<const ge::char_t *>({"parameter", "value", "reason"}),
+                                       std::vector<const ge::char_t *>({"filepath", tmp_dir_path, reason.c_str()}));
       GELOGW("[Util][mkdir] Create directory %s failed, reason:%s. Make sure the "
              "directory exists and writable.",
              tmp_dir_path, strerror(errno));
@@ -145,11 +145,11 @@ int32_t CreateDirectory(const std::string &directory_path) {
   return CreateDir(directory_path);
 }
 
-std::unique_ptr<char_t[]> GetBinFromFile(std::string &path, uint32_t &data_len) {
+std::unique_ptr<ge::char_t[]> GetBinFromFile(std::string &path, uint32_t &data_len) {
   return GetBinDataFromFile(path, data_len);
 }
 
-std::unique_ptr<char_t[]> GetBinDataFromFile(const std::string &path, uint32_t &data_len) {
+std::unique_ptr<ge::char_t[]> GetBinDataFromFile(const std::string &path, uint32_t &data_len) {
   GE_ASSERT_TRUE(!path.empty());
   const std::string real_path = RealPath(path.c_str());	
   GE_ASSERT_TRUE(!real_path.empty(), "Path: %s is invalid, file or directory does not exist", path.c_str());
@@ -162,13 +162,13 @@ std::unique_ptr<char_t[]> GetBinDataFromFile(const std::string &path, uint32_t &
   (void) ifs.seekg(0, std::ifstream::end);
   const uint32_t len = static_cast<uint32_t>(ifs.tellg());
   (void) ifs.seekg(0, std::ifstream::beg);
-  auto bin_data = std::unique_ptr<char_t[]>(new (std::nothrow) char_t[len]);
+  auto bin_data = std::unique_ptr<ge::char_t[]>(new (std::nothrow) ge::char_t[len]);
   if (bin_data == nullptr) {
-    GELOGE(FAILED, "[Allocate][Mem]Allocate mem failed");
+    GELOGE(ge::FAILED, "[Allocate][Mem]Allocate mem failed");
     ifs.close();
     return nullptr;
   }
-  (void) ifs.read(reinterpret_cast<char_t *>(bin_data.get()), static_cast<std::streamsize>(len));
+  (void) ifs.read(reinterpret_cast<ge::char_t *>(bin_data.get()), static_cast<std::streamsize>(len));
   data_len = len;
   ifs.close();
   return bin_data;
@@ -187,22 +187,22 @@ std::unique_ptr<char[]> GetBinFromFile(const std::string &path, size_t offset, s
                  "Offset add length overflow size_t or file length");
   ifs.clear();
   (void) ifs.seekg(static_cast<int64_t>(offset), std::ifstream::beg);
-  auto bin_data = std::unique_ptr<char_t[]>(new (std::nothrow) char_t[data_len]);
+  auto bin_data = std::unique_ptr<ge::char_t[]>(new (std::nothrow) ge::char_t[data_len]);
   GE_ASSERT_NOTNULL(bin_data, "[Allocate][Mem] Allocate mem failed");
-  (void) ifs.read(reinterpret_cast<char_t *>(bin_data.get()), static_cast<int64_t>(data_len));
+  (void) ifs.read(reinterpret_cast<ge::char_t *>(bin_data.get()), static_cast<int64_t>(data_len));
   ifs.close();
   return bin_data;
 }
 
-graphStatus GetBinFromFile(const std::string &path, char_t *buffer, size_t &data_len) {
+ge::graphStatus GetBinFromFile(const std::string &path, ge::char_t *buffer, size_t &data_len) {
   GE_ASSERT_TRUE(!path.empty());
   GE_ASSERT_TRUE(buffer != nullptr);
   std::string real_path = RealPath(path.c_str());
   GE_ASSERT_TRUE(!real_path.empty(), "Path: %s is invalid, file or directory does not exist", path.c_str());
   std::ifstream ifs(real_path, std::ifstream::binary);
   if (!ifs.is_open()) {
-    GELOGE(GRAPH_FAILED, "path:%s not open", real_path.c_str());
-    return GRAPH_FAILED;
+    GELOGE(ge::GRAPH_FAILED, "path:%s not open", real_path.c_str());
+    return ge::GRAPH_FAILED;
   }
 
   (void) ifs.seekg(0, std::ifstream::end);
@@ -211,17 +211,17 @@ graphStatus GetBinFromFile(const std::string &path, char_t *buffer, size_t &data
   if (len != data_len) {
     REPORT_INNER_ERR_MSG("E18888", "Bin length[%zu] is not equal to defined length[%zu], file_path[%s].", len, data_len,
                          path.c_str());
-    GELOGE(GRAPH_FAILED, "Bin length[%zu] is not equal to defined length[%zu], file_path[%s].", len, data_len,
+    GELOGE(ge::GRAPH_FAILED, "Bin length[%zu] is not equal to defined length[%zu], file_path[%s].", len, data_len,
            path.c_str());
     ifs.close();
-    return GRAPH_FAILED;
+    return ge::GRAPH_FAILED;
   }
   (void) ifs.read(buffer, static_cast<std::streamsize>(len));
   ifs.close();
-  return GRAPH_SUCCESS;
+  return ge::GRAPH_SUCCESS;
 }
 
-graphStatus WriteBinToFile(std::string &path, char_t *data, uint32_t &data_len) {
+ge::graphStatus WriteBinToFile(std::string &path, ge::char_t *data, uint32_t &data_len) {
   GE_ASSERT_TRUE(!path.empty());
   std::string dir_path;
   std::string file_name;
@@ -232,31 +232,31 @@ graphStatus WriteBinToFile(std::string &path, char_t *data, uint32_t &data_len) 
   std::string secure_path = real_dir_path + "/" + file_name;
   std::ofstream ofs(secure_path, std::ios::out | std::ifstream::binary); 
   if (!ofs.is_open()) {
-      GELOGE(GRAPH_FAILED, "Open file failed. Path: %s (Real: %s)", path.c_str(), secure_path.c_str());
-      return GRAPH_FAILED;
+      GELOGE(ge::GRAPH_FAILED, "Open file failed. Path: %s (Real: %s)", path.c_str(), secure_path.c_str());
+      return ge::GRAPH_FAILED;
   }
   (void) ofs.write(data, static_cast<std::streamsize>(data_len));
   ofs.close();
-  return GRAPH_SUCCESS;
+  return ge::GRAPH_SUCCESS;
 }
 
-graphStatus WriteBinToFile(const int32_t fd, const char_t *const data, size_t data_len) {
+ge::graphStatus WriteBinToFile(const int32_t fd, const ge::char_t *const data, size_t data_len) {
   if ((data == nullptr) || (data_len == 0UL)) {
-    GELOGE(GRAPH_FAILED, "check param failed, data is nullptr or length is zero.");
-    return GRAPH_FAILED;
+    GELOGE(ge::GRAPH_FAILED, "check param failed, data is nullptr or length is zero.");
+    return ge::GRAPH_FAILED;
   }
   int64_t write_count = 0;
   size_t remain_size = data_len;
-  auto seek = static_cast<void *>(const_cast<char_t *>(data));
+  auto seek = static_cast<void *>(const_cast<ge::char_t *>(data));
   do {
     const size_t copy_size = remain_size > kMaxWriteSize ? kMaxWriteSize : remain_size;
     write_count = mmWrite(fd, seek, static_cast<uint32_t>(copy_size));
     GE_ASSERT_TRUE(((write_count != EN_INVALID_PARAM) && (write_count != EN_ERROR)),
                    "Write data failed, data_len: %llu", data_len);
-    seek = PtrAdd<uint8_t>(PtrToPtr<void, uint8_t>(seek), remain_size, static_cast<size_t>(write_count));
+    seek = ge::PtrAdd<uint8_t>(ge::PtrToPtr<void, uint8_t>(seek), remain_size, static_cast<size_t>(write_count));
     remain_size -= static_cast<size_t>(write_count);
   }while (remain_size > 0U);
-  return GRAPH_SUCCESS;
+  return ge::GRAPH_SUCCESS;
 }
 
 void SplitFilePath(const std::string &file_path, std::string &dir_path, std::string &file_name) {
@@ -279,10 +279,10 @@ void SplitFilePath(const std::string &file_path, std::string &dir_path, std::str
   return;
 }
 
-graphStatus SaveBinToFile(const char *const data, size_t length, const std::string &file_path) {
+ge::graphStatus SaveBinToFile(const char *const data, size_t length, const std::string &file_path) {
   if (data == nullptr || length == 0UL) {
-    GELOGE(GRAPH_FAILED, "check param failed, data is nullptr or length is zero.");
-    return GRAPH_FAILED;
+    GELOGE(ge::GRAPH_FAILED, "check param failed, data is nullptr or length is zero.");
+    return ge::GRAPH_FAILED;
   }
   std::string dir_path;
   std::string file_name;
@@ -300,41 +300,41 @@ graphStatus SaveBinToFile(const char *const data, size_t length, const std::stri
                                                  static_cast<uint32_t>(O_TRUNC));
   const int32_t fd = mmOpen2(&real_path[0UL], open_flag, mode);
   GE_ASSERT_TRUE(((fd != EN_INVALID_PARAM) && (fd != EN_ERROR)), "Open file failed, path: %s", real_path.c_str());
-  Status ret = GRAPH_SUCCESS;
-  if (WriteBinToFile(fd, data, length) != GRAPH_SUCCESS) {
-    GELOGE(GRAPH_FAILED, "Write data to file: %s failed.", real_path.c_str());
-    ret = GRAPH_FAILED;
+  ge::Status ret = ge::GRAPH_SUCCESS;
+  if (WriteBinToFile(fd, data, length) != ge::GRAPH_SUCCESS) {
+    GELOGE(ge::GRAPH_FAILED, "Write data to file: %s failed.", real_path.c_str());
+    ret = ge::GRAPH_FAILED;
   }
   if (mmClose(fd) != 0) {  // mmClose:0 success
-    GELOGE(GRAPH_FAILED, "Close file failed.");
-    return GRAPH_FAILED;
+    GELOGE(ge::GRAPH_FAILED, "Close file failed.");
+    return ge::GRAPH_FAILED;
   }
   return ret;
 }
 
-Status GetAscendWorkPath(std::string &ascend_work_path) {
-  const char_t *work_path = nullptr;
+ge::Status GetAscendWorkPath(std::string &ascend_work_path) {
+  const ge::char_t *work_path = nullptr;
   MM_SYS_GET_ENV(MM_ENV_ASCEND_WORK_PATH, work_path);
   if (work_path != nullptr) {
     if (mmAccess(work_path) != EN_OK) {
-      if (ge::CreateDir(work_path) != 0) {
+      if (CreateDir(work_path) != 0) {
         std::string reason = "The path doesn't exist, create path failed.";
-        (void)REPORT_PREDEFINED_ERR_MSG("E10001", std::vector<const char_t *>({"parameter", "value", "reason"}),
-                                         std::vector<const char_t *>({"ASCEND_WORK_PATH", work_path, reason.c_str()}));
-        return FAILED;
+        (void)REPORT_PREDEFINED_ERR_MSG("E10001", std::vector<const ge::char_t *>({"parameter", "value", "reason"}),
+                                        std::vector<const ge::char_t *>({"ASCEND_WORK_PATH", work_path, reason.c_str()}));
+        return ge::FAILED;
       }
     }
     ascend_work_path = RealPath(work_path);
     if (ascend_work_path.empty()) {
-      GELOGE(FAILED, "[Call][RealPath] File path %s is invalid.", work_path);
-      return FAILED;
+      GELOGE(ge::FAILED, "[Call][RealPath] File path %s is invalid.", work_path);
+      return ge::FAILED;
     }
     GELOGD("Get ASCEND_WORK_PATH success, path = %s, real path = %s", work_path, ascend_work_path.c_str());
-    return SUCCESS;
+    return ge::SUCCESS;
   }
   ascend_work_path = "";
   GELOGD("Get ASCEND_WORK_PATH fail");
-  return SUCCESS;
+  return ge::SUCCESS;
 }
 
 int32_t Scandir(const CHAR *path, mmDirent ***entry_list, mmFilter filter_func, mmSort sort) {
@@ -353,4 +353,4 @@ int32_t Scandir(const CHAR *path, mmDirent ***entry_list, mmFilter filter_func, 
   }
   return count;
 }
-}  // namespace ge
+}  // namespace metadef

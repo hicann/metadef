@@ -47,7 +47,7 @@ OpImplRegistryHolder::~OpImplRegistryHolder() {
 
 ge::graphStatus OmOpImplRegistryHolder::CreateOmOppDir(std::string &opp_dir) const {
   opp_dir.clear();
-  GE_ASSERT_SUCCESS(ge::GetAscendWorkPath(opp_dir));
+  GE_ASSERT_SUCCESS(metadef::GetAscendWorkPath(opp_dir));
   if (opp_dir.empty()) {
     const ge::char_t *path_env = nullptr;
     MM_SYS_GET_ENV(MM_ENV_HOME, path_env);
@@ -56,7 +56,7 @@ ge::graphStatus OmOpImplRegistryHolder::CreateOmOppDir(std::string &opp_dir) con
       return ge::GRAPH_FAILED;
     }
 
-    const std::string file_path = ge::RealPath(path_env);
+    const std::string file_path = metadef::RealPath(path_env);
     if (file_path.empty()) {
       GELOGE(ge::FAILED, "[Call][RealPath] File path %s is invalid.", opp_dir.c_str());
       return ge::GRAPH_FAILED;
@@ -74,7 +74,7 @@ ge::graphStatus OmOpImplRegistryHolder::CreateOmOppDir(std::string &opp_dir) con
   GELOGD("opp_dir is %s", opp_dir.c_str());
 
   GE_ASSERT_TRUE(mmAccess2(opp_dir.c_str(), M_F_OK) != EN_OK);
-  GE_ASSERT_TRUE(ge::CreateDir(opp_dir) == 0);
+  GE_ASSERT_TRUE(metadef::CreateDir(opp_dir) == 0);
 
   return ge::GRAPH_SUCCESS;
 }

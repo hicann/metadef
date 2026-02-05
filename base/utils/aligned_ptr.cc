@@ -13,7 +13,7 @@
 #include "common/ge_common/debug/ge_log.h"
 #include "graph/def_types.h"
 
-namespace ge {
+namespace metadef {
 AlignedPtr::AlignedPtr(const size_t buffer_size, const size_t alignment) {
   size_t alloc_size = buffer_size;
   if (alignment > 0U) {
@@ -39,7 +39,7 @@ AlignedPtr::AlignedPtr(const size_t buffer_size, const size_t alignment) {
   } else {
     const size_t offset = alignment - 1U;
     aligned_addr_ =
-        PtrToPtr<void, uint8_t>(ValueToPtr((PtrToValue(PtrToPtr<uint8_t, void>(base_.get())) + offset) & ~offset));
+        ge::PtrToPtr<void, uint8_t>(ge::ValueToPtr((ge::PtrToValue(ge::PtrToPtr<uint8_t, void>(base_.get())) + offset) & ~offset));
   }
 }
 
@@ -61,7 +61,7 @@ std::unique_ptr<uint8_t[], AlignedPtr::Deleter> AlignedPtr::Reset(uint8_t *const
                                                                   const AlignedPtr::Deleter &delete_func) {
   if ((data == nullptr) || (delete_func == nullptr)) {
     REPORT_INNER_ERR_MSG("E18888", "data is nullptr or delete_func is nullptr");
-    GELOGE(FAILED, "[Check][Param] data/delete_func is null");
+    GELOGE(ge::FAILED, "[Check][Param] data/delete_func is null");
     return nullptr;
   }
   auto ptr = Reset();
@@ -75,13 +75,13 @@ std::shared_ptr<AlignedPtr> AlignedPtr::BuildFromAllocFunc(const AlignedPtr::All
                                                            const AlignedPtr::Deleter &delete_func) {
   if ((alloc_func == nullptr) || (delete_func == nullptr)) {
       REPORT_INNER_ERR_MSG("E18888", "alloc_func or delete_func is nullptr, check invalid");
-      GELOGE(FAILED, "[Check][Param] alloc_func/delete_func is null");
+      GELOGE(ge::FAILED, "[Check][Param] alloc_func/delete_func is null");
       return nullptr;
   }
-  const auto aligned_ptr = MakeShared<AlignedPtr>();
+  const auto aligned_ptr = ge::MakeShared<AlignedPtr>();
   if (aligned_ptr == nullptr) {
     REPORT_INNER_ERR_MSG("E18888", "create AlignedPtr failed.");
-    GELOGE(INTERNAL_ERROR, "[Create][AlignedPtr] make shared for AlignedPtr failed");
+    GELOGE(ge::INTERNAL_ERROR, "[Create][AlignedPtr] make shared for AlignedPtr failed");
     return nullptr;
   }
   aligned_ptr->base_.reset();
@@ -89,7 +89,7 @@ std::shared_ptr<AlignedPtr> AlignedPtr::BuildFromAllocFunc(const AlignedPtr::All
   aligned_ptr->base_.get_deleter() = delete_func;
   if (aligned_ptr->base_ == nullptr) {
     REPORT_INNER_ERR_MSG("E18888", "allocate for AlignedPtr failed");
-    GELOGE(FAILED, "[Call][AllocFunc] allocate for AlignedPtr failed");
+    GELOGE(ge::FAILED, "[Call][AllocFunc] allocate for AlignedPtr failed");
     return nullptr;
   }
   aligned_ptr->aligned_addr_ = aligned_ptr->base_.get();
@@ -99,13 +99,13 @@ std::shared_ptr<AlignedPtr> AlignedPtr::BuildFromAllocFunc(const AlignedPtr::All
 std::shared_ptr<AlignedPtr> AlignedPtr::BuildFromData(uint8_t * const data, const AlignedPtr::Deleter &delete_func) {
   if ((data == nullptr) || (delete_func == nullptr)) {
     REPORT_INNER_ERR_MSG("E18888", "data is nullptr or delete_func is nullptr");
-    GELOGE(FAILED, "[Check][Param] data/delete_func is null");
+    GELOGE(ge::FAILED, "[Check][Param] data/delete_func is null");
     return nullptr;
   }
-  const auto aligned_ptr = MakeShared<AlignedPtr>();
+  const auto aligned_ptr = ge::MakeShared<AlignedPtr>();
   if (aligned_ptr == nullptr) {
     REPORT_INNER_ERR_MSG("E18888", "create AlignedPtr failed.");
-    GELOGE(INTERNAL_ERROR, "[Create][AlignedPtr] make shared for AlignedPtr failed");
+    GELOGE(ge::INTERNAL_ERROR, "[Create][AlignedPtr] make shared for AlignedPtr failed");
     return nullptr;
   }
   aligned_ptr->base_.reset(data);
@@ -113,4 +113,4 @@ std::shared_ptr<AlignedPtr> AlignedPtr::BuildFromData(uint8_t * const data, cons
   aligned_ptr->aligned_addr_ = aligned_ptr->base_.get();
   return aligned_ptr;
 }
-}  // namespace ge
+}  // namespace metadef
