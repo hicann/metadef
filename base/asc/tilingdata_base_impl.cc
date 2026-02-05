@@ -214,21 +214,14 @@ TilingDataStructBaseImpl& TilingDataStructBaseImpl::GetInstance() {
 
 uint32_t __attribute__((weak)) TilingDataStructBaseImpl::RecordTilingStruct(const char* name, const char* file, \
     uint32_t line) {
+  // 只记录头文件的冲突
   const char* file_name = GetFileName(file);
-  bool is_header = CheckPathIsHeader(std::string(file_name));
+  if (!CheckPathIsHeader(std::string(file_name))) {
+    return 0;
+  }
   auto it = records->find(name);
   if (it != records->end()) {
     std::pair<const char *, uint32_t> item = it->second;
-    if (!is_header) {
-      if (item.second != line) {
-          printf("[Warning]: tiling struct [%s] is conflict with one in file %s, line %d\n", \
-              name, item.first, item.second);
-      }
-      return 0;
-    }
-    if (!CheckPathIsHeader(std::string(item.first))) {
-      return 0;
-    }
     if ((strcmp(item.first, file_name) == 0) && item.second == line) {
       return 0;
     }

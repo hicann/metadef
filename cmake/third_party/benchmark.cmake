@@ -17,10 +17,16 @@ if(EXISTS ${BENCHMARK_CMAKE_PATH})
 else()
     message(STATUS "[ThirdPartyLib][benchmark] ${BENCHMARK_CMAKE_PATH} not found, benchmark download.")
     set(BENCHMARK_FILE_PATH ${ASCEND_3RD_LIB_PATH}/benchmark-1.8.3)
-    if(IS_DIRECTORY "${BENCHMARK_FILE_PATH}")
-        set(REQ_URL ${BENCHMARK_FILE_PATH})
+    set(REQ_URL "${CMAKE_THIRD_PARTY_LIB_DIR}/benchmark/benchmark-1.8.3.tar.gz")
+    set(BENCHMARK_EXTRA_ARGS "")
+    if(EXISTS ${REQ_URL})
+        message(STATUS "[ThirdPartyLib][benchmark] ${REQ_URL} found.")
     else()
+        message(STATUS "[ThirdPartyLib][benchmark] ${REQ_URL} not found, need download.")
         set(REQ_URL "https://gitcode.com/cann-src-third-party/benchmark/releases/download/v1.8.3/benchmark-1.8.3.tar.gz")
+        list(APPEND BENCHMARK_EXTRA_ARGS
+             DOWNLOAD_DIR ${BENCHMARK_FILE_PATH}
+        )
     endif()
 
     set(benchmark_CXXFLAGS "-D_GLIBCXX_USE_CXX11_ABI=${USE_CXX11_ABI} -D_FORTIFY_SOURCE=2 -O2 -fstack-protector-all -Wl,-z,relro,-z,now,-z,noexecstack")
@@ -28,7 +34,7 @@ else()
     ExternalProject_Add(benchmark_build
                         URL ${REQ_URL}
                         TLS_VERIFY OFF
-                        DOWNLOAD_DIR ${BENCHMARK_FILE_PATH}
+                        ${BENCHMARK_EXTRA_ARGS}
                         CONFIGURE_COMMAND ${CMAKE_COMMAND}
                             -DBENCHMARK_ENABLE_GTEST_TESTS=OFF
                             -DCMAKE_BUILD_TYPE=Release

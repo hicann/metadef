@@ -20,6 +20,7 @@ BUILD_RELATIVE_PATH="build"
 ENABLE_BUILD_DEVICE=ON
 USE_CXX11_ABI=0
 CMAKE_TOOLCHAIN_FILE_VAL=""
+CMAKE_TOOLCHAIN_PREFIX="${BASEPATH}/../cmake/toolchain"
 
 # print usage message
 usage() {
@@ -77,7 +78,8 @@ parse_cmake_extra_args() {
                 echo "Set USE_CXX11_ABI to ${USE_CXX11_ABI}."
                 ;;
             "CMAKE_TOOLCHAIN_FILE")
-                CMAKE_TOOLCHAIN_FILE_VAL=$(realpath -s "$value")
+                CMAKE_TOOLCHAIN_FILE_VAL="${CMAKE_TOOLCHAIN_PREFIX}/${value}"
+                export LLVM_PATH="${BASEPATH}/../build/bin/os/aos_llvm_libs/aos_llvm_x86_ubuntu_20_04_adk/llvm/bin"
                 echo "Set CMAKE_TOOLCHAIN_FILE_VAL to ${CMAKE_TOOLCHAIN_FILE_VAL}."
                 ;;
             *)
@@ -207,7 +209,7 @@ cmake_generate_make() {
 copy_pkg() {
   if [ "${ENABLE_BUILD_DEVICE}" = "ON" ]; then
     mv ${BUILD_PATH}_CPack_Packages/makeself_staging/cann-*.run ${BUILD_OUT_PATH}/
-  elif [[ ${CMAKE_TOOLCHAIN_FILE_VAL} == "${BASEPATH}/cmake/llvm_toolchain.cmake" ]]; then
+  elif [[ "${CMAKE_TOOLCHAIN_FILE_VAL}" == *"ubuntu18.04-x86_64-llvm-toolchain.cmake"* ]]; then
     local aoskernel_file=$(basename "$(echo "$(ls ${BUILD_PATH}_CPack_Packages/makeself_staging/cann-*.run)" | sed 's/_linux-/-aoskernel./g')")
     mv ${BUILD_PATH}_CPack_Packages/makeself_staging/cann-*.run ${BUILD_OUT_PATH}/${aoskernel_file}
   else
@@ -245,6 +247,7 @@ build_metadef() {
               -D ENABLE_SYMENGINE=${ENABLE_SYMENGINE} \
               -D ENABLE_BUILD_DEVICE=${ENABLE_BUILD_DEVICE} \
               -D USE_CXX11_ABI=${USE_CXX11_ABI} \
+              -D LLVM_PATH=${LLVM_PATH} \
               -D CMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE_VAL} \
               -D FORCE_REBUILD_CANN_3RD=False"
 

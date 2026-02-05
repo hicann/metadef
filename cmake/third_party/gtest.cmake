@@ -62,7 +62,17 @@ if(gtest_FOUND AND NOT FORCE_REBUILD_CANN_3RD)
     message(STATUS "[ThirdPartyLib][gtest] gtest found in ${GTEST_INSTALL_PATH}, and not force rebuild cann third_party")
 else()
     message(STATUS "[ThirdPartyLib][gtest] gtest not found in ${GTEST_INSTALL_PATH}, force download and build")
-    set(REQ_URL "https://gitcode.com/cann-src-third-party/googletest/releases/download/v1.14.0/googletest-1.14.0.tar.gz")
+    set(REQ_URL "${CMAKE_THIRD_PARTY_LIB_DIR}/gtest_shared/googletest-1.14.0.tar.gz")
+    set(GTEST_EXTRA_ARGS "")
+    if(EXISTS ${REQ_URL})
+        message(STATUS "[ThirdPartyLib][gtest] ${REQ_URL} found.")
+    else()
+        message(STATUS "[ThirdPartyLib][gtest] ${REQ_URL} not found, need download.")
+        set(REQ_URL "https://gitcode.com/cann-src-third-party/googletest/releases/download/v1.14.0/googletest-1.14.0.tar.gz")
+        list(APPEND GTEST_EXTRA_ARGS
+             DOWNLOAD_DIR ${CANN_3RD_PKG_PATH}
+        )
+    endif()
 
     set (gtest_CXXFLAGS "-D_GLIBCXX_USE_CXX11_ABI=${USE_CXX11_ABI} -O2 -D_FORTIFY_SOURCE=2 -fPIC -fstack-protector-all -Wl,-z,relro,-z,now,-z,noexecstack")
     set (gtest_CFLAGS   "-D_GLIBCXX_USE_CXX11_ABI=${USE_CXX11_ABI} -O2 -D_FORTIFY_SOURCE=2 -fPIC -fstack-protector-all -Wl,-z,relro,-z,now,-z,noexecstack")
@@ -71,7 +81,7 @@ else()
     ExternalProject_Add(third_party_gtest
             URL ${REQ_URL}
             TLS_VERIFY OFF
-            DOWNLOAD_DIR ${CANN_3RD_PKG_PATH}
+            ${GTEST_EXTRA_ARGS}
             CONFIGURE_COMMAND ${CMAKE_COMMAND}
             -DCMAKE_C_COMPILER_LAUNCHER=${CMAKE_C_COMPILER_LAUNCHER}
             -DCMAKE_CXX_COMPILER_LAUNCHER=${CMAKE_CXX_COMPILER_LAUNCHER}
