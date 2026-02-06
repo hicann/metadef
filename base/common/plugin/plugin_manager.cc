@@ -27,7 +27,7 @@
 #include "graph/utils/file_utils.h"
 #include "common/ge_common/string_util.h"
 
-namespace metadef {
+namespace ge {
 namespace {
 constexpr int32_t kMaxNumOfSo = 64;
 constexpr int32_t kMaxSizeOfSo = 838860800;        // = 800M(unit is Byte)
@@ -145,7 +145,7 @@ void ProcessSubdirectoryAndSoFiles(const std::string &directory, const mmDirent 
 void PluginManager::ClearHandles_() noexcept {
   for (const auto &handle : handles_) {
     if (mmDlclose(handle.second) != 0) {
-      const ge::char_t *error = mmDlerror();
+      const char_t *error = mmDlerror();
       GE_IF_BOOL_EXEC(error == nullptr, error = "");
       GELOGW("Failed to close handle of %s, errmsg:%s", handle.first.c_str(), error);
     }
@@ -155,9 +155,9 @@ void PluginManager::ClearHandles_() noexcept {
 
 PluginManager::~PluginManager() { ClearHandles_(); }
 
-ge::Status PluginManager::GetOppPath(std::string &opp_path) {
+Status PluginManager::GetOppPath(std::string &opp_path) {
   GELOGI("Enter get opp path schedule");
-  const ge::char_t *path_env = nullptr;
+  const char_t *path_env = nullptr;
   MM_SYS_GET_ENV(MM_ENV_ASCEND_OPP_PATH, path_env);
   if ((path_env != nullptr) && (strlen(path_env) > 0U)) {
     opp_path = path_env;
@@ -178,12 +178,12 @@ ge::Status PluginManager::GetOppPath(std::string &opp_path) {
     opp_path = opp_path.substr(0, opp_path.rfind('/') + 1U);
     opp_path += "ops/";
   }
-  return ge::SUCCESS;
+  return SUCCESS;
 }
 
-ge::Status PluginManager::GetUpgradedOppPath(std::string &opp_path) {
+Status PluginManager::GetUpgradedOppPath(std::string &opp_path) {
   GELOGI("Enter get upgraded opp path schedule");
-  const ge::char_t *path_env = nullptr;
+  const char_t *path_env = nullptr;
   MM_SYS_GET_ENV(MM_ENV_ASCEND_HOME_PATH, path_env);
   if ((path_env != nullptr) && (strlen(path_env) > 0U)) {
     opp_path = path_env;
@@ -191,23 +191,23 @@ ge::Status PluginManager::GetUpgradedOppPath(std::string &opp_path) {
     std::string file_path = RealPath(opp_path.c_str());
     if (!file_path.empty()) {
       GELOGI("Get upgraded opp path from env: %s", opp_path.c_str());
-      return ge::SUCCESS;
+      return SUCCESS;
     }
     GELOGW("[Call][RealPath] Opp path %s is invalid.", opp_path.c_str());
   }
-  return ge::FAILED;
+  return FAILED;
 }
 
 bool PluginManager::IsNewOppPathStruct(const std::string &opp_path) {
   return mmIsDir((opp_path + kBuiltIn).c_str()) == EN_OK;
 }
 
-ge::Status PluginManager::GetOppPluginVendors(const std::string &vendors_config, std::vector<std::string> &vendors) {
+Status PluginManager::GetOppPluginVendors(const std::string &vendors_config, std::vector<std::string> &vendors) {
   GELOGI("Enter get opp plugin config file schedule, config file is '%s'", vendors_config.c_str());
   std::ifstream config(vendors_config);
   if (!config.good()) {
     GELOGI("Can not open file '%s'!", vendors_config.c_str());
-    return ge::FAILED;
+    return FAILED;
   }
   std::string content;
   (void) std::getline(config, content);
@@ -218,14 +218,14 @@ ge::Status PluginManager::GetOppPluginVendors(const std::string &vendors_config,
   GE_ASSERT_TRUE(v_parts.size() == kVendorConfigPartsCount, "Format of file content is invalid!");
   SplitPath(v_parts[1], vendors, ',');
   GE_ASSERT_TRUE(!vendors.empty(), "Format of file content is invalid!");
-  (void) for_each(vendors.begin(), vendors.end(), &ge::StringUtils::Trim);
-  return ge::SUCCESS;
+  (void) for_each(vendors.begin(), vendors.end(), &StringUtils::Trim);
+  return SUCCESS;
 }
 
-ge::Status PluginManager::ReversePathString(std::string &path_str) {
+Status PluginManager::ReversePathString(std::string &path_str) {
   GELOGI("Enter ReversePathString schedule");
   if (path_str.empty() || (path_str.find(":") == std::string::npos)) {
-    return ge::SUCCESS;
+    return SUCCESS;
   }
   std::vector<std::string> path_vec;
   SplitPath(path_str, path_vec, ':');
@@ -236,7 +236,7 @@ ge::Status PluginManager::ReversePathString(std::string &path_str) {
     path_str += ":" + *(it++);
   }
   GELOGI("path_str is '%s'", path_str.c_str());
-  return ge::SUCCESS;
+  return SUCCESS;
 }
 
 // 当前自定义算子路径不能直接从环境变量获取，需要通过op_register.cc中PreProcessForCustomOp初始化后
@@ -251,7 +251,7 @@ void PluginManager::SetCustomOpLibPath(const std::string &custom_op_Lib_path) {
 void PluginManager::GetPluginPathFromCustomOppPath(const std::string &sub_path, std::string &plugin_path) {
   plugin_path = "";
   if (custom_op_lib_path_.empty()) {
-    const ge::char_t *custom_opp_path_env = nullptr;
+    const char_t *custom_opp_path_env = nullptr;
     MM_SYS_GET_ENV(MM_ENV_ASCEND_CUSTOM_OPP_PATH, custom_opp_path_env);
     if (custom_opp_path_env == nullptr) {
       GELOGI("custom_op_lib_path_ is empty.");
@@ -260,7 +260,7 @@ void PluginManager::GetPluginPathFromCustomOppPath(const std::string &sub_path, 
     custom_op_lib_path_ = std::string(custom_opp_path_env);
   }
   GELOGI("value of env custom_op_lib_path_ is %s.", custom_op_lib_path_.c_str());
-  std::vector<std::string> custom_paths = ge::StringUtils::Split(custom_op_lib_path_, ':');
+  std::vector<std::string> custom_paths = StringUtils::Split(custom_op_lib_path_, ':');
   for (const auto &custom_path : custom_paths) {
     if ((!custom_path.empty()) && (mmIsDir((custom_path + "/" + sub_path).c_str()) == EN_OK)) {
       if (IsVendorVersionValid(custom_path)) {
@@ -274,16 +274,16 @@ void PluginManager::GetPluginPathFromCustomOppPath(const std::string &sub_path, 
   GELOGI("Run GetPluginPathFromCustomOppPath finished, current plugin_path is %s.", plugin_path.c_str());
 }
 
-ge::Status PluginManager::GetOppPluginPathOld(const std::string &opp_path,
-                                              const std::string &path_fmt,
-                                              std::string &plugin_path,
-                                              const std::string &path_fmt_custom) {
+Status PluginManager::GetOppPluginPathOld(const std::string &opp_path,
+                                          const std::string &path_fmt,
+                                          std::string &plugin_path,
+                                          const std::string &path_fmt_custom) {
   GELOGI("Enter get opp plugin path old schedule");
   const std::string &fmt_custom  = path_fmt_custom.empty() ? path_fmt : path_fmt_custom;
   plugin_path = (opp_path + ReplaceFirst(fmt_custom, "%s", "custom") + ":")
               + (opp_path + ReplaceFirst(path_fmt, "%s", "built-in"));
   GELOGI("plugin_path is '%s'", plugin_path.c_str());
-  return ge::SUCCESS;
+  return SUCCESS;
 }
 
 bool PluginManager::GetRequiredOppAbiVersion(std::vector<std::pair<uint32_t, uint32_t>> &required_opp_abi_version) {
@@ -312,17 +312,17 @@ bool PluginManager::GetRequiredOppAbiVersion(std::vector<std::pair<uint32_t, uin
   }
 
   // valid required_opp_abi_version: ">=6.3, <=6.4, 6.4"
-  version = ge::StringUtils::ReplaceAll(version, "\"", "");
-  (void) ge::StringUtils::Trim(version);
+  version = StringUtils::ReplaceAll(version, "\"", "");
+  (void) StringUtils::Trim(version);
   std::queue<std::string> split_version;
-  for (auto &it : ge::StringUtils::Split(version, ',')) {
-    (void) split_version.emplace(ge::StringUtils::Trim(it));
+  for (auto &it : StringUtils::Split(version, ',')) {
+    (void) split_version.emplace(StringUtils::Trim(it));
   }
   while (!split_version.empty()) {
     auto first = split_version.front();
     split_version.pop();
-    if (ge::StringUtils::StartWith(first, ">=")) {
-      if (split_version.empty() || !ge::StringUtils::StartWith(split_version.front(), "<=")) {
+    if (StringUtils::StartWith(first, ">=")) {
+      if (split_version.empty() || !StringUtils::StartWith(split_version.front(), "<=")) {
         GELOGW("Format of required_opp_abi_version [%s] is invalid, start with >= but not end with <=",
                version.c_str());
         return false;
@@ -355,7 +355,7 @@ bool PluginManager::GetRequiredOppAbiVersion(std::vector<std::pair<uint32_t, uin
 }
 
 bool PluginManager::GetEffectiveVersion(const std::string &opp_version, uint32_t &effective_version) {
-  const auto split_version = ge::StringUtils::Split(opp_version, '.');
+  const auto split_version = StringUtils::Split(opp_version, '.');
   GE_ASSERT_TRUE(split_version.size() >= kEffectiveVersionNum);
   std::stringstream ss;
   ss << split_version[0];        // Cann version
@@ -431,7 +431,7 @@ bool PluginManager::CheckOppAndCompilerVersions(const std::string &opp_version, 
   }
 
   if (!compiler_version.empty()) {
-    for (const auto &it : ge::StringUtils::Split(compiler_version, ',')) {
+    for (const auto &it : StringUtils::Split(compiler_version, ',')) {
       uint32_t effective_compiler_version = 0U;
       if (!GetEffectiveVersion(it, effective_compiler_version)) {
         GELOGW("[InvalidVersion] Format of compiler version [%s] is invalid", it.c_str());
@@ -457,16 +457,16 @@ bool PluginManager::CheckOppAndCompilerVersions(const std::string &opp_version, 
 // 3. ASCEND_OPP_PATH + build-in
 void PluginManager::GetPackageSoPath(std::vector<std::string> &vendors) {
   std::string custom_opp_path;
-  PluginManager::GetPluginPathFromCustomOppPath("", custom_opp_path);
+  ge::PluginManager::GetPluginPathFromCustomOppPath("", custom_opp_path);
   if (!custom_opp_path.empty()) {
     std::vector<std::string> split_custom_opp_path = ge::StringUtils::Split(custom_opp_path, ':');
     (void) vendors.insert(vendors.end(), split_custom_opp_path.begin(), split_custom_opp_path.end());
   }
 
   std::string opp_path;
-  if (PluginManager::GetOppPath(opp_path) == ge::SUCCESS) {
+  if (ge::PluginManager::GetOppPath(opp_path) == ge::SUCCESS) {
     std::string vendors_path;
-    (void) PluginManager::GetOppPluginPathNew(opp_path, "%s", vendors_path, "");
+    (void) ge::PluginManager::GetOppPluginPathNew(opp_path, "%s", vendors_path, "");
     if (!vendors_path.empty()) {
       auto split_vendors_path = ge::StringUtils::Split(vendors_path, ':');
       (void) vendors.insert(vendors.end(), split_vendors_path.begin(), split_vendors_path.end());
@@ -475,15 +475,15 @@ void PluginManager::GetPackageSoPath(std::vector<std::string> &vendors) {
   return;
 }
 
-ge::Status PluginManager::GetOppPluginPathNew(const std::string &opp_path,
-                                              const std::string &path_fmt,
-                                              std::string &plugin_path,
-                                              const std::string &old_custom_path,
-                                              const std::string &path_fmt_custom) {
+Status PluginManager::GetOppPluginPathNew(const std::string &opp_path,
+                                          const std::string &path_fmt,
+                                          std::string &plugin_path,
+                                          const std::string &old_custom_path,
+                                          const std::string &path_fmt_custom) {
   GELOGI("Enter get opp plugin path new schedule");
   const std::string vendors_config = opp_path + kVendors + "/" + kConfig;
   std::vector<std::string> vendors;
-  if (GetOppPluginVendors(vendors_config, vendors) != ge::SUCCESS) {
+  if (GetOppPluginVendors(vendors_config, vendors) != SUCCESS) {
     GELOGI("Can not get opp plugin vendors!");
     plugin_path += opp_path + old_custom_path + ":";
   } else {
@@ -498,12 +498,12 @@ ge::Status PluginManager::GetOppPluginPathNew(const std::string &opp_path,
     plugin_path += opp_path + ReplaceFirst(path_fmt, "%s", "built-in");
   }
   GELOGI("plugin_path is '%s'", plugin_path.c_str());
-  return ge::SUCCESS;
+  return SUCCESS;
 }
 
 bool PluginManager::IsSplitOpp() {
   std::string opp_path;
-  if (GetOppPath(opp_path) != ge::SUCCESS) {
+  if (GetOppPath(opp_path) != SUCCESS) {
     GELOGE(ge::FAILED, "Failed to get opp path:[%s]", opp_path.c_str());
     return false;
   }
@@ -597,10 +597,10 @@ bool PluginManager::IsSplitOpp() {
  * @param opsproto_path
  * @return
  */
-ge::Status PluginManager::GetOpsProtoPath(std::string &opsproto_path) {
+Status PluginManager::GetOpsProtoPath(std::string &opsproto_path) {
   GELOGI("Enter GetOpsProtoPath schedule");
   std::string opp_path;
-  GE_ASSERT_TRUE(GetOppPath(opp_path) == ge::SUCCESS, "Failed to get opp path!");
+  GE_ASSERT_TRUE(GetOppPath(opp_path) == SUCCESS, "Failed to get opp path!");
   if (!IsNewOppPathStruct(opp_path)) {
     GELOGI("Opp plugin path structure is old version!");
     return GetOppPluginPathOld(opp_path, "op_proto/%s/", opsproto_path);
@@ -611,7 +611,7 @@ ge::Status PluginManager::GetOpsProtoPath(std::string &opsproto_path) {
   }
 }
 
-ge::Status PluginManager::GetUpgradedOpsProtoPath(std::string &opsproto_path) {
+Status PluginManager::GetUpgradedOpsProtoPath(std::string &opsproto_path) {
   GELOGI("Start to get upgraded ops proto path");
   std::string upgraded_opp_path;
   if (GetUpgradedOppPath(upgraded_opp_path) != ge::SUCCESS) {
@@ -621,7 +621,7 @@ ge::Status PluginManager::GetUpgradedOpsProtoPath(std::string &opsproto_path) {
   return GetOppPluginPathNew(upgraded_opp_path, "%s/op_proto", opsproto_path, "");
 }
 
-ge::Status PluginManager::GetUpgradedOpMasterPath(std::string &op_tiling_path) {
+Status PluginManager::GetUpgradedOpMasterPath(std::string &op_tiling_path) {
   GELOGI("Start to get upgraded op tiling path");
   std::string upgraded_opp_path;
   if (GetUpgradedOppPath(upgraded_opp_path) != ge::SUCCESS) {
@@ -631,10 +631,10 @@ ge::Status PluginManager::GetUpgradedOpMasterPath(std::string &op_tiling_path) {
   return GetOppPluginPathNew(upgraded_opp_path, "%s/op_impl/ai_core/tbe", op_tiling_path, "");
 }
 
-ge::Status PluginManager::GetCustomOpPath(const std::string &fmk_type, std::string &customop_path) {
+Status PluginManager::GetCustomOpPath(const std::string &fmk_type, std::string &customop_path) {
   GELOGI("Enter GetCustomOpPath schedule");
   std::string opp_path;
-  GE_ASSERT_TRUE(GetOppPath(opp_path) == ge::SUCCESS, "Failed to get opp path!");
+  GE_ASSERT_TRUE(GetOppPath(opp_path) == SUCCESS, "Failed to get opp path!");
   if (!IsNewOppPathStruct(opp_path)) {
     GELOGI("Opp plugin path structure is old version!");
     return GetOppPluginPathOld(opp_path, "framework/%s/" + fmk_type + "/", customop_path, "framework/%s/");
@@ -646,20 +646,20 @@ ge::Status PluginManager::GetCustomOpPath(const std::string &fmk_type, std::stri
   }
 }
 
-ge::Status PluginManager::GetCustomCaffeProtoPath(std::string &customcaffe_path) {
+Status PluginManager::GetCustomCaffeProtoPath(std::string &customcaffe_path) {
   GELOGD("Enter GetCustomCaffeProtoPath schedule");
   std::string opp_path;
-  GE_ASSERT_TRUE(GetOppPath(opp_path) == ge::SUCCESS, "Failed to get opp path!");
+  GE_ASSERT_TRUE(GetOppPath(opp_path) == SUCCESS, "Failed to get opp path!");
   if (!IsNewOppPathStruct(opp_path)) {
     customcaffe_path = opp_path + "framework/custom/caffe/";
     GELOGI("Opp plugin path structure is old version! customcaffe_path is '%s'", customcaffe_path.c_str());
-    return ge::SUCCESS;
+    return SUCCESS;
   } else {
     GELOGI("Opp plugin path structure is new version!");
     GetPluginPathFromCustomOppPath("framework/caffe/", customcaffe_path);
     const std::string vendors_config = opp_path + kVendors + "/" + kConfig;
     std::vector<std::string> vendors;
-    if (GetOppPluginVendors(vendors_config, vendors) != ge::SUCCESS) {
+    if (GetOppPluginVendors(vendors_config, vendors) != SUCCESS) {
       GELOGI("Can not get opp plugin vendors!");
       customcaffe_path += opp_path + "framework/custom/caffe/";
     } else {
@@ -671,38 +671,38 @@ ge::Status PluginManager::GetCustomCaffeProtoPath(std::string &customcaffe_path)
       }
     }
     GELOGI("customcaffe_path is '%s'", customcaffe_path.c_str());
-    return ge::SUCCESS;
+    return SUCCESS;
   }
 }
 
-ge::Status PluginManager::GetOpTilingForwardOrderPath(std::string &op_tiling_path) {
+Status PluginManager::GetOpTilingForwardOrderPath(std::string &op_tiling_path) {
   GELOGI("Enter GetOpTilingPath schedule");
   std::string opp_path;
-  GE_ASSERT_TRUE(GetOppPath(opp_path) == ge::SUCCESS, "Failed to get opp path!");
+  GE_ASSERT_TRUE(GetOppPath(opp_path) == SUCCESS, "Failed to get opp path!");
   if (!IsNewOppPathStruct(opp_path)) {
     GELOGI("Opp plugin path structure is old version!");
-    GE_ASSERT_TRUE(GetOppPluginPathOld(opp_path, "op_impl/%s/ai_core/tbe/", op_tiling_path) == ge::SUCCESS,
+    GE_ASSERT_TRUE(GetOppPluginPathOld(opp_path, "op_impl/%s/ai_core/tbe/", op_tiling_path) == SUCCESS,
                    "GetOppPluginPathOld failed!");
   } else {
     GELOGI("Opp plugin path structure is new version!");
     GetPluginPathFromCustomOppPath("op_impl/ai_core/tbe/", op_tiling_path);
     GE_ASSERT_TRUE(GetOppPluginPathNew(opp_path, "%s/op_impl/ai_core/tbe/", op_tiling_path,
-                                       "op_impl/custom/ai_core/tbe/") == ge::SUCCESS,
+                                       "op_impl/custom/ai_core/tbe/") == SUCCESS,
                    "GetOppPluginPathNew failed!");
   }
-  return ge::SUCCESS;
+  return SUCCESS;
 }
 
-ge::Status PluginManager::GetOpTilingPath(std::string &op_tiling_path) {
+Status PluginManager::GetOpTilingPath(std::string &op_tiling_path) {
   GE_ASSERT_SUCCESS(GetOpTilingForwardOrderPath(op_tiling_path));
   return ReversePathString(op_tiling_path);
 }
 
-ge::Status PluginManager::GetConstantFoldingOpsPath(const std::string &path_base, std::string &constant_folding_ops_path) {
+Status PluginManager::GetConstantFoldingOpsPath(const std::string &path_base, std::string &constant_folding_ops_path) {
   GELOGI("Enter GetConstantFoldingOpsPath schedule");
   std::string opp_path;
-  const ge::Status ret = GetOppPath(opp_path);
-  if (ret != ge::SUCCESS) {
+  const Status ret = GetOppPath(opp_path);
+  if (ret != SUCCESS) {
     GELOGW("Failed to get opp path from env and so file! use path_base as opp path");
     opp_path = path_base;
   }
@@ -712,7 +712,7 @@ ge::Status PluginManager::GetConstantFoldingOpsPath(const std::string &path_base
   } else {
     constant_folding_ops_path = opp_path + kHostCpuLibRelativePathV02;
   }
-  return ge::SUCCESS;
+  return SUCCESS;
 }
 
 void PluginManager::SplitPath(const std::string &mutil_path, std::vector<std::string> &path_vec, const char sep) {
@@ -729,13 +729,13 @@ void PluginManager::SplitPath(const std::string &mutil_path, std::vector<std::st
   }
 }
 
-ge::Status PluginManager::LoadSo(const std::string &path, const std::vector<std::string> &func_check_list) {
+Status PluginManager::LoadSo(const std::string &path, const std::vector<std::string> &func_check_list) {
   constexpr int32_t flags = static_cast<int32_t>(static_cast<uint32_t>(MMPA_RTLD_NOW) |
       static_cast<uint32_t>(MMPA_RTLD_GLOBAL));
   return LoadSoWithFlags(path, flags, func_check_list);
 }
 
-ge::Status PluginManager::LoadSoWithFlags(const std::string &path, const int32_t flags,
+Status PluginManager::LoadSoWithFlags(const std::string &path, const int32_t flags,
     const std::vector<std::string> &func_check_list) {
   uint32_t num_of_loaded_so = 0U;
   int64_t size_of_loaded_so = 0;
@@ -745,7 +745,7 @@ ge::Status PluginManager::LoadSoWithFlags(const std::string &path, const int32_t
   std::vector<std::string> path_vec;
   SplitPath(path, path_vec);
   for (const auto &single_path : path_vec) {
-    GE_IF_BOOL_EXEC(single_path.length() >= static_cast<ULONG>(MMPA_MAX_PATH), GELOGE(ge::PARAM_INVALID,
+    GE_IF_BOOL_EXEC(single_path.length() >= static_cast<ULONG>(MMPA_MAX_PATH), GELOGE(PARAM_INVALID,
                     "The shared library file path is too long!");
                     continue);
     // load break when number of loaded so reach maximum
@@ -763,7 +763,7 @@ ge::Status PluginManager::LoadSoWithFlags(const std::string &path, const int32_t
     }
 
     int64_t file_size = 0;
-    if (ValidateSo(file_path_dlopen, size_of_loaded_so, file_size) != ge::SUCCESS) {
+    if (ValidateSo(file_path_dlopen, size_of_loaded_so, file_size) != SUCCESS) {
       GELOGW("Failed to validate the shared library: %s", file_path_dlopen.c_str());
       continue;
     }
@@ -777,7 +777,7 @@ ge::Status PluginManager::LoadSoWithFlags(const std::string &path, const int32_t
     GELOGI("[GEPERFTRACE] The time cost of PluginManager::Dlopen[%s] is [%lu] micro seconds.",
            (file_path_dlopen.c_str()), std::chrono::duration_cast<std::chrono::microseconds>(end - start).count());
     if (handle == nullptr) {
-      const ge::char_t *error = mmDlerror();
+      const char_t *error = mmDlerror();
       GE_IF_BOOL_EXEC(error == nullptr, error = "");
       GELOGW(
           "[DLOpen][SharedLibraryPath]Failed, path[%s]. Message[%s]!",
@@ -790,11 +790,11 @@ ge::Status PluginManager::LoadSoWithFlags(const std::string &path, const int32_t
     for (const auto &func_name : func_check_list) {
       const auto real_fn = reinterpret_cast<void (*)()>(mmDlsym(handle, func_name.c_str()));
       if (real_fn == nullptr) {
-        const ge::char_t *error = mmDlerror();
+        const char_t *error = mmDlerror();
         GE_IF_BOOL_EXEC(error == nullptr, error = "");
         REPORT_INNER_ERR_MSG("E19999", "[Check][So]%s is skipped since function %s does not exist! errmsg:%s",
                              func_name.c_str(), func_name.c_str(), error);
-        GELOGE(ge::PARAM_INVALID,
+        GELOGE(PARAM_INVALID,
                "[Check][So]%s is skipped since function %s does not exist! errmsg:%s",
                func_name.c_str(), func_name.c_str(), error);
         is_valid = false;
@@ -803,9 +803,9 @@ ge::Status PluginManager::LoadSoWithFlags(const std::string &path, const int32_t
     }
     if (!is_valid) {
       if (mmDlclose(handle) != 0) {
-        const ge::char_t *error = mmDlerror();
+        const char_t *error = mmDlerror();
         GE_IF_BOOL_EXEC(error == nullptr, error = "");
-        GELOGE(ge::FAILED, "[DLClose][Handle]Failed. errmsg:%s", error);
+        GELOGE(FAILED, "[DLClose][Handle]Failed. errmsg:%s", error);
       }
       continue;
     }
@@ -824,19 +824,19 @@ ge::Status PluginManager::LoadSoWithFlags(const std::string &path, const int32_t
 
   if (num_of_loaded_so == 0U) {
     GELOGW("No loadable shared library found in the path: %s", path.c_str());
-    return ge::SUCCESS;
+    return SUCCESS;
   }
 
-  return ge::SUCCESS;
+  return SUCCESS;
 }
 
-ge::Status PluginManager::ValidateSo(const std::string &file_path,
-                                     const int64_t size_of_loaded_so, int64_t &file_size) const {
+Status PluginManager::ValidateSo(const std::string &file_path,
+                                 const int64_t size_of_loaded_so, int64_t &file_size) const {
   // read file size
   struct stat stat_buf;
   if (stat(file_path.c_str(), &stat_buf) != 0) {
     GELOGW("The shared library file check failed: %s", file_path.c_str());
-    return ge::FAILED;
+    return FAILED;
   }
 
   // load continue when the size itself reaches maximum
@@ -844,7 +844,7 @@ ge::Status PluginManager::ValidateSo(const std::string &file_path,
   if (stat_buf.st_size > kMaxSizeOfSo) {
     GELOGW("The %s is skipped since its size exceeds maximum! (size: %ldB, maximum: %dB)", file_path.c_str(), file_size,
            kMaxSizeOfSo);
-    return ge::FAILED;
+    return FAILED;
   }
 
   // load continue if the total size of so reaches maximum when it is loaded
@@ -853,19 +853,19 @@ ge::Status PluginManager::ValidateSo(const std::string &file_path,
         "%s is skipped because the size of loaded share library reaches maximum if it is loaded! "
         "(size: %ldB, size of loaded share library: %ldB, maximum: %dB)",
         file_path.c_str(), file_size, size_of_loaded_so, kMaxSizeOfLoadedSo);
-    return ge::FAILED;
+    return FAILED;
   }
 
-  return ge::SUCCESS;
+  return SUCCESS;
 }
 
-ge::Status PluginManager::Load(const std::string &path, const std::vector<std::string> &func_check_list) {
+Status PluginManager::Load(const std::string &path, const std::vector<std::string> &func_check_list) {
   constexpr int32_t flags = static_cast<int32_t>(static_cast<uint32_t>(MMPA_RTLD_NOW) |
       static_cast<uint32_t>(MMPA_RTLD_GLOBAL));
   return LoadWithFlags(path, flags, func_check_list);
 }
 
-ge::Status PluginManager::LoadWithFlags(const std::string &path, const int32_t flags,
+Status PluginManager::LoadWithFlags(const std::string &path, const int32_t flags,
     const std::vector<std::string> &func_check_list) {
   uint32_t num_of_loaded_so = 0U;
   int64_t size_of_loaded_so = 0;
@@ -874,12 +874,12 @@ ge::Status PluginManager::LoadWithFlags(const std::string &path, const int32_t f
   so_list_.clear();
   ClearHandles_();
 
-  ge::char_t err_buf[kMaxErrorStrLen + 1U] = {};
-  ge::char_t canonical_path[MMPA_MAX_PATH] = {};
+  char_t err_buf[kMaxErrorStrLen + 1U] = {};
+  char_t canonical_path[MMPA_MAX_PATH] = {};
   if (mmRealPath(path.c_str(), &canonical_path[0], MMPA_MAX_PATH) != EN_OK) {
     const auto err_msg = mmGetErrorFormatMessage(mmGetErrorCode(), &err_buf[0], kMaxErrorStrLen);
     GELOGW("Failed to get realpath of %s, errmsg:%s", path.c_str(), err_msg);
-    return ge::SUCCESS;
+    return SUCCESS;
   }
 
   const int32_t is_dir = mmIsDir(&canonical_path[0]);
@@ -887,7 +887,7 @@ ge::Status PluginManager::LoadWithFlags(const std::string &path, const int32_t f
   if (is_dir != EN_OK) {
     const auto err_msg = mmGetErrorFormatMessage(mmGetErrorCode(), &err_buf[0], kMaxErrorStrLen);
     GELOGW("Invalid path for load: %s, errmsg:%s", path.c_str(), err_msg);
-    return ge::SUCCESS;
+    return SUCCESS;
   }
 
   mmDirent **entries = nullptr;
@@ -895,7 +895,7 @@ ge::Status PluginManager::LoadWithFlags(const std::string &path, const int32_t f
   if (ret < EN_OK) {
     const auto err_msg = mmGetErrorFormatMessage(mmGetErrorCode(), &err_buf[0], kMaxErrorStrLen);
     GELOGW("scan dir failed. path = %s, ret = %d, errmsg = %s", &canonical_path[0], ret, err_msg);
-    return ge::FAILED;
+    return FAILED;
   }
   for (int32_t i = 0; i < ret; ++i) {
     mmDirent * const entry = entries[i];
@@ -927,7 +927,7 @@ ge::Status PluginManager::LoadWithFlags(const std::string &path, const int32_t f
     }
 
     int64_t file_size = 0;
-    if (ValidateSo(file_path_dlopen, size_of_loaded_so, file_size) != ge::SUCCESS) {
+    if (ValidateSo(file_path_dlopen, size_of_loaded_so, file_size) != SUCCESS) {
       GELOGW("Failed to validate the shared library: %s", canonical_path_str.c_str());
       continue;
     }
@@ -938,7 +938,7 @@ ge::Status PluginManager::LoadWithFlags(const std::string &path, const int32_t f
     // load continue when dlopen is failed
     const auto handle = mmDlopen(file_path_dlopen.c_str(), flags);
     if (handle == nullptr) {
-      const ge::char_t *error = mmDlerror();
+      const char_t *error = mmDlerror();
       GE_IF_BOOL_EXEC(error == nullptr, error = "");
       GELOGW("Failed in dlopen %s!", error);
       continue;
@@ -949,7 +949,7 @@ ge::Status PluginManager::LoadWithFlags(const std::string &path, const int32_t f
     for (const auto &func_name : func_check_list) {
       const auto real_fn = reinterpret_cast<void (*)()>(mmDlsym(handle, func_name.c_str()));
       if (real_fn == nullptr) {
-        const ge::char_t *error = mmDlerror();
+        const char_t *error = mmDlerror();
         GE_IF_BOOL_EXEC(error == nullptr, error = "");
         GELOGW("The %s is skipped since function %s does not exist! errmsg:%s",
                file_name.c_str(), func_name.c_str(), error);
@@ -959,9 +959,9 @@ ge::Status PluginManager::LoadWithFlags(const std::string &path, const int32_t f
     }
     if (!is_valid) {
       if (mmDlclose(handle) != 0) {
-        const ge::char_t *error = mmDlerror();
+        const char_t *error = mmDlerror();
         GE_IF_BOOL_EXEC(error == nullptr, error = "");
-        GELOGE(ge::FAILED, "[DLClose][Handle]Failed. errmsg:%s", error);
+        GELOGE(FAILED, "[DLClose][Handle]Failed. errmsg:%s", error);
       }
       continue;
     }
@@ -975,10 +975,10 @@ ge::Status PluginManager::LoadWithFlags(const std::string &path, const int32_t f
   mmScandirFree(entries, ret);
   if (num_of_loaded_so == 0U) {
     GELOGW("No loadable shared library found in the path: %s", path.c_str());
-    return ge::SUCCESS;
+    return SUCCESS;
   }
 
-  return ge::SUCCESS;
+  return SUCCESS;
 }
 
 void PluginManager::GetOppSupportedOsAndCpuType(
@@ -999,7 +999,7 @@ void PluginManager::GetOppSupportedOsAndCpuType(
     }
   }
 
-  ge::char_t real_path[MMPA_MAX_PATH] = {};
+  char_t real_path[MMPA_MAX_PATH] = {};
   if (mmRealPath(opp_path.c_str(), &(real_path[0U]), MMPA_MAX_PATH) != EN_OK) {
     GELOGW("Can not get real path:%s, it may be an old version", opp_path.c_str());
     return;
@@ -1017,7 +1017,7 @@ void PluginManager::GetOppSupportedOsAndCpuType(
     return;
   }
   for (int32_t i = 0; i < ret; ++i) {
-    const mmDirent *const dir_ent = *ge::PtrAdd<mmDirent*>(entries, static_cast<size_t>(ret), static_cast<size_t>(i));
+    const mmDirent *const dir_ent = *PtrAdd<mmDirent*>(entries, static_cast<size_t>(ret), static_cast<size_t>(i));
     if (dir_ent != nullptr && static_cast<int32_t>(dir_ent->d_type) == DT_DIR) {
       std::string dir_name = dir_ent->d_name;
       if ((dir_name.compare(".") == 0) || (dir_name.compare("..") == 0)) {
@@ -1063,8 +1063,8 @@ void PluginManager::GetCurEnvPackageOsAndCpuType(std::string &host_env_os, std::
   }
   std::string line;
   while (std::getline(ifs, line)) {
-    line = ge::StringUtils::Trim(line);
-    std::vector<std::string> value = ge::StringUtils::Split(line, '=');
+    line = StringUtils::Trim(line);
+    std::vector<std::string> value = StringUtils::Split(line, '=');
     if (value.size() != kSceneValueCount) {
       continue;
     }
@@ -1114,7 +1114,7 @@ bool PluginManager::GetVersionFromPath(const std::string &file_path, std::string
 
 // Parsing the command line
 bool PluginManager::ParseVersion(std::string &line, std::string &version, const std::string version_name) {
-  line = ge::StringUtils::Trim(line);
+  line = StringUtils::Trim(line);
   if (line.empty()) {
     GELOGW("line is empty.");
     return false;
@@ -1148,11 +1148,11 @@ void PluginManager::GetFileListWithSuffix(const std::string &path, const std::st
   }
   if (path.size() >= static_cast<size_t>(MMPA_MAX_PATH)) {
     REPORT_INNER_ERR_MSG("E18888", "param path size:%zu >= max path:%d", path.size(), MMPA_MAX_PATH);
-    GELOGE(ge::FAILED, "param path size:%zu >= max path:%d", path.size(), MMPA_MAX_PATH);
+    GELOGE(FAILED, "param path size:%zu >= max path:%d", path.size(), MMPA_MAX_PATH);
     return;
   }
 
-  ge::char_t resolved_path[MMPA_MAX_PATH] = {};
+  char_t resolved_path[MMPA_MAX_PATH] = {};
 
   // Nullptr is returned when the path does not exist or there is no permission
   // Return absolute path when path is accessible
@@ -1194,7 +1194,7 @@ void PluginManager::GetFileListWithSuffix(const std::string &path, const std::st
 
 void PluginManager::FindSoFilesInCustomPassDirs(const std::string &directory,
                                                 std::vector<std::string> &so_files) {
-  ge::char_t resolved_path[MMPA_MAX_PATH] = {};
+  char_t resolved_path[MMPA_MAX_PATH] = {};
   if (mmRealPath(directory.c_str(), resolved_path, MMPA_MAX_PATH) != EN_OK) {
     GELOGW("[FindDirs][Check] Get real_path for directory %s failed, reason:%s", directory.c_str(), strerror(errno));
     return;
@@ -1226,11 +1226,11 @@ void PluginManager::FindSoFilesInCustomPassDirs(const std::string &directory,
   mmScandirFree(entries, dir_num);
 }
 
-ge::Status PluginManager::GetOpMasterDeviceSoPath(std::string &op_master_device_path) {
+Status PluginManager::GetOpMasterDeviceSoPath(std::string &op_master_device_path) {
   // op_master_device打包在opp和opp_kernel中，两个路径下的so都需要读取
   // op_master_device没有先后顺序，按照算子KernelDef中的so_name选择对应的so
   std::string opp_path;
-  GE_ASSERT_TRUE(GetOppPath(opp_path) == ge::SUCCESS, "Failed to get opp path!");
+  GE_ASSERT_TRUE(GetOppPath(opp_path) == SUCCESS, "Failed to get opp path!");
   GetPluginPathFromCustomOppPath(kOpMasterDeviceLib, op_master_device_path);
   std::string sub_pkg_builtin_path = opp_path + "built-in" + kOpTilingDeviceLib;
   if (mmAccess(sub_pkg_builtin_path.c_str()) == EN_OK) {
@@ -1247,7 +1247,7 @@ ge::Status PluginManager::GetOpMasterDeviceSoPath(std::string &op_master_device_
     op_master_device_path = opp_kernel_path + kBuiltIn + kOpMasterDeviceLib + ":" + op_master_device_path;
   }
   GELOGI("Get op master device so path is %s", op_master_device_path.c_str());
-  return ge::SUCCESS;
+  return SUCCESS;
 }
 
 std::string PluginManager::GetSoPackageName(const std::string &path) {
@@ -1304,4 +1304,4 @@ std::string PluginManager::GetOppPkgPath(const std::string &opp_built_in_path, c
   }
   return opp_built_in_path + whole_pkg_path + os_cpu_type;
 }
-}  // namespace metadef
+}  // namespace ge
