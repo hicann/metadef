@@ -13,7 +13,7 @@
 #include <gtest/gtest.h>
 #include "graph/debug/ge_util.h"
 
-namespace metadef {
+namespace ge {
 class UtestFileUtils : public testing::Test {
  public:
  protected:
@@ -24,26 +24,26 @@ class UtestFileUtils : public testing::Test {
 TEST_F(UtestFileUtils, RealPathIsNull) {
   const char *path = nullptr;
   std::string res;
-  res = RealPath(path);
+  res = ge::RealPath(path);
   EXPECT_EQ(res, "");
 }
 
 TEST_F(UtestFileUtils, RealPathIsNotExist) {
   const char *path = "D:/UTTest/aabbccddaaddbcasdaj.txt";
   std::string res;
-  res = RealPath(path);
+  res = ge::RealPath(path);
   EXPECT_EQ(res, "");
 }
 
 TEST_F(UtestFileUtils, CreateDirPathIsNull) {
   std::string directory_path;
-  int32_t ret = CreateDir(directory_path);
+  int32_t ret = ge::CreateDir(directory_path);
   EXPECT_EQ(ret, -1);
 }
 
 TEST_F(UtestFileUtils, CreateDirSuccess) {
   std::string directory_path = "D:\\123\\456";
-  int32_t ret = CreateDir(directory_path);
+  int32_t ret = ge::CreateDir(directory_path);
   EXPECT_EQ(ret, 0);
   int delete_ret = remove(directory_path.c_str());
   EXPECT_EQ(delete_ret, 0);
@@ -56,16 +56,16 @@ TEST_F(UtestFileUtils, CreateDirPathIsGreaterThanMaxPath) {
     directory_path.append(std::to_string(i));
   }
   int ret = 0;
-  ret = CreateDir(directory_path);
+  ret = ge::CreateDir(directory_path);
   EXPECT_EQ(ret, -1);
 }
 
 TEST_F(UtestFileUtils, RealPath) {
-  ASSERT_EQ(RealPath(nullptr), "");
+  ASSERT_EQ(ge::RealPath(nullptr), "");
 }
 
 TEST_F(UtestFileUtils, CreateDir) {
-  ASSERT_EQ(CreateDir("~/test"), 0);
+  ASSERT_EQ(ge::CreateDir("~/test"), 0);
 }
 
 TEST_F(UtestFileUtils, GetBinFileFromFileSuccess) {
@@ -73,7 +73,7 @@ TEST_F(UtestFileUtils, GetBinFileFromFileSuccess) {
   system(("touch " + so_bin).c_str());
   system(("echo '123' > " + so_bin).c_str());
   uint32_t data_len;
-  std::unique_ptr<ge::char_t[]> so_data = GetBinFromFile(so_bin, data_len);
+  std::unique_ptr<char_t[]> so_data = GetBinFromFile(so_bin, data_len);
   ASSERT_NE(so_data, nullptr);
   ASSERT_EQ(data_len, 4);
   ASSERT_EQ(so_data.get()[0], '1');
@@ -96,7 +96,7 @@ TEST_F(UtestFileUtils, GetBinFileFromFileSuccess_offset) {
   ASSERT_EQ(so_data.get()[1], '2');
   ASSERT_EQ(so_data.get()[2], '3');
 
-  ASSERT_EQ(GetBinFromFile(so_bin, static_cast<ge::char_t *>(so_data.get()), data_len), ge::GRAPH_SUCCESS);
+  ASSERT_EQ(GetBinFromFile(so_bin, static_cast<ge::char_t *>(so_data.get()), data_len), GRAPH_SUCCESS);
   ASSERT_NE(so_data, nullptr);
   ASSERT_EQ(data_len, 4);
   ASSERT_EQ(so_data.get()[0], '1');
@@ -108,7 +108,7 @@ TEST_F(UtestFileUtils, GetBinFileFromFileSuccess_offset) {
 TEST_F(UtestFileUtils, GetBinFilePathNullFail) {
   std::string so_bin = "";
   uint32_t data_len;
-  std::unique_ptr<ge::char_t[]> so_data = GetBinFromFile(so_bin, data_len);
+  std::unique_ptr<char_t[]> so_data = GetBinFromFile(so_bin, data_len);
   ASSERT_EQ(so_data, nullptr);
 }
 
@@ -122,8 +122,8 @@ TEST_F(UtestFileUtils, WriteBinToFileSuccess) {
   std::string so_bin = "./opsptoro.so";
   uint32_t data_len = 4;
   char so_data[4] = {'1', '2', '3'};
-  ASSERT_EQ(WriteBinToFile(so_bin, so_data, data_len), ge::GRAPH_SUCCESS);
-  ASSERT_EQ(SaveBinToFile(so_data, data_len, so_bin), ge::GRAPH_SUCCESS);
+  ASSERT_EQ(WriteBinToFile(so_bin, so_data, data_len), GRAPH_SUCCESS);
+  ASSERT_EQ(SaveBinToFile(so_data, data_len, so_bin), GRAPH_SUCCESS);
   system(("rm -f " + so_bin).c_str());
 }
 
@@ -131,11 +131,11 @@ TEST_F(UtestFileUtils, WriteBinToFilePathNullFail) {
   std::string so_bin = "";
   uint32_t data_len = 4;
   char so_data[4] = {'1', '2', '3'};
-  ASSERT_EQ(WriteBinToFile(so_bin, so_data, data_len), ge::PARAM_INVALID);
+  ASSERT_EQ(WriteBinToFile(so_bin, so_data, data_len), PARAM_INVALID);
 }
 
 TEST_F(UtestFileUtils, GetSanitizedNameCase0) {
   std::string file_name = "ge_proto_a/b\\c";
   ASSERT_EQ(GetRegulatedName(file_name), "ge_proto_a_b_c");
 }
-} // namespace metadef
+} // namespace ge

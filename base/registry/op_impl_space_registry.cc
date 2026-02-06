@@ -91,7 +91,7 @@ ge::graphStatus OpImplSpaceRegistry::ConvertSoToRegistry(const std::string &so_p
     (void)gert::DefaultOpImplSpaceRegistryV2::GetInstance().SetSpaceRegistry(space_registry_v2, opp_version_tag);
   }
   OppSoDesc opp_so_desc({ge::AscendString(so_path.c_str())},
-    ge::AscendString(metadef::PluginManager::GetSoPackageName(so_path).c_str()));
+    ge::AscendString(ge::PluginManager::GetSoPackageName(so_path).c_str()));
   return space_registry_v2->AddSoToRegistry(opp_so_desc);
 }
 

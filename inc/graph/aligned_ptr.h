@@ -14,7 +14,7 @@
 #include <memory>
 #include <functional>
 
-namespace metadef {
+namespace ge {
 class AlignedPtr {
  public:
   using Deleter = std::function<void(uint8_t *)>;
@@ -40,5 +40,5 @@ class AlignedPtr {
   std::unique_ptr<uint8_t[], AlignedPtr::Deleter> base_ = nullptr;
   uint8_t *aligned_addr_ = nullptr;
 };
-}  // namespace metadef
+}  // namespace ge
 #endif  // GE_ALIGNED_PTR_H_
