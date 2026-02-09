@@ -84,7 +84,8 @@ class OpImplRegistryHolderManager {
 
   const OpImplRegistryHolderPtr GetOpImplRegistryHolder(const std::string &so_data);
 
-  OpImplRegistryHolderPtr GetOrCreateOpImplRegistryHolder(const std::string &so_data,
+  OpImplRegistryHolderPtr GetOrCreateOpImplRegistryHolder(const std::string &so_path,
+                                                          const std::string &so_data,
                                                           const std::function<OpImplRegistryHolderPtr()> &create_func);
 
   size_t GetOpImplRegistrySize() {

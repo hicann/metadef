@@ -355,11 +355,21 @@ bool PluginManager::GetRequiredOppAbiVersion(std::vector<std::pair<uint32_t, uin
 }
 
 bool PluginManager::GetEffectiveVersion(const std::string &opp_version, uint32_t &effective_version) {
-  const auto split_version = StringUtils::Split(opp_version, '.');
+  auto split_version = StringUtils::Split(opp_version, '.');
   GE_ASSERT_TRUE(split_version.size() >= kEffectiveVersionNum);
   std::stringstream ss;
-  ss << split_version[0];        // Cann version
-  ss << split_version[1];        // C version
+  ss << split_version[0];  // Cann version
+  const size_t c_effective_version_max_num = 5;
+  const size_t c_effective_version_size = split_version[1].size();
+  if (c_effective_version_max_num > c_effective_version_size) {
+    // C version 的数字个数要拉齐，不然配 3.20~9.0 之类的会取到空集
+    split_version[1].append(c_effective_version_max_num - c_effective_version_size, '0');
+  } else {
+    GELOGW("c_effective_version_size:%zu, will reach or over max num:%zu, Ensure that the range of valid version is not "
+           "empty",
+           c_effective_version_size, c_effective_version_max_num);
+  }
+  ss << split_version[1];  // C version
   ss >> effective_version;
   if (ss.fail() || !ss.eof()) {
     GELOGW("Can not convert [%s] to number from %s", ss.str().c_str(), opp_version.c_str());
