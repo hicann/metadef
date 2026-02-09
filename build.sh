@@ -210,13 +210,13 @@ copy_pkg() {
   if [ "${ENABLE_BUILD_DEVICE}" = "ON" ]; then
     mv ${BUILD_PATH}_CPack_Packages/makeself_staging/cann-*.run ${BUILD_OUT_PATH}/
   elif [[ "${CMAKE_TOOLCHAIN_FILE_VAL}" == *"ubuntu18.04-x86_64-llvm-toolchain.cmake"* ]]; then
-    local aoskernel_file=$(basename "$(echo "$(ls ${BUILD_PATH}_CPack_Packages/makeself_staging/cann-*.run)" | sed 's/_linux-/-aoskernel./g')")
+    local aoskernel_file=$(basename "$(echo "$(ls ${BUILD_PATH}_CPack_Packages/makeself_staging/cann-*.run)" | sed 's/metadef_/metadef-/g; s/_linux-/-aoskernel./g')")
     mv ${BUILD_PATH}_CPack_Packages/makeself_staging/cann-*.run ${BUILD_OUT_PATH}/${aoskernel_file}
   else
     if [ -f "/etc/lsb-release" ]; then
       ubuntu_version=$(grep -E '^DISTRIB_RELEASE=' /etc/lsb-release | cut -d'=' -f2 | xargs)
       ubuntu_version="-ubuntu${ubuntu_version}."
-      local runtime_file=$(basename "$(echo "$(ls ${BUILD_PATH}_CPack_Packages/makeself_staging/cann-*.run)" | sed "s/_linux-/${ubuntu_version}/g")")
+      local runtime_file=$(basename "$(echo "$(ls ${BUILD_PATH}_CPack_Packages/makeself_staging/cann-*.run)" | sed "s/metadef_/metadef-/g; s/_linux-/${ubuntu_version}/g")")
       mv ${BUILD_PATH}_CPack_Packages/makeself_staging/cann-*.run ${BUILD_OUT_PATH}/${runtime_file}
     else
       echo "Error: operate enviroment is not ubuntu."
