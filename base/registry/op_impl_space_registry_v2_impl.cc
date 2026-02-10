@@ -118,8 +118,8 @@ ge::graphStatus OpImplSpaceRegistryImpl::AddSoToRegistry(const OppSoDesc &so_des
     };
 
     const std::string str_so_data(so_data.get(), static_cast<size_t>(len));
-    const auto registry_holder =
-        OpImplRegistryHolderManager::GetInstance().GetOrCreateOpImplRegistryHolder(str_so_data, create_func);
+    const auto registry_holder = OpImplRegistryHolderManager::GetInstance().GetOrCreateOpImplRegistryHolder(
+        std::string(so_path), str_so_data, create_func);
     if (registry_holder == nullptr) {
       GELOGW("Nothing in so, so_path:%s, package name %s", so_path, so_desc.GetPackageName().GetString());
       continue;

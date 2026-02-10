@@ -295,6 +295,7 @@ const std::shared_ptr<OpImplRegistryHolder> OpImplRegistryHolderManager::GetOpIm
 }
 
 OpImplRegistryHolderPtr OpImplRegistryHolderManager::GetOrCreateOpImplRegistryHolder(
+    const std::string &so_path,
     const std::string &so_data,
     const std::function<OpImplRegistryHolderPtr()> &create_func) {
   const std::lock_guard<std::mutex> lock(map_mutex_);
@@ -302,7 +303,7 @@ OpImplRegistryHolderPtr OpImplRegistryHolderManager::GetOrCreateOpImplRegistryHo
   if (iter != op_impl_registries_.cend()) {
     auto holder = iter->second;
     if (holder != nullptr) {
-      GELOGI("so already loaded! so path:%s, no need dlopen, use existing registry holder", so_data.c_str());
+      GELOGI("so already loaded! so path:%s, no need dlopen, use existing registry holder", so_path.c_str());
       return holder;
     }
   }

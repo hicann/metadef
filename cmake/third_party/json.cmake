@@ -47,7 +47,7 @@ if(json_FOUND AND NOT FORCE_REBUILD_CANN_3RD)
     target_include_directories(json INTERFACE ${JSON_INCLUDE_DIR})
 else()
     message(STATUS "[ThirdPartyLib][json] json not found in ${JSON_INSTALL_PATH}.")
-    set(REQ_URL "${CMAKE_THIRD_PARTY_LIB_DIR}/json/json-3.11.3.tar.gz")
+    set(REQ_URL "${JSON_INSTALL_PATH}/json-3.11.3.tar.gz")
     set(JSON_EXTRA_ARGS "")
     if(EXISTS ${REQ_URL})
         message(STATUS "[json] ${REQ_URL} found.")
@@ -68,7 +68,7 @@ else()
             BUILD_COMMAND ""
             INSTALL_COMMAND
                 ${CMAKE_COMMAND} -E make_directory ${JSON_INSTALL_PATH} &&
-                ${CMAKE_COMMAND} -E chdir ${JSON_INSTALL_PATH} ${CMAKE_COMMAND} -E tar xf "${JSON_DOWNLOAD_PATH}/include.zip" --format=zip
+                ${CMAKE_COMMAND} -E chdir ${JSON_INSTALL_PATH} ${CMAKE_COMMAND} -E tar xf "${JSON_DOWNLOAD_PATH}/json-3.11.3.tar.gz"
             UPDATE_COMMAND ""
     )
     set(JSON_INCLUDE_DIR ${JSON_INSTALL_PATH}/include)
