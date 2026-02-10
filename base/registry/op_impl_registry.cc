@@ -135,7 +135,7 @@ ge::graphStatus InferOutDataTypeSameWithFirstInputFunc(InferDataTypeContext *con
 }
 } // namespace
 
-OpImplRegisterV2 &OpImplRegisterV2::ExceptionDumpParseFunc(ExcepitonDumpFunc exception_func) {
+OpImplRegisterV2 &OpImplRegisterV2::ExceptionDumpParseFunc(ExceptionDumpFunc exception_func) {
   if (impl_ != nullptr && exception_func != nullptr) {
     impl_->functions.exception_func = exception_func;
     GELOGI("Register exception function for op type %s", impl_->op_type.GetString());

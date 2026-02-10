@@ -82,7 +82,7 @@ class OpImplRegisterV2 {
                                          std::vector<std::vector<uint8_t>> &tasks);
   using OP_CHECK_FUNC_V2 = ge::graphStatus (*)(const OpCheckContext *context,
                                                ge::AscendString &result);
-  using ExcepitonDumpFunc = void (*) (aclrtExceptionInfo *exception_info, void *reserved);
+  using ExceptionDumpFunc = void (*) (aclrtExceptionInfo *exception_info, void *reserved);
 
  public:
   OpImplRegisterV2 &InferShape(InferShapeKernelFunc infer_shape_func);
@@ -125,7 +125,7 @@ class OpImplRegisterV2 {
   OpImplRegisterV2 &GenerateTask(OpGenTaskKernelFunc gen_task_func);
   OpImplRegisterV2 &CheckSupport(OP_CHECK_FUNC_V2 check_support_func);
   OpImplRegisterV2 &OpSelectFormat(OP_CHECK_FUNC_V2 op_select_format_func);
-  OpImplRegisterV2 &ExceptionDumpParseFunc(ExcepitonDumpFunc exception_func);
+  OpImplRegisterV2 &ExceptionDumpParseFunc(ExceptionDumpFunc exception_func);
 
  private:
   OpImplRegisterV2 &TilingParse(KernelFunc tiling_parse_func,
