@@ -21,7 +21,7 @@
 #include "register/op_impl_space_registry.h"
 #include "base/registry/opp_package_utils.h"
 #include "graph/ascend_string.h"
-#include "common/plugin/plugin_manager.h"
+#include "inc/common/plugin/plugin_manager.h"
 #include "common/ge_common/util.h"
 
 namespace gert {
@@ -91,7 +91,7 @@ ge::graphStatus OpImplSpaceRegistry::ConvertSoToRegistry(const std::string &so_p
     (void)gert::DefaultOpImplSpaceRegistryV2::GetInstance().SetSpaceRegistry(space_registry_v2, opp_version_tag);
   }
   OppSoDesc opp_so_desc({ge::AscendString(so_path.c_str())},
-    ge::AscendString(ge::PluginManager::GetSoPackageName(so_path).c_str()));
+    ge::AscendString(metadef::PluginManager::GetSoPackageName(so_path).c_str()));
   return space_registry_v2->AddSoToRegistry(opp_so_desc);
 }
 

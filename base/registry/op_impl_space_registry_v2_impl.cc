@@ -16,7 +16,7 @@
 #include "mmpa/mmpa_api.h"
 #include "common/ge_common/util.h"
 #include "graph/debug/ge_util.h"
-#include "graph/utils/file_utils.h"
+#include "inc/graph/utils/file_utils.h"
 #include "base/registry/op_impl_space_registry_v2_impl.h"
 #include "register/op_impl_registry_base.h"
 #include "graph/any_value.h"
@@ -74,7 +74,7 @@ ge::graphStatus OpImplSpaceRegistryImpl::AddSoToRegistry(const OppSoDesc &so_des
     auto so_path = so_path_ascend_string.GetString();
     GELOGI("Start to AddSoToRegistry so_path:%s, package name %s", so_path, so_desc.GetPackageName().GetString());
     uint32_t len = 0U;
-    const auto so_data = ge::GetBinDataFromFile(std::string(so_path), len);
+    const auto so_data = metadef::GetBinDataFromFile(std::string(so_path), len);
     GE_ASSERT_NOTNULL(so_data);
     const auto create_func = [&types_to_impl_from_holder, so_path, so_desc]() -> OpImplRegistryHolderPtr {
       void *const handle = mmDlopen(

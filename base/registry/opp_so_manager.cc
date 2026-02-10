@@ -9,7 +9,7 @@
  */
 
 #include <string>
-#include "common/plugin/plugin_manager.h"
+#include "inc/common/plugin/plugin_manager.h"
 #include "common/ge_common/debug/ge_log.h"
 #include "mmpa/mmpa_api.h"
 #include "register/op_impl_space_registry.h"
@@ -33,19 +33,19 @@ const std::string kOpHostPath = "/op_impl/ai_core/tbe/op_host/lib/";
 using GetPathFunc = std::function<Status(std::string &)>;
 const std::map<gert::OppImplVersionTag, GetPathFunc> kVersion2GetProtoPathFunc = {
   {gert::OppImplVersionTag::kOpp, [](std::string &path) {
-    return PluginManager::GetOpsProtoPath(path);
+    return metadef::PluginManager::GetOpsProtoPath(path);
   }},
  {gert::OppImplVersionTag::kOppKernel, [](std::string &path) {
-   return PluginManager::GetUpgradedOpsProtoPath(path);
+   return metadef::PluginManager::GetUpgradedOpsProtoPath(path);
  }}
 };
 
 const std::map<gert::OppImplVersionTag, GetPathFunc> kVersion2GetMasterPathFunc = {
   {gert::OppImplVersionTag::kOpp, [](std::string &path) {
-    return PluginManager::GetOpTilingForwardOrderPath(path);
+    return metadef::PluginManager::GetOpTilingForwardOrderPath(path);
   }},
  {gert::OppImplVersionTag::kOppKernel, [](std::string &path) {
-   return PluginManager::GetUpgradedOpMasterPath(path);
+   return metadef::PluginManager::GetUpgradedOpMasterPath(path);
  }}
 };
 
@@ -62,7 +62,7 @@ void GetOppSoList(const std::string &opp_so_path, const std::vector<std::string>
                   gert::OppImplVersionTag opp_version_tag) {
   std::vector<std::string> so_list;
   for (auto &so_suffix : so_suffix_list) {
-    PluginManager::GetFileListWithSuffix(opp_so_path, so_suffix, so_list);
+    metadef::PluginManager::GetFileListWithSuffix(opp_so_path, so_suffix, so_list);
   }
   // 排序，将"_legacy.so"移到到最后
   (void)std::stable_partition(so_list.begin(), so_list.end(), [](const std::string &so_name) {
@@ -74,7 +74,7 @@ void GetOppSoList(const std::string &opp_so_path, const std::vector<std::string>
   }
 
   // 合并到so_list到package_to_opp_so_desc对应的值中
-  std::string package_name = ge::PluginManager::GetSoPackageName(opp_so_path);
+  std::string package_name = metadef::PluginManager::GetSoPackageName(opp_so_path);
   if (opp_version_tag >= gert::OppImplVersionTag::kVersionEnd) {
     GELOGE(ge::FAILED, "Invalid opp_impl_version: %d", static_cast<int32_t>(opp_version_tag));
     return;
@@ -124,12 +124,12 @@ void OppSoManager::LoadSoAndInitDefault(const std::vector<AscendString> &so_list
 
 void OppSoManager::LoadOpsProtoPackage() const {
   const std::lock_guard<std::mutex> lock(mutex_);
-  bool is_split = PluginManager::IsSplitOpp();
+  bool is_split = metadef::PluginManager::IsSplitOpp();
   GELOGI("Start to load ops proto package, is_split:[%d].", is_split);
   for (int32_t v = 0; v < static_cast<int32_t>(gert::OppImplVersionTag::kVersionEnd); ++v) {
     const auto version = static_cast<gert::OppImplVersionTag>(v);
     std::vector<std::pair<std::string, gert::OppSoDesc>> package_to_opp_so_desc;
-    is_split = PluginManager::IsSplitOpp();
+    is_split = metadef::PluginManager::IsSplitOpp();
     if (version == gert::OppImplVersionTag::kOppKernel && !is_split) {
       // 非拆分模式下，无需加载OppKernel目录下so
       continue;
@@ -148,7 +148,7 @@ void OppSoManager::LoadOppPackage() const {
   for (int32_t v = 0; v < static_cast<int32_t>(gert::OppImplVersionTag::kVersionEnd); ++v) {
     const auto version = static_cast<gert::OppImplVersionTag>(v);
     std::vector<std::pair<std::string, gert::OppSoDesc>> package_to_opp_so_desc_opp;
-    const bool is_split = PluginManager::IsSplitOpp();
+    const bool is_split = metadef::PluginManager::IsSplitOpp();
     if (version == gert::OppImplVersionTag::kOppKernel && !is_split) {
       // 非拆分模式下，无需加载OppKernel目录下so
       continue;
@@ -179,10 +179,10 @@ void OppSoManager::LoadOpsProtoSo(gert::OppImplVersionTag version, std::vector<s
 
   std::string os_type;
   std::string cpu_type;
-  PluginManager::GetCurEnvPackageOsAndCpuType(os_type, cpu_type);
+  metadef::PluginManager::GetCurEnvPackageOsAndCpuType(os_type, cpu_type);
 
   std::vector<std::string> v_path;
-  PluginManager::SplitPath(ops_proto_path, v_path);
+  metadef::PluginManager::SplitPath(ops_proto_path, v_path);
   for (size_t i = 0UL; i < v_path.size(); ++i) {
     if (v_path[i].back() != '/') {
        v_path[i] += '/';
@@ -203,7 +203,7 @@ void OppSoManager::LoadOpsProtoSo(gert::OppImplVersionTag version, std::vector<s
     // 加载built-in算子so
     std::string path = v_path[i].substr(0, idx) + kBuiltIn;
     bool is_sub_pkg = false;
-    path = PluginManager::GetOppPkgPath(path, kOpsProtoPath, kOpsGraphPath, os_type + "/" + cpu_type + "/", is_sub_pkg);
+    path = metadef::PluginManager::GetOppPkgPath(path, kOpsProtoPath, kOpsGraphPath, os_type + "/" + cpu_type + "/", is_sub_pkg);
     if (is_sub_pkg) {
       GetOppSoList(path, {kSoSuffix}, package_to_opp_so_desc, version);
     } else {
@@ -235,10 +235,10 @@ void OppSoManager::LoadOpMasterSo(gert::OppImplVersionTag version, std::vector<s
 
   std::string os_type;
   std::string cpu_type;
-  PluginManager::GetCurEnvPackageOsAndCpuType(os_type, cpu_type);
+  metadef::PluginManager::GetCurEnvPackageOsAndCpuType(os_type, cpu_type);
 
   std::vector<std::string> path_vec;
-  PluginManager::SplitPath(op_tiling_path, path_vec);
+  metadef::PluginManager::SplitPath(op_tiling_path, path_vec);
   for (auto &path : path_vec) {
     if (path.back() != '/') {
       path += '/';
@@ -262,7 +262,7 @@ void OppSoManager::LoadOpMasterSo(gert::OppImplVersionTag version, std::vector<s
     // 加载built-in算子so
     std::string root_path = path.substr(0, idx) + kBuiltIn;
     bool is_sub_pkg = false;
-    root_path = PluginManager::GetOppPkgPath(root_path, kOpMasterPath, kOpHostPath, os_type + "/" + cpu_type + "/",
+    root_path = metadef::PluginManager::GetOppPkgPath(root_path, kOpMasterPath, kOpHostPath, os_type + "/" + cpu_type + "/",
                                              is_sub_pkg);
     if (is_sub_pkg) {
       GetOppSoList(root_path, {kSoSuffix}, package_to_opp_so_desc, version);
