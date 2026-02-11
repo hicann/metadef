@@ -18,7 +18,7 @@
 #include "ge_common/ge_api_types.h"
 #include "mmpa/mmpa_api.h"
 
-namespace ge {
+namespace metadef {
 
 /**
  * @ingroup domi_common
@@ -27,7 +27,7 @@ namespace ge {
  * @return string. Absolute path of a file. If the absolute path cannot be
  * obtained, an empty string is returned
  */
-std::string RealPath(const char_t *path);
+std::string RealPath(const ge::char_t *path);
 
 /**
  * @ingroup domi_common
@@ -54,9 +54,9 @@ int32_t CreateDir(const std::string &directory_path, uint32_t mode);
  */
 int32_t CreateDirectory(const std::string &directory_path);
 
-std::unique_ptr<char_t[]> GetBinFromFile(std::string &path, uint32_t &data_len);
+std::unique_ptr<ge::char_t[]> GetBinFromFile(std::string &path, uint32_t &data_len);
 
-std::unique_ptr<char_t[]> GetBinDataFromFile(const std::string &path, uint32_t &data_len);
+std::unique_ptr<ge::char_t[]> GetBinDataFromFile(const std::string &path, uint32_t &data_len);
 
 /**
  * @ingroup domi_common
@@ -68,7 +68,7 @@ std::unique_ptr<char_t[]> GetBinDataFromFile(const std::string &path, uint32_t &
  */
 std::unique_ptr<char[]> GetBinFromFile(const std::string &path, size_t offset, size_t data_len);
 
-graphStatus WriteBinToFile(std::string &path, char_t *data, uint32_t &data_len);
+ge::graphStatus WriteBinToFile(std::string &path, ge::char_t *data, uint32_t &data_len);
 
 /**
  * @ingroup domi_common
@@ -92,7 +92,7 @@ std::string GetSanitizedName(const std::string& input);
  * @param [out] data_len store read size
  * @return graphStatus GRAPH_SUCCESS: success, OTHERS: fail.
  */
-graphStatus GetBinFromFile(const std::string &path, char_t *buffer, size_t &data_len);
+ge::graphStatus GetBinFromFile(const std::string &path, ge::char_t *buffer, size_t &data_len);
 
 /**
  * @ingroup domi_common
@@ -102,7 +102,7 @@ graphStatus GetBinFromFile(const std::string &path, char_t *buffer, size_t &data
  * @param [in] data_len store write size
  * @return graphStatus GRAPH_SUCCESS: success, OTHERS: fail.
  */
-graphStatus WriteBinToFile(const int32_t fd, const char_t * const data, size_t data_len);
+ge::graphStatus WriteBinToFile(const int32_t fd, const ge::char_t * const data, size_t data_len);
 
 /**
  * @ingroup domi_common
@@ -112,7 +112,7 @@ graphStatus WriteBinToFile(const int32_t fd, const char_t * const data, size_t d
  * @param [in] length store read size
  * @return graphStatus GRAPH_SUCCESS: success, OTHERS: fail.
  */
-graphStatus SaveBinToFile(const char * const data, size_t length, const std::string &file_path);
+ge::graphStatus SaveBinToFile(const char * const data, size_t length, const std::string &file_path);
 
 /**
  * @ingroup domi_common
@@ -130,9 +130,9 @@ void SplitFilePath(const std::string &file_path, std::string &dir_path, std::str
  * @param [out] ascend_work_path ASCEND_WORK_PATH's value.
  * @return graphStatus SUCCESS: success, OTHERS: fail.
  */
-Status GetAscendWorkPath(std::string &ascend_work_path);
+ge::Status GetAscendWorkPath(std::string &ascend_work_path);
 
 int32_t Scandir(const CHAR *path, mmDirent ***entry_list, mmFilter filter_func, mmSort sort);
-}
+} // namespace metadef
 
 #endif // end COMMON_GRAPH_UTILS_FILE_UTILS_H_

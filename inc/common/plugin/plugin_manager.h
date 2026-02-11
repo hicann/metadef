@@ -26,7 +26,7 @@
 #include "common/ge_common/debug/ge_log.h"
 #include "mmpa/mmpa_api.h"
 
-namespace ge {
+namespace metadef {
 class DNNEngine;
 class PluginManager {
  public:
@@ -52,26 +52,26 @@ class PluginManager {
 
   static void SplitPath(const std::string &mutil_path, std::vector<std::string> &path_vec, const char sep = ':');
 
-  static Status GetOppPath(std::string &opp_path);
+  static ge::Status GetOppPath(std::string &opp_path);
 
-  static Status GetUpgradedOppPath(std::string &opp_path);
+  static ge::Status GetUpgradedOppPath(std::string &opp_path);
 
   static bool IsNewOppPathStruct(const std::string &opp_path);
 
-  static Status GetOppPluginVendors(const std::string &vendors_config, std::vector<std::string> &vendors);
+  static ge::Status GetOppPluginVendors(const std::string &vendors_config, std::vector<std::string> &vendors);
 
-  static Status ReversePathString(std::string &path_str);
+  static ge::Status ReversePathString(std::string &path_str);
 
   static void GetPluginPathFromCustomOppPath(const std::string &sub_path, std::string &plugin_path);
 
   static void SetCustomOpLibPath(const std::string &custom_op_Lib_path);
 
-  static Status GetOppPluginPathOld(const std::string &opp_path,
+  static ge::Status GetOppPluginPathOld(const std::string &opp_path,
                                     const std::string &path_fmt,
                                     std::string &plugin_path,
                                     const std::string &path_fmt_custom = "");
 
-  static Status GetOppPluginPathNew(const std::string &opp_path,
+  static ge::Status GetOppPluginPathNew(const std::string &opp_path,
                                     const std::string &path_fmt,
                                     std::string &plugin_path,
                                     const std::string &old_custom_path,
@@ -79,30 +79,30 @@ class PluginManager {
 
   static bool IsSplitOpp();
   
-  static Status GetOpsProtoPath(std::string &opsproto_path);
+  static ge::Status GetOpsProtoPath(std::string &opsproto_path);
 
-  static Status GetUpgradedOpsProtoPath(std::string &opsproto_path);
+  static ge::Status GetUpgradedOpsProtoPath(std::string &opsproto_path);
 
-  static Status GetUpgradedOpMasterPath(std::string &op_tiling_path);
+  static ge::Status GetUpgradedOpMasterPath(std::string &op_tiling_path);
 
-  static Status GetCustomOpPath(const std::string &fmk_type, std::string &customop_path);
+  static ge::Status GetCustomOpPath(const std::string &fmk_type, std::string &customop_path);
 
-  static Status GetCustomCaffeProtoPath(std::string &customcaffe_path);
+  static ge::Status GetCustomCaffeProtoPath(std::string &customcaffe_path);
 
-  static Status GetOpTilingPath(std::string &op_tiling_path);
+  static ge::Status GetOpTilingPath(std::string &op_tiling_path);
 
-  static Status GetOpTilingForwardOrderPath(std::string &op_tiling_path);
+  static ge::Status GetOpTilingForwardOrderPath(std::string &op_tiling_path);
 
-  static Status GetConstantFoldingOpsPath(const std::string &path_base, std::string &constant_folding_ops_path);
+  static ge::Status GetConstantFoldingOpsPath(const std::string &path_base, std::string &constant_folding_ops_path);
 
-  Status LoadSoWithFlags(const std::string &path, const int32_t flags,
+  ge::Status LoadSoWithFlags(const std::string &path, const int32_t flags,
       const std::vector<std::string> &func_check_list = std::vector<std::string>());
 
-  Status LoadSo(const std::string &path, const std::vector<std::string> &func_check_list = std::vector<std::string>());
+  ge::Status LoadSo(const std::string &path, const std::vector<std::string> &func_check_list = std::vector<std::string>());
 
-  Status Load(const std::string &path, const std::vector<std::string> &func_check_list = std::vector<std::string>());
+  ge::Status Load(const std::string &path, const std::vector<std::string> &func_check_list = std::vector<std::string>());
 
-  Status LoadWithFlags(const std::string &path, const int32_t flags,
+  ge::Status LoadWithFlags(const std::string &path, const int32_t flags,
       const std::vector<std::string> &func_check_list = std::vector<std::string>());
 
   static void GetOppSupportedOsAndCpuType(
@@ -129,7 +129,7 @@ class PluginManager {
 
   static bool IsEndWith(const std::string &path, const std::string &suff);
 
-  static Status GetOpMasterDeviceSoPath(std::string &op_master_device_path);
+  static ge::Status GetOpMasterDeviceSoPath(std::string &op_master_device_path);
 
   static std::string GetSoPackageName(const std::string &path);
 
@@ -137,7 +137,7 @@ class PluginManager {
                                    const std::string &sub_pkg_path, const std::string &os_cpu_type, bool &is_sub_pkg);
 
   template <typename R, typename... Types>
-  Status GetAllFunctions(const std::string &func_name, std::map<std::string, std::function<R(Types... args)>> &funcs) {
+  ge::Status GetAllFunctions(const std::string &func_name, std::map<std::string, std::function<R(Types... args)>> &funcs) {
     for (const auto &handle : handles_) {
       const auto real_fn = reinterpret_cast<R(*)(Types...)>(mmDlsym(handle.second, func_name.c_str()));
       if (real_fn == nullptr) {
@@ -146,16 +146,16 @@ class PluginManager {
           error = "";
         }
         GELOGW("Failed to get function %s in %s! errmsg:%s", func_name.c_str(), handle.first.c_str(), error);
-        return GE_PLGMGR_FUNC_NOT_EXIST;
+        return ge::GE_PLGMGR_FUNC_NOT_EXIST;
       } else {
         funcs[handle.first] = real_fn;
       }
     }
-    return SUCCESS;
+    return ge::SUCCESS;
   }
 
   template <typename... Types>
-  Status InvokeAll(const std::string &func_name, const Types... args) {
+  ge::Status InvokeAll(const std::string &func_name, const Types... args) {
     for (const auto &handle : handles_) {
       InvokeFuncPerfRecorder recorder(func_name, handle.first);
       // If the funcName is existed, signature of realFn can be casted to any type
@@ -166,27 +166,27 @@ class PluginManager {
           error = "";
         }
         GELOGW("Failed to invoke function %s in %s! errmsg:%s", func_name.c_str(), handle.first.c_str(), error);
-        return GE_PLGMGR_INVOKE_FAILED;
+        return ge::GE_PLGMGR_INVOKE_FAILED;
       } else {
         real_fn(args...);
       }
     }
-    return SUCCESS;
+    return ge::SUCCESS;
   }
 
   template <typename T>
-  Status InvokeAll(const std::string &func_name, const T arg) {
+  ge::Status InvokeAll(const std::string &func_name, const T arg) {
     for (const auto &handle : handles_) {
       // If the funcName is existed, signature of realFn can be casted to any type
       InvokeFuncPerfRecorder recorder(func_name, handle.first);
       const auto real_fn = reinterpret_cast<void (*)(T)>(mmDlsym(handle.second, func_name.c_str()));
       if (real_fn == nullptr) {
-        const char_t *error = mmDlerror();
+        const ge::char_t *error = mmDlerror();
         if (error == nullptr) {
           error = "";
         }
         GELOGW("Failed to invoke function %s in %s! errmsg:%s", func_name.c_str(), handle.first.c_str(), error);
-        return GE_PLGMGR_INVOKE_FAILED;
+        return ge::GE_PLGMGR_INVOKE_FAILED;
       }
       typename std::remove_reference<T>::type arg_temp;
       real_fn(arg_temp);
@@ -203,7 +203,7 @@ class PluginManager {
       }
       arg.insert(arg_temp.begin(), arg_temp.end());
     }
-    return SUCCESS;
+    return ge::SUCCESS;
   }
 
   template <typename... Args>
@@ -223,54 +223,54 @@ class PluginManager {
   }
 
   template <typename T1, typename T2>
-  Status InvokeAll(const std::string &func_name, const T1 arg) {
+  ge::Status InvokeAll(const std::string &func_name, const T1 arg) {
     for (const auto &handle : handles_) {
       // If the funcName is existed, signature of realFn can be casted to any type
       InvokeFuncPerfRecorder recorder(func_name, handle.first);
       const auto real_fn = reinterpret_cast<T2(*)(T1)>(mmDlsym(handle.second, func_name.c_str()));
       if (real_fn == nullptr) {
-        const char_t *error = mmDlerror();
+        const ge::char_t *error = mmDlerror();
         if (error == nullptr) {
           error = "";
         }
         GELOGW("Failed to invoke function %s in %s! errmsg:%s", func_name.c_str(), handle.first.c_str(), error);
-        return GE_PLGMGR_INVOKE_FAILED;
+        return ge::GE_PLGMGR_INVOKE_FAILED;
       } else {
         const T2 res = real_fn(arg);
-        if (res != SUCCESS) {
-          return FAILED;
+        if (res != ge::SUCCESS) {
+          return ge::FAILED;
         }
       }
     }
-    return SUCCESS;
+    return ge::SUCCESS;
   }
 
   template <typename T>
-  Status InvokeAll(const std::string &func_name) {
+  ge::Status InvokeAll(const std::string &func_name) {
     for (const auto &handle : handles_) {
       // If the funcName is existed, signature of realFn can be casted to any type
       InvokeFuncPerfRecorder recorder(func_name, handle.first);
       const auto real_fn = reinterpret_cast<T(*)()>(mmDlsym(handle.second, func_name.c_str()));
       if (real_fn == nullptr) {
-        const char_t *error = mmDlerror();
+        const ge::char_t *error = mmDlerror();
         if (error == nullptr) {
           error = "";
         }
         GELOGW("Failed to invoke function %s in %s! errmsg:%s", func_name.c_str(), handle.first.c_str(), error);
-        return GE_PLGMGR_INVOKE_FAILED;
+        return ge::GE_PLGMGR_INVOKE_FAILED;
       } else {
         const T res = real_fn();
-        if (res != SUCCESS) {
-          return FAILED;
+        if (res != ge::SUCCESS) {
+          return ge::FAILED;
         }
       }
     }
-    return SUCCESS;
+    return ge::SUCCESS;
   }
 
  private:
   void ClearHandles_() noexcept;
-  Status ValidateSo(const std::string &file_path, const int64_t size_of_loaded_so, int64_t &file_size) const;
+  ge::Status ValidateSo(const std::string &file_path, const int64_t size_of_loaded_so, int64_t &file_size) const;
   static bool ParseVersion(std::string &line, std::string &version, const std::string version_name);
   static bool GetRequiredOppAbiVersion(std::vector<std::pair<uint32_t, uint32_t>> &required_opp_abi_version);
   static bool GetEffectiveVersion(const std::string &opp_version, uint32_t &effective_version);
@@ -295,10 +295,10 @@ inline std::string GetSoRealPathByAddr(void *func_ptr) {
     return std::string();
   }
 
-  char_t path[MMPA_MAX_PATH] = {};
+  ge::char_t path[MMPA_MAX_PATH] = {};
   if (mmRealPath(dl_info.dli_fname, &path[0], MMPA_MAX_PATH) != EN_OK) {
     constexpr size_t max_error_strlen = 128U;
-    char_t err_buf[max_error_strlen + 1U] = {};
+    ge::char_t err_buf[max_error_strlen + 1U] = {};
     const auto err_msg = mmGetErrorFormatMessage(mmGetErrorCode(), &err_buf[0], max_error_strlen);
     GELOGW("Failed to get realpath of %s, errmsg:%s", dl_info.dli_fname, err_msg);
     return std::string();
@@ -319,6 +319,6 @@ inline std::string GetModelPathByAddr(void *func_ptr) {
 inline std::string GetModelPath() {
   return GetModelPathByAddr(reinterpret_cast<void *>(&GetModelPath));
 }
-}  // namespace ge
+}  // namespace metadef
 
 #endif  // GE_COMMON_GE_PLUGIN_MANAGER_H_

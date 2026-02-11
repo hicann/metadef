@@ -18,15 +18,15 @@
 using namespace testing;
 using namespace std;
 
-namespace ge {
+namespace metadef {
 namespace {
 const char *const kEnvName = "ASCEND_OPP_PATH";
 const char *const kCustOppPath = "ASCEND_CUSTOM_OPP_PATH";
 const char *const kAscendHomePath = "ASCEND_HOME_PATH";
-const char_t *const kBuiltIn = "built-in";
-const char_t *const kVendors = "vendors";
-const char_t *const kOpMasterDeviceLib = "/op_impl/ai_core/tbe/op_master_device/lib/";
-const char_t *const kOpTilingDeviceLib = "/op_impl/ai_core/tbe/op_tiling_device/lib/";
+const ge::char_t *const kBuiltIn = "built-in";
+const ge::char_t *const kVendors = "vendors";
+const ge::char_t *const kOpMasterDeviceLib = "/op_impl/ai_core/tbe/op_master_device/lib/";
+const ge::char_t *const kOpTilingDeviceLib = "/op_impl/ai_core/tbe/op_tiling_device/lib/";
 
 void WriteRequiredVersion(const std::string &version, std::string &path, std::string &path1) {
   path ="./runtime";
@@ -194,9 +194,9 @@ TEST_F(UtestPluginManager, test_plugin_manager_load) {
   manager.ClearHandles_();
   ge::MmpaStub::GetInstance().Reset();
   ASSERT_EQ(manager.handles_.size(), 0);
-  EXPECT_EQ(manager.LoadSo("./", {}), SUCCESS);
+  EXPECT_EQ(manager.LoadSo("./", {}), ge::SUCCESS);
   int64_t file_size = 1;
-  EXPECT_EQ(manager.ValidateSo("./", 1, file_size), SUCCESS);
+  EXPECT_EQ(manager.ValidateSo("./", 1, file_size), ge::SUCCESS);
 
   std::string path = GetModelPath();
   std::vector<std::string> pathList;
@@ -209,14 +209,14 @@ TEST_F(UtestPluginManager, test_plugin_manager_load) {
 
   system(("touch " + path + file_name).c_str());
 
-  EXPECT_EQ(manager.Load("", pathList), SUCCESS);
-  EXPECT_EQ(manager.Load(path, {}), SUCCESS);
-  EXPECT_EQ(manager.LoadSo(path, {}), SUCCESS);
-  EXPECT_EQ(manager.LoadSo(path, funcChkList), SUCCESS);
+  EXPECT_EQ(manager.Load("", pathList), ge::SUCCESS);
+  EXPECT_EQ(manager.Load(path, {}), ge::SUCCESS);
+  EXPECT_EQ(manager.LoadSo(path, {}), ge::SUCCESS);
+  EXPECT_EQ(manager.LoadSo(path, funcChkList), ge::SUCCESS);
 
   path += file_name + "/";
   pathList.push_back(path);
-  EXPECT_EQ(manager.LoadSo(path, pathList), SUCCESS);
+  EXPECT_EQ(manager.LoadSo(path, pathList), ge::SUCCESS);
 
   unlink(path.c_str());
 }
@@ -259,8 +259,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_load_so_fail) {
   std::vector<std::string> funcs;
   const std::string path = "./tests/depends/mmpa/libmmpa.so";
   funcs.push_back("invalid_func");
-  EXPECT_EQ(manager.LoadSo(path, funcs), SUCCESS);
-  EXPECT_EQ(manager.Load("./tests/depends/mmpa/", funcs), SUCCESS);
+  EXPECT_EQ(manager.LoadSo(path, funcs), ge::SUCCESS);
+  EXPECT_EQ(manager.Load("./tests/depends/mmpa/", funcs), ge::SUCCESS);
 }
 
 TEST_F(UtestPluginManager, test_plugin_manager_getopp_plugin_vendors_01) {
@@ -274,8 +274,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_getopp_plugin_vendors_01) {
   system(("echo 'load_priority=customize,mdc,lhisi' > " + path_config).c_str());
 
   std::vector<std::string> vendors;
-  Status ret = PluginManager::GetOppPluginVendors(path_config, vendors);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetOppPluginVendors(path_config, vendors);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(vendors[0], "customize");
   EXPECT_EQ(vendors[1], "mdc");
   EXPECT_EQ(vendors[2], "lhisi");
@@ -293,8 +293,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_getopp_plugin_vendors_02) {
   system(("echo '' > " + path_config).c_str());
 
   std::vector<std::string> vendors;
-  Status ret = PluginManager::GetOppPluginVendors(path_config, vendors);
-  EXPECT_NE(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetOppPluginVendors(path_config, vendors);
+  EXPECT_NE(ret, ge::SUCCESS);
   system(("rm -rf " + opp_path).c_str());
 }
 
@@ -309,8 +309,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_getopp_plugin_vendors_03) {
   system(("echo 'load_priority' > " + path_config).c_str());
 
   std::vector<std::string> vendors;
-  Status ret = PluginManager::GetOppPluginVendors(path_config, vendors);
-  EXPECT_NE(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetOppPluginVendors(path_config, vendors);
+  EXPECT_NE(ret, ge::SUCCESS);
   system(("rm -rf " + opp_path).c_str());
 }
 
@@ -325,8 +325,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_getopp_plugin_vendors_04) {
   system(("rm -rf " + path_config).c_str());
 
   std::vector<std::string> vendors;
-  Status ret = PluginManager::GetOppPluginVendors(path_config, vendors);
-  EXPECT_NE(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetOppPluginVendors(path_config, vendors);
+  EXPECT_NE(ret, ge::SUCCESS);
   system(("rm -rf " + opp_path).c_str());
 }
 
@@ -341,8 +341,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_getopp_plugin_vendors_05) {
   system(("echo ' load_priority = customize , mdc , lhisi ' > " + path_config).c_str());
 
   std::vector<std::string> vendors;
-  Status ret = PluginManager::GetOppPluginVendors(path_config, vendors);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetOppPluginVendors(path_config, vendors);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(vendors[0], "customize");
   EXPECT_EQ(vendors[1], "mdc");
   EXPECT_EQ(vendors[2], "lhisi");
@@ -353,8 +353,8 @@ TEST_F(UtestPluginManager, test_GetOpsProtoPath_OldPath_PriorityOk) {
   std::string opp_path = GetOldPath();
 
   std::string opsproto_path;
-  Status ret = PluginManager::GetOpsProtoPath(opsproto_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetOpsProtoPath(opsproto_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(opsproto_path,
       opp_path + "op_proto/custom/:" +
       opp_path + "op_proto/built-in/"
@@ -366,8 +366,8 @@ TEST_F(UtestPluginManager, test_GetOpsProtoPath_NewPath_PriorityOk) {
   std::string path_vendors = opp_path + "vendors";
 
   std::string opsproto_path;
-  Status ret = PluginManager::GetOpsProtoPath(opsproto_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetOpsProtoPath(opsproto_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(opsproto_path,
     path_vendors + "/customize/op_proto/:" +
     path_vendors + "/mdc/op_proto/:" +
@@ -389,8 +389,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetOpsProtoPath_03) {
   system(("echo 'load_priority' > " + path_config).c_str());
 
   std::string opsproto_path;
-  Status ret = PluginManager::GetOpsProtoPath(opsproto_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetOpsProtoPath(opsproto_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(opsproto_path,
     opp_path + "op_proto/custom/:" +
     opp_path + "built-in/op_proto/"
@@ -414,8 +414,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetOpsProtoPath_04) {
   system(("mkdir -p " + custom_opp_path + "/op_proto").c_str());
 
   std::string opsproto_path;
-  Status ret = PluginManager::GetOpsProtoPath(opsproto_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetOpsProtoPath(opsproto_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(opsproto_path,
     custom_opp_path + "/op_proto/:" +
     path_vendors + "/customize/op_proto/:" +
@@ -442,8 +442,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetOpsProtoPath_05) {
   system(("mkdir -p " + custom_opp_path + "/op_proto").c_str());
 
   std::string opsproto_path;
-  Status ret = PluginManager::GetOpsProtoPath(opsproto_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetOpsProtoPath(opsproto_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(opsproto_path,
     path_vendors + "/customize/op_proto/:" +
     path_vendors + "/mdc/op_proto/:" +
@@ -471,8 +471,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetOpsProtoPath_06) {
   system(("mkdir -p " + custom_opp_path_02 + "/op_proto").c_str());
 
   std::string opsproto_path;
-  Status ret = PluginManager::GetOpsProtoPath(opsproto_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetOpsProtoPath(opsproto_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(opsproto_path,
     custom_opp_path_01 + "/op_proto/:" +
     custom_opp_path_02 + "/op_proto/:" +
@@ -498,8 +498,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetOpsProtoPath_07) {
   system(("mkdir -p " + custom_opp_path + "/op_proto").c_str());
 
   std::string opsproto_path;
-  Status ret = PluginManager::GetOpsProtoPath(opsproto_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetOpsProtoPath(opsproto_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(opsproto_path,
     custom_opp_path + "/op_proto/:" +
     opp_path + "op_proto/custom/:" +
@@ -534,8 +534,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetOpsProtoPath_08) {
   system(("mkdir -p " + custom_opp_path_02 + "/op_proto").c_str());
 
   std::string opsproto_path;
-  Status ret = PluginManager::GetOpsProtoPath(opsproto_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetOpsProtoPath(opsproto_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(opsproto_path,
     custom_opp_path_01 + "/op_proto/:" +
     custom_opp_path_02 + "/op_proto/:" +
@@ -569,8 +569,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetOpsProtoPath_09) {
   system(("mkdir -p " + custom_opp_path_02 + "/op_proto").c_str());
 
   std::string opsproto_path;
-  Status ret = PluginManager::GetOpsProtoPath(opsproto_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetOpsProtoPath(opsproto_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(opsproto_path,
     custom_opp_path_01 + "/op_proto/:" +
     custom_opp_path_02 + "/op_proto/:" +
@@ -593,8 +593,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetOpTilingPath_01) {
   system(("rm -rf " + path_builtin).c_str());
 
   std::string op_tiling_path;
-  Status ret = PluginManager::GetOpTilingPath(op_tiling_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetOpTilingPath(op_tiling_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(op_tiling_path,
       opp_path + "op_impl/built-in/ai_core/tbe/:" + opp_path + "op_impl/custom/ai_core/tbe/"
   );
@@ -613,8 +613,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetOpTilingPath_02) {
   system(("echo 'load_priority=customize,mdc,lhisi' > " + path_config).c_str());
 
   std::string op_tiling_path;
-  Status ret = PluginManager::GetOpTilingPath(op_tiling_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetOpTilingPath(op_tiling_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(op_tiling_path,
     opp_path + "built-in/op_impl/ai_core/tbe/:" +
     path_vendors + "/lhisi/op_impl/ai_core/tbe/:" +
@@ -637,8 +637,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetOpTilingPath_03) {
   system(("echo 'load_priority' > " + path_config).c_str());
 
   std::string op_tiling_path;
-  Status ret = PluginManager::GetOpTilingPath(op_tiling_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetOpTilingPath(op_tiling_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(op_tiling_path,
     opp_path + "built-in/op_impl/ai_core/tbe/:" +
     opp_path + "op_impl/custom/ai_core/tbe/"
@@ -662,8 +662,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetOpTilingPath_04) {
   system(("mkdir -p " + custom_opp_path + "/op_impl/ai_core/tbe").c_str());
 
   std::string op_tiling_path;
-  Status ret = PluginManager::GetOpTilingPath(op_tiling_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetOpTilingPath(op_tiling_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(op_tiling_path,
     opp_path + "built-in/op_impl/ai_core/tbe/:" +
     path_vendors + "/lhisi/op_impl/ai_core/tbe/:" +
@@ -690,8 +690,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetOpTilingPath_05) {
   system(("mkdir -p " + custom_opp_path + "/op_impl/ai_core/tbe").c_str());
 
   std::string op_tiling_path;
-  Status ret = PluginManager::GetOpTilingPath(op_tiling_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetOpTilingPath(op_tiling_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(op_tiling_path,
     opp_path + "built-in/op_impl/ai_core/tbe/:" +
     path_vendors + "/lhisi/op_impl/ai_core/tbe/:" +
@@ -719,8 +719,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetOpTilingPath_06) {
   system(("mkdir -p " + custom_opp_path_02 + "/op_impl/ai_core/tbe").c_str());
 
   std::string op_tiling_path;
-  Status ret = PluginManager::GetOpTilingPath(op_tiling_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetOpTilingPath(op_tiling_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(op_tiling_path,
     opp_path + "built-in/op_impl/ai_core/tbe/:" +
     path_vendors + "/lhisi/op_impl/ai_core/tbe/:" +
@@ -746,8 +746,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetOpTilingPath_07) {
   system(("mkdir -p " + custom_opp_path + "/op_impl/ai_core/tbe").c_str());
 
   std::string op_tiling_path;
-  Status ret = PluginManager::GetOpTilingPath(op_tiling_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetOpTilingPath(op_tiling_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(op_tiling_path,
     opp_path + "built-in/op_impl/ai_core/tbe/:" +
     opp_path + "op_impl/custom/ai_core/tbe/:" +
@@ -782,8 +782,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetOpTilingPath_08) {
   system(("mkdir -p " + custom_opp_path_02 + "/op_impl/ai_core/tbe").c_str());
 
   std::string op_tiling_path;
-  Status ret = PluginManager::GetOpTilingPath(op_tiling_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetOpTilingPath(op_tiling_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(op_tiling_path,
     opp_path + "built-in/op_impl/ai_core/tbe/:" +
     path_vendors + "/lhisi/op_impl/ai_core/tbe/:" +
@@ -817,8 +817,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetOpTilingPath_09) {
   system(("mkdir -p " + custom_opp_path_02 + "/op_impl/ai_core/tbe").c_str());
 
   std::string op_tiling_path;
-  Status ret = PluginManager::GetOpTilingPath(op_tiling_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetOpTilingPath(op_tiling_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(op_tiling_path,
     opp_path + "built-in/op_impl/ai_core/tbe/:" +
     path_vendors + "/lhisi/op_impl/ai_core/tbe/:" +
@@ -841,8 +841,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetCustomOpPath_01) {
   system(("rm -rf " + path_builtin).c_str());
 
   std::string customop_path;
-  Status ret = PluginManager::GetCustomOpPath("tensorflow", customop_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetCustomOpPath("tensorflow", customop_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(customop_path,
     opp_path + "framework/custom/:" + opp_path + "framework/built-in/tensorflow/"
   );
@@ -861,8 +861,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetCustomOpPath_02) {
   system(("echo 'load_priority=customize,mdc,lhisi' > " + path_config).c_str());
 
   std::string customop_path;
-  Status ret = PluginManager::GetCustomOpPath("tensorflow", customop_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetCustomOpPath("tensorflow", customop_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(customop_path,
     path_vendors + "/customize/framework/:" +
     path_vendors + "/mdc/framework/:" +
@@ -885,8 +885,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetCustomOpPath_03) {
   system(("rm -rf " + path_config).c_str());
 
   std::string customop_path;
-  Status ret = PluginManager::GetCustomOpPath("tensorflow", customop_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetCustomOpPath("tensorflow", customop_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(customop_path,
     opp_path + "framework/custom/:" +
     opp_path + "built-in/framework/tensorflow/"
@@ -910,8 +910,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetCustomOpPath_04) {
   system(("mkdir -p " + custom_opp_path + "/framework").c_str());
 
   std::string customop_path;
-  Status ret = PluginManager::GetCustomOpPath("tensorflow", customop_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetCustomOpPath("tensorflow", customop_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(customop_path,
     custom_opp_path + "/framework/:" +
     path_vendors + "/customize/framework/:" +
@@ -938,8 +938,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetCustomOpPath_05) {
   system(("mkdir -p " + custom_opp_path + "/framework").c_str());
 
   std::string customop_path;
-  Status ret = PluginManager::GetCustomOpPath("tensorflow", customop_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetCustomOpPath("tensorflow", customop_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(customop_path,
     path_vendors + "/customize/framework/:" +
     path_vendors + "/mdc/framework/:" +
@@ -967,8 +967,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetCustomOpPath_06) {
   system(("mkdir -p " + custom_opp_path_02 + "/framework").c_str());
 
   std::string customop_path;
-  Status ret = PluginManager::GetCustomOpPath("tensorflow", customop_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetCustomOpPath("tensorflow", customop_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(customop_path,
     custom_opp_path_01 + "/framework/:" +
     custom_opp_path_02 + "/framework/:" +
@@ -994,8 +994,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetCustomOpPath_07) {
   system(("mkdir -p " + custom_opp_path + "/framework").c_str());
 
   std::string customop_path;
-  Status ret = PluginManager::GetCustomOpPath("tensorflow", customop_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetCustomOpPath("tensorflow", customop_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(customop_path,
     custom_opp_path + "/framework/:" +
     opp_path + "framework/custom/:" +
@@ -1030,8 +1030,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetCustomOpPath_08) {
   system(("mkdir -p " + custom_opp_path_02 + "/framework").c_str());
 
   std::string customop_path;
-  Status ret = PluginManager::GetCustomOpPath("tensorflow", customop_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetCustomOpPath("tensorflow", customop_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(customop_path,
     custom_opp_path_01 + "/framework/:" +
     custom_opp_path_02 + "/framework/:" +
@@ -1065,8 +1065,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetCustomOpPath_09) {
   system(("mkdir -p " + custom_opp_path_02 + "/framework").c_str());
 
   std::string customop_path;
-  Status ret = PluginManager::GetCustomOpPath("tensorflow", customop_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetCustomOpPath("tensorflow", customop_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(customop_path,
     custom_opp_path_01 + "/framework/:" +
     custom_opp_path_02 + "/framework/:" +
@@ -1091,8 +1091,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetCustomCaffeProtoPath_01) {
   system(("rm -rf " + path_vendors).c_str());
 
   std::string customcaffe_path;
-  Status ret = PluginManager::GetCustomCaffeProtoPath(customcaffe_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetCustomCaffeProtoPath(customcaffe_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(customcaffe_path,
     opp_path + "framework/custom/caffe/"
   );
@@ -1112,8 +1112,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetCustomCaffeProtoPath_02) {
   system(("echo 'load_priority=customize,mdc,lhisi' > " + path_config).c_str());
 
   std::string customcaffe_path;
-  Status ret = PluginManager::GetCustomCaffeProtoPath(customcaffe_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetCustomCaffeProtoPath(customcaffe_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(customcaffe_path,
     path_vendors + "/customize/framework/caffe/:" +
     path_vendors + "/mdc/framework/caffe/:" +
@@ -1135,8 +1135,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetCustomCaffeProtoPath_03) {
   system(("rm -rf " + path_config).c_str());
 
   std::string customcaffe_path;
-  Status ret = PluginManager::GetCustomCaffeProtoPath(customcaffe_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetCustomCaffeProtoPath(customcaffe_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(customcaffe_path,
     opp_path + "framework/custom/caffe/"
   );
@@ -1159,8 +1159,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetCustomCaffeProtoPath_04) {
   system(("mkdir -p " + custom_opp_path + "/framework/caffe").c_str());
 
   std::string customcaffe_path;
-  Status ret = PluginManager::GetCustomCaffeProtoPath(customcaffe_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetCustomCaffeProtoPath(customcaffe_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(customcaffe_path,
     custom_opp_path + "/framework/caffe/:" +
     path_vendors + "/customize/framework/caffe/:" +
@@ -1186,8 +1186,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetCustomCaffeProtoPath_05) {
   system(("mkdir -p " + custom_opp_path + "/framework/caffe").c_str());
 
   std::string customcaffe_path;
-  Status ret = PluginManager::GetCustomCaffeProtoPath(customcaffe_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetCustomCaffeProtoPath(customcaffe_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(customcaffe_path,
     path_vendors + "/customize/framework/caffe/:" +
     path_vendors + "/mdc/framework/caffe/:" +
@@ -1214,8 +1214,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetCustomCaffeProtoPath_06) {
   system(("mkdir -p " + custom_opp_path_02 + "/framework/caffe").c_str());
 
   std::string customcaffe_path;
-  Status ret = PluginManager::GetCustomCaffeProtoPath(customcaffe_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetCustomCaffeProtoPath(customcaffe_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(customcaffe_path,
     custom_opp_path_01 + "/framework/caffe/:" +
     custom_opp_path_02 + "/framework/caffe/:" +
@@ -1240,8 +1240,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetCustomCaffeProtoPath_07) {
   system(("mkdir -p " + custom_opp_path + "/framework/caffe").c_str());
 
   std::string customcaffe_path;
-  Status ret = PluginManager::GetCustomCaffeProtoPath(customcaffe_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetCustomCaffeProtoPath(customcaffe_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(customcaffe_path,
     custom_opp_path + "/framework/caffe/:" +
     opp_path + "framework/custom/caffe/"
@@ -1275,8 +1275,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetCustomCaffeProtoPath_08) {
   system(("mkdir -p " + custom_opp_path_02 + "/framework/caffe").c_str());
 
   std::string customcaffe_path;
-  Status ret = PluginManager::GetCustomCaffeProtoPath(customcaffe_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetCustomCaffeProtoPath(customcaffe_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(customcaffe_path,
     custom_opp_path_01 + "/framework/caffe/:" +
     custom_opp_path_02 + "/framework/caffe/:" +
@@ -1308,8 +1308,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetCustomCaffeProtoPath_09) {
   system(("mkdir -p " + custom_opp_path_02 + "/framework/caffe").c_str());
 
   std::string customcaffe_path;
-  Status ret = PluginManager::GetCustomCaffeProtoPath(customcaffe_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetCustomCaffeProtoPath(customcaffe_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(customcaffe_path,
     custom_opp_path_01 + "/framework/caffe/:" +
     custom_opp_path_02 + "/framework/caffe/:" +
@@ -1331,8 +1331,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetConstantFoldingOpsPath_01) {
   system(("rm -rf " + path_builtin).c_str());
 
   std::string customop_path;
-  Status ret = PluginManager::GetConstantFoldingOpsPath("/tmp", customop_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetConstantFoldingOpsPath("/tmp", customop_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(customop_path, opp_path + "/op_impl/built-in/host_cpu");
 }
 
@@ -1345,8 +1345,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetConstantFoldingOpsPath_02) {
   system(("mkdir -p " + path_builtin).c_str());
 
   std::string customop_path;
-  Status ret = PluginManager::GetConstantFoldingOpsPath("/tmp", customop_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetConstantFoldingOpsPath("/tmp", customop_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(customop_path, opp_path + "/built-in/op_impl/host_cpu");
   system(("rm -rf " + opp_path).c_str());
 }
@@ -1377,7 +1377,7 @@ TEST_F(UtestPluginManager, GetOppSupportedOsAndCpuType_SUCCESS) {
     }
   }
 
-  MmpaStub::GetInstance().SetImpl(std::make_shared<MockMmpa>());
+  ge::MmpaStub::GetInstance().SetImpl(std::make_shared<MockMmpa>());
   PluginManager::GetOppSupportedOsAndCpuType(opp_supported_os_cpu_tmp);
   for (auto it0 : opp_supported_os_cpu_tmp) {
     ASSERT_NE(opp_supported_os_cpu.count(it0.first), 0);
@@ -1385,7 +1385,7 @@ TEST_F(UtestPluginManager, GetOppSupportedOsAndCpuType_SUCCESS) {
       ASSERT_NE(opp_supported_os_cpu[it0.first].count(it1), 0);
     }
   }
-  MmpaStub::GetInstance().Reset();
+  ge::MmpaStub::GetInstance().Reset();
   // del dir
   system(("rm -rf " + opp_path).c_str());
 }
@@ -1554,8 +1554,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetVersion_Valid) {
   WriteRequiredVersion(">=6.4,<=6.4", path, path1);
 
   std::string op_tiling_path;
-  Status ret = PluginManager::GetOpTilingPath(op_tiling_path);
-  EXPECT_EQ(ret, SUCCESS);
+  ge::Status ret = PluginManager::GetOpTilingPath(op_tiling_path);
+  EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(op_tiling_path,
             opp_path + "built-in/op_impl/ai_core/tbe/:" +
                 path_vendors + "/mdc/op_impl/ai_core/tbe/:" +
@@ -1777,7 +1777,7 @@ TEST_F(UtestPluginManager, FindSoFilesInCustomPassDirs_not_dir) {
 }
 
 TEST_F(UtestPluginManager, FindSoFilesInCustomPassDirs_scan_dir_failed) {
-  MmpaStub::GetInstance().SetImpl(std::make_shared<MockMmpaInvalid>());
+  ge::MmpaStub::GetInstance().SetImpl(std::make_shared<MockMmpaInvalid>());
   std::string path = __FILE__;
   path = path.substr(0, path.rfind("/") + 1) + "opp/";
   system(("mkdir -p " + path).c_str());
@@ -1791,7 +1791,7 @@ TEST_F(UtestPluginManager, FindSoFilesInCustomPassDirs_scan_dir_failed) {
   PluginManager::FindSoFilesInCustomPassDirs(custom_path, so_files);
   ASSERT_EQ(so_files.size(), 0);
 
-  MmpaStub::GetInstance().Reset();
+  ge::MmpaStub::GetInstance().Reset();
   system(("rm -rf " + path).c_str());
 }
 
@@ -1914,7 +1914,7 @@ TEST_F(UtestPluginManager, GetOpMasterDeviceSoPath_Whole_Pkg_Success) {
   ConstructOpMasterDeviceSo(opp_kernel_path, 1, 0);
 
   std::string op_master_device_so_paths;
-  EXPECT_EQ(PluginManager::GetOpMasterDeviceSoPath(op_master_device_so_paths), SUCCESS);
+  EXPECT_EQ(PluginManager::GetOpMasterDeviceSoPath(op_master_device_so_paths), ge::SUCCESS);
 
   std::vector<std::string> path_vec;
   PluginManager::SplitPath(op_master_device_so_paths, path_vec);
@@ -1936,7 +1936,7 @@ TEST_F(UtestPluginManager, GetOpMasterDeviceSoPath_Sub_Pkg_Success) {
   ConstructOpMasterDeviceSoForSubPkg(opp_kernel_path, 1, 0);
 
   std::string op_master_device_so_paths;
-  EXPECT_EQ(PluginManager::GetOpMasterDeviceSoPath(op_master_device_so_paths), SUCCESS);
+  EXPECT_EQ(PluginManager::GetOpMasterDeviceSoPath(op_master_device_so_paths), ge::SUCCESS);
 
   std::vector<std::string> path_vec;
   PluginManager::SplitPath(op_master_device_so_paths, path_vec);
@@ -2005,4 +2005,4 @@ TEST_F(UtestPluginManager, FindSoFilesInSubPkgDirs_01) {
   system(("rm -rf " + path).c_str());
 }
 
-}  // namespace ge
+}  // namespace metadef

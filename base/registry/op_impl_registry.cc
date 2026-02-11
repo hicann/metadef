@@ -15,7 +15,7 @@
 #include "register/op_impl_registry_base.h"
 #include "base/registry/op_impl_register_v2_impl.h"
 #include "common/checker.h"
-#include "common/plugin/plugin_manager.h"
+#include "inc/common/plugin/plugin_manager.h"
 
 namespace gert {
 namespace {
@@ -113,7 +113,7 @@ void RegisterOpImplToRegistry(const OpImplRegisterV2Impl *rd) {
   }
 
   GELOGI("LocalRegistry[%zu] Op type[%s] register OP_IMPL : %s",
-         std::hash<std::string>()(ge::GetModelPathByAddr(&OpImplRegistry::GetInstance())),
+         std::hash<std::string>()(metadef::GetModelPathByAddr(&OpImplRegistry::GetInstance())),
          rd->op_type.GetString(), ss.str().c_str());
 }
 
@@ -135,7 +135,7 @@ ge::graphStatus InferOutDataTypeSameWithFirstInputFunc(InferDataTypeContext *con
 }
 } // namespace
 
-OpImplRegisterV2 &OpImplRegisterV2::ExceptionDumpParseFunc(ExcepitonDumpFunc exception_func) {
+OpImplRegisterV2 &OpImplRegisterV2::ExceptionDumpParseFunc(ExceptionDumpFunc exception_func) {
   if (impl_ != nullptr && exception_func != nullptr) {
     impl_->functions.exception_func = exception_func;
     GELOGI("Register exception function for op type %s", impl_->op_type.GetString());

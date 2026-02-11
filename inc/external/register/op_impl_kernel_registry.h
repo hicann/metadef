@@ -186,7 +186,7 @@ struct OpImplKernelRegistry {
     OpImplRegisterV2::OP_CHECK_FUNC_V2 get_op_specific_info = nullptr;
     OpImplRegisterV2::OpExecPrepareFunc op_execute_prepare_func = nullptr;
     OpImplRegisterV2::OpExecLaunchFunc op_execute_launch_func = nullptr;
-    OpImplRegisterV2::ExcepitonDumpFunc exception_func = nullptr;
+    OpImplRegisterV2::ExceptionDumpFunc exception_func = nullptr;
     uint64_t reserved_[501] = {0U};
   };
 };

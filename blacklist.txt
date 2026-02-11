@@ -1,0 +1,8 @@
+base/common/plugin/plugin_manager.cc
+base/registry/op_impl_space_registry.cc
+base/registry/op_impl_space_registry_v2_impl.cc
+base/registry/opp_so_manager.cc
+base/utils/aligned_ptr.cc
+base/utils/file_utils.cc
+base/registry/op_bin_info.cc
+base/registry/op_impl_registry_holder_manager.cc
