@@ -192,7 +192,7 @@
 <p id="p1069545111557"><a name="p1069545111557"></a><a name="p1069545111557"></a>头文件位于<span id="ph2069535155516"><a name="ph2069535155516"></a><a name="ph2069535155516"></a>CANN软件安装后文件存储路径</span>下的include/exe_graph/runtime/storage_shape.h。</p>
 </td>
 </tr>
-<tr id="row15953122533617"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p133643406497"><a name="p133643406497"></a><a name="p133643406497"></a><a href="TilingData-153.md">TensorData</a></p>
+<tr id="row15953122533617"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p133643406497"><a name="p133643406497"></a><a name="p133643406497"></a><a href="TensorData.md">TensorData</a></p>
 </td>
 <td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p1131469134319"><a name="p1131469134319"></a><a name="p1131469134319"></a>用于存储Tensor数据。</p>
 <p id="p51058278561"><a name="p51058278561"></a><a name="p51058278561"></a>头文件位于<span id="ph1521013318566"><a name="ph1521013318566"></a><a name="ph1521013318566"></a>CANN软件安装后文件存储路径</span>下的include/exe_graph/runtime/tensor_data.h。</p>
