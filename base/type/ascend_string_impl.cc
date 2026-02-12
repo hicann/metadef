@@ -9,7 +9,7 @@
  */
 
 #include "base/type/ascend_string_impl.h"
-#include "debug/ge_log.h"
+#include "common/ge_common/debug/ge_log.h"
 #include <memory>
 
 namespace ge {
