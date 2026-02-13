@@ -2,9 +2,9 @@
 
 ### 1. 安装依赖
 
-metadef 支持源码编译。在源码编译前，请根据实际情况选择 **方式一（手动安装）** 或 **方式二（Docker容器）** 完成基础环境准备，然后进行 **CANN Toolkit** 的安装。
+metadef支持源码编译。在源码编译前，请完成[基础环境准备](#安装依赖)，然后进行[CANN Toolkit](#2-安装软件包)的安装。
 
-#### 方式一：手动安装依赖
+#### 安装依赖
 
    以下所列为源码编译用到的依赖，请注意版本要求。
 
@@ -24,38 +24,11 @@ metadef 支持源码编译。在源码编译前，请根据实际情况选择 **
      sudo apt-get install cmake ccache lcov libasan4 libgraph-easy-perl
      ```
 
-
-#### 方式二：使用 Docker 镜像
-
-  **配套 X86 构建镜像地址**：`swr.cn-north-4.myhuaweicloud.com/ci_cann/ubuntu20.04.05_x86:lv1_latest`
-  
-  **配套 ARM 构建镜像地址**：`swr.cn-north-4.myhuaweicloud.com/ci_cann/ubuntu20.04.05_arm:lv1_latest`
-
-  以下是推荐的使用方式，可供参考:
-
-  ```shell
-  image=${根据本地机器架构类型从上面选择配套的构建镜像地址}
-
-  # 1. 拉取配套构建镜像
-  docker pull ${image}
-  # 2. 创建容器
-  docker run --name env_for_ge_build --cap-add SYS_PTRACE -d -it ${image} /bin/bash
-  # 3. 启动容器
-  docker start env_for_ge_build
-  # 4. 进入容器
-  docker exec -it env_for_ge_build /bin/bash
-  ```
-  完成后可以进入[安装软件包](#2-安装软件包)章节。
-
-  > [!NOTE]说明
-  > - `--cap-add SYS_PTRACE`：创建Docker容器时添加`SYS_PTRACE`权限，以支持[本地验证](#5-本地验证ut)时的内存泄漏检测功能。
-  > - 更多 docker 选项介绍请通过 `docker --help` 查询。
-
 ### 2. 安装软件包
 
 #### 步骤一：安装社区版CANN Toolkit包
 
-根据实际环境，下载对应`Ascend-cann-toolkit_${cann_version}_linux-${arch}.run`包，下载链接为[toolkit x86_64包](https://ascend.devcloud.huaweicloud.com/cann/run/software/8.5.0-beta.1/x86_64/Ascend-cann-toolkit_8.5.0-beta.1_linux-x86_64.run)、[toolkit aarch64包](https://ascend.devcloud.huaweicloud.com/cann/run/software/8.5.0-beta.1/aarch64/Ascend-cann-toolkit_8.5.0-beta.1_linux-aarch64.run)。
+根据实际环境，下载对应`Ascend-cann-toolkit_${cann_version}_linux-${arch}.run`包，请选择最新版本，[下载链接](https://mirror-centralrepo.devcloud.cn-north-4.huaweicloud.com/artifactory/cann-run-release/software/9.0.0/)。
 
   ```bash
   # 确保安装包具有可执行权限
