@@ -219,7 +219,6 @@ namespace {                                                                     
 #define TILING_DATA_FIELD_DEF_ARR(arr_type, arr_size, field_name)                                                      \
  public:                                                                                                               \
   void set_##field_name(arr_type *field_name) {                                                                        \
-    field_name##_ = field_name;                                                                                        \
     auto offset = field_name##_offset_;                                                                                \
     if (data_ptr_ + offset == (uint8_t *)field_name) {                                                                 \
       return;                                                                                                          \
