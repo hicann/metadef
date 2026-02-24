@@ -4,7 +4,7 @@
 
 -   **ge（Graph Engine）** 命名空间
 
-    ge是Graph Engine的缩写，代表一个通用的命名空间，专注于构图和图编译处理。此命名空间提供了一套丰富的API，用于构建和管理复杂的图结构。它的核心优势在于其通用性和灵活性，能够满足各种图处理需求，无论是在设计阶段还是在编译过程中。
+    ge是Graph Engine的缩写，此命名空间专注于构图和图编译处理，提供了一套丰富的API，用于构建和管理复杂的图结构。
 
 -   **gert（GE Runtime）** 命名空间
 
@@ -14,234 +14,9 @@
 
     用于算子和图开发的C语言接口。
 
-## gert命名空间<a name="section1498490112017"></a>
-
-**表 1**  gert命名空间
-
-<a name="table107281858237"></a>
-<table><thead align="left"><tr id="row1372812592319"><th class="cellrowborder" valign="top" width="14.760000000000002%" id="mcps1.2.4.1.1"><p id="p28543193914"><a name="p28543193914"></a><a name="p28543193914"></a>分类</p>
-</th>
-<th class="cellrowborder" valign="top" width="19.49%" id="mcps1.2.4.1.2"><p id="p147285552316"><a name="p147285552316"></a><a name="p147285552316"></a>数据结构/接口名称</p>
-</th>
-<th class="cellrowborder" valign="top" width="65.75%" id="mcps1.2.4.1.3"><p id="p17281151239"><a name="p17281151239"></a><a name="p17281151239"></a>功能描述</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="row1972815510234"><td class="cellrowborder" rowspan="33" valign="top" width="14.760000000000002%" headers="mcps1.2.4.1.1 "><p id="p28542192920"><a name="p28542192920"></a><a name="p28542192920"></a>类和结构体</p>
-</td>
-<td class="cellrowborder" valign="top" width="19.49%" headers="mcps1.2.4.1.2 "><p id="p1363104074916"><a name="p1363104074916"></a><a name="p1363104074916"></a><a href="AnchorInstanceInfo.md">AnchorInstanceInfo</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="65.75%" headers="mcps1.2.4.1.3 "><p id="p14728115122318"><a name="p14728115122318"></a><a name="p14728115122318"></a>用来描述一个算子的IR原型定义的输入信息与实际输入之间的关系。</p>
-<p id="p1414816528417"><a name="p1414816528417"></a><a name="p1414816528417"></a>头文件位于<span id="ph17279164704115"><a name="ph17279164704115"></a><a name="ph17279164704115"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/compute_node_info.h。</p>
-</td>
-</tr>
-<tr id="row77297582318"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p163638404494"><a name="p163638404494"></a><a name="p163638404494"></a><a href="CompileTimeTensorDesc.md">CompileTimeTensorDesc</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="zh-cn_topic_0000001936566892_p16772114119230"><a name="zh-cn_topic_0000001936566892_p16772114119230"></a><a name="zh-cn_topic_0000001936566892_p16772114119230"></a>用于描述编译时的Tensor描述信息，包含dtype信息以及format信息。</p>
-<p id="p162162021194310"><a name="p162162021194310"></a><a name="p162162021194310"></a>头文件位于<span id="ph52162219437"><a name="ph52162219437"></a><a name="ph52162219437"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/compute_node_info.h。</p>
-</td>
-</tr>
-<tr id="row095531611435"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p3363194034916"><a name="p3363194034916"></a><a name="p3363194034916"></a><a href="ComputeNodeInfo.md">ComputeNodeInfo</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="zh-cn_topic_0000001585966930_zh-cn_topic_0000001390567173_p167811575587"><a name="zh-cn_topic_0000001585966930_zh-cn_topic_0000001390567173_p167811575587"></a><a name="zh-cn_topic_0000001585966930_zh-cn_topic_0000001390567173_p167811575587"></a>用于将算子的相关编译信息进行序列化保存，以便可以在图执行阶段能够高效地获取这些信息。</p>
-<p id="p1739943374312"><a name="p1739943374312"></a><a name="p1739943374312"></a>头文件位于<span id="ph93996332438"><a name="ph93996332438"></a><a name="ph93996332438"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/compute_node_info.h。</p>
-</td>
-</tr>
-<tr id="row511511575710"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p1211595719717"><a name="p1211595719717"></a><a name="p1211595719717"></a><a href="ContextHolder.md">ContextHolder</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p62581949594"><a name="p62581949594"></a><a name="p62581949594"></a>Context是算子Host侧实现函数执行时的上下文，由于构造出来的Context存储的都是指针类型，为了方便进行生命周期和所有权管理，提供ContextHolder类进行资源管理。</p>
-<p id="p299611428818"><a name="p299611428818"></a><a name="p299611428818"></a>头文件位于<span id="ph179962423813"><a name="ph179962423813"></a><a name="ph179962423813"></a>CANN toolkit安装路径</span>下的include/base/context_builder/context_holder.h。</p>
-</td>
-</tr>
-<tr id="row1698614591910"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p20363840134916"><a name="p20363840134916"></a><a name="p20363840134916"></a><a href="ContinuousVectorVector.md">ContinuousVectorVector</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p698612594920"><a name="p698612594920"></a><a name="p698612594920"></a>在内存中开辟一块连续的空间，用于存储数据的描述信息以及实际的数据元素，元素类型为ContinuousVector结构。</p>
-<p id="p10301052164315"><a name="p10301052164315"></a><a name="p10301052164315"></a>头文件位于<span id="ph930135224314"><a name="ph930135224314"></a><a name="ph930135224314"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/continuous_vector.h。</p>
-</td>
-</tr>
-<tr id="row204721719184318"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p1236354013492"><a name="p1236354013492"></a><a name="p1236354013492"></a><a href="ContinuousVector.md">ContinuousVector</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="zh-cn_topic_0000001592855212_zh-cn_topic_0000001390366241_p12937161142617"><a name="zh-cn_topic_0000001592855212_zh-cn_topic_0000001390366241_p12937161142617"></a><a name="zh-cn_topic_0000001592855212_zh-cn_topic_0000001390366241_p12937161142617"></a>本类是一个POD类，在内存中开辟一块连续的空间用于存储描述信息以及实际内存数据。</p>
-<p id="p10243172611443"><a name="p10243172611443"></a><a name="p10243172611443"></a>头文件位于<span id="ph924313263449"><a name="ph924313263449"></a><a name="ph924313263449"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/continuous_vector.h。</p>
-</td>
-</tr>
-<tr id="row975519111306"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p14756121133015"><a name="p14756121133015"></a><a name="p14756121133015"></a><a href="CtInferShapeContext.md">CtInferShapeContext</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p18756151123013"><a name="p18756151123013"></a><a name="p18756151123013"></a><span id="ph2142149193117"><a name="ph2142149193117"></a><a name="ph2142149193117"></a>CtInferShapeContext继承自InferShapeContext，用于编译期Shape推导，提供编译期使用的接口。</span></p>
-<p id="p637116304365"><a name="p637116304365"></a><a name="p637116304365"></a>头文件位于<span id="ph1189133053619"><a name="ph1189133053619"></a><a name="ph1189133053619"></a>CANN toolkit安装路径</span>下的include/graph/ct_infer_shape_context.h。</p>
-</td>
-</tr>
-<tr id="row167714413017"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p4774419300"><a name="p4774419300"></a><a name="p4774419300"></a><a href="CtInferShapeRangeContext.md">CtInferShapeRangeContext</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p47724153013"><a name="p47724153013"></a><a name="p47724153013"></a><span id="ph393531633114"><a name="ph393531633114"></a><a name="ph393531633114"></a>CtInferShapeRangeContext继承自InferShapeRangeContext，用于编译期ShapeRange推导，提供编译期使用的接口。</span></p>
-<p id="p698294611360"><a name="p698294611360"></a><a name="p698294611360"></a>头文件位于<span id="ph343494743610"><a name="ph343494743610"></a><a name="ph343494743610"></a>CANN toolkit安装路径</span>下的include/graph/ct_infer_shape_range_context.h。</p>
-</td>
-</tr>
-<tr id="row1263518197432"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p1236314004917"><a name="p1236314004917"></a><a name="p1236314004917"></a><a href="ExpandDimsType.md">ExpandDimsType</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p1163651916435"><a name="p1163651916435"></a><a name="p1163651916435"></a>ExpandDimsType类基于补维后的shape，描述了补维规则。</p>
-<p id="p125632124514"><a name="p125632124514"></a><a name="p125632124514"></a>头文件位于<span id="ph725642118458"><a name="ph725642118458"></a><a name="ph725642118458"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/expand_dims_type.h。</p>
-</td>
-</tr>
-<tr id="row1194312197431"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p1363154014916"><a name="p1363154014916"></a><a name="p1363154014916"></a><a href="ExtendedKernelContext.md">ExtendedKernelContext</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p1358715569312"><a name="p1358715569312"></a><a name="p1358715569312"></a><a href="InferShapeContext.md">InferShapeContext</a>、<a href="TilingContext.md">TilingContext</a>等的基类，ExtendedKernelContext中提供的方法如获取算子type、name、属性等接口均可以在InferShape、Tiling时调用。</p>
-<p id="p2369165864520"><a name="p2369165864520"></a><a name="p2369165864520"></a>头文件位于<span id="ph2894185864514"><a name="ph2894185864514"></a><a name="ph2894185864514"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/extended_kernel_context.h。</p>
-</td>
-</tr>
-<tr id="row11951420124314"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p1736311404495"><a name="p1736311404495"></a><a name="p1736311404495"></a><a href="InferDataTypeContext.md">InferDataTypeContext</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p1998216819332"><a name="p1998216819332"></a><a name="p1998216819332"></a>用于datatype推导的上下文结构。</p>
-<p id="p737151114715"><a name="p737151114715"></a><a name="p737151114715"></a>头文件位于<span id="ph1740153214919"><a name="ph1740153214919"></a><a name="ph1740153214919"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/infer_datatype_context.h。</p>
-</td>
-</tr>
-<tr id="row19906179401"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p69901317144012"><a name="p69901317144012"></a><a name="p69901317144012"></a><a href="InferFormatContext.md">InferFormatContext</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p199041714015"><a name="p199041714015"></a><a name="p199041714015"></a><span id="ph204111647174018"><a name="ph204111647174018"></a><a name="ph204111647174018"></a>InferFormatContext继承自ExtendedKernelContext，是一个用于Format推导的上下文类。</span></p>
-<p id="p575414216416"><a name="p575414216416"></a><a name="p575414216416"></a>头文件位于<span id="ph102011743204118"><a name="ph102011743204118"></a><a name="ph102011743204118"></a>CANN toolkit安装路径</span>下的</p>
-<p id="p163841311104217"><a name="p163841311104217"></a><a name="p163841311104217"></a>include/graph/<span>infer_format_context.h</span>。</p>
-</td>
-</tr>
-<tr id="row687313439911"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p036318401492"><a name="p036318401492"></a><a name="p036318401492"></a><a href="InferShapeContext.md">InferShapeContext</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p144251127203317"><a name="p144251127203317"></a><a name="p144251127203317"></a>用于shape推导的上下文结构。</p>
-<p id="p139211474490"><a name="p139211474490"></a><a name="p139211474490"></a>头文件位于<span id="ph2069034764918"><a name="ph2069034764918"></a><a name="ph2069034764918"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/infer_shape_context.h。</p>
-</td>
-</tr>
-<tr id="row1874810244362"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p1736334018496"><a name="p1736334018496"></a><a name="p1736334018496"></a><a href="InferShapeRangeContext.md">InferShapeRangeContext</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p1773814911334"><a name="p1773814911334"></a><a name="p1773814911334"></a>用于shape range推导的上下文结构。</p>
-<p id="p321712055015"><a name="p321712055015"></a><a name="p321712055015"></a>头文件位于<span id="ph121782035019"><a name="ph121782035019"></a><a name="ph121782035019"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/infer_shape_range_context.h。</p>
-</td>
-</tr>
-<tr id="row238911283125"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p173899283121"><a name="p173899283121"></a><a name="p173899283121"></a><a href="OpContextBuilderBase.md">OpContextBuilderBase</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p1240295105711"><a name="p1240295105711"></a><a name="p1240295105711"></a>OpContextBuilderBase是各ContextBuilder的基类，用于构造子类context中算子信息，包括算子类型、名称、输入输出原型个数、输入输出实例个数、属性等信息。</p>
-<p id="p152882514199"><a name="p152882514199"></a><a name="p152882514199"></a>头文件位于<span id="ph12288125113191"><a name="ph12288125113191"></a><a name="ph12288125113191"></a>CANN toolkit安装路径</span>下的include/base/context_builder/op_context_builder_base.h。</p>
-</td>
-</tr>
-<tr id="row1291015249364"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p1436374084910"><a name="p1436374084910"></a><a name="p1436374084910"></a><a href="OpImplRegisterV2.md">OpImplRegisterV2</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p791052483612"><a name="p791052483612"></a><a name="p791052483612"></a>OpImplRegisterV2类作为注册接口类，提供了一系列算子原型注册接口，供用户注册指定算子类型的Tiling函数、Infershape函数、私有属性等信息。用户调用算子原型注册接口进行注册时会间接使用到该类。</p>
-<p id="p18746105165019"><a name="p18746105165019"></a><a name="p18746105165019"></a>头文件位于<span id="ph1577124115115"><a name="ph1577124115115"></a><a name="ph1577124115115"></a>CANN toolkit安装路径</span>下的include/register/op_impl_registry.h。</p>
-</td>
-</tr>
-<tr id="row526153215126"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p195254175131"><a name="p195254175131"></a><a name="p195254175131"></a><a href="OpInferDataTypeContextBuilder.md">OpInferDataTypeContextBuilder</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p28242032488"><a name="p28242032488"></a><a name="p28242032488"></a>OpInferDataTypeContextBuilder用于构建InferDataTypeContext 。构造出的Context在算子数据类型推导过程中作为入参，<span>用于获取必要的算子输入输出数据。推导完成后，结果会被写入回</span>上下文中。</p>
-<p id="p934017349182"><a name="p934017349182"></a><a name="p934017349182"></a>头文件位于<span id="ph3569134419184"><a name="ph3569134419184"></a><a name="ph3569134419184"></a>CANN toolkit安装路径</span>下的include/base/context_builder/op_infer_datatype_context_builder.h。</p>
-</td>
-</tr>
-<tr id="row7705834151210"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p6948152101316"><a name="p6948152101316"></a><a name="p6948152101316"></a><a href="OpInferShapeContextBuilder.md">OpInferShapeContextBuilder</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p9830105961317"><a name="p9830105961317"></a><a name="p9830105961317"></a>OpInferShapeContextBuilder用于构建InferShapeContext。构造出的Context在算子Shape推导过程中作为入参，<span>用于获取必要的算子输入输出数据。推导完成后，结果会被写入回</span>上下文中。</p>
-<p id="p9682101617205"><a name="p9682101617205"></a><a name="p9682101617205"></a>头文件位于<span id="ph19682111672015"><a name="ph19682111672015"></a><a name="ph19682111672015"></a>CANN toolkit安装路径</span>下的include/base/context_builder/op_infer_shape_context_builder.h。</p>
-</td>
-</tr>
-<tr id="row117031340171213"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p4525317181314"><a name="p4525317181314"></a><a name="p4525317181314"></a><a href="OpInferShapeRangeContextBuilder.md">OpInferShapeRangeContextBuilder</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p1664244510536"><a name="p1664244510536"></a><a name="p1664244510536"></a>OpInferShapeRangeContextBuilder用于构建InferShapeRangeContext。构造出的Context在算子ShapeRange推导过程中作为输入，<span>用于获取必要的算子输入输出数据。推导完成后，结果会被写回</span>上下文中。</p>
-<p id="p04514512207"><a name="p04514512207"></a><a name="p04514512207"></a>头文件位于<span id="ph1545104510209"><a name="ph1545104510209"></a><a name="ph1545104510209"></a>CANN toolkit安装路径</span>下的include/base/context_builder/op_infer_shape_range_context_builder.h。</p>
-</td>
-</tr>
-<tr id="row1467094219121"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p852519179132"><a name="p852519179132"></a><a name="p852519179132"></a><a href="OpKernelContextBuilder.md">OpKernelContextBuilder</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p344493161011"><a name="p344493161011"></a><a name="p344493161011"></a>用于构建一个通用的KernelContext对象，该上下文作为算子Host实现实际执行阶段的输入上下文。</p>
-<p id="p17662181112119"><a name="p17662181112119"></a><a name="p17662181112119"></a>头文件位于<span id="ph7663611102114"><a name="ph7663611102114"></a><a name="ph7663611102114"></a>CANN toolkit安装路径</span>下的include/base/context_builder/op_kernel_run_context_builder.h。</p>
-</td>
-</tr>
-<tr id="row2770184410123"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p0525111715136"><a name="p0525111715136"></a><a name="p0525111715136"></a><a href="OpTilingContextBuilder.md">OpTilingContextBuilder</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p16770744111211"><a name="p16770744111211"></a><a name="p16770744111211"></a>OpTilingContextBuilder用于构建TilingContext。构造出的Context在算子Tiling计算过程中作为入参，<span>用于获取必要的算子输入输出等数据。Tiling计算完成后，结果会被写回</span>上下文中。</p>
-<p id="p181391939182111"><a name="p181391939182111"></a><a name="p181391939182111"></a>头文件位于<span id="ph13139173912212"><a name="ph13139173912212"></a><a name="ph13139173912212"></a>CANN toolkit安装路径</span>下的include/base/context_builder/op_tiling_context_builder.h。</p>
-</td>
-</tr>
-<tr id="row17393114861214"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p58025395135"><a name="p58025395135"></a><a name="p58025395135"></a><a href="OpTilingParseContextBuilder.md">OpTilingParseContextBuilder</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p187071637112213"><a name="p187071637112213"></a><a name="p187071637112213"></a>OpTilingParseContextBuilder用于构建TilingParseContext。构造出的Context在算子TilingParse计算过程中作为输入，<span>用于获取必要的算子输入输出数据。完成Parser计算后，结果会被写回到</span>上下文中。</p>
-<p id="p164534942216"><a name="p164534942216"></a><a name="p164534942216"></a>头文件位于<span id="ph1745164992220"><a name="ph1745164992220"></a><a name="ph1745164992220"></a>CANN toolkit安装路径</span>下的include/base/context_builder/op_tiling_parse_context_builder.h。</p>
-</td>
-</tr>
-<tr id="row81121256363"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p8363154016490"><a name="p8363154016490"></a><a name="p8363154016490"></a><a href="Range.md">Range</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p191131256368"><a name="p191131256368"></a><a name="p191131256368"></a>Range类用于描述一个对象的上下界。</p>
-<p id="p136075135310"><a name="p136075135310"></a><a name="p136075135310"></a>头文件位于<span id="ph14360145155317"><a name="ph14360145155317"></a><a name="ph14360145155317"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/range.h。</p>
-</td>
-</tr>
-<tr id="row152552025153613"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p3364104015490"><a name="p3364104015490"></a><a name="p3364104015490"></a><a href="RuntimeAttrs.md">RuntimeAttrs</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p1325552515362"><a name="p1325552515362"></a><a name="p1325552515362"></a>用于保存算子属性。</p>
-<p id="p41551913195420"><a name="p41551913195420"></a><a name="p41551913195420"></a>头文件位于<span id="ph15214197544"><a name="ph15214197544"></a><a name="ph15214197544"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/runtime_attrs.h。</p>
-</td>
-</tr>
-<tr id="row104017250363"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p2364174018498"><a name="p2364174018498"></a><a name="p2364174018498"></a><a href="Shape.md">Shape</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p389445174112"><a name="p389445174112"></a><a name="p389445174112"></a>Shape结构体用于描述一个tensor的shape。</p>
-<p id="p029110085517"><a name="p029110085517"></a><a name="p029110085517"></a>头文件位于<span id="ph073715055514"><a name="ph073715055514"></a><a name="ph073715055514"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/shape.h。</p>
-</td>
-</tr>
-<tr id="row855712515365"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p5364194054910"><a name="p5364194054910"></a><a name="p5364194054910"></a><a href="StorageFormat.md">StorageFormat</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="zh-cn_topic_0000001339250874_p1775574215191"><a name="zh-cn_topic_0000001339250874_p1775574215191"></a><a name="zh-cn_topic_0000001339250874_p1775574215191"></a>StorageFormat格式包括原始格式、运行时格式、补维规则。</p>
-<p id="p2584101005519"><a name="p2584101005519"></a><a name="p2584101005519"></a>头文件位于<span id="ph058421015511"><a name="ph058421015511"></a><a name="ph058421015511"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/storage_format.h。</p>
-</td>
-</tr>
-<tr id="row19695152573617"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p133641540164918"><a name="p133641540164918"></a><a name="p133641540164918"></a><a href="StorageShape.md">StorageShape</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p17348124922015"><a name="p17348124922015"></a><a name="p17348124922015"></a>该类描述了tensor的shape，包含两个信息：origin_shape以及storage_shape。</p>
-<p id="p1069545111557"><a name="p1069545111557"></a><a name="p1069545111557"></a>头文件位于<span id="ph2069535155516"><a name="ph2069535155516"></a><a name="ph2069535155516"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/storage_shape.h。</p>
-</td>
-</tr>
-<tr id="row15953122533617"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p133643406497"><a name="p133643406497"></a><a name="p133643406497"></a><a href="TensorData.md">TensorData</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p1131469134319"><a name="p1131469134319"></a><a name="p1131469134319"></a>用于存储Tensor数据。</p>
-<p id="p51058278561"><a name="p51058278561"></a><a name="p51058278561"></a>头文件位于<span id="ph1521013318566"><a name="ph1521013318566"></a><a name="ph1521013318566"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/tensor_data.h。</p>
-</td>
-</tr>
-<tr id="row16141192653616"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p9364340204919"><a name="p9364340204919"></a><a name="p9364340204919"></a><a href="TensorPlacementUtils.md">TensorPlacementUtils</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="zh-cn_topic_0000001957261985_zh-cn_topic_0000001390105721_p162284242318"><a name="zh-cn_topic_0000001957261985_zh-cn_topic_0000001390105721_p162284242318"></a><a name="zh-cn_topic_0000001957261985_zh-cn_topic_0000001390105721_p162284242318"></a>提供一组函数，用于判断TensorPlacement的位置。</p>
-<p id="p582793175710"><a name="p582793175710"></a><a name="p582793175710"></a>头文件位于<span id="ph118271031155714"><a name="ph118271031155714"></a><a name="ph118271031155714"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/tensor_data.h。</p>
-</td>
-</tr>
-<tr id="row977016176378"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p13364104010495"><a name="p13364104010495"></a><a name="p13364104010495"></a><a href="Tensor.md">Tensor</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="zh-cn_topic_0000001633985549_zh-cn_topic_0000001339551770_p1350955724012"><a name="zh-cn_topic_0000001633985549_zh-cn_topic_0000001339551770_p1350955724012"></a><a name="zh-cn_topic_0000001633985549_zh-cn_topic_0000001339551770_p1350955724012"></a>Tensor类用来描述一个tensor对象的信息以及行为，包含：shape信息、format信息、datatype信息以及tensor数据内容tensordata。</p>
-<p id="p1191185211579"><a name="p1191185211579"></a><a name="p1191185211579"></a>头文件位于<span id="ph1191115217575"><a name="ph1191115217575"></a><a name="ph1191115217575"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/tensor.h。</p>
-</td>
-</tr>
-<tr id="row17935161713713"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p14364104017490"><a name="p14364104017490"></a><a name="p14364104017490"></a><a href="TilingContext.md">TilingContext</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p8493179459"><a name="p8493179459"></a><a name="p8493179459"></a>用于算子Tiling的上下文结构。</p>
-<p id="p1217510419583"><a name="p1217510419583"></a><a name="p1217510419583"></a>头文件位于<span id="ph417612410581"><a name="ph417612410581"></a><a name="ph417612410581"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/tiling_context.h。</p>
-</td>
-</tr>
-<tr id="row138841816370"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p9364540134916"><a name="p9364540134916"></a><a name="p9364540134916"></a><a href="TilingData-153.md">TilingData</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p158818183378"><a name="p158818183378"></a><a name="p158818183378"></a>用于存储Tiling数据。</p>
-<p id="p135104117583"><a name="p135104117583"></a><a name="p135104117583"></a>头文件位于<span id="ph754411582"><a name="ph754411582"></a><a name="ph754411582"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/tiling_data.h。</p>
-</td>
-</tr>
-<tr id="row193701818163720"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p175781844102711"><a name="p175781844102711"></a><a name="p175781844102711"></a><a href="TypedContinuousVector.md">TypedContinuousVector</a></p>
-</td>
-<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="zh-cn_topic_0000001592697028_zh-cn_topic_0000001390668229_p1952831015116"><a name="zh-cn_topic_0000001592697028_zh-cn_topic_0000001390668229_p1952831015116"></a><a name="zh-cn_topic_0000001592697028_zh-cn_topic_0000001390668229_p1952831015116"></a>本类继承自ContinuousVector类，与ContinuousVector类不同的是MutableData和GetData返回的是指定类型的地址，而不是void *。因此称为Typed。</p>
-<p id="p1848995817227"><a name="p1848995817227"></a><a name="p1848995817227"></a>头文件位于<span id="ph6489858152213"><a name="ph6489858152213"></a><a name="ph6489858152213"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/continuous_vector.h。</p>
-</td>
-</tr>
-<tr id="row61828281024"><td class="cellrowborder" valign="top" width="14.760000000000002%" headers="mcps1.2.4.1.1 "><p id="p818214281124"><a name="p818214281124"></a><a name="p818214281124"></a>枚举</p>
-</td>
-<td class="cellrowborder" valign="top" width="19.49%" headers="mcps1.2.4.1.2 "><p id="p1873693411213"><a name="p1873693411213"></a><a name="p1873693411213"></a><a href="TensorPlacement.md">TensorPlacement</a></p>
-</td>
-<td class="cellrowborder" valign="top" width="65.75%" headers="mcps1.2.4.1.3 "><p id="p673610345217"><a name="p673610345217"></a><a name="p673610345217"></a>表达Tensor存储位置的枚举值。</p>
-<p id="p837174652313"><a name="p837174652313"></a><a name="p837174652313"></a>头文件位于<span id="ph84153466231"><a name="ph84153466231"></a><a name="ph84153466231"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/tensor_data.h。</p>
-</td>
-</tr>
-</tbody>
-</table>
-
 ## ge命名空间<a name="section1740161272017"></a>
 
-**表 2**  ge命名空间
+**表 1**  ge命名空间
 
 <a name="table14480302486"></a>
 <table><thead align="left"><tr id="row24803013488"><th class="cellrowborder" valign="top" width="13.850000000000001%" id="mcps1.2.4.1.1"><p id="p548018014820"><a name="p548018014820"></a><a name="p548018014820"></a>分类</p>
@@ -494,6 +269,231 @@
 </td>
 <td class="cellrowborder" valign="top" width="59.01%" headers="mcps1.2.4.1.3 "><p id="p1459473119483"><a name="p1459473119483"></a><a name="p1459473119483"></a>错误码及描述注册宏。</p>
 <p id="p181514221315"><a name="p181514221315"></a><a name="p181514221315"></a>头文件位于<span id="ph15956113510115"><a name="ph15956113510115"></a><a name="ph15956113510115"></a>CANN toolkit安装路径</span>下的include/register/register_error_codes.h。</p>
+</td>
+</tr>
+</tbody>
+</table>
+
+## gert命名空间<a name="section1498490112017"></a>
+
+**表 2**  gert命名空间
+
+<a name="table107281858237"></a>
+<table><thead align="left"><tr id="row1372812592319"><th class="cellrowborder" valign="top" width="14.760000000000002%" id="mcps1.2.4.1.1"><p id="p28543193914"><a name="p28543193914"></a><a name="p28543193914"></a>分类</p>
+</th>
+<th class="cellrowborder" valign="top" width="19.49%" id="mcps1.2.4.1.2"><p id="p147285552316"><a name="p147285552316"></a><a name="p147285552316"></a>数据结构/接口名称</p>
+</th>
+<th class="cellrowborder" valign="top" width="65.75%" id="mcps1.2.4.1.3"><p id="p17281151239"><a name="p17281151239"></a><a name="p17281151239"></a>功能描述</p>
+</th>
+</tr>
+</thead>
+<tbody><tr id="row1972815510234"><td class="cellrowborder" rowspan="33" valign="top" width="14.760000000000002%" headers="mcps1.2.4.1.1 "><p id="p28542192920"><a name="p28542192920"></a><a name="p28542192920"></a>类和结构体</p>
+</td>
+<td class="cellrowborder" valign="top" width="19.49%" headers="mcps1.2.4.1.2 "><p id="p1363104074916"><a name="p1363104074916"></a><a name="p1363104074916"></a><a href="AnchorInstanceInfo.md">AnchorInstanceInfo</a></p>
+</td>
+<td class="cellrowborder" valign="top" width="65.75%" headers="mcps1.2.4.1.3 "><p id="p14728115122318"><a name="p14728115122318"></a><a name="p14728115122318"></a>用来描述一个算子的IR原型定义的输入信息与实际输入之间的关系。</p>
+<p id="p1414816528417"><a name="p1414816528417"></a><a name="p1414816528417"></a>头文件位于<span id="ph17279164704115"><a name="ph17279164704115"></a><a name="ph17279164704115"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/compute_node_info.h。</p>
+</td>
+</tr>
+<tr id="row77297582318"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p163638404494"><a name="p163638404494"></a><a name="p163638404494"></a><a href="CompileTimeTensorDesc.md">CompileTimeTensorDesc</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="zh-cn_topic_0000001936566892_p16772114119230"><a name="zh-cn_topic_0000001936566892_p16772114119230"></a><a name="zh-cn_topic_0000001936566892_p16772114119230"></a>用于描述编译时的Tensor描述信息，包含dtype信息以及format信息。</p>
+<p id="p162162021194310"><a name="p162162021194310"></a><a name="p162162021194310"></a>头文件位于<span id="ph52162219437"><a name="ph52162219437"></a><a name="ph52162219437"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/compute_node_info.h。</p>
+</td>
+</tr>
+<tr id="row095531611435"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p3363194034916"><a name="p3363194034916"></a><a name="p3363194034916"></a><a href="ComputeNodeInfo.md">ComputeNodeInfo</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="zh-cn_topic_0000001585966930_zh-cn_topic_0000001390567173_p167811575587"><a name="zh-cn_topic_0000001585966930_zh-cn_topic_0000001390567173_p167811575587"></a><a name="zh-cn_topic_0000001585966930_zh-cn_topic_0000001390567173_p167811575587"></a>用于将算子的相关编译信息进行序列化保存，以便可以在图执行阶段能够高效地获取这些信息。</p>
+<p id="p1739943374312"><a name="p1739943374312"></a><a name="p1739943374312"></a>头文件位于<span id="ph93996332438"><a name="ph93996332438"></a><a name="ph93996332438"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/compute_node_info.h。</p>
+</td>
+</tr>
+<tr id="row511511575710"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p1211595719717"><a name="p1211595719717"></a><a name="p1211595719717"></a><a href="ContextHolder.md">ContextHolder</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p62581949594"><a name="p62581949594"></a><a name="p62581949594"></a>Context是算子Host侧实现函数执行时的上下文，由于构造出来的Context存储的都是指针类型，为了方便进行生命周期和所有权管理，提供ContextHolder类进行资源管理。</p>
+<p id="p299611428818"><a name="p299611428818"></a><a name="p299611428818"></a>头文件位于<span id="ph179962423813"><a name="ph179962423813"></a><a name="ph179962423813"></a>CANN toolkit安装路径</span>下的include/base/context_builder/context_holder.h。</p>
+</td>
+</tr>
+<tr id="row1698614591910"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p20363840134916"><a name="p20363840134916"></a><a name="p20363840134916"></a><a href="ContinuousVectorVector.md">ContinuousVectorVector</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p698612594920"><a name="p698612594920"></a><a name="p698612594920"></a>在内存中开辟一块连续的空间，用于存储数据的描述信息以及实际的数据元素，元素类型为ContinuousVector结构。</p>
+<p id="p10301052164315"><a name="p10301052164315"></a><a name="p10301052164315"></a>头文件位于<span id="ph930135224314"><a name="ph930135224314"></a><a name="ph930135224314"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/continuous_vector.h。</p>
+</td>
+</tr>
+<tr id="row204721719184318"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p1236354013492"><a name="p1236354013492"></a><a name="p1236354013492"></a><a href="ContinuousVector.md">ContinuousVector</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="zh-cn_topic_0000001592855212_zh-cn_topic_0000001390366241_p12937161142617"><a name="zh-cn_topic_0000001592855212_zh-cn_topic_0000001390366241_p12937161142617"></a><a name="zh-cn_topic_0000001592855212_zh-cn_topic_0000001390366241_p12937161142617"></a>本类是一个POD类，在内存中开辟一块连续的空间用于存储描述信息以及实际内存数据。</p>
+<p id="p10243172611443"><a name="p10243172611443"></a><a name="p10243172611443"></a>头文件位于<span id="ph924313263449"><a name="ph924313263449"></a><a name="ph924313263449"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/continuous_vector.h。</p>
+</td>
+</tr>
+<tr id="row975519111306"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p14756121133015"><a name="p14756121133015"></a><a name="p14756121133015"></a><a href="CtInferShapeContext.md">CtInferShapeContext</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p18756151123013"><a name="p18756151123013"></a><a name="p18756151123013"></a><span id="ph2142149193117"><a name="ph2142149193117"></a><a name="ph2142149193117"></a>CtInferShapeContext继承自InferShapeContext，用于编译期Shape推导，提供编译期使用的接口。</span></p>
+<p id="p637116304365"><a name="p637116304365"></a><a name="p637116304365"></a>头文件位于<span id="ph1189133053619"><a name="ph1189133053619"></a><a name="ph1189133053619"></a>CANN toolkit安装路径</span>下的include/graph/ct_infer_shape_context.h。</p>
+</td>
+</tr>
+<tr id="row167714413017"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p4774419300"><a name="p4774419300"></a><a name="p4774419300"></a><a href="CtInferShapeRangeContext.md">CtInferShapeRangeContext</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p47724153013"><a name="p47724153013"></a><a name="p47724153013"></a><span id="ph393531633114"><a name="ph393531633114"></a><a name="ph393531633114"></a>CtInferShapeRangeContext继承自InferShapeRangeContext，用于编译期ShapeRange推导，提供编译期使用的接口。</span></p>
+<p id="p698294611360"><a name="p698294611360"></a><a name="p698294611360"></a>头文件位于<span id="ph343494743610"><a name="ph343494743610"></a><a name="ph343494743610"></a>CANN toolkit安装路径</span>下的include/graph/ct_infer_shape_range_context.h。</p>
+</td>
+</tr>
+<tr id="row1263518197432"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p1236314004917"><a name="p1236314004917"></a><a name="p1236314004917"></a><a href="ExpandDimsType.md">ExpandDimsType</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p1163651916435"><a name="p1163651916435"></a><a name="p1163651916435"></a>ExpandDimsType类基于补维后的shape，描述了补维规则。</p>
+<p id="p125632124514"><a name="p125632124514"></a><a name="p125632124514"></a>头文件位于<span id="ph725642118458"><a name="ph725642118458"></a><a name="ph725642118458"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/expand_dims_type.h。</p>
+</td>
+</tr>
+<tr id="row1194312197431"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p1363154014916"><a name="p1363154014916"></a><a name="p1363154014916"></a><a href="ExtendedKernelContext.md">ExtendedKernelContext</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p1358715569312"><a name="p1358715569312"></a><a name="p1358715569312"></a><a href="InferShapeContext.md">InferShapeContext</a>、<a href="TilingContext.md">TilingContext</a>等的基类，ExtendedKernelContext中提供的方法如获取算子type、name、属性等接口均可以在InferShape、Tiling时调用。</p>
+<p id="p2369165864520"><a name="p2369165864520"></a><a name="p2369165864520"></a>头文件位于<span id="ph2894185864514"><a name="ph2894185864514"></a><a name="ph2894185864514"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/extended_kernel_context.h。</p>
+</td>
+</tr>
+<tr id="row11951420124314"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p1736311404495"><a name="p1736311404495"></a><a name="p1736311404495"></a><a href="InferDataTypeContext.md">InferDataTypeContext</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p1998216819332"><a name="p1998216819332"></a><a name="p1998216819332"></a>用于datatype推导的上下文结构。</p>
+<p id="p737151114715"><a name="p737151114715"></a><a name="p737151114715"></a>头文件位于<span id="ph1740153214919"><a name="ph1740153214919"></a><a name="ph1740153214919"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/infer_datatype_context.h。</p>
+</td>
+</tr>
+<tr id="row19906179401"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p69901317144012"><a name="p69901317144012"></a><a name="p69901317144012"></a><a href="InferFormatContext.md">InferFormatContext</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p199041714015"><a name="p199041714015"></a><a name="p199041714015"></a><span id="ph204111647174018"><a name="ph204111647174018"></a><a name="ph204111647174018"></a>InferFormatContext继承自ExtendedKernelContext，是一个用于Format推导的上下文类。</span></p>
+<p id="p575414216416"><a name="p575414216416"></a><a name="p575414216416"></a>头文件位于<span id="ph102011743204118"><a name="ph102011743204118"></a><a name="ph102011743204118"></a>CANN toolkit安装路径</span>下的</p>
+<p id="p163841311104217"><a name="p163841311104217"></a><a name="p163841311104217"></a>include/graph/<span>infer_format_context.h</span>。</p>
+</td>
+</tr>
+<tr id="row687313439911"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p036318401492"><a name="p036318401492"></a><a name="p036318401492"></a><a href="InferShapeContext.md">InferShapeContext</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p144251127203317"><a name="p144251127203317"></a><a name="p144251127203317"></a>用于shape推导的上下文结构。</p>
+<p id="p139211474490"><a name="p139211474490"></a><a name="p139211474490"></a>头文件位于<span id="ph2069034764918"><a name="ph2069034764918"></a><a name="ph2069034764918"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/infer_shape_context.h。</p>
+</td>
+</tr>
+<tr id="row1874810244362"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p1736334018496"><a name="p1736334018496"></a><a name="p1736334018496"></a><a href="InferShapeRangeContext.md">InferShapeRangeContext</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p1773814911334"><a name="p1773814911334"></a><a name="p1773814911334"></a>用于shape range推导的上下文结构。</p>
+<p id="p321712055015"><a name="p321712055015"></a><a name="p321712055015"></a>头文件位于<span id="ph121782035019"><a name="ph121782035019"></a><a name="ph121782035019"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/infer_shape_range_context.h。</p>
+</td>
+</tr>
+<tr id="row238911283125"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p173899283121"><a name="p173899283121"></a><a name="p173899283121"></a><a href="OpContextBuilderBase.md">OpContextBuilderBase</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p1240295105711"><a name="p1240295105711"></a><a name="p1240295105711"></a>OpContextBuilderBase是各ContextBuilder的基类，用于构造子类context中算子信息，包括算子类型、名称、输入输出原型个数、输入输出实例个数、属性等信息。</p>
+<p id="p152882514199"><a name="p152882514199"></a><a name="p152882514199"></a>头文件位于<span id="ph12288125113191"><a name="ph12288125113191"></a><a name="ph12288125113191"></a>CANN toolkit安装路径</span>下的include/base/context_builder/op_context_builder_base.h。</p>
+</td>
+</tr>
+<tr id="row1291015249364"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p1436374084910"><a name="p1436374084910"></a><a name="p1436374084910"></a><a href="OpImplRegisterV2.md">OpImplRegisterV2</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p791052483612"><a name="p791052483612"></a><a name="p791052483612"></a>OpImplRegisterV2类作为注册接口类，提供了一系列算子原型注册接口，供用户注册指定算子类型的Tiling函数、Infershape函数、私有属性等信息。用户调用算子原型注册接口进行注册时会间接使用到该类。</p>
+<p id="p18746105165019"><a name="p18746105165019"></a><a name="p18746105165019"></a>头文件位于<span id="ph1577124115115"><a name="ph1577124115115"></a><a name="ph1577124115115"></a>CANN toolkit安装路径</span>下的include/register/op_impl_registry.h。</p>
+</td>
+</tr>
+<tr id="row526153215126"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p195254175131"><a name="p195254175131"></a><a name="p195254175131"></a><a href="OpInferDataTypeContextBuilder.md">OpInferDataTypeContextBuilder</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p28242032488"><a name="p28242032488"></a><a name="p28242032488"></a>OpInferDataTypeContextBuilder用于构建InferDataTypeContext 。构造出的Context在算子数据类型推导过程中作为入参，<span>用于获取必要的算子输入输出数据。推导完成后，结果会被写入回</span>上下文中。</p>
+<p id="p934017349182"><a name="p934017349182"></a><a name="p934017349182"></a>头文件位于<span id="ph3569134419184"><a name="ph3569134419184"></a><a name="ph3569134419184"></a>CANN toolkit安装路径</span>下的include/base/context_builder/op_infer_datatype_context_builder.h。</p>
+</td>
+</tr>
+<tr id="row7705834151210"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p6948152101316"><a name="p6948152101316"></a><a name="p6948152101316"></a><a href="OpInferShapeContextBuilder.md">OpInferShapeContextBuilder</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p9830105961317"><a name="p9830105961317"></a><a name="p9830105961317"></a>OpInferShapeContextBuilder用于构建InferShapeContext。构造出的Context在算子Shape推导过程中作为入参，<span>用于获取必要的算子输入输出数据。推导完成后，结果会被写入回</span>上下文中。</p>
+<p id="p9682101617205"><a name="p9682101617205"></a><a name="p9682101617205"></a>头文件位于<span id="ph19682111672015"><a name="ph19682111672015"></a><a name="ph19682111672015"></a>CANN toolkit安装路径</span>下的include/base/context_builder/op_infer_shape_context_builder.h。</p>
+</td>
+</tr>
+<tr id="row117031340171213"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p4525317181314"><a name="p4525317181314"></a><a name="p4525317181314"></a><a href="OpInferShapeRangeContextBuilder.md">OpInferShapeRangeContextBuilder</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p1664244510536"><a name="p1664244510536"></a><a name="p1664244510536"></a>OpInferShapeRangeContextBuilder用于构建InferShapeRangeContext。构造出的Context在算子ShapeRange推导过程中作为输入，<span>用于获取必要的算子输入输出数据。推导完成后，结果会被写回</span>上下文中。</p>
+<p id="p04514512207"><a name="p04514512207"></a><a name="p04514512207"></a>头文件位于<span id="ph1545104510209"><a name="ph1545104510209"></a><a name="ph1545104510209"></a>CANN toolkit安装路径</span>下的include/base/context_builder/op_infer_shape_range_context_builder.h。</p>
+</td>
+</tr>
+<tr id="row1467094219121"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p852519179132"><a name="p852519179132"></a><a name="p852519179132"></a><a href="OpKernelContextBuilder.md">OpKernelContextBuilder</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p344493161011"><a name="p344493161011"></a><a name="p344493161011"></a>用于构建一个通用的KernelContext对象，该上下文作为算子Host实现实际执行阶段的输入上下文。</p>
+<p id="p17662181112119"><a name="p17662181112119"></a><a name="p17662181112119"></a>头文件位于<span id="ph7663611102114"><a name="ph7663611102114"></a><a name="ph7663611102114"></a>CANN toolkit安装路径</span>下的include/base/context_builder/op_kernel_run_context_builder.h。</p>
+</td>
+</tr>
+<tr id="row2770184410123"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p0525111715136"><a name="p0525111715136"></a><a name="p0525111715136"></a><a href="OpTilingContextBuilder.md">OpTilingContextBuilder</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p16770744111211"><a name="p16770744111211"></a><a name="p16770744111211"></a>OpTilingContextBuilder用于构建TilingContext。构造出的Context在算子Tiling计算过程中作为入参，<span>用于获取必要的算子输入输出等数据。Tiling计算完成后，结果会被写回</span>上下文中。</p>
+<p id="p181391939182111"><a name="p181391939182111"></a><a name="p181391939182111"></a>头文件位于<span id="ph13139173912212"><a name="ph13139173912212"></a><a name="ph13139173912212"></a>CANN toolkit安装路径</span>下的include/base/context_builder/op_tiling_context_builder.h。</p>
+</td>
+</tr>
+<tr id="row17393114861214"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p58025395135"><a name="p58025395135"></a><a name="p58025395135"></a><a href="OpTilingParseContextBuilder.md">OpTilingParseContextBuilder</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p187071637112213"><a name="p187071637112213"></a><a name="p187071637112213"></a>OpTilingParseContextBuilder用于构建TilingParseContext。构造出的Context在算子TilingParse计算过程中作为输入，<span>用于获取必要的算子输入输出数据。完成Parser计算后，结果会被写回到</span>上下文中。</p>
+<p id="p164534942216"><a name="p164534942216"></a><a name="p164534942216"></a>头文件位于<span id="ph1745164992220"><a name="ph1745164992220"></a><a name="ph1745164992220"></a>CANN toolkit安装路径</span>下的include/base/context_builder/op_tiling_parse_context_builder.h。</p>
+</td>
+</tr>
+<tr id="row81121256363"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p8363154016490"><a name="p8363154016490"></a><a name="p8363154016490"></a><a href="Range.md">Range</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p191131256368"><a name="p191131256368"></a><a name="p191131256368"></a>Range类用于描述一个对象的上下界。</p>
+<p id="p136075135310"><a name="p136075135310"></a><a name="p136075135310"></a>头文件位于<span id="ph14360145155317"><a name="ph14360145155317"></a><a name="ph14360145155317"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/range.h。</p>
+</td>
+</tr>
+<tr id="row152552025153613"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p3364104015490"><a name="p3364104015490"></a><a name="p3364104015490"></a><a href="RuntimeAttrs.md">RuntimeAttrs</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p1325552515362"><a name="p1325552515362"></a><a name="p1325552515362"></a>用于保存算子属性。</p>
+<p id="p41551913195420"><a name="p41551913195420"></a><a name="p41551913195420"></a>头文件位于<span id="ph15214197544"><a name="ph15214197544"></a><a name="ph15214197544"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/runtime_attrs.h。</p>
+</td>
+</tr>
+<tr id="row104017250363"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p2364174018498"><a name="p2364174018498"></a><a name="p2364174018498"></a><a href="Shape.md">Shape</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p389445174112"><a name="p389445174112"></a><a name="p389445174112"></a>Shape结构体用于描述一个tensor的shape。</p>
+<p id="p029110085517"><a name="p029110085517"></a><a name="p029110085517"></a>头文件位于<span id="ph073715055514"><a name="ph073715055514"></a><a name="ph073715055514"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/shape.h。</p>
+</td>
+</tr>
+<tr id="row855712515365"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p5364194054910"><a name="p5364194054910"></a><a name="p5364194054910"></a><a href="StorageFormat.md">StorageFormat</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="zh-cn_topic_0000001339250874_p1775574215191"><a name="zh-cn_topic_0000001339250874_p1775574215191"></a><a name="zh-cn_topic_0000001339250874_p1775574215191"></a>StorageFormat格式包括原始格式、运行时格式、补维规则。</p>
+<p id="p2584101005519"><a name="p2584101005519"></a><a name="p2584101005519"></a>头文件位于<span id="ph058421015511"><a name="ph058421015511"></a><a name="ph058421015511"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/storage_format.h。</p>
+</td>
+</tr>
+<tr id="row19695152573617"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p133641540164918"><a name="p133641540164918"></a><a name="p133641540164918"></a><a href="StorageShape.md">StorageShape</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p17348124922015"><a name="p17348124922015"></a><a name="p17348124922015"></a>该类描述了tensor的shape，包含两个信息：origin_shape以及storage_shape。</p>
+<p id="p1069545111557"><a name="p1069545111557"></a><a name="p1069545111557"></a>头文件位于<span id="ph2069535155516"><a name="ph2069535155516"></a><a name="ph2069535155516"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/storage_shape.h。</p>
+</td>
+</tr>
+<tr id="row15953122533617"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p133643406497"><a name="p133643406497"></a><a name="p133643406497"></a><a href="TensorData.md">TensorData</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p1131469134319"><a name="p1131469134319"></a><a name="p1131469134319"></a>用于存储Tensor数据。</p>
+<p id="p51058278561"><a name="p51058278561"></a><a name="p51058278561"></a>头文件位于<span id="ph1521013318566"><a name="ph1521013318566"></a><a name="ph1521013318566"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/tensor_data.h。</p>
+</td>
+</tr>
+<tr id="row16141192653616"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p9364340204919"><a name="p9364340204919"></a><a name="p9364340204919"></a><a href="TensorPlacementUtils.md">TensorPlacementUtils</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="zh-cn_topic_0000001957261985_zh-cn_topic_0000001390105721_p162284242318"><a name="zh-cn_topic_0000001957261985_zh-cn_topic_0000001390105721_p162284242318"></a><a name="zh-cn_topic_0000001957261985_zh-cn_topic_0000001390105721_p162284242318"></a>提供一组函数，用于判断TensorPlacement的位置。</p>
+<p id="p582793175710"><a name="p582793175710"></a><a name="p582793175710"></a>头文件位于<span id="ph118271031155714"><a name="ph118271031155714"></a><a name="ph118271031155714"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/tensor_data.h。</p>
+</td>
+</tr>
+<tr id="row977016176378"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p13364104010495"><a name="p13364104010495"></a><a name="p13364104010495"></a><a href="Tensor.md">Tensor</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="zh-cn_topic_0000001633985549_zh-cn_topic_0000001339551770_p1350955724012"><a name="zh-cn_topic_0000001633985549_zh-cn_topic_0000001339551770_p1350955724012"></a><a name="zh-cn_topic_0000001633985549_zh-cn_topic_0000001339551770_p1350955724012"></a>Tensor类用来描述一个tensor对象的信息以及行为，包含：shape信息、format信息、datatype信息以及tensor数据内容tensordata。</p>
+<p id="p1191185211579"><a name="p1191185211579"></a><a name="p1191185211579"></a>头文件位于<span id="ph1191115217575"><a name="ph1191115217575"></a><a name="ph1191115217575"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/tensor.h。</p>
+</td>
+</tr>
+<tr id="row17935161713713"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p14364104017490"><a name="p14364104017490"></a><a name="p14364104017490"></a><a href="TilingContext.md">TilingContext</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p8493179459"><a name="p8493179459"></a><a name="p8493179459"></a>用于算子Tiling的上下文结构。</p>
+<p id="p1217510419583"><a name="p1217510419583"></a><a name="p1217510419583"></a>头文件位于<span id="ph417612410581"><a name="ph417612410581"></a><a name="ph417612410581"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/tiling_context.h。</p>
+</td>
+</tr>
+<tr id="row138841816370"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p9364540134916"><a name="p9364540134916"></a><a name="p9364540134916"></a><a href="TilingData-153.md">TilingData</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="p158818183378"><a name="p158818183378"></a><a name="p158818183378"></a>用于存储Tiling数据。</p>
+<p id="p135104117583"><a name="p135104117583"></a><a name="p135104117583"></a>头文件位于<span id="ph754411582"><a name="ph754411582"></a><a name="ph754411582"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/tiling_data.h。</p>
+</td>
+</tr>
+<tr id="row193701818163720"><td class="cellrowborder" valign="top" headers="mcps1.2.4.1.1 "><p id="p175781844102711"><a name="p175781844102711"></a><a name="p175781844102711"></a><a href="TypedContinuousVector.md">TypedContinuousVector</a></p>
+</td>
+<td class="cellrowborder" valign="top" headers="mcps1.2.4.1.2 "><p id="zh-cn_topic_0000001592697028_zh-cn_topic_0000001390668229_p1952831015116"><a name="zh-cn_topic_0000001592697028_zh-cn_topic_0000001390668229_p1952831015116"></a><a name="zh-cn_topic_0000001592697028_zh-cn_topic_0000001390668229_p1952831015116"></a>本类继承自ContinuousVector类，与ContinuousVector类不同的是MutableData和GetData返回的是指定类型的地址，而不是void *。因此称为Typed。</p>
+<p id="p1848995817227"><a name="p1848995817227"></a><a name="p1848995817227"></a>头文件位于<span id="ph6489858152213"><a name="ph6489858152213"></a><a name="ph6489858152213"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/continuous_vector.h。</p>
+</td>
+</tr>
+<tr id="row61828281024"><td class="cellrowborder" valign="top" width="14.760000000000002%" headers="mcps1.2.4.1.1 "><p id="p818214281124"><a name="p818214281124"></a><a name="p818214281124"></a>枚举</p>
+</td>
+<td class="cellrowborder" valign="top" width="19.49%" headers="mcps1.2.4.1.2 "><p id="p1873693411213"><a name="p1873693411213"></a><a name="p1873693411213"></a><a href="TensorPlacement.md">TensorPlacement</a></p>
+</td>
+<td class="cellrowborder" valign="top" width="65.75%" headers="mcps1.2.4.1.3 "><p id="p673610345217"><a name="p673610345217"></a><a name="p673610345217"></a>表达Tensor存储位置的枚举值。</p>
+<p id="p837174652313"><a name="p837174652313"></a><a name="p837174652313"></a>头文件位于<span id="ph84153466231"><a name="ph84153466231"></a><a name="ph84153466231"></a>CANN toolkit安装路径</span>下的include/exe_graph/runtime/tensor_data.h。</p>
 </td>
 </tr>
 </tbody>
