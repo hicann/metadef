@@ -49,6 +49,16 @@ class OpTilingContextBuilder : public OpContextBuilderBase<OpTilingContextBuilde
     * @return TilingContextBuilder对象用于链式调用
     */
   OpTilingContextBuilder &Deterministic(int32_t deterministic);
+
+  /**
+    * @brief 设置Op的deterministic级别
+    * @note 设置的所有输入数据类型，所有权归调用者管理，调用者需要保证输入指针生命周期指针长于Build产生的ContextHolder对象
+    * @param deterministic_level 确定性计算级别，当前只支持三种级别，0：未开启任何配置。1：仅开启确定性计算配置。2: 开启确定性计算和
+    *        强一致性计算配置。
+    * @return TilingContextBuilder对象用于链式调用
+    */
+  OpTilingContextBuilder &DeterministicLevel(int32_t deterministic_level);
+
   /**
     * @brief 设置Op的tilingData指针, 用于构造TilingContext的中的TilingData字段
     * @note 设置的所有输入数据类型，所有权归调用者管理，调用者需要保证输入指针生命周期指针长于Build产生的ContextHolder对象
@@ -98,4 +108,24 @@ class OpTilingContextBuilder : public OpContextBuilderBase<OpTilingContextBuilde
   ContextHolder<TilingContext> Build();
 };
 }  // namespace gert
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/**
+  * @brief 设置Op的deterministic级别的纯C接口
+  * @note 为了保障GE和metadef包间前后兼容性，单独为Deterministic级别设置的弱符号接口
+  * @param builder OpTilingContextBuilder指针
+  * @param deterministic_level 确定性计算级别，当前只支持三种级别，0：未开启任何配置。1：仅开启确定性计算配置。2: 开启确定性计算和
+  *        强一致性计算配置。
+  * @return 设置结果
+  */
+uint32_t __attribute__((weak)) gert_TilingContextBuilder_SetDeterministicLevel(void *builder,
+                                                                               int32_t deterministic_level);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif  // METADEF_INC_EXTERNAL_BASE_CONTEXT_BUILDER_TILING_CONTEXT_BUILDER_H_

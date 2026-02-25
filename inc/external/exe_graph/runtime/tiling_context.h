@@ -418,6 +418,25 @@ class TilingContext : public ExtendedKernelContext {
   }
 
   /**
+   * 获取 确定性计算级别变量
+   * @return int32 变量
+   */
+  int32_t GetDeterministicLevel() const {
+    const auto compute_node_info = GetComputeNodeInfo();
+    if (compute_node_info == nullptr) {
+      return std::numeric_limits<int32_t>::max();
+    }
+    const size_t index = compute_node_info->GetInputsNum() + compute_node_info->GetOutputsNum();
+    // 此处按照tiling内存排布，将确定性计算级别的字段添加在
+    // inputshape outputshape compileinfo platform tiling_func deterministic之后
+    const auto av = GetInput(index + 4U);
+    if (av == nullptr) {
+      return std::numeric_limits<int32_t>::max();
+    }
+    return av->GetValue<int32_t>();
+  }
+
+  /**
    * 设置 local memory size, 默认值为0
    * @param local_memory_size
    * @return 成功返回ge::GRAPH_SUCCESS
