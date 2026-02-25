@@ -174,8 +174,8 @@ install(FILES ${CMAKE_SOURCE_DIR}/inc/external/ge_common/ge_api_types.h
               ${CMAKE_SOURCE_DIR}/inc/external/ge_common/ge_error_codes.h
     DESTINATION metadef/include/external/ge_common
 )
-install(FILES ${CMAKE_SOURCE_DIR}/inc/external/base/registry/op_impl_space_registry_v2.h
-              ${CMAKE_SOURCE_DIR}/inc/external/base/registry/opp_package_utils.h
+install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/base/registry/op_impl_space_registry_v2.h
+              ${CMAKE_SOURCE_DIR}/pkg_inc/base/registry/opp_package_utils.h
     DESTINATION metadef/pkg_inc/base/registry
 )
 install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/base/err_mgr.h
@@ -238,9 +238,6 @@ set(EXTERNAL_REGISTRY_FILES
     ${CMAKE_SOURCE_DIR}/inc/external/register/register_types.h
     ${CMAKE_SOURCE_DIR}/inc/external/register/register_fmk_types.h
     ${CMAKE_SOURCE_DIR}/inc/external/register/register_error_codes.h
-    ${CMAKE_SOURCE_DIR}/inc/external/register/op_ct_impl_kernel_registry.h
-    ${CMAKE_SOURCE_DIR}/inc/external/register/op_ct_impl_registry_api.h
-    ${CMAKE_SOURCE_DIR}/inc/external/register/op_ct_impl_registry.h
     ${CMAKE_SOURCE_DIR}/inc/external/register/op_bin_info.h
     ${CMAKE_SOURCE_DIR}/inc/external/register/tilingdata_base.h
     ${CMAKE_SOURCE_DIR}/inc/external/register/device_op_impl_registry.h
