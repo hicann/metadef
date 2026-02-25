@@ -18,6 +18,8 @@ const RuntimeAttrs *GetAttrs() const
 
 所有IR原型定义的属性值，为const类型的对象，属性值按照IR原型定义的顺序依次保存。
 
+返回值为 `RuntimeAttrs` 类型指针，可通过 `RuntimeAttrs` 提供的方法获取具体的属性值，如 `GetInt()`、`GetStr()`、`GetTensor()` 等。详见 [RuntimeAttrs](RuntimeAttrs.md) 接口说明。
+
 ## 约束说明<a name="zh-cn_topic_0000001636247417_zh-cn_topic_0000001390806845_section19165124931511"></a>
 
 无。

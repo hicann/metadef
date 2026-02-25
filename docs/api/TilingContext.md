@@ -18,9 +18,9 @@
 
 -   **[GetRequiredInputShape](GetRequiredInputShape-151.md)**  
 
--   **[GetOutputShape](GetOutputShape-152.md)**  
+-   **[GetOutputShape](GetOutputShape-152.md)**
 
--   **[SetTilingKey](SetTilingKey.md)**  
+-   **[SetTilingKey](SetTilingKey.md)** 
 
 -   **[GetTilingKey](GetTilingKey.md)**  
 
@@ -88,7 +88,9 @@
 
 -   **[RequiredInputIsView](RequiredInputIsView.md)**  
 
--   **[GetRequiredInputStride](GetRequiredInputStride.md)**  
+-   **[GetRequiredInputStride](GetRequiredInputStride.md)**
 
--   **[GetRequiredInputOffset](GetRequiredInputOffset.md)**  
+-   **[GetRequiredInputOffset](GetRequiredInputOffset.md)**
 
+
+TilingContext 继承自 ExtendedKernelContext，除上述方法外，还可使用父类提供的方法获取算子属性（如 GetAttrs）、节点信息等。详见 [ExtendedKernelContext](ExtendedKernelContext.md) 接口说明。

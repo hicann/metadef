@@ -20,7 +20,7 @@
 
 -   **[GetComputeNodeOutputNum](GetComputeNodeOutputNum.md)**  
 
--   **[GetAttrs](GetAttrs-17.md)**  
+-   **[GetAttrs](GetAttrs.md)**  获取算子属性值，通过[RuntimeAttrs](RuntimeAttrs.md)进一步获取具体属性 
 
 -   **[GetNodeType](GetNodeType-18.md)**  
 
