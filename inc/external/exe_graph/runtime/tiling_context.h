@@ -159,15 +159,18 @@ class TilingContext : public ExtendedKernelContext {
    * outputs[8]: aicpu block-dim
    */
   enum TilingOutputIndex : uint32_t {
-    kOutputTilingKey,
-    kOutputBlockDim,
-    kOutputAtomicCleanFlag,
-    kOutputTilingData,
-    kOutputWorkspace,
-    kOutputTilingCond,
-    kOutputScheduleMode,
-    kOutputLocalMemorySize,
-    kOutputAicpuBlockDim,
+    kOutputTilingKey = 0,
+    kOutputBlockDim = 1, // 接口即将废弃；优先选择 kOutputSimdNumBlocks
+    kOutputSimdNumBlocks = 1,
+    kOutputAtomicCleanFlag = 2,
+    kOutputTilingData = 3,
+    kOutputWorkspace = 4,
+    kOutputTilingCond = 5,
+    kOutputScheduleMode = 6,
+    kOutputLocalMemorySize = 7, // 接口即将废弃；优先选择 kOutputDynUBufSize
+    kOutputDynUBufSize = 7,
+    kOutputAicpuBlockDim = 8, // 接口即将废弃；优先选择 kOutputAicpuNumBlocks
+    kOutputAicpuNumBlocks = 8,
     // add new output definitions here
     kOutputNum
   };
@@ -235,21 +238,50 @@ class TilingContext : public ExtendedKernelContext {
    * 设置block dim
    * @param block_dim block dim
    * @return 成功时返回ge::GRAPH_SUCCESS
+   * @deprecated SetBlockDim 接口即将废弃，改用 SetSimdNumBlocks 接口；当前同时保留两个接口，后续整改完成后，删除废弃接口
    */
   ge::graphStatus SetBlockDim(const uint32_t block_dim) {
-    const auto p = GetOutputPointer<uint32_t>(kOutputBlockDim);
+    const auto p = GetOutputPointer<uint32_t>(kOutputSimdNumBlocks);
     if (p == nullptr) {
       return ge::GRAPH_FAILED;
     }
     *p = block_dim;
     return ge::GRAPH_SUCCESS;
   }
+
+  /**
+   * 设置 simd number of blocks
+   * @param num_blocks number of blocks
+   * @return 成功时返回ge::GRAPH_SUCCESS
+   */
+  ge::graphStatus SetSimdNumBlocks(const uint32_t num_blocks) {
+    const auto p = GetOutputPointer<uint32_t>(kOutputSimdNumBlocks);
+    if (p == nullptr) {
+      return ge::GRAPH_FAILED;
+    }
+    *p = num_blocks;
+    return ge::GRAPH_SUCCESS;
+  }
+
   /**
    * 获取block dim
    * @return block dim
+   * @deprecated GetBlockDim 接口即将废弃，改用 GetSimdNumBlocks 接口；当前同时保留两个接口，后续整改完成后，删除废弃接口
    */
   uint32_t GetBlockDim() const {
-    const auto p = GetOutputPointer<uint32_t>(kOutputBlockDim);
+    const auto p = GetOutputPointer<uint32_t>(kOutputSimdNumBlocks);
+    if (p == nullptr) {
+      return std::numeric_limits<uint32_t>::max();
+    }
+    return *p;
+  }
+
+  /**
+   * 获取 simd number of blocks
+   * @return number of blocks
+   */
+  uint32_t GetSimdNumBlocks() const {
+    const auto p = GetOutputPointer<uint32_t>(kOutputSimdNumBlocks);
     if (p == nullptr) {
       return std::numeric_limits<uint32_t>::max();
     }
@@ -260,9 +292,10 @@ class TilingContext : public ExtendedKernelContext {
    * 设置aicpu block dim(融合算子使用)
    * @param block_dim block dim
    * @return 成功时返回ge::GRAPH_SUCCESS
+   * @deprecated SetAicpuBlockDim 接口即将废弃，改用 SetAicpuNumBlocks 接口；当前同时保留两个接口，后续整改完成后，删除废弃接口
    */
   ge::graphStatus SetAicpuBlockDim(uint32_t block_dim) {
-    const auto p = GetOutputPointer<uint32_t>(kOutputAicpuBlockDim);
+    const auto p = GetOutputPointer<uint32_t>(kOutputAicpuNumBlocks);
     if (p == nullptr) {
       return ge::GRAPH_FAILED;
     }
@@ -271,11 +304,37 @@ class TilingContext : public ExtendedKernelContext {
   }
 
   /**
+   * 设置 aicpu number of blocks(融合算子使用)
+   * @param num_blocks number of blocks
+   * @return 成功时返回ge::GRAPH_SUCCESS
+   */
+  ge::graphStatus SetAicpuNumBlocks(uint32_t num_blocks) {
+    const auto p = GetOutputPointer<uint32_t>(kOutputAicpuNumBlocks);
+    if (p == nullptr) {
+      return ge::GRAPH_FAILED;
+    }
+    *p = num_blocks;
+    return ge::GRAPH_SUCCESS;
+  }
+
+  /**
    * 获取aicpu block dim(融合算子使用)
    * @return block dim
    */
   uint32_t GetAicpuBlockDim() const {
-    const auto p = GetOutputPointer<uint32_t>(kOutputAicpuBlockDim);
+    const auto p = GetOutputPointer<uint32_t>(kOutputAicpuNumBlocks);
+    if (p == nullptr) {
+      return std::numeric_limits<uint32_t>::max();
+    }
+    return *p;
+  }
+
+  /**
+   * 获取 aicpu number of blocks(融合算子使用)
+   * @return number of blocks
+   */
+  uint32_t GetAicpuNumBlocks() const {
+    const auto p = GetOutputPointer<uint32_t>(kOutputAicpuNumBlocks);
     if (p == nullptr) {
       return std::numeric_limits<uint32_t>::max();
     }
@@ -443,7 +502,7 @@ class TilingContext : public ExtendedKernelContext {
    * @deprecated SetLocalMemorySize 接口即将废弃，改用 SetDynUBufSize 接口；当前同时保留两个接口，后续整改完成后，删除废弃接口
    */
   ge::graphStatus SetLocalMemorySize(const uint32_t local_memory_size) {
-    const auto p = GetOutputPointer<uint32_t>(kOutputLocalMemorySize);
+    const auto p = GetOutputPointer<uint32_t>(kOutputDynUBufSize);
     if (p == nullptr) {
       return ge::GRAPH_FAILED;
     }
@@ -456,7 +515,7 @@ class TilingContext : public ExtendedKernelContext {
    * @return 成功返回ge::GRAPH_SUCCESS
    */
   ge::graphStatus SetDynUBufSize(const uint32_t dyn_ubuf_size) {
-    const auto p = GetOutputPointer<uint32_t>(kOutputLocalMemorySize);
+    const auto p = GetOutputPointer<uint32_t>(kOutputDynUBufSize);
     if (p == nullptr) {
       return ge::GRAPH_FAILED;
     }
@@ -469,7 +528,7 @@ class TilingContext : public ExtendedKernelContext {
    * @deprecated GetLocalMemorySize 接口即将废弃，改用 GetDynUBufSize 接口；当前同时保留两个接口，后续整改完成后，删除废弃接口
    */
   uint32_t GetLocalMemorySize() const {
-    const auto p = GetOutputPointer<uint32_t>(kOutputLocalMemorySize);
+    const auto p = GetOutputPointer<uint32_t>(kOutputDynUBufSize);
     if (p == nullptr) {
       return std::numeric_limits<uint32_t>::max();
     }
@@ -480,7 +539,7 @@ class TilingContext : public ExtendedKernelContext {
    * @return dynamic unified buffer size， 失败返回 std::numeric_limits<uint32_t>::max()
    */
   uint32_t GetDynUBufSize() const {
-    const auto p = GetOutputPointer<uint32_t>(kOutputLocalMemorySize);
+    const auto p = GetOutputPointer<uint32_t>(kOutputDynUBufSize);
     if (p == nullptr) {
       return std::numeric_limits<uint32_t>::max();
     }
