@@ -130,8 +130,8 @@ install(TARGETS rt2_registry_static
         )
 ##############################################################
 set(STUB_HEADER_LIST
-    ${METADEF_DIR}/pkg_inc/base/registry/op_impl_space_registry_v2.h
-    ${METADEF_DIR}/pkg_inc/base/registry/opp_package_utils.h
+    ${METADEF_DIR}/inc/external/base/registry/op_impl_space_registry_v2.h
+    ${METADEF_DIR}/inc/external/base/registry/opp_package_utils.h
     ${METADEF_DIR}/inc/external/register/tilingdata_base.h
 )
 
