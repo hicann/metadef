@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -64,6 +64,7 @@ TEST_F(UtestTypeUtils, DataTypeToSerialString) {
   ASSERT_EQ(TypeUtils::DataTypeToSerialString(DT_FLOAT6_E2M3), "DT_FLOAT6_E2M3");
   ASSERT_EQ(TypeUtils::DataTypeToSerialString(DT_FLOAT4_E2M1), "DT_FLOAT4_E2M1");
   ASSERT_EQ(TypeUtils::DataTypeToSerialString(DT_FLOAT4_E1M2), "DT_FLOAT4_E1M2");
+  ASSERT_EQ(TypeUtils::DataTypeToSerialString(DT_HIFLOAT4), "DT_HIFLOAT4");
   ASSERT_EQ(TypeUtils::DataTypeToSerialString(DT_MAX), "UNDEFINED");
 }
 
@@ -78,6 +79,7 @@ TEST_F(UtestTypeUtils, SerialStringToDataType) {
   ASSERT_EQ(TypeUtils::SerialStringToDataType("DT_FLOAT6_E2M3"), DT_FLOAT6_E2M3);
   ASSERT_EQ(TypeUtils::SerialStringToDataType("DT_FLOAT4_E2M1"), DT_FLOAT4_E2M1);
   ASSERT_EQ(TypeUtils::SerialStringToDataType("DT_FLOAT4_E1M2"), DT_FLOAT4_E1M2);
+  ASSERT_EQ(TypeUtils::SerialStringToDataType("DT_HIFLOAT4"), DT_HIFLOAT4);
   ASSERT_EQ(TypeUtils::SerialStringToDataType("DT_MAX"), DT_UNDEFINED);
 }
 
