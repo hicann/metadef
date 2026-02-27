@@ -28,7 +28,7 @@ int main() {
   tiling_context.GetDynamicInputTensor(0, 0);
   tiling_context.GetDynamicInputDesc(0, 0);
 
-  tiling_context.GetBlockDim();
+  tiling_context.GetSimdNumBlocks();
   tiling_context.NeedAtomic();
   tiling_context.GetScheduleMode();
   tiling_context.GetTilingCond();
@@ -55,7 +55,7 @@ int main() {
   tiling_context.GetNodeName();
   tiling_context.GetNodeType();
 
-  tiling_context.SetBlockDim(0);
+  tiling_context.SetSimdNumBlocks(0);
   tiling_context.SetNeedAtomic(true);
   tiling_context.SetScheduleMode(0);
   tiling_context.SetTilingCond(0);

@@ -74,8 +74,9 @@ function(install_public_packages)
     set(CONF_FILES
         ${CMAKE_SOURCE_DIR}/scripts/package/common/cfg/path.cfg
     )
-    install(FILES ${CMAKE_SOURCE_DIR}/version.info
+    install(FILES ${CMAKE_BINARY_DIR}/version.metadef.info
         DESTINATION share/info/metadef
+        RENAME version.info
     )
     install(FILES ${CONF_FILES}
         DESTINATION metadef/conf

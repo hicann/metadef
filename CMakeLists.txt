@@ -255,6 +255,12 @@ if (ENABLE_OPEN_SRC AND "${PRODUCT_SIDE}" STREQUAL "host" AND ENABLE_BUILD_DEVIC
     )
 endif()
 
+include(version.cmake)
+if(ENABLE_OPEN_SRC)
+    check_pkg_build_deps("metadef")
+endif()
+add_version_info_targets()
+
 if (ENABLE_OPEN_SRC AND "${PRODUCT_SIDE}" STREQUAL "host")
     set(ARCH_LINX_PATH "${CMAKE_SYSTEM_PROCESSOR}-linux")
 
@@ -273,25 +279,6 @@ if (ENABLE_OPEN_SRC AND "${PRODUCT_SIDE}" STREQUAL "host")
     else()
         set(RUNTIME_PKG_PATH "${ASCEND_INSTALL_PATH}/runtime")
     endif()
- 
-    set(version_info "${RUNTIME_PKG_PATH}/version.info")
-    set(install_script_dir "${CMAKE_CURRENT_BINARY_DIR}/install_scripts/")
- 
-    set(ASCEND_SCRIPT_DIR "${RUNTIME_PKG_PATH}/script")
-    add_custom_target(generate_install_script_metadef ALL
-        COMMAND rm -rf ${install_script_dir}
-        COMMAND cp -rf ${ASCEND_SCRIPT_DIR} ${install_script_dir}
-        COMMAND chmod -R u+w ${install_script_dir}
-        COMMAND echo "base_package=runtime\;compiler" > ${install_script_dir}/version.info
-        COMMAND echo "backup_dir=metadef" >> ${install_script_dir}/version.info
-        COMMAND grep -iE "'^(version|version_dir)='" ${version_info} >> ${install_script_dir}/version.info
-    )
-
-    install(DIRECTORY ${install_script_dir}
-        DESTINATION . OPTIONAL
-        FILE_PERMISSIONS OWNER_EXECUTE OWNER_READ GROUP_READ
-        COMPONENT . EXCLUDE_FROM_ALL
-    )
     
     if(NOT ENABLE_METADEF_UT)
         include(cmake/package.cmake)
