@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -120,6 +120,7 @@ enum DataType {
   DT_FLOAT6_E2M3 = ::C_DT_FLOAT6_E2M3,
   DT_FLOAT4_E2M1 = ::C_DT_FLOAT4_E2M1,
   DT_FLOAT4_E1M2 = ::C_DT_FLOAT4_E1M2,
+  DT_HIFLOAT4 = ::C_DT_HIFLOAT4,
   DT_MAX = ::C_DT_MAX,
 };
 
@@ -173,6 +174,7 @@ inline int GetSizeByDataType(DataType data_type) {
       kDataTypeSizeBitOffset + 6,  // DT_FLOAT6_E2M3,           float6_e2m3 type, 6bit
       kDataTypeSizeBitOffset + 4,  // DT_FLOAT4_E2M1,           float4_e2m1 type, 4bit
       kDataTypeSizeBitOffset + 4,  // DT_FLOAT4_E1M2,           float4_e1m2 type, 4bit
+      kDataTypeSizeBitOffset + 4,  // DT_HIFLOAT4,              hifloat4 type, 4bit
                                    // DT_MAX
   };
   if ((data_type < 0) || (data_type >= DT_MAX)) {

@@ -46,6 +46,7 @@ typedef enum {
   C_DT_FLOAT6_E2M3 = 39,     // float6_e2m3 type    当前版本不支持该类型。
   C_DT_FLOAT4_E2M1 = 40,     // float4_e2m1 type    当前版本不支持该类型。
   C_DT_FLOAT4_E1M2 = 41,     // float4_e1m2 type    当前版本不支持该类型。
+  C_DT_HIFLOAT4 = 42,        // hifloat4 type     当前版本不支持该类型。
   C_DT_MAX                   // Mark the boundaries of data types
 } C_DataType;
 ```

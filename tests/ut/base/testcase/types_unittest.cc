@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -149,7 +149,8 @@ TEST_F(UtestTypes, GetSizeByDataType) {
   EXPECT_EQ(GetSizeByDataType(DT_FLOAT6_E2M3), kDataTypeSizeBitOffset + 6);
   EXPECT_EQ(GetSizeByDataType(DT_FLOAT4_E2M1), kDataTypeSizeBitOffset + 4);
   EXPECT_EQ(GetSizeByDataType(DT_FLOAT4_E1M2), kDataTypeSizeBitOffset + 4);
-  EXPECT_EQ(DT_MAX, 42);
+  EXPECT_EQ(GetSizeByDataType(DT_HIFLOAT4), kDataTypeSizeBitOffset + 4);
+  EXPECT_EQ(DT_MAX, 43);
 }
 
 TEST_F(UtestTypes, GetSizeInBytes) {
@@ -174,6 +175,7 @@ TEST_F(UtestTypes, GetSizeInBytes) {
   EXPECT_EQ(GetSizeInBytes(10, DT_FLOAT6_E2M3), 8);  // 10 * 6 / 8 = 7.5
   EXPECT_EQ(GetSizeInBytes(10, DT_FLOAT4_E2M1), 5);  // 10 * 4 / 8 = 5
   EXPECT_EQ(GetSizeInBytes(10, DT_FLOAT4_E1M2), 5);  // 10 * 4 / 8 = 5
+  EXPECT_EQ(GetSizeInBytes(10, DT_HIFLOAT4), 5);  // 10 * 4 / 8 = 5
 }
 
 TEST_F(UtestTypes, GetC0ValueFromFormat) {
