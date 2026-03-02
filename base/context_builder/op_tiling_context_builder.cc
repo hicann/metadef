@@ -42,6 +42,8 @@ class OpTilingContextBuilderImpl : public ContextBuilderImpl {
     output_values_[TilingContext::kOutputTilingData] =
         std::make_pair(tiling_info_.tiling_data_.first, tiling_info_.tiling_data_.second);
     output_values_[TilingContext::kOutputWorkspace] = std::make_pair(tiling_info_.workspace_, nullptr);
+    output_values_[TilingContext::kOutputSimtBlockDim] = std::make_pair(tiling_info_.simt_block_dim, nullptr);
+    output_values_[TilingContext::kOutputSimtGridDim] = std::make_pair(tiling_info_.simt_grid_dim, nullptr);
     GE_ASSERT_SUCCESS(BuildCtx(*holder), "BuildCtx failed.");
     return holder;
   }
@@ -111,6 +113,18 @@ OpTilingContextBuilder &OpTilingContextBuilder::Workspace(const gert::Continuous
   return *this;
 }
 
+OpTilingContextBuilder &OpTilingContextBuilder::SimtBlockDim(const gert::Dim3 *block_dim) {
+  GE_CHECK_NOTNULL_EXEC(impl_, return *this);
+  impl_->SetSimtBlockDim(block_dim);
+  return *this;
+}
+
+OpTilingContextBuilder &OpTilingContextBuilder::SimtGridDim(const gert::Dim3 *grid_dim) {
+  GE_CHECK_NOTNULL_EXEC(impl_, return *this);
+  impl_->SetSimtGridDim(grid_dim);
+  return *this;
+}
+
 OpTilingContextBuilder &OpTilingContextBuilder::InputTensors(const std::vector<gert::Tensor *> &inputs) {
   GE_CHECK_NOTNULL_EXEC(impl_, return *this);
   std::vector<void *> tmp_inputs;
@@ -165,6 +179,29 @@ uint32_t gert_TilingContextBuilder_SetDeterministicLevel(void *builder, int32_t 
 
   auto *tiling_builder = static_cast<gert::OpTilingContextBuilder *>(builder);
   (void)tiling_builder->DeterministicLevel(deterministic_level);
+
+  return ge::GRAPH_SUCCESS;
+}
+
+uint32_t gert_TilingContextBuilder_SetSimtBlockDim(void *builder, const gert::Dim3 *block_dim) {
+  if (builder == nullptr) {
+    GELOGE(ge::PARAM_INVALID, "Builder is null");
+    return ge::GRAPH_PARAM_INVALID;
+  }
+
+  auto *tiling_builder = static_cast<gert::OpTilingContextBuilder *>(builder);
+  (void) tiling_builder->SimtBlockDim(block_dim);
+
+  return ge::GRAPH_SUCCESS;
+}
+
+uint32_t gert_TilingContextBuilder_SetSimtGridDim(void *builder, const gert::Dim3 *grid_dim) {
+  if (builder == nullptr) {
+    GELOGE(ge::PARAM_INVALID, "Builder is null");
+    return ge::GRAPH_PARAM_INVALID;
+  }
+  auto *tiling_builder = static_cast<gert::OpTilingContextBuilder *>(builder);
+  (void) tiling_builder->SimtGridDim(grid_dim);
 
   return ge::GRAPH_SUCCESS;
 }

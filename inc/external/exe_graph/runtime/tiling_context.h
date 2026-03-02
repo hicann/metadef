@@ -22,6 +22,13 @@ class PlatFormInfos;
 }  // namespace fe
 
 namespace gert {
+struct Dim3 {
+  uint32_t x, y, z;
+
+  Dim3(const uint32_t dim3_x, const uint32_t dim3_y = 1, const uint32_t dim3_z = 1) : x(dim3_x), y(dim3_y), z(dim3_z) {
+  }
+};
+
 /**
  * tiling kernel的context
  */
@@ -171,6 +178,8 @@ class TilingContext : public ExtendedKernelContext {
     kOutputDynUBufSize = 7,
     kOutputAicpuBlockDim = 8, // 接口即将废弃；优先选择 kOutputAicpuNumBlocks
     kOutputAicpuNumBlocks = 8,
+    kOutputSimtBlockDim = 9,
+    kOutputSimtGridDim = 10,
     // add new output definitions here
     kOutputNum
   };
@@ -241,12 +250,7 @@ class TilingContext : public ExtendedKernelContext {
    * @deprecated SetBlockDim 接口即将废弃，改用 SetSimdNumBlocks 接口；当前同时保留两个接口，后续整改完成后，删除废弃接口
    */
   ge::graphStatus SetBlockDim(const uint32_t block_dim) {
-    const auto p = GetOutputPointer<uint32_t>(kOutputSimdNumBlocks);
-    if (p == nullptr) {
-      return ge::GRAPH_FAILED;
-    }
-    *p = block_dim;
-    return ge::GRAPH_SUCCESS;
+    return SetSimdNumBlocks(block_dim);
   }
 
   /**
@@ -269,11 +273,7 @@ class TilingContext : public ExtendedKernelContext {
    * @deprecated GetBlockDim 接口即将废弃，改用 GetSimdNumBlocks 接口；当前同时保留两个接口，后续整改完成后，删除废弃接口
    */
   uint32_t GetBlockDim() const {
-    const auto p = GetOutputPointer<uint32_t>(kOutputSimdNumBlocks);
-    if (p == nullptr) {
-      return std::numeric_limits<uint32_t>::max();
-    }
-    return *p;
+    return GetSimdNumBlocks();
   }
 
   /**
@@ -295,12 +295,7 @@ class TilingContext : public ExtendedKernelContext {
    * @deprecated SetAicpuBlockDim 接口即将废弃，改用 SetAicpuNumBlocks 接口；当前同时保留两个接口，后续整改完成后，删除废弃接口
    */
   ge::graphStatus SetAicpuBlockDim(uint32_t block_dim) {
-    const auto p = GetOutputPointer<uint32_t>(kOutputAicpuNumBlocks);
-    if (p == nullptr) {
-      return ge::GRAPH_FAILED;
-    }
-    *p = block_dim;
-    return ge::GRAPH_SUCCESS;
+    return SetAicpuNumBlocks(block_dim);
   }
 
   /**
@@ -320,13 +315,10 @@ class TilingContext : public ExtendedKernelContext {
   /**
    * 获取aicpu block dim(融合算子使用)
    * @return block dim
+   * @deprecated GetAicpuBlockDim 接口即将废弃，改用 GetAicpuNumBlocks 接口；当前同时保留两个接口，后续整改完成后，删除废弃接口
    */
   uint32_t GetAicpuBlockDim() const {
-    const auto p = GetOutputPointer<uint32_t>(kOutputAicpuNumBlocks);
-    if (p == nullptr) {
-      return std::numeric_limits<uint32_t>::max();
-    }
-    return *p;
+    return GetAicpuNumBlocks();
   }
 
   /**
@@ -502,12 +494,7 @@ class TilingContext : public ExtendedKernelContext {
    * @deprecated SetLocalMemorySize 接口即将废弃，改用 SetDynUBufSize 接口；当前同时保留两个接口，后续整改完成后，删除废弃接口
    */
   ge::graphStatus SetLocalMemorySize(const uint32_t local_memory_size) {
-    const auto p = GetOutputPointer<uint32_t>(kOutputDynUBufSize);
-    if (p == nullptr) {
-      return ge::GRAPH_FAILED;
-    }
-    *p = local_memory_size;
-    return ge::GRAPH_SUCCESS;
+    return SetDynUBufSize(local_memory_size);
   }
   /**
    * 设置 dynamic unified buffer size, 默认值为0
@@ -528,11 +515,7 @@ class TilingContext : public ExtendedKernelContext {
    * @deprecated GetLocalMemorySize 接口即将废弃，改用 GetDynUBufSize 接口；当前同时保留两个接口，后续整改完成后，删除废弃接口
    */
   uint32_t GetLocalMemorySize() const {
-    const auto p = GetOutputPointer<uint32_t>(kOutputDynUBufSize);
-    if (p == nullptr) {
-      return std::numeric_limits<uint32_t>::max();
-    }
-    return *p;
+    return GetDynUBufSize();
   }
   /**
    * 获取 dynamic unified buffer size，默认值为0
@@ -545,6 +528,51 @@ class TilingContext : public ExtendedKernelContext {
     }
     return *p;
   }
+
+  /**
+   * 设置 SIMT Grid 维度
+   * @param grid_dim
+   * @return 成功返回ge::GRAPH_SUCCESS
+   */
+  ge::graphStatus SetSimtGridDim(const Dim3 &grid_dim) {
+    const auto p = GetOutputPointer<Dim3>(kOutputSimtGridDim);
+    if (p == nullptr) {
+      return ge::GRAPH_FAILED;
+    }
+    *p = grid_dim;
+    return ge::GRAPH_SUCCESS;
+  }
+
+  /**
+   * 获取 SIMT Grid 维度
+   * @return simt grid dim
+   */
+  const Dim3 *GetSimtGridDim() const {
+    return GetOutputPointer<Dim3>(kOutputSimtGridDim);
+  }
+
+  /**
+   * 设置 SIMT Block 维度
+   * @param block_dim
+   * @return 成功返回ge::GRAPH_SUCCESS
+   */
+  ge::graphStatus SetSimtBlockDim(const Dim3 &block_dim) {
+    const auto p = GetOutputPointer<Dim3>(kOutputSimtBlockDim);
+    if (p == nullptr) {
+      return ge::GRAPH_FAILED;
+    }
+    *p = block_dim;
+    return ge::GRAPH_SUCCESS;
+  }
+
+  /**
+   * 获取 SIMT Block 维度
+   * @return simt block dim
+   */
+  const Dim3 *GetSimtBlockDim() const {
+    return GetOutputPointer<Dim3>(kOutputSimtBlockDim);
+  }
+
   /**
    * 判断输入tensor是否携带非连续描述信息
    * @index 输入index

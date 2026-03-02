@@ -84,6 +84,23 @@ class OpTilingContextBuilder : public OpContextBuilderBase<OpTilingContextBuilde
     * @return OpTilingContextBuilder对象用于链式调用
     */
   OpTilingContextBuilder &Workspace(const gert::ContinuousVector *workspace);
+
+  /**
+    * @brief 设置Op的SIMT Block Dim
+    * @note 设置的所有输入数据类型，所有权归调用者管理，调用者需要保证输入指针生命周期指针长于Build产生的ContextHolder对象
+    * @param block_dim Block Dim 指针
+    * @return OpTilingContextBuilder对象用于链式调用
+    */
+  OpTilingContextBuilder &SimtBlockDim(const gert::Dim3 *block_dim);
+
+  /**
+    * @brief 设置Op的SIMT Grid Dim
+    * @note 设置的所有输入数据类型，所有权归调用者管理，调用者需要保证输入指针生命周期指针长于Build产生的ContextHolder对象
+    * @param grid_dim Grid Dim 指针
+    * @return OpTilingContextBuilder对象用于链式调用
+    */
+  OpTilingContextBuilder &SimtGridDim(const gert::Dim3 *grid_dim);
+
   /**
     * @brief 设置输入Tensor指针，用于在tiling计算时，可通过该builder类构造的上下文TilingContext获取相应的输入tensor指针
     * @note  对于数据依赖的算子，对应数据依赖的输入Tensor中的TensorData是需要有Host地址的正确值；
@@ -123,6 +140,24 @@ extern "C" {
   */
 uint32_t __attribute__((weak)) gert_TilingContextBuilder_SetDeterministicLevel(void *builder,
                                                                                int32_t deterministic_level);
+
+/**
+* @brief 设置Op的 SimtBlockDim 纯C接口
+* @note 为了保障GE和metadef包间前后兼容性，单独为 SimtBlockDim 设置的弱符号接口
+* @param builder OpTilingContextBuilder指针
+* @param block_dim Block Dim 指针
+* @return 设置结果
+*/
+uint32_t __attribute__((weak)) gert_TilingContextBuilder_SetSimtBlockDim(void *builder, const gert::Dim3 *block_dim);
+
+/**
+* @brief 设置Op的 SimtGridDim 纯C接口
+* @note 为了保障GE和metadef包间前后兼容性，单独为 SimtGridDim 设置的弱符号接口
+* @param builder OpTilingContextBuilder指针
+* @param grid_dim Grid Dim 指针
+* @return 设置结果
+*/
+uint32_t __attribute__((weak)) gert_TilingContextBuilder_SetSimtGridDim(void *builder, const gert::Dim3 *grid_dim);
 
 #ifdef __cplusplus
 }

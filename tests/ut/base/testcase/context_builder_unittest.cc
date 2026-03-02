@@ -394,6 +394,9 @@ TEST_F(UtestContextBuilder, CreateTilingContextOK) {
   uint8_t tmp_platform_info[] = {1, 2, 3, 4, 5, 6, 7};
   int32_t deterministic = 1;
 
+  gert::Dim3 block_dim(2, 3);
+  gert::Dim3 grid_dim(4, 5);
+
   OpTilingContextBuilder ctx_builder;
   auto holder = ctx_builder.OpName("tmp")
                     .OpType("DIY")
@@ -412,6 +415,8 @@ TEST_F(UtestContextBuilder, CreateTilingContextOK) {
                     .CompileInfo(tmp_compile_info)
                     .Deterministic(deterministic)
                     .PlatformInfo(tmp_platform_info)
+                    .SimtBlockDim(&block_dim)
+                    .SimtGridDim(&grid_dim)
                     .InputTensors({&x_tensor, &resultIn_tensor, &gammax_tensor, &beta_tensor})
                     .OutputTensors({&result_tensor})
                     .Build();
@@ -434,6 +439,18 @@ TEST_F(UtestContextBuilder, CreateTilingContextOK) {
   EXPECT_EQ(static_cast<void *>(ctx->GetPlatformInfo()), static_cast<void *>(tmp_platform_info));
   EXPECT_EQ(ctx->GetDeterministic(), deterministic);
   EXPECT_EQ(static_cast<void *>(ctx->GetRawTilingData()), static_cast<void *>(tmp_tiling_data.get()));
+  EXPECT_EQ(ctx->GetSimtBlockDim(), &block_dim);
+  EXPECT_EQ(ctx->GetSimtGridDim(), &grid_dim);
+  ctx->SetSimtBlockDim(grid_dim);
+  ctx->SetSimtGridDim(block_dim);
+  EXPECT_EQ(ctx->GetSimtBlockDim(), &block_dim);
+  EXPECT_EQ(ctx->GetSimtGridDim(), &grid_dim);
+  EXPECT_EQ(ctx->GetSimtBlockDim()->x, grid_dim.x);
+  EXPECT_EQ(ctx->GetSimtBlockDim()->y, grid_dim.y);
+  EXPECT_EQ(ctx->GetSimtBlockDim()->z, grid_dim.z);
+  EXPECT_EQ(ctx->GetSimtGridDim()->x, block_dim.x);
+  EXPECT_EQ(ctx->GetSimtGridDim()->y, block_dim.y);
+  EXPECT_EQ(ctx->GetSimtGridDim()->z, block_dim.z);
   EXPECT_EQ(*(ctx->GetAttrs()->GetInt(0)), 1);
   EXPECT_EQ(*(ctx->GetAttrs()->GetBool(1)), true);
   EXPECT_FLOAT_EQ(*(ctx->GetAttrs()->GetFloat(2)), 0.3);
@@ -905,7 +922,7 @@ TEST_F(UtestContextBuilder, CreateTilingParseContextExpandDimsTypeFailed) {
   EXPECT_EQ(ctx->GetInputDesc(1)->GetExpandDimsType(), expand_dims_type12);
 }
 
-TEST_F(UtestContextBuilder, SetDeterministicLevelTest) {
+TEST_F(UtestContextBuilder, OpTilingContextBuilderCStyleApiTest) {
   auto workspace_size_holer = gert::ContinuousVector::Create<size_t>(4096);
   auto ws_ptr = reinterpret_cast<gert::ContinuousVector *>(workspace_size_holer.get());
 
@@ -954,6 +971,7 @@ TEST_F(UtestContextBuilder, SetDeterministicLevelTest) {
         .OutputTensors({&result_tensor});
   };
 
+  // Test gert_TilingContextBuilder_SetDeterministicLevel
   OpTilingContextBuilder ctx_builder1;
   BuildContext(ctx_builder1);
   ctx_builder1.DeterministicLevel(1);
@@ -976,4 +994,30 @@ TEST_F(UtestContextBuilder, SetDeterministicLevelTest) {
   ctx_builder3.DeterministicLevel(4);
   auto holder3 = ctx_builder3.Build();
   EXPECT_EQ(holder3.GetContext()->GetDeterministicLevel(), 0);
+
+  // Test gert_TilingContextBuilder_SetSimtBlockDim and gert_TilingContextBuilder_SetSimtGridDim
+  gert::Dim3 block_dim(2, 3);
+  gert::Dim3 grid_dim(4, 5);
+  OpTilingContextBuilder ctx_builder4;
+  BuildContext(ctx_builder4);
+  ctx_builder4.DeterministicLevel(1);
+  ret = gert_TilingContextBuilder_SetSimtBlockDim(nullptr, &block_dim);
+  EXPECT_EQ(ret, GRAPH_PARAM_INVALID);
+  ret = gert_TilingContextBuilder_SetSimtGridDim(nullptr, &grid_dim);
+  EXPECT_EQ(ret, GRAPH_PARAM_INVALID);
+  ret = gert_TilingContextBuilder_SetSimtBlockDim(reinterpret_cast<void *>(&ctx_builder4), &block_dim);
+  EXPECT_EQ(ret, 0);
+  ret = gert_TilingContextBuilder_SetSimtGridDim(reinterpret_cast<void *>(&ctx_builder4), &grid_dim);
+  EXPECT_EQ(ret, 0);
+  auto holder4 = ctx_builder4.Build();
+  auto ctx4 = holder4.GetContext();
+  EXPECT_EQ(ctx4->GetDeterministicLevel(), 1);
+  EXPECT_EQ(ctx4->GetSimtBlockDim(), &block_dim);
+  EXPECT_EQ(ctx4->GetSimtGridDim(), &grid_dim);
+  EXPECT_EQ(ctx4->GetSimtBlockDim()->x, block_dim.x);
+  EXPECT_EQ(ctx4->GetSimtBlockDim()->y, block_dim.y);
+  EXPECT_EQ(ctx4->GetSimtBlockDim()->z, block_dim.z);
+  EXPECT_EQ(ctx4->GetSimtGridDim()->x, grid_dim.x);
+  EXPECT_EQ(ctx4->GetSimtGridDim()->y, grid_dim.y);
+  EXPECT_EQ(ctx4->GetSimtGridDim()->z, grid_dim.z);
 }
