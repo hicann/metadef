@@ -29,6 +29,8 @@ struct TilingInfo {
   int32_t deterministic_ = 0;
   int32_t deterministic_level_ = 0;
   const gert::ContinuousVector *workspace_ = nullptr;
+  const gert::Dim3 *simt_block_dim = nullptr;
+  const gert::Dim3 *simt_grid_dim = nullptr;
 };
 struct TilingParseInfo {
   const ge::char_t *compiled_json_ = nullptr;
@@ -109,6 +111,14 @@ class ContextBuilderImpl {
 
   void SetWorkspace(const gert::ContinuousVector *workspace) {
     tiling_info_.workspace_ = workspace;
+  }
+
+  void SetSimtBlockDim(const gert::Dim3 *block_dim) {
+    tiling_info_.simt_block_dim = block_dim;
+  }
+
+  void SetSimtGridDim(const gert::Dim3 *grid_dim) {
+    tiling_info_.simt_grid_dim = grid_dim;
   }
 
   void Inputs(std::vector<void *> inputs) {

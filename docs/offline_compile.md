@@ -59,7 +59,7 @@ bash scripts/download_third_party_source.sh
 │  └── output                        # 三方软件默认目录
 │     └── third_party
 │        ├── abseil-cpp
-│        ├── benchmark
+│        ├── benchmark-1.8.3
 │        └── ...
 ```
 

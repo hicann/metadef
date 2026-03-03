@@ -202,6 +202,7 @@ main() {
       cd "${BASEPATH}"
       rm -rf ${BASEPATH}/cov
       mk_dir ${BASEPATH}/cov
+      source ${BASEPATH}/scripts/support_multiple_versions_of_lcov.sh
       lcov -c \
         -d ${BUILD_RELATIVE_PATH}/base/CMakeFiles/metadef.dir \
         -d ${BUILD_RELATIVE_PATH}/base/CMakeFiles/opp_registry.dir \
@@ -209,12 +210,11 @@ main() {
         -d ${BUILD_RELATIVE_PATH}/error_manager/CMakeFiles/error_manager.dir \
         -d ${BUILD_RELATIVE_PATH}/base/CMakeFiles/exe_graph.dir \
         -d ${BUILD_RELATIVE_PATH}/base/CMakeFiles/rt2_registry_objects.dir \
-        -o cov/tmp.info
+        -o cov/tmp.info $(add_lcov_ops_by_major_version 2 "--ignore-errors empty")
       lcov -r cov/tmp.info '*/output/*' \
                            '/usr/*' \
                            -o cov/coverage.info
-      cd "${BASEPATH}/cov"
-      genhtml coverage.info
+      genhtml cov/coverage.info -o cov/html
     fi
   fi
 

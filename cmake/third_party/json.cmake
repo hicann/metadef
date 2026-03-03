@@ -20,11 +20,7 @@ unset(JSON_INCLUDE CACHE)
 if(NOT ASCEND_3RD_LIB_PATH)
   set(ASCEND_3RD_LIB_PATH ${PROJECT_SOURCE_DIR}/third_party)
 endif()
-if(NOT CANN_3RD_PKG_PATH)
-  set(CANN_3RD_PKG_PATH ${PROJECT_SOURCE_DIR}/third_party/pkg)
-endif()
 
-set(JSON_DOWNLOAD_PATH ${CANN_3RD_PKG_PATH})
 set(JSON_INSTALL_PATH ${ASCEND_3RD_LIB_PATH}/json)
 
 find_path(JSON_INCLUDE
@@ -55,7 +51,7 @@ else()
         message(STATUS "[json] ${REQ_URL} not found, need download.")
         set(REQ_URL "https://gitcode.com/cann-src-third-party/json/releases/download/v3.11.3/json-3.11.3.tar.gz")
         list(APPEND JSON_EXTRA_ARGS
-             DOWNLOAD_DIR ${JSON_DOWNLOAD_PATH}
+             DOWNLOAD_DIR ${JSON_INSTALL_PATH}
         )
     endif()
     include(ExternalProject)
@@ -63,13 +59,13 @@ else()
             URL ${REQ_URL}
             TLS_VERIFY OFF
             ${JSON_EXTRA_ARGS}
-            SOURCE_DIR ${JSON_INSTALL_PATH}
-            CONFIGURE_COMMAND ""
-            BUILD_COMMAND ""
-            INSTALL_COMMAND
-                ${CMAKE_COMMAND} -E make_directory ${JSON_INSTALL_PATH} &&
-                ${CMAKE_COMMAND} -E chdir ${JSON_INSTALL_PATH} ${CMAKE_COMMAND} -E tar xf "${JSON_DOWNLOAD_PATH}/json-3.11.3.tar.gz"
-            UPDATE_COMMAND ""
+            CONFIGURE_COMMAND ${CMAKE_COMMAND}
+                            -DJSON_MultipleHeaders=ON
+                            -DJSON_BuildTests=OFF
+                            -DBUILD_SHARED_LIBS=OFF
+                            -DCMAKE_INSTALL_PREFIX=${JSON_INSTALL_PATH}
+                            <SOURCE_DIR>
+            EXCLUDE_FROM_ALL TRUE
     )
     set(JSON_INCLUDE_DIR ${JSON_INSTALL_PATH}/include)
     add_library(json INTERFACE)
