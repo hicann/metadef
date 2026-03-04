@@ -3,10 +3,13 @@
 /output/
 /prebuilts/
 /build_gcov/
+/build_out/
 /cov/
 *.ir
 *.out
 /.dev_env
+__pycache__/
+*.ccopp/
 
 # Dynamic libraries
 # *.so
