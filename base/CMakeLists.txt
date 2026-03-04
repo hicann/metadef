@@ -12,9 +12,7 @@ include(${METADEF_DIR}/cmake/build_type.cmake)
 
 # 注意： op_impl_functions.cc 不能被包含在opp_registry.so里，该文件只能被librt2_registry.a包含
 file(GLOB_RECURSE OPP_REGISTRY_SRC_LIST
-        registry/op_ct_impl_registry.cc
         registry/op_impl_register_v2_impl.cc
-        registry/op_impl_registry.cc
         registry/op_impl_registry_holder_manager.cc
         registry/op_impl_space_registry.cc
         registry/op_impl_space_registry_v2.cc
