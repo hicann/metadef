@@ -28,9 +28,14 @@ size_t GetRegisteredOpNum(void) {
 
 int32_t GetOpImplFunctions(TypesToImpl *impl, size_t impl_num) {
   auto types_to_impl = gert::OpImplRegistry::GetInstance().GetAllTypesToImpl();
-  GELOGI("LocalRegistry path[%s] all impl size : %zu, impl_num[%zu]",
+  GELOGI("LocalRegistry path[%s] all impl size : %zu",
          metadef::GetSoRealPathByAddr(&gert::OpImplRegistry::GetInstance()).c_str(),
-         types_to_impl.size(), impl_num);
+         types_to_impl.size());
+  if (impl_num != types_to_impl.size()) {
+    GELOGE(ge::FAILED, "Get types_to_impl_ failed, impl_num[%zu] and map size[%zu] not match",
+           impl_num, types_to_impl.size());
+    return static_cast<int32_t>(ge::GRAPH_FAILED);
+  }
   size_t cnt = 0U;
   for (auto &it : types_to_impl) {
     impl[cnt].op_type = it.first.GetString();
@@ -42,9 +47,14 @@ int32_t GetOpImplFunctions(TypesToImpl *impl, size_t impl_num) {
 
 int32_t GetOpImplFunctionsV2(TypesToImplV2 *impl, size_t impl_num) {
   const auto types_to_impl = gert::OpImplRegistry::GetInstance().GetAllTypesToImpl();
-  GELOGI("LocalRegistry path[%s] all impl size : %zu, impl_num[%zu]",
+  GELOGI("LocalRegistry path[%s] all impl size : %zu",
          metadef::GetSoRealPathByAddr(&gert::OpImplRegistry::GetInstance()).c_str(),
-         types_to_impl.size(), impl_num);
+         types_to_impl.size());
+  if (impl_num != types_to_impl.size()) {
+    GELOGE(ge::FAILED, "Get types_to_impl_ failed, impl_num[%zu] and map size[%zu] not match",
+           impl_num, types_to_impl.size());
+    return static_cast<int32_t>(ge::GRAPH_FAILED);
+  }
   size_t cnt = 0U;
   for (auto &it : types_to_impl) {
     impl[cnt].op_type = it.first.GetString();

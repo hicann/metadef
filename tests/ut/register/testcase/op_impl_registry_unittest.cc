@@ -766,7 +766,7 @@ TEST_F(OpImplRegistryUT, GetOpImplFunctionsERR) {
   auto impl_num = GetRegisteredOpNum();
   auto impl_funcs = std::unique_ptr<TypesToImpl[]>(new(std::nothrow) TypesToImpl[impl_num]);
   auto ret = GetOpImplFunctions(reinterpret_cast<TypesToImpl *>(impl_funcs.get()), 10);
-  EXPECT_EQ(ret, ge::GRAPH_SUCCESS);
+  EXPECT_EQ(ret, ge::GRAPH_FAILED);
 }
 
 TEST_F(OpImplRegistryUT, Retpeat_register_InputsDataDependency_success) {

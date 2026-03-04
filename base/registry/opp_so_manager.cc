@@ -162,14 +162,6 @@ void OppSoManager::LoadOppPackage() const {
       LoadSoAndInitDefault(so_list_opp.GetSoPaths(), version, package_name);
     }
   }
-
-  // 静态库场景，算子注册到主程序中
-  auto space_registry_v2 =
-      gert::DefaultOpImplSpaceRegistryV2::GetInstance().GetSpaceRegistry();
-  gert::OppSoDesc opp_main_desc({metadef::GetModelPath().c_str()}, ge::AscendString("main_exe"));
-  if ((space_registry_v2 != nullptr) && (space_registry_v2->AddSoToRegistry(opp_main_desc) != ge::SUCCESS)) {
-    GELOGW("Add main_exe Registry failed");
-  }
 }
 
 void OppSoManager::LoadOpsProtoSo(gert::OppImplVersionTag version, std::vector<std::pair<std::string, gert::OppSoDesc>> &package_to_opp_so_desc, bool is_split) const {

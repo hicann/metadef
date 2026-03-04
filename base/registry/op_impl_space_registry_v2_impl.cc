@@ -46,60 +46,24 @@ void CloseHandle(void *const handle) {
 }  // namespace
 
 ge::graphStatus OpImplSpaceRegistryImpl::AddMainExeToRegistry(const OppSoDesc &so_desc) {
-   GELOGI("Start to add main_exe op_impl to registry.");
-   auto types_to_impl_from_holder = std::map<OpImplRegisterV2::OpType, OpImplKernelRegistry::OpImplFunctionsV2>();
-
-   // Get the executable path of the current process
-   char exe_path[PATH_MAX];
-   ssize_t process_name_len = readlink("/proc/self/exe", exe_path, sizeof(exe_path) - 1);
-   if (process_name_len != -1) {
-     exe_path[process_name_len] = '\0';
-     GELOGI("Current process executable path: [%s]", exe_path);
-   } else {
-     GELOGW("Failed to get current process executable path.");
-     return ge::GRAPH_FAILED;
-   }
-
-   const auto create_func = [exe_path, so_desc]() -> OpImplRegistryHolderPtr {
-     // 获取主程序的句柄
-     void *const handle  = mmDlopen(nullptr, RTLD_LAZY);
-     GELOGI("=====main_exe handle is: %p", handle);
-     if (handle == nullptr) {
-       GELOGW("Failed to get main process handle!");
-       return nullptr;
-     }
-     const std::function<void()> callback = [&handle]() { CloseHandle(handle); };
-     GE_DISMISSABLE_GUARD(close_handle, callback);
-     auto om_registry_holder = ge::MakeShared<gert::OpImplRegistryHolder>();
-     if (om_registry_holder == nullptr) {
-       return nullptr;
-     }
-     if (om_registry_holder->GetOpImplFunctionsByHandle(handle, exe_path) != ge::GRAPH_SUCCESS) {
-       GELOGW("Failed to get funcs from so!");
-       return nullptr;
-     }
-
-     om_registry_holder->SetHandle(handle);
-     GE_DISMISS_GUARD(close_handle);
-     return om_registry_holder;
-   };
-
-   uint32_t len = 0U;
-   const auto so_data = metadef::GetBinDataFromFile(std::string(exe_path), len);
-   GE_ASSERT_NOTNULL(so_data);
-   const std::string str_so_data(so_data.get(), static_cast<size_t>(process_name_len));
-   const auto registry_holder = OpImplRegistryHolderManager::GetInstance().GetOrCreateOpImplRegistryHolder(
-       std::string(exe_path), str_so_data, create_func);
-   if (registry_holder == nullptr) {
-     GELOGW("Nothing in exec, exec_path:%s, package name %s", exe_path, so_desc.GetPackageName().GetString());
-     return ge::GRAPH_FAILED;
-   }
-
-   GE_ASSERT_GRAPH_SUCCESS(AddRegistry(registry_holder));
-   GELOGI("Save so symbol and handle in main_exe successfully!");
-
-   return ge::GRAPH_SUCCESS;
- }
+  auto types_to_impl_from_holder = std::map<OpImplRegisterV2::OpType, OpImplKernelRegistry::OpImplFunctionsV2>();
+  for (const auto &so_path_ascend_string : so_desc.GetSoPaths()) {
+    auto so_path = so_path_ascend_string.GetString();
+    GELOGI("Start to add main_exe op_impl to registry.");
+    const auto om_registry_holder = ge::MakeShared<gert::OpImplRegistryHolder>();
+    GE_CHECK_NOTNULL(om_registry_holder);
+    if (om_registry_holder->GetOpImplFunctionsByHandle(RTLD_DEFAULT, so_path) != ge::GRAPH_SUCCESS) {
+      GELOGW("Failed to get funcs from so!");
+      return ge::GRAPH_FAILED;
+    }
+    for (const auto &type : om_registry_holder->GetTypesToImpl()) {
+      types_to_impl_from_holder[type.first] = type.second;
+    }
+    GE_ASSERT_GRAPH_SUCCESS(AddRegistry(om_registry_holder));
+    GELOGI("Save so symbol and handle in main_exe successfully!");
+  }
+  return ge::GRAPH_SUCCESS;
+}
 
 ge::graphStatus OpImplSpaceRegistryImpl::AddSoToRegistry(const OppSoDesc &so_desc) {
   if (so_desc.GetPackageName() == "main_exe") {
@@ -187,7 +151,7 @@ const OpImplKernelRegistry::OpImplFunctionsV2 *OpImplSpaceRegistryImpl::GetOpImp
   const auto iter = merged_types_to_impl_.find(op_type.c_str());
   if (iter == merged_types_to_impl_.cend()) {
     GELOGW("Get %s's op_impl from local registry.", op_type.c_str());
-    return nullptr;
+    return gert::OpImplRegistry::GetInstance().GetOpImpl(op_type.c_str());
   }
   return &iter->second;
 }
