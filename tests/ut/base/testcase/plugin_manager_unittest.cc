@@ -403,7 +403,7 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetOpsProtoPath_04) {
   opp_path = opp_path.substr(0, opp_path.rfind("/") + 1) + "opp_path/";
   std::string custom_opp_path = opp_path + "custom_opp_path";
   mmSetEnv(kEnvName, opp_path.c_str(), 1);
-  PluginManager::SetCustomOpLibPath(custom_opp_path);
+  SetMetadefPluginCustomOpLibPathForC(custom_opp_path.c_str());
 
   std::string path_builtin = opp_path + "built-in";
   std::string path_vendors = opp_path + "vendors";
