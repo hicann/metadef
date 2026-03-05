@@ -81,7 +81,7 @@ bool CheckBasePathWritePermission(std::string &basePath, const char *resolvedPat
 
 bool GetBasePathByEnv(std::string& basePath, const char *ascendWorkPathEnv, const std::string& currentTimestamp) {
   GELOGD("Running GetBasePathByEnv.");
-  std::string resolvedPath = metadef::RealPath(ascendWorkPathEnv);
+  std::string resolvedPath = ge::RealPath(ascendWorkPathEnv);
   if (resolvedPath.empty()) {
     GELOGE(ge::FAILED, "Invalid ASCEND_WORK_PATH: %s", ascendWorkPathEnv);
     return false;
@@ -309,7 +309,7 @@ uint32_t OpBinInfo::Generate(ge::AscendString *opLibPath, const std::string &tar
     return 1;
   }
 
-  std::string resolvedPath = metadef::RealPath(targetPath.c_str());
+  std::string resolvedPath = ge::RealPath(targetPath.c_str());
   if (resolvedPath.empty()) {
     GELOGE(ge::FAILED, "Failed to resolve libcust_opapi.so path.");
     return 1;

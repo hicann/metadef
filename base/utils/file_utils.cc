@@ -354,3 +354,9 @@ int32_t Scandir(const CHAR *path, mmDirent ***entry_list, mmFilter filter_func, 
   return count;
 }
 }  // namespace metadef
+
+namespace ge {
+std::string RealPath(const ge::char_t *path) {
+  return metadef::RealPath(path);
+}
+} // namespace ge

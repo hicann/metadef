@@ -135,4 +135,7 @@ ge::Status GetAscendWorkPath(std::string &ascend_work_path);
 int32_t Scandir(const CHAR *path, mmDirent ***entry_list, mmFilter filter_func, mmSort sort);
 } // namespace metadef
 
+namespace ge {
+std::string RealPath(const ge::char_t *path);
+} // namespace ge
 #endif // end COMMON_GRAPH_UTILS_FILE_UTILS_H_
