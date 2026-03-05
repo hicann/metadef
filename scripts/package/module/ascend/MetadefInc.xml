@@ -108,9 +108,6 @@
     <file_info value="include" copy_type="source" dst_path="include/base/runtime" install_path="$(TARGET_ENV)/include/base/runtime" install_type="devel" install_mod="440">
         <file value="runtime_attrs_def.h"/>
     </file_info>
-    <file_info value="include" copy_type="source" dst_path="pkg_inc/base" install_path="$(TARGET_ENV)/pkg_inc/base" install_type="devel" install_mod="440">
-        <file value="err_mgr.h"/>
-    </file_info>
     <file_info value="include" copy_type="source" dst_path="pkg_inc/base/type" install_path="$(TARGET_ENV)/pkg_inc/base/type" install_type="devel" install_mod="440">
         <file value="ascend_string_impl.h" pkg_inner_softlink="metadef:/pkg_inc/base/type/ascend_string_impl.h"/>
     </file_info>

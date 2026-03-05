@@ -321,4 +321,12 @@ inline std::string GetModelPath() {
 }
 }  // namespace metadef
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY void SetMetadefPluginCustomOpLibPathForC(const char* custom_op_Lib_path);
+#ifdef __cplusplus
+}
+#endif
+
 #endif  // GE_COMMON_GE_PLUGIN_MANAGER_H_

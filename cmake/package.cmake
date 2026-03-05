@@ -179,9 +179,6 @@ install(FILES ${CMAKE_SOURCE_DIR}/inc/external/base/registry/op_impl_space_regis
               ${CMAKE_SOURCE_DIR}/inc/external/base/registry/opp_package_utils.h
     DESTINATION metadef/pkg_inc/base/registry
 )
-install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/base/err_mgr.h
-    DESTINATION metadef/pkg_inc/base
-)
 
 install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/base/type/ascend_string_impl.h
         DESTINATION metadef/pkg_inc/base/type

@@ -1315,3 +1315,9 @@ std::string PluginManager::GetOppPkgPath(const std::string &opp_built_in_path, c
   return opp_built_in_path + whole_pkg_path + os_cpu_type;
 }
 }  // namespace metadef
+
+extern "C" void SetMetadefPluginCustomOpLibPathForC(const char* custom_op_Lib_path) {
+  if (custom_op_Lib_path != nullptr) {
+    metadef::PluginManager::SetCustomOpLibPath(custom_op_Lib_path);
+  }
+}
