@@ -21,7 +21,7 @@ extern "C" {
 
 size_t GetRegisteredOpNum(void) {
   GELOGI("LocalRegistry path[%s] all impl size : %zu",
-         metadef::GetSoRealPathByAddr(&gert::OpImplRegistry::GetInstance()).c_str(),
+         ge::GetSoRealPathByAddr(&gert::OpImplRegistry::GetInstance()).c_str(),
          gert::OpImplRegistry::GetInstance().GetAllTypesToImpl().size());
   return gert::OpImplRegistry::GetInstance().GetAllTypesToImpl().size();
 }
@@ -29,7 +29,7 @@ size_t GetRegisteredOpNum(void) {
 int32_t GetOpImplFunctions(TypesToImpl *impl, size_t impl_num) {
   auto types_to_impl = gert::OpImplRegistry::GetInstance().GetAllTypesToImpl();
   GELOGI("LocalRegistry path[%s] all impl size : %zu",
-         metadef::GetSoRealPathByAddr(&gert::OpImplRegistry::GetInstance()).c_str(),
+         ge::GetSoRealPathByAddr(&gert::OpImplRegistry::GetInstance()).c_str(),
          types_to_impl.size());
   if (impl_num != types_to_impl.size()) {
     GELOGE(ge::FAILED, "Get types_to_impl_ failed, impl_num[%zu] and map size[%zu] not match",
@@ -48,7 +48,7 @@ int32_t GetOpImplFunctions(TypesToImpl *impl, size_t impl_num) {
 int32_t GetOpImplFunctionsV2(TypesToImplV2 *impl, size_t impl_num) {
   const auto types_to_impl = gert::OpImplRegistry::GetInstance().GetAllTypesToImpl();
   GELOGI("LocalRegistry path[%s] all impl size : %zu",
-         metadef::GetSoRealPathByAddr(&gert::OpImplRegistry::GetInstance()).c_str(),
+         ge::GetSoRealPathByAddr(&gert::OpImplRegistry::GetInstance()).c_str(),
          types_to_impl.size());
   if (impl_num != types_to_impl.size()) {
     GELOGE(ge::FAILED, "Get types_to_impl_ failed, impl_num[%zu] and map size[%zu] not match",
