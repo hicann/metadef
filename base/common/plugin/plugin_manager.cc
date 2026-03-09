@@ -1323,10 +1323,6 @@ extern "C" __attribute__((weak)) void SetMetadefPluginCustomOpLibPathForC(const 
 }
 
 namespace ge {
-std::string GetSoRealPathByAddr(void *func_ptr) {
-  return metadef::GetSoRealPathByAddr(func_ptr);
-}
-
 std::string GetModelPathByAddr(void *func_ptr) {
   return metadef::GetModelPathByAddr(func_ptr);
 }
