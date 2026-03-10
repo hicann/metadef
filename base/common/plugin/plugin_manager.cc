@@ -1316,17 +1316,13 @@ std::string PluginManager::GetOppPkgPath(const std::string &opp_built_in_path, c
 }
 }  // namespace metadef
 
-extern "C" void SetMetadefPluginCustomOpLibPathForC(const char* custom_op_Lib_path) {
+extern "C" __attribute__((weak)) void SetMetadefPluginCustomOpLibPathForC(const char* custom_op_Lib_path) {
   if (custom_op_Lib_path != nullptr) {
     metadef::PluginManager::SetCustomOpLibPath(custom_op_Lib_path);
   }
 }
 
 namespace ge {
-std::string GetSoRealPathByAddr(void *func_ptr) {
-  return metadef::GetSoRealPathByAddr(func_ptr);
-}
-
 std::string GetModelPathByAddr(void *func_ptr) {
   return metadef::GetModelPathByAddr(func_ptr);
 }
