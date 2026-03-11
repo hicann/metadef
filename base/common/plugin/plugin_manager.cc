@@ -1321,9 +1321,3 @@ extern "C" __attribute__((weak)) void SetMetadefPluginCustomOpLibPathForC(const 
     metadef::PluginManager::SetCustomOpLibPath(custom_op_Lib_path);
   }
 }
-
-namespace ge {
-std::string GetModelPathByAddr(void *func_ptr) {
-  return metadef::GetModelPathByAddr(func_ptr);
-}
-} // namespace ge
