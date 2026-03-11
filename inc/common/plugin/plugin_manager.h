@@ -283,7 +283,7 @@ class PluginManager {
   static std::string custom_op_lib_path_;
 };
 
-inline std::string GetModelPathByAddr(void *func_ptr) {
+inline std::string GetSoRealPathByAddr(void *func_ptr) {
   mmDlInfo dl_info{nullptr, nullptr, nullptr, nullptr, 0, 0, 0};
   if ((mmDladdr(func_ptr, &dl_info) != EN_OK) || (dl_info.dli_fname == nullptr)) {
     GELOGW("Failed to read the shared library file path! errmsg:%s", mmDlerror());
@@ -307,13 +307,17 @@ inline std::string GetModelPathByAddr(void *func_ptr) {
   return std::string(path);
 }
 
-inline std::string GetModelPath() {
-  std::string so_path = GetModelPathByAddr(reinterpret_cast<void *>(&GetModelPath));
+inline std::string GetModelPathByAddr(void *func_ptr) {
+  std::string so_path = GetSoRealPathByAddr(func_ptr);
   if (so_path.empty()) {
     return so_path;
   }
   so_path = so_path.substr(0U, so_path.rfind('/') + 1U);
   return so_path;
+}
+
+inline std::string GetModelPath() {
+  return GetModelPathByAddr(reinterpret_cast<void *>(&GetModelPath));
 }
 }  // namespace metadef
 
@@ -324,12 +328,5 @@ GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY void SetMetadefPluginCustomOpLibP
 #ifdef __cplusplus
 }
 #endif
-
-/**
- * 下面是为了兼容算子独立升级提供的老接口
- */
-namespace ge {
-std::string GetModelPathByAddr(void *func_ptr);
-} // namespace ge
 
 #endif  // GE_COMMON_GE_PLUGIN_MANAGER_H_

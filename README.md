@@ -10,33 +10,25 @@
 
 ### 在 CANN 架构中的位置
 
-metadef 是 CANN（Compute Architecture for Neural Networks）平台的基础组件仓，为[ge](https://gitcode.com/cann/ge)（Graph Engine）和[ops](https://gitcode.com/cann/ops-nn)（Operator Repository）等上层组件提供共享的基础数据结构和接口。
+metadef 是 CANN（Compute Architecture for Neural Networks）平台的基础组件仓，为[ge](https://gitcode.com/cann/ge)（Graph Engine）和算子仓库（[ops-nn](https://gitcode.com/cann/ops-nn)、[ops-math](https://gitcode.com/cann/ops-math)、[ops-transformer](https://gitcode.com/cann/ops-transformer)、[ops-cv](https://gitcode.com/cann/ops-cv)）等上层组件提供共享的基础数据结构和接口。
 
+```mermaid
+flowchart TD
+    App[Application Layer<br/>MindSpore, PyTorch, TensorFlow]
+    subgraph Ops[Operator Repositories]
+        OpsNN[ops-nn<br/>ops-math<br/>ops-transformer<br/>ops-cv]
+    end
+    GE[ge]
+    Other[other components]
+    MetaDef[metadef<br/>Base Library<br/>共享的基础数据结构和接口]
+
+    App --> Ops
+    App --> GE
+    App --> Other
+    Ops --> MetaDef
+    GE --> MetaDef
+    Other --> MetaDef
 ```
-┌────────────────────────────────────────────────────────────────────────────────────┐
-│                              CANN Platform                                         │
-├────────────────────────────────────────────────────────────────────────────────────┤
-│                                                                                    │
-│  Application Layer (MindSpore, PyTorch, TensorFlow)                                │
-│                                                                                    │
-├────────────────────────────────────────────────────────────────────────────────────┤
-│                                                                                    │
-│  ┌──────────────────┐   ┌──────────────────┐    ┌──────────────────┐               │
-│  │     ge           │   │     ops-nn       │    │     other        │               │
-│  │  (Graph Engine)  │   │  (Operators)     │    │  Components      │               │
-│  └────────┬─────────┘   └────────┬─────────┘    └────────┬─────────┘               │
-│           │                      |                       │                         |
-│           │                      │                       │                         │
-│           └──────────────────────┴───────────────────────┘                         │
-│                                  │                                                 │
-│                         ┌────────▼─────────┐                                       │
-│                         │     metadef      │  Shared Data Structures & Interfaces  │
-│                         │  (Base Library)  │                                       │
-│                         └──────────────────┘                                       │
-└────────────────────────────────────────────────────────────────────────────────────┘
-
-```
-
 ### metadef 提供的核心功能
 
 | 功能 | 说明 | 使用场景 |
