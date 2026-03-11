@@ -329,13 +329,4 @@ GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY void SetMetadefPluginCustomOpLibP
 }
 #endif
 
-/**
- * 下面是为了兼容算子独立升级提供的老接口
- */
-namespace ge {
-std::string GetSoRealPathByAddr(void *func_ptr);
-
-std::string GetModelPathByAddr(void *func_ptr);
-} // namespace ge
-
 #endif  // GE_COMMON_GE_PLUGIN_MANAGER_H_
