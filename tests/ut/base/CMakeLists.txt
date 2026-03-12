@@ -60,3 +60,6 @@ target_link_options(ut_metadef PRIVATE
 target_include_directories(ut_metadef PRIVATE
     ${METADEF_DIR}/tests/depends
 )
+
+add_test(NAME ut_metadef COMMAND ut_metadef --gtest_output=xml:${CMAKE_INSTALL_PREFIX}/report/ut/ut_metadef.xml)
+set_tests_properties(ut_metadef PROPERTIES LABELS "ut;ut_metadef")

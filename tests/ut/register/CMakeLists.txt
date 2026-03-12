@@ -71,3 +71,6 @@ target_link_options(ut_register PRIVATE
 target_include_directories(ut_register PRIVATE
         ${METADEF_DIR}/base/registry
         )
+
+add_test(NAME ut_register COMMAND ut_register --gtest_output=xml:${CMAKE_INSTALL_PREFIX}/report/ut/ut_register.xml)
+set_tests_properties(ut_register PROPERTIES LABELS "ut;ut_register")
