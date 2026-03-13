@@ -54,3 +54,6 @@ target_link_libraries(ut_error_manager
     pthread
     metadef_headers
 )
+
+add_test(NAME ut_error_manager COMMAND ut_error_manager --gtest_output=xml:${CMAKE_INSTALL_PREFIX}/report/ut/ut_error_manager.xml)
+set_tests_properties(ut_error_manager PROPERTIES LABELS "ut;ut_error_manager")

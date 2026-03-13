@@ -35,3 +35,6 @@ target_link_libraries(ut_sc_check PRIVATE
     GTest::gtest GTest::gtest_main slog_stub unified_dlog c_sec json mmpa_stub -lrt -ldl
     pthread
 )
+
+add_test(NAME ut_sc_check COMMAND ut_sc_check --gtest_output=xml:${CMAKE_INSTALL_PREFIX}/report/ut/ut_sc_check.xml)
+set_tests_properties(ut_sc_check PROPERTIES LABELS "ut;ut_sc_check")

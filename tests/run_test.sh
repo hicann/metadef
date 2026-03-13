@@ -181,15 +181,9 @@ main() {
   echo "---------------- Metadef llt build finished ----------------"
 
   if [[ "X$ENABLE_METADEF_UT" = "Xon" || "X$ENABLE_METADEF_COV" = "Xon" ]]; then
-    cp ${BUILD_PATH}/tests/ut/base/ut_metadef ${OUTPUT_PATH}
-    cp ${BUILD_PATH}/tests/ut/register/ut_register ${OUTPUT_PATH}
-    cp ${BUILD_PATH}/tests/ut/error_manager/ut_error_manager ${OUTPUT_PATH}
-    cp ${BUILD_PATH}/tests/ut/sc_check/ut_sc_check ${OUTPUT_PATH}
     export ASAN_OPTIONS=detect_container_overflow=0
-    RUN_TEST_CASE=${OUTPUT_PATH}/ut_metadef && ${RUN_TEST_CASE} &&
-    RUN_TEST_CASE=${OUTPUT_PATH}/ut_register && ${RUN_TEST_CASE} &&
-    RUN_TEST_CASE=${OUTPUT_PATH}/ut_error_manager && ${RUN_TEST_CASE} &&
-    RUN_TEST_CASE=${OUTPUT_PATH}/ut_sc_check && ${RUN_TEST_CASE}
+    ctest --verbose -j ${THREAD_NUM} -L ut --test-dir ${BUILD_PATH} --no-tests=error \
+      2>&1 | tee ${BUILD_PATH}/ctest_ut.log
     if [[ "$?" -ne 0 ]]; then
       echo "!!! UT FAILED, PLEASE CHECK YOUR CHANGES !!!"
       echo -e "\033[31m${RUN_TEST_CASE}\033[0m"
