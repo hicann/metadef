@@ -24,6 +24,25 @@ metadef支持源码编译。在源码编译前，请完成[基础环境准备](#
      sudo apt-get install cmake ccache lcov libasan4 libgraph-easy-perl
      ```
 
+#### 检查编译环境
+
+安装完成后，建议执行环境检查脚本，确认当前环境是否满足编译要求。
+
+```bash
+bash scripts/check_env.sh
+```
+
+检查结果说明如下：
+
+| 状态 | 含义 | 处理建议 |
+|---|---|---|
+| **[PASS]** | 检查通过 | 无需处理 |
+| **[WARNING]** | 非关键依赖缺失或版本存在偏差 | 建议修复，不影响核心编译 |
+| **[ERROR]** | 关键依赖缺失或版本不兼容 | 必须修复，否则无法编译 |
+
+> [!NOTE] 注意
+> 环境检查脚本中所有检查项和版本约束严格来源于 docs/build.md，如 build.md 更新，请同步修改[脚本](../scripts/check_env.sh)
+
 ### 2. 安装软件包
 
 #### 步骤一：安装社区版CANN Toolkit包
