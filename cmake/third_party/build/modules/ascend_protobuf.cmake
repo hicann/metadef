@@ -66,7 +66,7 @@ else()
     ExternalProject_Add(ascend_protobuf_build
                         URL ${REQ_URL}
                         ${PROTOBUF_EXTRA_ARGS}
-                        PATCH_COMMAND patch -p1 < ${CMAKE_CURRENT_LIST_DIR}/build/modules/patch/protobuf_25.1_change_version.patch
+                        PATCH_COMMAND patch -p1 < ${CMAKE_CURRENT_LIST_DIR}/patch/protobuf_25.1_change_version.patch
                         CONFIGURE_COMMAND ${CMAKE_COMMAND}
                             -DCMAKE_INSTALL_LIBDIR=lib
                             -Dprotobuf_WITH_ZLIB=OFF

@@ -45,7 +45,7 @@ unset(_cmake_targets_not_defined)
 unset(_cmake_expected_targets)
 
 find_path(_INCLUDE_DIR
-    NAMES platform/platform_info.h
+    NAMES include/platform/platform_info.h
     NO_CMAKE_SYSTEM_PATH
     NO_CMAKE_FIND_ROOT_PATH)
 
@@ -79,7 +79,7 @@ if(platform_FOUND)
 
     add_library(platform_headers INTERFACE IMPORTED)
     set_target_properties(platform_headers PROPERTIES
-        INTERFACE_INCLUDE_DIRECTORIES "${platform_INCLUDE_DIR};${platform_INCLUDE_DIR}/platform"
+        INTERFACE_INCLUDE_DIRECTORIES "${platform_INCLUDE_DIR};${platform_INCLUDE_DIR}/include;${platform_INCLUDE_DIR}/include/platform"
     )
 
     include(CMakePrintHelpers)

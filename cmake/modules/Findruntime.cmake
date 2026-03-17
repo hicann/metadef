@@ -45,7 +45,7 @@ unset(_cmake_targets_not_defined)
 unset(_cmake_expected_targets)
 
 find_path(_INCLUDE_DIR
-    NAMES experiment/runtime/runtime/rt.h
+    NAMES pkg_inc/runtime/rt_external.h
     NO_CMAKE_SYSTEM_PATH
     NO_CMAKE_FIND_ROOT_PATH)
 
@@ -65,7 +65,7 @@ find_package_handle_standard_args(runtime
 )
 
 if(runtime_FOUND)
-    set(runtime_INCLUDE_DIR "${_INCLUDE_DIR}/experiment")
+    set(runtime_INCLUDE_DIR "${_INCLUDE_DIR}")
     include(CMakePrintHelpers)
     message(STATUS "Variables in runtime module:")
     cmake_print_variables(runtime_INCLUDE_DIR)
@@ -79,7 +79,7 @@ if(runtime_FOUND)
 
     add_library(runtime_headers INTERFACE IMPORTED)
     set_target_properties(runtime_headers PROPERTIES
-        INTERFACE_INCLUDE_DIRECTORIES "${runtime_INCLUDE_DIR};${runtime_INCLUDE_DIR}/runtime;${runtime_INCLUDE_DIR}/runtime/external;${runtime_INCLUDE_DIR}/runtime/external/runtime"
+        INTERFACE_INCLUDE_DIRECTORIES "${runtime_INCLUDE_DIR};${runtime_INCLUDE_DIR}/pkg_inc;${runtime_INCLUDE_DIR}/pkg_inc/runtime"
     )
 
     include(CMakePrintHelpers)
