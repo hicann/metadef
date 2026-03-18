@@ -8,29 +8,27 @@
 # See LICENSE in the root of the software repository for the full text of the License.
 # -----------------------------------------------------------------------------------------------------------
 
-if (TARGET pybind11_build)
-    return()
-endif()
-
 include(ExternalProject)
 
-if (CANN_PKG)
-    set(REQ_URL "${CANN_PKG}/libs/pybind11/v2.10.3.tar.gz")
-elseif (ENABLE_GITHUB)
-    set(REQ_URL "https://github.com/pybind/pybind11/archive/refs/tags/v2.10.3.tar.gz")
-else ()
-    set(REQ_URL "https://gitee.com/mirrors/pybind11/repository/archive/v2.10.3.tar.gz")
-endif ()
+set(REQ_URL "${ASCEND_3RD_LIB_PATH}/abseil-cpp/abseil-cpp-20230802.1.tar.gz")
+# 初始化可选参数列表
+set(ABSEIL_EXTRA_ARGS "")
+if(EXISTS ${REQ_URL})
+  message(STATUS "[ThirdPartyLib][abseil-cpp] ${REQ_URL} found.")
+else()
+  message(STATUS "[ThirdPartyLib][abseil-cpp] ${REQ_URL} not found, need download.")
+  set(REQ_URL "https://gitcode.com/cann-src-third-party/abseil-cpp/releases/download/20230802.1/abseil-cpp-20230802.1.tar.gz")
+  list(APPEND ABSEIL_EXTRA_ARGS
+      DOWNLOAD_DIR ${ASCEND_3RD_LIB_PATH}/abseil-cpp
+  )
+endif()
 
-ExternalProject_Add(pybind11_build
+ExternalProject_Add(abseil_build
                     URL ${REQ_URL}
-                    CONFIGURE_COMMAND ${CMAKE_COMMAND}
-                        -DPYBIND11_INSTALL=ON
-                        -DPYBIND11_TEST=OFF
-                        -DPYBIND11_NOPYTHON=ON
-                        -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/pybind11
-                        <SOURCE_DIR>
-                    BUILD_COMMAND $(MAKE)
-                    INSTALL_COMMAND $(MAKE) install
-                    EXCLUDE_FROM_ALL TRUE
+                    ${ABSEIL_EXTRA_ARGS}
+                    PATCH_COMMAND patch -p1 < ${CMAKE_CURRENT_LIST_DIR}/patch/protobuf-hide_absl_symbols.patch
+                    CONFIGURE_COMMAND ""
+                    BUILD_COMMAND ""
+                    INSTALL_COMMAND ""
+                    EXCLUDE_FROM_ALL TRUE 
 )

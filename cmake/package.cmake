@@ -25,7 +25,7 @@ message(STATUS "CMAKE_INSTALL_PREFIX = ${CMAKE_INSTALL_PREFIX}")
 message(STATUS "CMAKE_SOURCE_DIR = ${CMAKE_SOURCE_DIR}")
 message(STATUS "CMAKE_BINARY_DIR = ${CMAKE_BINARY_DIR}")
 set(ARCH_LINUX_PATH "${ARCH}-linux")
-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/third_party/makeself-fetch.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/third_party/build/modules/makeself-fetch.cmake)
 
 # ============= 组件打包 =============
 function(install_public_packages)

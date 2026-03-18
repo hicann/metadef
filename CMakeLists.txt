@@ -58,7 +58,6 @@ endif ()
 
 if (NOT DEFINED CMAKE_MODULE_PATH)
     set(CMAKE_MODULE_PATH
-        ${CMAKE_CURRENT_LIST_DIR}/cmake/modules/sub_module
         ${CMAKE_CURRENT_LIST_DIR}/cmake/modules
         ${CMAKE_CURRENT_LIST_DIR}/cmake/third_party/scripts/modules
         ${ASCEND_3RD_LIB_PATH}/cmake/modules
@@ -156,12 +155,12 @@ if (ENABLE_OPEN_SRC)
     include(cmake/intf_pub_linux.cmake)
 
     if(ENABLE_METADEF_UT)
-        include(cmake/third_party/ascend_protobuf.cmake)
-        include(cmake/third_party/json.cmake)
-        include(cmake/third_party/gtest.cmake)
+        include(cmake/third_party/build/modules/ascend_protobuf.cmake)
+        include(cmake/third_party/build/modules/json.cmake)
+        include(cmake/third_party/build/modules/gtest.cmake)
         find_package(msprof MODULE REQUIRED)
     else()
-        include(cmake/third_party/json.cmake)	
+        include(cmake/third_party/build/modules/json.cmake)	
     endif()
 
     # 自研软件包
@@ -180,7 +179,7 @@ add_subdirectory(error_manager)
 add_subdirectory(base)
 
 if (ENABLE_METADEF_UT OR ENABLE_METADEF_ST OR ENABLE_BENCHMARK)
-    include(cmake/third_party/benchmark.cmake)
+    include(cmake/third_party/build/modules/benchmark.cmake)
     add_subdirectory(tests)
 endif()
 
