@@ -15,6 +15,7 @@ file(GLOB_RECURSE SRC_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
 include_directories(${METADEF_DIR}/inc/external)
 
 add_library(platform_stub SHARED ${SRC_FILES})
+target_compile_options(platform_stub PRIVATE -Wno-unused-parameter)
 target_link_libraries(platform_stub
     PRIVATE
         intf_pub

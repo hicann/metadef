@@ -31,6 +31,7 @@ RETURN_STATEMENTS = {
     'std::size_t': '    return 0U;',
     'float': '    return 0.0f;',
     'bool': '    return false;',
+    'void': '    return;',
     'void*': '    return nullptr;',
     'char*': '    return nullptr;',
     'char_t*': '    return nullptr;',
@@ -401,6 +402,58 @@ def need_generate_func(func_line):
     return True
 
 
+def is_func_without_return_type(decl: str) -> bool:
+    """
+    Check if a C++ function declaration has no return type (constructor/destructor).
+    Rules:
+    - Remove comments/strings
+    - Extract function name (identifier after last ::, may start with ~)
+    - If function name starts with ~ and not operator~ → destructor → True
+    - If function name starts with operator → operator overload/conversion → False
+    - Otherwise check prefix before function name: if empty or only contains
+      explicit/inline/constexpr/friend/virtual → constructor → True
+    - Else False
+    Note: Heuristic, only works for simple single-line declarations.
+          Does not handle templates/attributes/macros.
+    """
+    # Trim whitespace
+    decl = decl.strip()
+    if not decl:
+        return False
+
+    # Remove comments and string literals
+    decl = re.sub(r'//.*$', '', decl, flags=re.MULTILINE)           # line comments
+    decl = re.sub(r'/\*.*?\*/', '', decl, flags=re.DOTALL)         # block comments
+    decl = re.sub(r'"(?:\\.|[^"\\])*"', '""', decl)                # double-quoted strings
+    decl = re.sub(r"'(?:\\.|[^'\\])*'", "''", decl)                # single-quoted chars
+
+    # Extract function name (possibly qualified with ::)
+    match = re.search(r'(?:(?:\w+\s*::\s*)*)(~?\w+)\s*\(', decl)
+    if not match:
+        return False
+    func_name = match.group(1)
+
+    # Destructor
+    if func_name.startswith('~') and func_name != 'operator~' and not func_name.startswith('operator~'):
+        return True
+
+    # Operator overload/conversion (always have return type)
+    if func_name.startswith('operator'):
+        return False
+
+    # Check constructor prefix
+    idx = decl.find(func_name)
+    if idx == -1:
+        return False
+    prefix = decl[:idx].strip()
+    if not prefix:
+        return True  # No prefix → constructor
+
+    allowed = {'explicit', 'inline', 'constexpr', 'friend', 'virtual'}
+    tokens = re.split(r'\s+', prefix)
+    return all(t in allowed for t in tokens)
+
+
 """
     belows are patterns used for analyse .h file
 """
@@ -641,16 +694,13 @@ class H2CC(object):
             else:
                 line, func_name = self.handle_normal_func(line, template_string)
 
-            need_generate = need_generate_func(line)
-
-            # build func body
-            line += self.implement_function(line)
-
-            # comment
-            # line = self.gen_comment(start_i) + line
-
-            # write to out file
-            self.write_func_content(line, func_name, need_generate)
+            if not (func_name in self.func_list_exist) and need_generate_func(line):
+                # build func body
+                line += self.implement_function(line)
+                # comment
+                line = self.gen_comment(start_i) + line
+                # write to out file
+                self.write_func_content(line, func_name)
 
             # next loop
             self.line_index += 1
@@ -903,11 +953,10 @@ class H2CC(object):
         logging.info("func_name[%s]", func_name)
         return line, func_name
 
-    def write_func_content(self, content, func_name, need_generate):
-        if not (func_name in self.func_list_exist) and need_generate:
-            self.output_fd.write(content)
-            self.func_list_exist.append(func_name)
-            logging.info('add func:[%s]', func_name)
+    def write_func_content(self, content, func_name):
+        self.output_fd.write(content)
+        self.func_list_exist.append(func_name)
+        logging.info('add func:[%s]', func_name)
 
     def gen_comment(self, start_i):
         comment_line = ''
@@ -1039,9 +1088,9 @@ class H2CC(object):
 
                 if RETURN_STATEMENTS.__contains__(return_type):
                     function_def += RETURN_STATEMENTS[return_type]
-                else:
-                    logging.info("Unhandled func:%s", func)
-                    logging.warning("Unhandled return type:%s", return_type)
+                elif not is_func_without_return_type(func):
+                    logging.error("Unhandled func:[%s]", func)
+                    raise Exception("Unhandled return type:[%s]", return_type)
 
         function_def += '\n'
         function_def += '}\n'

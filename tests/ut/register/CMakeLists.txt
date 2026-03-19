@@ -28,6 +28,7 @@ target_compile_options(ut_register PRIVATE
     -g --coverage -fprofile-arcs -ftest-coverage -fno-access-control
     -Wno-deprecated-declarations
     -Wall -Wfloat-equal -Werror
+    -Wno-unused-parameter
     -fno-access-control
 )
 

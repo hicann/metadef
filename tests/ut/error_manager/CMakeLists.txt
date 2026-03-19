@@ -33,6 +33,7 @@ target_compile_options(ut_error_manager PRIVATE
     -g --coverage -fprofile-arcs -ftest-coverage
     -Wno-deprecated-declarations
     -Wall -Wfloat-equal -Werror
+    -Wno-unused-parameter
     -fno-access-control
 )
 

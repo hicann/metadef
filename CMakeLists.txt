@@ -125,6 +125,10 @@ else()
     endif()
 endif()
 
+# 针对 GCC/Clang 编译器, 开启编译告警转报错
+if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    add_compile_options(-Wall -Wextra -Werror)
+endif()
 # 针对 Clang 编译器，关闭特定警告（避免 -Werror 触发编译错误）
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     message(STATUS "Add compile option for Clang.")

@@ -213,7 +213,7 @@ INT32 mmGetSystemTime(mmSystemTime_t *sysTime) {
 
 mmTimespec mmGetTickCount() {
   mmTimespec rts;
-  struct timespec ts = {0};
+  struct timespec ts = {};
   (void)clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
   rts.tv_sec = ts.tv_sec;
   rts.tv_nsec = ts.tv_nsec;
