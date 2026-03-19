@@ -16,6 +16,7 @@
 #include <cstdint>
 #include <ctime>
 #include <sstream>
+#include <cstdlib>
 #include <sys/stat.h>
 #include <sys/utsname.h>
 #include <dirent.h>
@@ -25,11 +26,29 @@
 #include "op_bin_info_utils.h"
 #include "dlog_pub.h"
 #include "common/ge_common/debug/ge_log.h"
-#include "graph/utils/file_utils.h"
 
 namespace ops {
 constexpr uint32_t kOpsFour = 4;
 constexpr uint32_t kOpsBufLen = 64;
+constexpr size_t kMaxPathLen = 4096;
+
+std::string RealPath(const char *path) {
+  if (path == nullptr) {
+    GELOGE(ge::FAILED, "[Check][Param] path pointer is NULL.");
+    return "";
+  }
+  if (strnlen(path, kMaxPathLen) >= kMaxPathLen) {
+    GELOGE(ge::FAILED, "[Check][Param]Path[%s] len is too long, it must be less than %zu", path, kMaxPathLen);
+    return "";
+  }
+  char resolved_path[kMaxPathLen] = {};
+  if (realpath(path, resolved_path) != nullptr) {
+    return std::string(resolved_path);
+  } else {
+    GELOGW("[Util][realpath] Can not get real_path for [%s], reason:%s", path, strerror(errno));
+    return "";
+  }
+}
 
 void CheckCloseDir(DIR *dir, const char *file, int32_t line, const char *func) {
   if (closedir(dir) != 0) {
@@ -81,7 +100,7 @@ bool CheckBasePathWritePermission(std::string &basePath, const char *resolvedPat
 
 bool GetBasePathByEnv(std::string& basePath, const char *ascendWorkPathEnv, const std::string& currentTimestamp) {
   GELOGD("Running GetBasePathByEnv.");
-  std::string resolvedPath = ge::RealPath(ascendWorkPathEnv);
+  std::string resolvedPath = RealPath(ascendWorkPathEnv);
   if (resolvedPath.empty()) {
     GELOGE(ge::FAILED, "Invalid ASCEND_WORK_PATH: %s", ascendWorkPathEnv);
     return false;
@@ -309,7 +328,7 @@ uint32_t OpBinInfo::Generate(ge::AscendString *opLibPath, const std::string &tar
     return 1;
   }
 
-  std::string resolvedPath = ge::RealPath(targetPath.c_str());
+  std::string resolvedPath = RealPath(targetPath.c_str());
   if (resolvedPath.empty()) {
     GELOGE(ge::FAILED, "Failed to resolve libcust_opapi.so path.");
     return 1;
