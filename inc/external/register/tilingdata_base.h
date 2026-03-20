@@ -149,15 +149,6 @@ END_TILING_DATA_DEF
 REGISTER_TILING_DATA_CLASS(MaxPool, MaxPoolTilingData)
 */
 #define BEGIN_TILING_DATA_DEF(class_name)                                                                              \
-namespace {                                                                                                            \
-  static uint32_t class_name##tiling = [](void) {                                                                      \
-    if (&TilingDataStructBase::RecordTilingStruct != nullptr) {                                                        \
-      return TilingDataStructBase::GetInstance().RecordTilingStruct(#class_name, __FILE__, __LINE__);                  \
-    } else {                                                                                                           \
-      return static_cast<uint32_t>(0);                                                                                 \
-    }                                                                                                                  \
-  }();                                                                                                                 \
-}                                                                                                                      \
   class class_name : public TilingDef {                                                                                \
    public:                                                                                                             \
     size_t FieldHandler(const char *dtype, const char *name, size_t typeSize, const char* namePh) {                    \

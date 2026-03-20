@@ -13,6 +13,7 @@ file(GLOB_RECURSE SRC_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 add_library(slog_stub SHARED ${SRC_FILES})
+target_compile_options(slog_stub PRIVATE -Wno-unused-parameter)
 target_link_libraries(slog_stub
     PRIVATE
         intf_pub

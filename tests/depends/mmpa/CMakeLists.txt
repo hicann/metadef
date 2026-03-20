@@ -18,6 +18,7 @@ include_directories(${METADEF_DIR}/metadef/inc)
 include_directories(${METADEF_DIR}/inc/framework)
 include_directories(${METADEF_DIR}/metadef/inc/external)
 add_library(mmpa_stub SHARED ${SRCS})
+target_compile_options(mmpa_stub PRIVATE -Wno-unused-parameter)
 target_link_libraries(mmpa_stub
     PRIVATE
         intf_pub

@@ -170,6 +170,7 @@ target_compile_options(stub_opp_registry PRIVATE
         -fno-common
         -Os
         -Werror=return-type
+        -Wno-unused-parameter
 )
 
 target_link_libraries(stub_opp_registry
@@ -342,6 +343,7 @@ target_compile_options(stub_metadef PRIVATE
     -fno-common
     -Os
     -Werror=return-type
+    -Wno-unused-parameter
 )
 
 target_link_libraries(stub_metadef
@@ -580,6 +582,7 @@ target_compile_options(stub_exe_graph PRIVATE
         -fno-common
         -Os
         -Werror=return-type
+        -Wno-unused-parameter
         )
 
 target_link_libraries(stub_exe_graph
