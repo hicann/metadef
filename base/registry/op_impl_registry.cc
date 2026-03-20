@@ -111,6 +111,10 @@ void RegisterOpImplToRegistry(const OpImplRegisterV2Impl *rd) {
     ss << "[ExceptionFunc]";
     funcs.exception_func = rd->functions.exception_func;
   }
+  if (rd->functions.nullable_outputs_ != 0UL) {
+    ss << "[NullableOutputs]";
+    funcs.nullable_outputs_ = rd->functions.nullable_outputs_;
+  }
 
   GELOGI("LocalRegistry[%zu] Op type[%s] register OP_IMPL : %s",
          std::hash<std::string>()(metadef::GetModelPathByAddr(&OpImplRegistry::GetInstance())),
@@ -230,6 +234,7 @@ OpImplRegisterV2::OpImplRegisterV2(const ge::char_t *op_type) : impl_(new(std::n
   impl_->functions.gen_simplifiedkey = nullptr;
   impl_->functions.output_shape_depend_compute = 0U;
   impl_->functions.infer_format_func = nullptr;
+  impl_->functions.nullable_outputs_ = 0UL;
 
   // private attr controlled by is_private_attr_registered
   (void)OpImplRegistry::GetInstance().CreateOrGetOpImpl(op_type);
@@ -455,7 +460,19 @@ OpImplRegisterV2 &OpImplRegisterV2::HostInputs(std::initializer_list<int32_t> in
   }
   return *this;
 }
-
+OpImplRegisterV2 &OpImplRegisterV2::NullableOutputs(std::initializer_list<int32_t> outputs) {
+  if (impl_ != nullptr) {
+    impl_->functions.nullable_outputs_ = 0UL;
+    for (const int32_t index : outputs) {
+      if (impl_->functions.NullableOutput(static_cast<size_t>(index)) != ge::GRAPH_SUCCESS) {
+        GELOGE(ge::FAILED, "Failed to nullable output for node %s, the output index %d",
+               impl_->op_type.GetString(), index);
+        return *this;
+      }
+    }
+  }
+  return *this;
+}
 OpImplRegisterV2 &OpImplRegisterV2::InferFormat(InferFormatFunc infer_format_func) {
   if (impl_ != nullptr) {
     impl_->functions.infer_format_func = infer_format_func;

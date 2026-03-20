@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -45,6 +45,8 @@ constexpr const size_t kRangeSize = 56U;
 constexpr const size_t kKernelExtendInfoSize = 72U;
 constexpr const size_t kKernelRunContextSize = 48U;
 constexpr const size_t kTilingDataSize = 64U;
+constexpr const size_t kCompileTimeTensorDescStorageFormatSize = 97U;
+constexpr const size_t kCompileTimeTensorDescReservedFieldSize = 39U;
 }  // namespace
 constexpr size_t Shape::kMaxDimNum;
 class AbiCompatibilityForExeGraphUT : public testing::Test {};
@@ -132,8 +134,8 @@ TEST_F(AbiCompatibilityForExeGraphUT, CompileTimeTensorDesc_CheckMemLayoutNotCha
 
   EXPECT_EQ(reinterpret_cast<uintptr_t>(&t.storage_format_) - reinterpret_cast<uintptr_t>(&t.data_type_), 8);
   EXPECT_EQ(reinterpret_cast<uintptr_t>(&t.reserved_) - reinterpret_cast<uintptr_t>(&t.storage_format_),
-            kStorageFormatSize);
-  EXPECT_EQ(sizeof(t.reserved_), kReservedFieldSize);
+            kCompileTimeTensorDescStorageFormatSize);
+  EXPECT_EQ(sizeof(t.reserved_), kCompileTimeTensorDescReservedFieldSize);
 }
 
 TEST_F(AbiCompatibilityForExeGraphUT, AnchorInstanceInfo_CheckMemLayoutNotChanged) {

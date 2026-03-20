@@ -186,6 +186,9 @@ TEST_F(OpImplRegistryUT, Register_Success_RegisterAll) {
       .InputsDataDependency({0, 1, 3, 5})
       .TilingInputsDataDependency({0, 1, 2, 128});
 
+  IMPL_OP(TestFoo_nullableOutputs)
+      .NullableOutputs({0, 1, 4, 128, 3});
+
   funcs = gert::OpImplRegistry::GetInstance().GetOpImpl("TestFoo_tilingDepend");
   EXPECT_TRUE(funcs->IsTilingInputDataDependency(0U));
   EXPECT_TRUE(funcs->IsTilingInputDataDependency(1U));
@@ -217,6 +220,14 @@ TEST_F(OpImplRegistryUT, Register_Success_RegisterAll) {
   EXPECT_TRUE(funcs->IsTilingInputDataDependency(0U));
   EXPECT_TRUE(funcs->IsTilingInputDataDependency(1U));
   EXPECT_TRUE(funcs->IsTilingInputDataDependency(2U));
+
+  funcs = gert::OpImplRegistry::GetInstance().GetOpImpl("TestFoo_nullableOutputs");
+  EXPECT_TRUE(funcs->IsNullableOutput(0U));
+  EXPECT_TRUE(funcs->IsNullableOutput(1U));
+  EXPECT_FALSE(funcs->IsNullableOutput(2U));
+  EXPECT_FALSE(funcs->IsNullableOutput(3U));
+  EXPECT_TRUE(funcs->IsNullableOutput(4U));
+  EXPECT_FALSE(funcs->IsNullableOutput(128U));
 
   funcs = gert::OpImplRegistry::GetInstance().GetOpImpl("TestFoo");
   ASSERT_NE(funcs, nullptr);
