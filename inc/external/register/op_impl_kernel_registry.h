@@ -176,6 +176,31 @@ struct OpImplKernelRegistry {
     InferSymbolShapeKernelFunc infer_symbol_shape = nullptr;
     OpImplRegisterV2::InferFormatFunc infer_format_func = nullptr;
 
+    /**
+     * 获取输出是否可以为空
+     * @param index IR原型定义中的index
+     * @return 输出是否可以为空
+     */
+    bool IsNullableOutput(const size_t index) const {
+      if (index >= (sizeof(nullable_outputs_) * kByteBitCount)) {
+        return false;
+      }
+      return static_cast<bool>(nullable_outputs_ & (1UL << index));
+    }
+
+    /**
+     * 设置可以为空的输出
+     * @param index IR原型定义中的index
+     * @return 成功时返回ge::GRAPH_SUCCESS
+     */
+    ge::graphStatus NullableOutput(const size_t index) {
+      if (index >= (sizeof(nullable_outputs_) * kByteBitCount)) {
+        return ge::GRAPH_FAILED;
+      }
+      nullable_outputs_ |= 1UL << index;
+      return ge::GRAPH_SUCCESS;
+    }
+
     uint32_t st_size = sizeof(OpImplFunctionsV2);
     uint32_t version = OP_IMPL_MAIN_VERSION;
     OpImplRegisterV2::OpCalcParamKernelFunc calc_op_param = nullptr;
@@ -187,7 +212,8 @@ struct OpImplKernelRegistry {
     OpImplRegisterV2::OpExecPrepareFunc op_execute_prepare_func = nullptr;
     OpImplRegisterV2::OpExecLaunchFunc op_execute_launch_func = nullptr;
     OpImplRegisterV2::ExceptionDumpFunc exception_func = nullptr;
-    uint64_t reserved_[501] = {0U};
+    uint64_t nullable_outputs_ = 0UL;
+    uint64_t reserved_[500] = {0U};
   };
 };
 }  // namespace gert

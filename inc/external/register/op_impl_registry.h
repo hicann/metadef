@@ -126,6 +126,7 @@ class OpImplRegisterV2 {
   OpImplRegisterV2 &CheckSupport(OP_CHECK_FUNC_V2 check_support_func);
   OpImplRegisterV2 &OpSelectFormat(OP_CHECK_FUNC_V2 op_select_format_func);
   OpImplRegisterV2 &ExceptionDumpParseFunc(ExceptionDumpFunc exception_func);
+  OpImplRegisterV2 &NullableOutputs(std::initializer_list<int32_t> outputs);
 
  private:
   OpImplRegisterV2 &TilingParse(KernelFunc tiling_parse_func,

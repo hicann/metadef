@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -135,10 +135,29 @@ class CompileTimeTensorDesc {
     storage_format_.SetExpandDimsType(expand_dims_type);
   }
 
+  /**
+   * 设置输出是否存在
+   * @param is_exist 输出是否存在
+   */
+  void SetExist(bool is_exist) {
+    extend_.not_exist = is_exist ? 0 : 1;
+  }
+  /**
+   * 获取输出是否存在
+   * @return 输出是否存在
+   */
+  bool IsExist() const {
+    return extend_.not_exist != 1;
+  }
  private:
+  struct Extend {
+    uint8_t not_exist : 1;
+    uint8_t reserved : 7;
+  };
   ge::DataType data_type_;
   StorageFormat storage_format_;
-  uint8_t reserved_[40]; // Reservd field, 32+8, do not directly use when only 8-byte left
+  Extend extend_{};
+  uint8_t reserved_[39]; // Reservd field, 31+8, do not directly use when only 8-byte left
 };
 static_assert(std::is_standard_layout<CompileTimeTensorDesc>::value, "The class CompileTimeTensorDesc must be a POD");
 
