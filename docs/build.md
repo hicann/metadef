@@ -25,13 +25,9 @@
 
 ### 方式二：手动安装软件包
 
-**场景1：已发布版本**
+**场景1：体验master版本能力或基于master版本进行开发**
 
-如果您想体验**官网正式发布的CANN包**能力，请访问[CANN官网下载中心](https://www.hiascend.com/cann/download)，选择对应版本CANN软件包（仅支持CANN 8.5.0及后续版本）进行安装。
-
-**场景2：master版本**
-
-如果您想体验**master分支最新能力**，单击[下载链接](https://ascend.devcloud.huaweicloud.com/artifactory/cann-run-mirror/software/master)获取获取软件包，按照如下步骤进行安装。更多安装指导请参考[CANN软件安装指南](https://www.hiascend.com/document/redirect/CannCommunityInstWizard)。安装社区版CANN toolkit包方法如下：
+请单击[下载链接](https://ascend.devcloud.huaweicloud.com/artifactory/cann-run-mirror/software/master/)，选择最新时间版本，并根据产品型号和环境架构下载对应包。安装命令如下，更多指导参考《[CANN软件安装指南](https://www.hiascend.com/document/redirect/CannCommunityInstWizard)》。安装CANN Toolkit开发套件包方法如下：
 
 ```bash
 # 确保安装包具有可执行权限
@@ -43,6 +39,10 @@ chmod +x Ascend-cann-toolkit_${cann_version}_linux-${arch}.run
 - `${cann_version}`：表示CANN包版本号。
 - `${arch}`：表示CPU架构，如`aarch64`、`x86_64`。
 - `${install_path}`：表示指定安装路径，需要与toolkit包安装在相同路径，root用户默认安装在`/usr/local/Ascend`目录。
+
+**场景2：体验已发布版本能力或基于已发布版本进行开发**
+
+如果您想体验**官网正式发布的CANN包**能力，请访问[CANN官网下载中心](https://www.hiascend.com/cann/download)，选择对应版本CANN软件包（仅支持CANN 8.5.0及后续版本）进行安装。
 
 ## 2. 环境验证
 
@@ -136,9 +136,9 @@ bash build.sh
 ### 4.3. 本地验证（UT）
 
 > [!NOTE] 注意
-> 若您的编译环境无法访问网络，请确保已经完成了[4. 编译](#4-编译)章节中的[离线编译指导](offline_compile.md)。
+> 若您的编译环境无法访问网络，请确保已经完成了[4.3 编译](#4.3-编译)章节中的[离线编译指导](offline_compile.md)。
 
-执行本地验证前，请确保已完成[安装依赖](#1-安装依赖)，并设置[环境变量](#步骤二配置环境变量)。
+执行本地验证前，请确保已完成[安装依赖](#4.2-安装依赖)，并设置[环境变量](#3.-环境变量配置)。
 
 `metadef`仓提供一键式编译执行供开发者测试，详细配置可通过`bash tests/run_test.sh -h`查看。
 
