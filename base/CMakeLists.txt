@@ -40,7 +40,6 @@ target_compile_definitions(opp_registry PRIVATE
         google=ascend_private
         $<IF:$<STREQUAL:${TARGET_SYSTEM_NAME},Windows>,OS_TYPE=WIN,OS_TYPE=0>
         $<$<STREQUAL:${TARGET_SYSTEM_NAME},Windows>:SECUREC_USING_STD_SECURE_LIB=0 NOMINMAX>
-        $<$<STREQUAL:${ENABLE_OPEN_SRC},True>:ONLY_COMPILE_OPEN_SRC>
 )
 
 target_compile_options(opp_registry PRIVATE -O2 -DNO_METADEF_ABI_COMPATIABLE)
@@ -85,7 +84,6 @@ target_compile_options(rt2_registry_objects PRIVATE
 target_compile_definitions(rt2_registry_objects PRIVATE
         $<IF:$<STREQUAL:${TARGET_SYSTEM_NAME},Windows>,OS_TYPE=WIN,OS_TYPE=0>
         $<$<STREQUAL:${TARGET_SYSTEM_NAME},Windows>:SECUREC_USING_STD_SECURE_LIB=0 NOMINMAX>
-        $<$<STREQUAL:${ENABLE_OPEN_SRC},True>:ONLY_COMPILE_OPEN_SRC>
         )
 
 target_include_directories(rt2_registry_objects PRIVATE
@@ -233,7 +231,6 @@ target_compile_definitions(metadef PRIVATE
     google=ascend_private
     $<IF:$<STREQUAL:${TARGET_SYSTEM_NAME},Windows>,OS_TYPE=WIN,OS_TYPE=0>
     $<$<STREQUAL:${TARGET_SYSTEM_NAME},Windows>:SECUREC_USING_STD_SECURE_LIB=0 NOMINMAX>
-    $<$<STREQUAL:${ENABLE_OPEN_SRC},True>:ONLY_COMPILE_OPEN_SRC>
 )
 
 target_include_directories(metadef PRIVATE
@@ -420,7 +417,6 @@ target_link_libraries(exe_graph PRIVATE
 
 target_compile_definitions(exe_graph PRIVATE
         google=ascend_private
-        $<$<STREQUAL:${ENABLE_OPEN_SRC},True>:ONLY_COMPILE_OPEN_SRC>
         $<IF:$<STREQUAL:${TARGET_SYSTEM_NAME},Windows>,OS_TYPE=WIN,OS_TYPE=0>
         $<$<STREQUAL:${TARGET_SYSTEM_NAME},Windows>:SECUREC_USING_STD_SECURE_LIB=0 NOMINMAX>
         )

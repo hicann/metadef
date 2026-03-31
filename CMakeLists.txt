@@ -15,29 +15,6 @@ set(CMAKE_C_FLAGS_RELEASE "")
 set(CMAKE_CXX_FLAGS_RELEASE "")
 set(PRODUCT_SIDE "host" CACHE STRING "Build target: host or device")
 set(METADEF_DEVICE_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/device_output)
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.dev_env")
-    set(ENABLE_OPEN_SRC True)
-    set(ENABLE_METADEF_UT True)
-    set(ENABLE_METADEF_ST True)
-    # Read the file into a list of lines
-    file(STRINGS "${CMAKE_SOURCE_DIR}/.dev_env" DEV_ENV_LINES)
-
-    # Process each line
-    foreach(line IN LISTS DEV_ENV_LINES)
-        string(STRIP "${line}" line)
-        if(line MATCHES "^([^=]+)=(.*)$")
-            set(var_name "${CMAKE_MATCH_1}")
-            set(var_value "${CMAKE_MATCH_2}")
-            # Remove any leading/trailing whitespace
-            string(STRIP "${var_name}" var_name)
-            string(STRIP "${var_value}" var_value)
-            # Set the variable
-            set(${var_name} ${var_value})
-        endif()
-    endforeach()
-
-    set(ASCEND_INSTALL_PATH ${ASCEND_INSTALL_PATH}/latest)
-endif()
 
 # 编译缓存
 find_program(CCACHE_PROGRAM ccache)

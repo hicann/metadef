@@ -51,7 +51,6 @@ set_target_properties(error_manager PROPERTIES
 target_clone(error_manager error_manager_static STATIC)
 
 target_compile_definitions(error_manager_static PRIVATE
-    $<$<STREQUAL:${ENABLE_OPEN_SRC},True>:ONLY_COMPILE_OPEN_SRC>
     )
 
 set_target_properties(error_manager_static PROPERTIES
