@@ -183,7 +183,7 @@ main() {
   if [[ "X$ENABLE_METADEF_UT" = "Xon" || "X$ENABLE_METADEF_COV" = "Xon" ]]; then
     export ASAN_OPTIONS=detect_container_overflow=0
     ctest --verbose -j ${THREAD_NUM} -L ut --test-dir ${BUILD_PATH} --no-tests=error \
-      2>&1 | tee ${BUILD_PATH}/ctest_ut.log
+          --output-log ${BUILD_PATH}/ctest_ut.log
     if [[ "$?" -ne 0 ]]; then
       echo "!!! UT FAILED, PLEASE CHECK YOUR CHANGES !!!"
       echo -e "\033[31m${RUN_TEST_CASE}\033[0m"

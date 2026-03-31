@@ -109,7 +109,7 @@ inline bool IsLogPrintStdout() {
   do {                                                                                                                 \
     constexpr const char_t *TraceStatStr[] = {"INIT", "RUNNING", "WAITING", "STOP"};                                   \
     constexpr int32_t idx = static_cast<int32_t>(VALUE);                                                               \
-    char_t *v = const_cast<char_t *>(TraceStatStr[idx]);                                                               \
+    auto v = TraceStatStr[idx];                                                                                        \
     dlog_info((static_cast<uint32_t>(RUN_LOG_MASK) | static_cast<uint32_t>(GE_MODULE_NAME)),                           \
               "[status:%s]%" PRIu64 " %s:" fmt, v, GeLog::GetTid(), &__FUNCTION__[0U], ##__VA_ARGS__);                 \
   } while (false)
