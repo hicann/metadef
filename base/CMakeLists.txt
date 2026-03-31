@@ -124,7 +124,7 @@ target_link_libraries(rt2_registry_static
         )
 
 install(TARGETS rt2_registry_static
-        ARCHIVE DESTINATION ${INSTALL_LIBRARY_DIR}/${CMAKE_SYSTEM_PROCESSOR} OPTIONAL
+        ARCHIVE DESTINATION ${INSTALL_LIBRARY_DIR}/${CMAKE_SYSTEM_PROCESSOR} ${INSTALL_OPTIONAL}
         )
 ##############################################################
 set(STUB_HEADER_LIST
@@ -188,7 +188,7 @@ set_target_properties(stub_opp_registry PROPERTIES
 )
 
 ############ install ############
-install(TARGETS stub_opp_registry OPTIONAL
+install(TARGETS stub_opp_registry ${INSTALL_OPTIONAL}
         LIBRARY DESTINATION ${INSTALL_LIBRARY_DIR}/${CMAKE_SYSTEM_PROCESSOR}/stub
 )
 
@@ -373,13 +373,13 @@ if (NOT ENABLE_OPEN_SRC)
         OUTPUT_NAME metadef
         ARCHIVE_OUTPUT_DIRECTORY stub
     )
-    install(TARGETS stub_metadef_static OPTIONAL
+    install(TARGETS stub_metadef_static ${INSTALL_OPTIONAL}
             ARCHIVE DESTINATION ${INSTALL_LIBRARY_DIR}/${CMAKE_SYSTEM_PROCESSOR}/stub
             )
 endif ()
 
 ############ install ############
-install(TARGETS stub_metadef OPTIONAL
+install(TARGETS stub_metadef ${INSTALL_OPTIONAL}
         LIBRARY DESTINATION ${INSTALL_LIBRARY_DIR}/${CMAKE_SYSTEM_PROCESSOR}/stub
 )
 
@@ -434,7 +434,7 @@ if (NOT ENABLE_OPEN_SRC)
     set_target_properties(exe_graph_static PROPERTIES OUTPUT_NAME exe_graph)
 
     ############ install ############
-    install(TARGETS exe_graph_static OPTIONAL
+    install(TARGETS exe_graph_static ${INSTALL_OPTIONAL}
             ARCHIVE DESTINATION ${INSTALL_LIBRARY_DIR}
             )
 endif()
@@ -498,7 +498,7 @@ target_compile_options(exe_meta_device PRIVATE
         -D_FORTIFY_SOURCE=2
         )
 
-install(TARGETS exe_meta_device OPTIONAL
+install(TARGETS exe_meta_device ${INSTALL_OPTIONAL}
         ARCHIVE DESTINATION ${INSTALL_LIBRARY_DIR}
         COMPONENT metadef_device
         )
@@ -557,7 +557,7 @@ target_link_options(device_register PRIVATE
     -Wl,-Bsymbolic
 )
 
-install(TARGETS device_register OPTIONAL
+install(TARGETS device_register ${INSTALL_OPTIONAL}
   ARCHIVE DESTINATION ${INSTALL_LIBRARY_DIR}
   COMPONENT metadef_device
 )
@@ -648,7 +648,7 @@ target_link_options(tilingdata_base PRIVATE
     $<$<BOOL:${ENABLE_GCOV}>:-fprofile-arcs -ftest-coverage>
 )
 
-install(TARGETS tilingdata_base OPTIONAL
+install(TARGETS tilingdata_base ${INSTALL_OPTIONAL}
   ARCHIVE DESTINATION ${INSTALL_LIBRARY_DIR}
   COMPONENT metadef_device
 )
@@ -669,13 +669,13 @@ if (NOT ENABLE_OPEN_SRC)
             )
 
     ############ install ############
-    install(TARGETS stub_exe_graph_static OPTIONAL
+    install(TARGETS stub_exe_graph_static ${INSTALL_OPTIONAL}
             ARCHIVE DESTINATION ${INSTALL_LIBRARY_DIR}/${CMAKE_SYSTEM_PROCESSOR}/stub
             )
 endif ()
 
 ############ install ############
-install(TARGETS stub_exe_graph OPTIONAL
+install(TARGETS stub_exe_graph ${INSTALL_OPTIONAL}
         LIBRARY DESTINATION ${INSTALL_LIBRARY_DIR}/${CMAKE_SYSTEM_PROCESSOR}/stub
         )
 

@@ -155,6 +155,7 @@ if (ENABLE_OPEN_SRC)
 endif()
 
 include(cmake/common_funcs.cmake)
+set_common_params()
 add_subdirectory(inc)
 add_subdirectory(error_manager)
 add_subdirectory(base)
@@ -166,9 +167,9 @@ endif()
 
 install(TARGETS exe_graph error_manager opp_registry rt2_registry_static metadef
     EXPORT metadef-targets
-    LIBRARY DESTINATION ${INSTALL_LIBRARY_DIR} OPTIONAL COMPONENT opensdk
-    ARCHIVE DESTINATION ${INSTALL_LIBRARY_DIR} OPTIONAL COMPONENT opensdk
-    RUNTIME DESTINATION ${INSTALL_RUNTIME_DIR} OPTIONAL COMPONENT opensdk
+    LIBRARY DESTINATION ${INSTALL_LIBRARY_DIR} ${INSTALL_OPTIONAL}
+    ARCHIVE DESTINATION ${INSTALL_LIBRARY_DIR} ${INSTALL_OPTIONAL}
+    RUNTIME DESTINATION ${INSTALL_RUNTIME_DIR} ${INSTALL_OPTIONAL}
 )
 
 # 下列头文件发布是非法的，需要在后续整改中删掉
@@ -176,32 +177,32 @@ install(TARGETS exe_graph error_manager opp_registry rt2_registry_static metadef
 install(FILES   ${METADEF_DIR}/register/op_tiling/op_tiling_constants.h
                 ${METADEF_DIR}/register/op_tiling/op_compile_info_manager.h
                 ${METADEF_DIR}/register/op_tiling/op_tiling_utils.h
-        DESTINATION ${INSTALL_INCLUDE_DIR}/metadef/register/op_tiling COMPONENT opensdk EXCLUDE_FROM_ALL
+        DESTINATION ${INSTALL_INCLUDE_DIR}/metadef/register/op_tiling EXCLUDE_FROM_ALL
 )
 install(FILES   ${METADEF_DIR}/graph/normal_graph/operator_impl.h
                 ${METADEF_DIR}/graph/normal_graph/op_io.h
-        DESTINATION ${INSTALL_INCLUDE_DIR}/metadef/graph COMPONENT opensdk EXCLUDE_FROM_ALL
+        DESTINATION ${INSTALL_INCLUDE_DIR}/metadef/graph EXCLUDE_FROM_ALL
 )
 install(FILES   ${METADEF_DIR}/inc/graph/debug/ge_log.h
                 ${METADEF_DIR}/inc/graph/debug/ge_util.h # 被air使用
-        DESTINATION ${INSTALL_INCLUDE_DIR}/metadef/graph/debug COMPONENT opensdk EXCLUDE_FROM_ALL
+        DESTINATION ${INSTALL_INCLUDE_DIR}/metadef/graph/debug EXCLUDE_FROM_ALL
 )
 install(FILES   ${METADEF_DIR}/graph/utils/dumper/ge_graph_dumper.h
-        DESTINATION ${INSTALL_INCLUDE_DIR}/metadef/graph/utils/dumper COMPONENT opensdk EXCLUDE_FROM_ALL
+        DESTINATION ${INSTALL_INCLUDE_DIR}/metadef/graph/utils/dumper EXCLUDE_FROM_ALL
 )
 # ---------------------end-------------------------
 
 install(DIRECTORY ${METADEF_DIR}/inc/ DESTINATION ${INSTALL_INCLUDE_DIR}/metadef
-    COMPONENT opensdk EXCLUDE_FROM_ALL FILES_MATCHING PATTERN "*.h"
+    EXCLUDE_FROM_ALL FILES_MATCHING PATTERN "*.h"
 )
 
 install(DIRECTORY ${METADEF_DIR}/pkg_inc/ DESTINATION ${INSTALL_INCLUDE_DIR}/metadef
-        COMPONENT opensdk EXCLUDE_FROM_ALL FILES_MATCHING PATTERN "*.h"
+        EXCLUDE_FROM_ALL FILES_MATCHING PATTERN "*.h"
 )
 
 if (PACKAGE STREQUAL "opensdk")
     install(EXPORT metadef-targets DESTINATION ${INSTALL_CONFIG_DIR}
-        FILE metadef-targets.cmake COMPONENT opensdk EXCLUDE_FROM_ALL
+        FILE metadef-targets.cmake EXCLUDE_FROM_ALL
     )
     set(PKG_NAME metadef)
     configure_package_config_file(${TOP_DIR}/cmake/config/pkg_config_template.cmake.in
@@ -212,14 +213,14 @@ if (PACKAGE STREQUAL "opensdk")
     )
     unset(PKG_NAME)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/metadef-config.cmake
-        DESTINATION ${INSTALL_CONFIG_DIR} COMPONENT opensdk EXCLUDE_FROM_ALL
+        DESTINATION ${INSTALL_CONFIG_DIR} EXCLUDE_FROM_ALL
     )
 endif()
 
 if (ENABLE_OPEN_SRC AND "${PRODUCT_SIDE}" STREQUAL "host" AND ENABLE_BUILD_DEVICE)
     set(TOOLCHAIN_DIR ${ASCEND_INSTALL_PATH}/toolkit/toolchain/hcc)
     include(ExternalProject)
-    ExternalProject_add(metadef_device_ep
+    ExternalProject_Add(metadef_device_ep
         SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}
         CONFIGURE_COMMAND ${CMAKE_COMMAND}
             -G ${CMAKE_GENERATOR}
@@ -241,7 +242,7 @@ if (ENABLE_OPEN_SRC AND "${PRODUCT_SIDE}" STREQUAL "host" AND ENABLE_BUILD_DEVIC
             -DFORCE_REBUILD_CANN_3RD=${FORCE_REBUILD_CANN_3RD}
             <SOURCE_DIR>
         BUILD_COMMAND $(MAKE) metadef_device
-        INSTALL_COMMAND $(MAKE) install CMAKE_INSTALL_COMPONENT=metadef_device
+        INSTALL_COMMAND ${CMAKE_COMMAND} --install <BINARY_DIR> --component metadef_device
         BUILD_ALWAYS TRUE
     )
 endif()
@@ -260,9 +261,9 @@ if (ENABLE_OPEN_SRC AND "${PRODUCT_SIDE}" STREQUAL "host")
                     opp_registry
                     rt2_registry_static
                     metadef
-        LIBRARY DESTINATION ${ARCH_LINX_PATH}/lib64 OPTIONAL COMPONENT packages EXCLUDE_FROM_ALL
-        ARCHIVE DESTINATION ${ARCH_LINX_PATH}/lib64 OPTIONAL COMPONENT packages EXCLUDE_FROM_ALL
-        RUNTIME DESTINATION ${ARCH_LINX_PATH}/bin OPTIONAL COMPONENT packages EXCLUDE_FROM_ALL
+        LIBRARY DESTINATION ${ARCH_LINX_PATH}/lib64 OPTIONAL EXCLUDE_FROM_ALL
+        ARCHIVE DESTINATION ${ARCH_LINX_PATH}/lib64 OPTIONAL EXCLUDE_FROM_ALL
+        RUNTIME DESTINATION ${ARCH_LINX_PATH}/bin OPTIONAL EXCLUDE_FROM_ALL
     )
 
      if(EXISTS "${ASCEND_INSTALL_PATH}/share/info/runtime")

@@ -59,7 +59,7 @@ set_target_properties(error_manager_static PROPERTIES
 
 if(NOT TARGET_SYSTEM_NAME STREQUAL "Windows")
     install(TARGETS error_manager_static
-        ARCHIVE DESTINATION ${INSTALL_LIBRARY_DIR} OPTIONAL
+        ARCHIVE DESTINATION ${INSTALL_LIBRARY_DIR} ${INSTALL_OPTIONAL}
     )
 endif()
 
@@ -112,6 +112,6 @@ set_target_properties(stub_error_manager PROPERTIES
 )
 
 ############ install ############
-install(TARGETS stub_error_manager OPTIONAL
+install(TARGETS stub_error_manager ${INSTALL_OPTIONAL}
     LIBRARY DESTINATION ${INSTALL_LIBRARY_DIR}/${CMAKE_SYSTEM_PROCESSOR}/stub
 )
