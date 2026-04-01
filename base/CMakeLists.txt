@@ -40,7 +40,6 @@ target_compile_definitions(opp_registry PRIVATE
         google=ascend_private
         $<IF:$<STREQUAL:${TARGET_SYSTEM_NAME},Windows>,OS_TYPE=WIN,OS_TYPE=0>
         $<$<STREQUAL:${TARGET_SYSTEM_NAME},Windows>:SECUREC_USING_STD_SECURE_LIB=0 NOMINMAX>
-        $<$<STREQUAL:${ENABLE_OPEN_SRC},True>:ONLY_COMPILE_OPEN_SRC>
 )
 
 target_compile_options(opp_registry PRIVATE -O2 -DNO_METADEF_ABI_COMPATIABLE)
@@ -85,7 +84,6 @@ target_compile_options(rt2_registry_objects PRIVATE
 target_compile_definitions(rt2_registry_objects PRIVATE
         $<IF:$<STREQUAL:${TARGET_SYSTEM_NAME},Windows>,OS_TYPE=WIN,OS_TYPE=0>
         $<$<STREQUAL:${TARGET_SYSTEM_NAME},Windows>:SECUREC_USING_STD_SECURE_LIB=0 NOMINMAX>
-        $<$<STREQUAL:${ENABLE_OPEN_SRC},True>:ONLY_COMPILE_OPEN_SRC>
         )
 
 target_include_directories(rt2_registry_objects PRIVATE
@@ -126,7 +124,7 @@ target_link_libraries(rt2_registry_static
         )
 
 install(TARGETS rt2_registry_static
-        ARCHIVE DESTINATION ${INSTALL_LIBRARY_DIR}/${CMAKE_SYSTEM_PROCESSOR} OPTIONAL
+        ARCHIVE DESTINATION ${INSTALL_LIBRARY_DIR}/${CMAKE_SYSTEM_PROCESSOR} ${INSTALL_OPTIONAL}
         )
 ##############################################################
 set(STUB_HEADER_LIST
@@ -190,7 +188,7 @@ set_target_properties(stub_opp_registry PROPERTIES
 )
 
 ############ install ############
-install(TARGETS stub_opp_registry OPTIONAL
+install(TARGETS stub_opp_registry ${INSTALL_OPTIONAL}
         LIBRARY DESTINATION ${INSTALL_LIBRARY_DIR}/${CMAKE_SYSTEM_PROCESSOR}/stub
 )
 
@@ -233,7 +231,6 @@ target_compile_definitions(metadef PRIVATE
     google=ascend_private
     $<IF:$<STREQUAL:${TARGET_SYSTEM_NAME},Windows>,OS_TYPE=WIN,OS_TYPE=0>
     $<$<STREQUAL:${TARGET_SYSTEM_NAME},Windows>:SECUREC_USING_STD_SECURE_LIB=0 NOMINMAX>
-    $<$<STREQUAL:${ENABLE_OPEN_SRC},True>:ONLY_COMPILE_OPEN_SRC>
 )
 
 target_include_directories(metadef PRIVATE
@@ -376,13 +373,13 @@ if (NOT ENABLE_OPEN_SRC)
         OUTPUT_NAME metadef
         ARCHIVE_OUTPUT_DIRECTORY stub
     )
-    install(TARGETS stub_metadef_static OPTIONAL
+    install(TARGETS stub_metadef_static ${INSTALL_OPTIONAL}
             ARCHIVE DESTINATION ${INSTALL_LIBRARY_DIR}/${CMAKE_SYSTEM_PROCESSOR}/stub
             )
 endif ()
 
 ############ install ############
-install(TARGETS stub_metadef OPTIONAL
+install(TARGETS stub_metadef ${INSTALL_OPTIONAL}
         LIBRARY DESTINATION ${INSTALL_LIBRARY_DIR}/${CMAKE_SYSTEM_PROCESSOR}/stub
 )
 
@@ -420,7 +417,6 @@ target_link_libraries(exe_graph PRIVATE
 
 target_compile_definitions(exe_graph PRIVATE
         google=ascend_private
-        $<$<STREQUAL:${ENABLE_OPEN_SRC},True>:ONLY_COMPILE_OPEN_SRC>
         $<IF:$<STREQUAL:${TARGET_SYSTEM_NAME},Windows>,OS_TYPE=WIN,OS_TYPE=0>
         $<$<STREQUAL:${TARGET_SYSTEM_NAME},Windows>:SECUREC_USING_STD_SECURE_LIB=0 NOMINMAX>
         )
@@ -438,7 +434,7 @@ if (NOT ENABLE_OPEN_SRC)
     set_target_properties(exe_graph_static PROPERTIES OUTPUT_NAME exe_graph)
 
     ############ install ############
-    install(TARGETS exe_graph_static OPTIONAL
+    install(TARGETS exe_graph_static ${INSTALL_OPTIONAL}
             ARCHIVE DESTINATION ${INSTALL_LIBRARY_DIR}
             )
 endif()
@@ -502,7 +498,7 @@ target_compile_options(exe_meta_device PRIVATE
         -D_FORTIFY_SOURCE=2
         )
 
-install(TARGETS exe_meta_device OPTIONAL
+install(TARGETS exe_meta_device ${INSTALL_OPTIONAL}
         ARCHIVE DESTINATION ${INSTALL_LIBRARY_DIR}
         COMPONENT metadef_device
         )
@@ -561,7 +557,7 @@ target_link_options(device_register PRIVATE
     -Wl,-Bsymbolic
 )
 
-install(TARGETS device_register OPTIONAL
+install(TARGETS device_register ${INSTALL_OPTIONAL}
   ARCHIVE DESTINATION ${INSTALL_LIBRARY_DIR}
   COMPONENT metadef_device
 )
@@ -652,7 +648,7 @@ target_link_options(tilingdata_base PRIVATE
     $<$<BOOL:${ENABLE_GCOV}>:-fprofile-arcs -ftest-coverage>
 )
 
-install(TARGETS tilingdata_base OPTIONAL
+install(TARGETS tilingdata_base ${INSTALL_OPTIONAL}
   ARCHIVE DESTINATION ${INSTALL_LIBRARY_DIR}
   COMPONENT metadef_device
 )
@@ -673,13 +669,13 @@ if (NOT ENABLE_OPEN_SRC)
             )
 
     ############ install ############
-    install(TARGETS stub_exe_graph_static OPTIONAL
+    install(TARGETS stub_exe_graph_static ${INSTALL_OPTIONAL}
             ARCHIVE DESTINATION ${INSTALL_LIBRARY_DIR}/${CMAKE_SYSTEM_PROCESSOR}/stub
             )
 endif ()
 
 ############ install ############
-install(TARGETS stub_exe_graph OPTIONAL
+install(TARGETS stub_exe_graph ${INSTALL_OPTIONAL}
         LIBRARY DESTINATION ${INSTALL_LIBRARY_DIR}/${CMAKE_SYSTEM_PROCESSOR}/stub
         )
 
