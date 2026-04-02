@@ -17,11 +17,11 @@ endif()
 unset(json_FOUND CACHE)
 unset(JSON_INCLUDE CACHE)
 
-if(NOT ASCEND_3RD_LIB_PATH)
-  set(ASCEND_3RD_LIB_PATH ${PROJECT_SOURCE_DIR}/third_party)
+if(NOT CANN_3RD_LIB_PATH)
+  set(CANN_3RD_LIB_PATH ${PROJECT_SOURCE_DIR}/third_party)
 endif()
 
-set(JSON_INSTALL_PATH ${ASCEND_3RD_LIB_PATH}/json)
+set(JSON_INSTALL_PATH ${CANN_3RD_LIB_PATH}/json)
 
 find_path(JSON_INCLUDE
         NAMES nlohmann/json.hpp

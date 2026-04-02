@@ -9,7 +9,7 @@
 # ----------------------------------------------------------------------------------------------------------
 include(ExternalProject)
 
-set(ASCEND_PROTOBUF_DIR ${ASCEND_3RD_LIB_PATH}/ascend_protobuf)
+set(ASCEND_PROTOBUF_DIR ${CANN_3RD_LIB_PATH}/ascend_protobuf)
 # 从已经下载好的路径找
 find_path(ASCEND_PROTOBUF_SHARED_INCLUDE
     NAMES google/protobuf/api.pb.h
@@ -43,8 +43,8 @@ if(ascend_protobuf_FOUND AND NOT FORCE_REBUILD_CANN_3RD)
 else()
     message(STATUS "[ThirdPartyLib][ascend protobuf] ascend protobuf shared not found, finding binary file.")
 
-    set(REQ_URL "${ASCEND_3RD_LIB_PATH}/protobuf/protobuf-all-25.1.tar.gz")
-    set(REQ_URL_BACK "${ASCEND_3RD_LIB_PATH}/protobuf/protobuf-25.1.tar.gz")
+    set(REQ_URL "${CANN_3RD_LIB_PATH}/protobuf/protobuf-all-25.1.tar.gz")
+    set(REQ_URL_BACK "${CANN_3RD_LIB_PATH}/protobuf/protobuf-25.1.tar.gz")
     # 初始化可选参数列表
     set(PROTOBUF_EXTRA_ARGS "")
     if(EXISTS ${REQ_URL})

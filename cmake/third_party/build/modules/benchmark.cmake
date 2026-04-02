@@ -10,13 +10,13 @@
 
 include_guard(GLOBAL)
 
-set(BENCHMARK_CMAKE_PATH ${ASCEND_3RD_LIB_PATH}/benchmark-1.8.3/lib/cmake/benchmark/benchmarkConfig.cmake)
+set(BENCHMARK_CMAKE_PATH ${CANN_3RD_LIB_PATH}/benchmark-1.8.3/lib/cmake/benchmark/benchmarkConfig.cmake)
 if(EXISTS ${BENCHMARK_CMAKE_PATH})
     message(STATUS "[ThirdPartyLib][benchmark] ${BENCHMARK_CMAKE_PATH} found, benchmark is ready after compile.")
     find_package(benchmark CONFIG REQUIRED)
 else()
     message(STATUS "[ThirdPartyLib][benchmark] ${BENCHMARK_CMAKE_PATH} not found, benchmark download.")
-    set(BENCHMARK_FILE_PATH ${ASCEND_3RD_LIB_PATH}/benchmark-1.8.3)
+    set(BENCHMARK_FILE_PATH ${CANN_3RD_LIB_PATH}/benchmark-1.8.3)
     set(REQ_URL "${CMAKE_THIRD_PARTY_LIB_DIR}/benchmark/benchmark-1.8.3.tar.gz")
     set(BENCHMARK_EXTRA_ARGS "")
     if(EXISTS ${REQ_URL})
