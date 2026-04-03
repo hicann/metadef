@@ -14,7 +14,7 @@ unset(GTEST_MAIN_STATIC_LIBRARY CACHE)
 unset(GMOCK_STATIC_LIBRARY CACHE)
 unset(GMOCK_MAIN_STATIC_LIBRARY CACHE)
 
-set(GTEST_INSTALL_PATH ${ASCEND_3RD_LIB_PATH}/gtest)
+set(GTEST_INSTALL_PATH ${CANN_3RD_LIB_PATH}/gtest)
 message("GTEST_INSTALL_PATH=${GTEST_INSTALL_PATH}")
 find_path(GTEST_INCLUDE
         NAMES gtest/gtest.h
@@ -61,7 +61,7 @@ find_package_handle_standard_args(gtest
 if(gtest_FOUND AND NOT FORCE_REBUILD_CANN_3RD)
     message(STATUS "[ThirdPartyLib][gtest] gtest found in ${GTEST_INSTALL_PATH}, and not force rebuild cann third_party")
 else()
-    set(REQ_URL "${ASCEND_3RD_LIB_PATH}/gtest/googletest-1.14.0.tar.gz")
+    set(REQ_URL "${CANN_3RD_LIB_PATH}/gtest/googletest-1.14.0.tar.gz")
     set(GTEST_EXTRA_ARGS "")
     if(EXISTS ${REQ_URL})
         message(STATUS "[ThirdPartyLib][gtest] ${REQ_URL} found.")

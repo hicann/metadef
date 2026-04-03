@@ -27,7 +27,7 @@ enable_testing()
 
 if (NOT DEFINED CMAKE_MODULE_PATH OR NOT DEFINED CMAKE_PREFIX_PATH)
     # In a developer environment, neither CMAKE_MODULE_PATH nor CMAKE_PREFIX_PATH is set.
-    if (NOT DEFINED ASCEND_INSTALL_PATH OR NOT DEFINED ASCEND_3RD_LIB_PATH)
+    if (NOT DEFINED ASCEND_INSTALL_PATH OR NOT DEFINED CANN_3RD_LIB_PATH)
         message(FATAL_ERROR "Environment setup incomplete.\n"
                 "To complete the setup, please refer to https://gitcode.com/cann/metadef/blob/master/docs/build.md#2-%E5%AE%89%E8%A3%85%E8%BD%AF%E4%BB%B6%E5%8C%85.")
     endif ()
@@ -37,25 +37,25 @@ if (NOT DEFINED CMAKE_MODULE_PATH)
     set(CMAKE_MODULE_PATH
         ${CMAKE_CURRENT_LIST_DIR}/cmake/modules
         ${CMAKE_CURRENT_LIST_DIR}/cmake/third_party/scripts/modules
-        ${ASCEND_3RD_LIB_PATH}/cmake/modules
+        ${CANN_3RD_LIB_PATH}/cmake/modules
     )
 endif()
 
 if (NOT DEFINED CMAKE_PREFIX_PATH)
     set(CMAKE_PREFIX_PATH
-        ${ASCEND_3RD_LIB_PATH}/json
-        ${ASCEND_3RD_LIB_PATH}/openssl
-        ${ASCEND_3RD_LIB_PATH}/protoc
-        ${ASCEND_3RD_LIB_PATH}/protoc_grpc
-        ${ASCEND_3RD_LIB_PATH}/grpc
-        ${ASCEND_3RD_LIB_PATH}/protobuf_static
-        ${ASCEND_3RD_LIB_PATH}/ascend_protobuf
-        ${ASCEND_3RD_LIB_PATH}/ascend_protobuf_static
-        ${ASCEND_3RD_LIB_PATH}/gtest_shared/lib64/cmake/GTest
-        ${ASCEND_3RD_LIB_PATH}/benchmark-1.8.3
-        ${ASCEND_3RD_LIB_PATH}/pybind11
-        ${ASCEND_3RD_LIB_PATH}/symengine/lib/cmake/symengine
-        ${ASCEND_3RD_LIB_PATH}/boost/lib/cmake/Boost-1.87.0
+        ${CANN_3RD_LIB_PATH}/json
+        ${CANN_3RD_LIB_PATH}/openssl
+        ${CANN_3RD_LIB_PATH}/protoc
+        ${CANN_3RD_LIB_PATH}/protoc_grpc
+        ${CANN_3RD_LIB_PATH}/grpc
+        ${CANN_3RD_LIB_PATH}/protobuf_static
+        ${CANN_3RD_LIB_PATH}/ascend_protobuf
+        ${CANN_3RD_LIB_PATH}/ascend_protobuf_static
+        ${CANN_3RD_LIB_PATH}/gtest_shared/lib64/cmake/GTest
+        ${CANN_3RD_LIB_PATH}/benchmark-1.8.3
+        ${CANN_3RD_LIB_PATH}/pybind11
+        ${CANN_3RD_LIB_PATH}/symengine/lib/cmake/symengine
+        ${CANN_3RD_LIB_PATH}/boost/lib/cmake/Boost-1.87.0
         ${ASCEND_INSTALL_PATH}
     )
 endif()
@@ -63,7 +63,7 @@ endif()
 include(CMakePrintHelpers)
 message(STATUS "Variables in metadef project:")
 cmake_print_variables(ASCEND_INSTALL_PATH)
-cmake_print_variables(ASCEND_3RD_LIB_PATH)
+cmake_print_variables(CANN_3RD_LIB_PATH)
 cmake_print_variables(CMAKE_SYSTEM_PROCESSOR)
 cmake_print_variables(CMAKE_BUILD_TYPE)
 cmake_print_variables(CMAKE_INSTALL_PREFIX)
@@ -123,7 +123,7 @@ endif()
 
 # 查看三方软件目录，并尝试调整目录结构
 execute_process(
-    COMMAND bash scripts/prepare_third_party.sh ${ASCEND_3RD_LIB_PATH}
+    COMMAND bash scripts/prepare_third_party.sh ${CANN_3RD_LIB_PATH}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     RESULT_VARIABLE SCRIPT_RESULT
     OUTPUT_VARIABLE SCRIPT_OUTPUT
@@ -235,7 +235,7 @@ if (ENABLE_OPEN_SRC AND "${PRODUCT_SIDE}" STREQUAL "host" AND ENABLE_BUILD_DEVIC
             -DENABLE_BENCHMARK=${ENABLE_BENCHMARK}
             -DBUILD_WITHOUT_AIR=${BUILD_WITHOUT_AIR}
             -DASCEND_INSTALL_PATH=${ASCEND_INSTALL_PATH}
-            -DASCEND_3RD_LIB_PATH=${ASCEND_3RD_LIB_PATH}
+            -DCANN_3RD_LIB_PATH=${CANN_3RD_LIB_PATH}
             -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
             -DENABLE_SYMENGINE=${ENABLE_SYMENGINE}
             -DCMAKE_INSTALL_PREFIX=${METADEF_DEVICE_OUTPUT}

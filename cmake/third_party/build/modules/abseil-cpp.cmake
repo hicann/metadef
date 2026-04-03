@@ -10,7 +10,7 @@
 
 include(ExternalProject)
 
-set(REQ_URL "${ASCEND_3RD_LIB_PATH}/abseil-cpp/abseil-cpp-20230802.1.tar.gz")
+set(REQ_URL "${CANN_3RD_LIB_PATH}/abseil-cpp/abseil-cpp-20230802.1.tar.gz")
 # 初始化可选参数列表
 set(ABSEIL_EXTRA_ARGS "")
 if(EXISTS ${REQ_URL})
@@ -19,7 +19,7 @@ else()
   message(STATUS "[ThirdPartyLib][abseil-cpp] ${REQ_URL} not found, need download.")
   set(REQ_URL "https://gitcode.com/cann-src-third-party/abseil-cpp/releases/download/20230802.1/abseil-cpp-20230802.1.tar.gz")
   list(APPEND ABSEIL_EXTRA_ARGS
-      DOWNLOAD_DIR ${ASCEND_3RD_LIB_PATH}/abseil-cpp
+      DOWNLOAD_DIR ${CANN_3RD_LIB_PATH}/abseil-cpp
   )
 endif()
 

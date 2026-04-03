@@ -241,7 +241,7 @@ build_metadef() {
               -D ENABLE_GCOV=${ENABLE_GCOV} \
               -D BUILD_WITHOUT_AIR=True \
               -D ASCEND_INSTALL_PATH=${ASCEND_INSTALL_PATH} \
-              -D ASCEND_3RD_LIB_PATH=${CANN_3RD_LIB_PATH} \
+              -D CANN_3RD_LIB_PATH=${CANN_3RD_LIB_PATH} \
               -D CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
               -D CMAKE_INSTALL_PREFIX=${OUTPUT_PATH} \
               -D ENABLE_SYMENGINE=${ENABLE_SYMENGINE} \
