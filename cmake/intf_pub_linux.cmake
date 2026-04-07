@@ -8,6 +8,12 @@
 # See LICENSE in the root of the software repository for the full text of the License.
 # -----------------------------------------------------------------------------------------------------------
 
+if (CMAKE_BUILD_TYPE MATCHES GCOV)
+    set(OPTIMIZE_OPTION "-O0")
+else ()
+    set(OPTIMIZE_OPTION "-O2")
+endif ()
+
 include_guard(GLOBAL)
 if (TARGET intf_pub)
     return()
@@ -17,8 +23,10 @@ endif()
 add_library(intf_pub_base INTERFACE)
 
 target_compile_options(intf_pub_base INTERFACE
+    ${OPTIMIZE_OPTION}
     -Wall
     -fPIC
+    $<$<NOT:$<STREQUAL:${CMAKE_BUILD_TYPE},GCOV>>:-D_FORTIFY_SOURCE=2>
     $<IF:$<STREQUAL:${CMAKE_SYSTEM_NAME},centos>,-fstack-protector-all,-fstack-protector-strong>
     $<$<CONFIG:Debug>:-g>
     $<$<BOOL:${ENABLE_ASAN}>:-fsanitize=address -fsanitize=leak -fsanitize-recover=address,all -fno-stack-protector -fno-omit-frame-pointer -g>
