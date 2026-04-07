@@ -53,6 +53,7 @@ uint32_t GetOpImplFunctionsV3(TypesToImplV2 *impl, size_t g_impl_num) {
     funcs.tiling = (gert::OpImplRegisterV2::TilingKernelFunc) (0x10 + i);
     funcs.infer_shape = (gert::OpImplRegisterV2::InferShapeKernelFunc) (0x20 + i);
     funcs.infer_symbol_shape = (gert::OpImplKernelRegistry::InferSymbolShapeKernelFunc) (0x30 + i);
+    funcs.exception_func = (gert::OpImplRegisterV2::ExceptionDumpFunc) (0x40 + i);
     funcs.infer_datatype = nullptr;
     funcs.tiling_parse = nullptr;
     funcs.compile_info_deleter = nullptr;

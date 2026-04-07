@@ -31,6 +31,17 @@
   } else {                                                                                                             \
     /* 空分支，无需操作 */                                                                                             \
   }
+
+#define MERGE_SCALAR(merged, src, member)                                                              \
+  do {                                                                                                  \
+    if ((merged).member == 0 && (src).member != 0) {                                                    \
+      (merged).member = (src).member;                                                                   \
+    } else if ((merged).member != 0 && (src).member != 0) {                                             \
+      GELOGW("op type %s " #member " has been registered", op_type.c_str());                            \
+    } else {                                                                                            \
+      /* 已经注册且没有重复注册 */                                                                        \
+    }                                                                                                   \
+  } while (0)
 namespace gert {
 namespace {
 const char_t *const kBuiltIn = "built-in";     // opp built-in directory name
@@ -176,53 +187,13 @@ void OpImplSpaceRegistryImpl::MergeFunctions(OpImplKernelRegistry::OpImplFunctio
   MERGE_FUNCTION(merged_funcs, src_funcs, op_type.c_str(), gen_task)
   MERGE_FUNCTION(merged_funcs, src_funcs, op_type.c_str(), check_support)
   MERGE_FUNCTION(merged_funcs, src_funcs, op_type.c_str(), op_select_format)
-  if (merged_funcs.max_tiling_data_size == 0U) {
-    merged_funcs.max_tiling_data_size = src_funcs.max_tiling_data_size;
-  } else if (src_funcs.max_tiling_data_size != 0U) {
-    GELOGW("op type %s max_tiling_data_size has been registered", op_type.c_str());
-  } else {
-    // 已经注册且没有重复注册
-  }
-
-  if (merged_funcs.host_inputs == 0U) {
-    merged_funcs.host_inputs = src_funcs.host_inputs;
-  } else if (src_funcs.host_inputs != 0U) {
-    GELOGW("op type %s host_inputs has been registered", op_type.c_str());
-  } else {
-    // 已经注册且没有重复注册
-  }
-
-  if (merged_funcs.output_shape_depend_compute == 0UL) {
-    merged_funcs.output_shape_depend_compute = src_funcs.output_shape_depend_compute;
-  } else if (src_funcs.output_shape_depend_compute != 0UL) {
-    GELOGW("op type %s output_shape_depend_compute has been registered", op_type.c_str());
-  } else {
-    // 已经注册且没有重复注册
-  }
-
-  if (merged_funcs.inputs_dependency == 0U) {
-    merged_funcs.inputs_dependency = src_funcs.inputs_dependency;
-  } else if (src_funcs.inputs_dependency != 0U) {
-    GELOGW("op type %s inputs_dependency has been registered", op_type.c_str());
-  } else {
-    // 已经注册且没有重复注册
-  }
-
-  if (merged_funcs.tiling_dependency == 0U) {
-    merged_funcs.tiling_dependency = src_funcs.tiling_dependency;
-  } else if (src_funcs.tiling_dependency != 0U) {
-    GELOGW("op type %s tiling_dependency has been registered", op_type.c_str());
-  } else {
-    // 已经注册且没有重复注册
-  }
-
-  if (merged_funcs.tiling_dependency_placements == 0U) {
-    merged_funcs.tiling_dependency_placements = src_funcs.tiling_dependency_placements;
-  } else if (src_funcs.tiling_dependency_placements != 0U) {
-    GELOGW("op type %s tiling_dependency_placement has been registered", op_type.c_str());
-  } else {
-    // 已经注册且没有重复注册
-  }
+  MERGE_FUNCTION(merged_funcs, src_funcs, op_type.c_str(), exception_func)
+  MERGE_SCALAR(merged_funcs, src_funcs, max_tiling_data_size);
+  MERGE_SCALAR(merged_funcs, src_funcs, host_inputs);
+  MERGE_SCALAR(merged_funcs, src_funcs, output_shape_depend_compute);
+  MERGE_SCALAR(merged_funcs, src_funcs, inputs_dependency);
+  MERGE_SCALAR(merged_funcs, src_funcs, tiling_dependency);
+  MERGE_SCALAR(merged_funcs, src_funcs, tiling_dependency_placements);
 
   if (merged_funcs.private_attrs.size() == 0U) {
     merged_funcs.private_attrs = src_funcs.private_attrs;
