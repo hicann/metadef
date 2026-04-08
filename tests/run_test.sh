@@ -205,9 +205,7 @@ main() {
         -d ${BUILD_RELATIVE_PATH}/base/CMakeFiles/exe_graph.dir \
         -d ${BUILD_RELATIVE_PATH}/base/CMakeFiles/rt2_registry_objects.dir \
         -o cov/tmp.info $(add_lcov_ops_by_major_version 2 "--ignore-errors empty")
-      lcov -r cov/tmp.info '*/output/*' \
-                           '/usr/*' \
-                           -o cov/coverage.info
+      lcov -r cov/tmp.info '/usr/*' -o cov/coverage.info
       genhtml cov/coverage.info -o cov/html
     fi
   fi
