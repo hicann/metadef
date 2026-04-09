@@ -78,6 +78,7 @@ set(INSTALL_LIBRARY_DIR lib)
 set(INSTALL_RUNTIME_DIR bin)
 set(INSTALL_INCLUDE_DIR include)
 set(INSTALL_CONFIG_DIR cmake)
+set(INSTALL_DEVICE_LIBRARY_DIR metadef/lib64/device/lib64)
 
 include(CMakePackageConfigHelpers)
 

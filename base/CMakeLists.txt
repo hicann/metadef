@@ -499,7 +499,7 @@ target_compile_options(exe_meta_device PRIVATE
         )
 
 install(TARGETS exe_meta_device ${INSTALL_OPTIONAL}
-        ARCHIVE DESTINATION ${INSTALL_LIBRARY_DIR}
+        ARCHIVE DESTINATION ${INSTALL_DEVICE_LIBRARY_DIR}
         COMPONENT metadef_device
         )
 
@@ -558,7 +558,7 @@ target_link_options(device_register PRIVATE
 )
 
 install(TARGETS device_register ${INSTALL_OPTIONAL}
-  ARCHIVE DESTINATION ${INSTALL_LIBRARY_DIR}
+  ARCHIVE DESTINATION ${INSTALL_DEVICE_LIBRARY_DIR}
   COMPONENT metadef_device
 )
 
@@ -649,7 +649,7 @@ target_link_options(tilingdata_base PRIVATE
 )
 
 install(TARGETS tilingdata_base ${INSTALL_OPTIONAL}
-  ARCHIVE DESTINATION ${INSTALL_LIBRARY_DIR}
+  ARCHIVE DESTINATION ${INSTALL_DEVICE_LIBRARY_DIR}
   COMPONENT metadef_device
 )
 
