@@ -200,6 +200,26 @@ install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/base/type/ascend_string_impl.h
         COMPONENT metadef
 )
 
+install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/base/asc/opcheck/op_check_register_impl.h
+        DESTINATION metadef/pkg_inc/base/asc/opcheck
+        COMPONENT metadef
+)
+
+install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/base/asc/opdef/op_config_registry_impl.h
+        DESTINATION metadef/pkg_inc/base/asc/opdef
+        COMPONENT metadef
+)
+
+install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/base/asc/opdef/op_def_factory_impl.h
+        DESTINATION metadef/pkg_inc/base/asc/opdef
+        COMPONENT metadef
+)
+
+install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/base/asc/opdef/op_def_impl.h
+        DESTINATION metadef/pkg_inc/base/asc/opdef
+        COMPONENT metadef
+)
+
 install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/base/utils/type_utils_impl.h
         DESTINATION metadef/pkg_inc/base/utils
         COMPONENT metadef
@@ -271,6 +291,17 @@ set(EXTERNAL_REGISTRY_FILES
 )
 install(FILES ${EXTERNAL_REGISTRY_FILES}
     DESTINATION metadef/include/register
+    COMPONENT metadef
+)
+
+set(EXTERNAL_ASC_REGISTRY_FILES
+    ${CMAKE_SOURCE_DIR}/inc/external/asc/register/op_config_registry.h
+    ${CMAKE_SOURCE_DIR}/inc/external/asc/register/op_def_factory.h
+    ${CMAKE_SOURCE_DIR}/inc/external/asc/register/op_def.h
+    ${CMAKE_SOURCE_DIR}/inc/external/asc/register/op_def_registry.h
+)
+install(FILES ${EXTERNAL_ASC_REGISTRY_FILES}
+    DESTINATION metadef/include/register/asc
     COMPONENT metadef
 )
 
