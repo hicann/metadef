@@ -57,8 +57,6 @@ const std::string kCompilerVersion = "compiler_version=";
 const std::string kVersionInfo = "/version.info";
 const std::string kOppVersion = "Version=";
 constexpr size_t kEffectiveVersionNum = 2U;
-const std::string kOpMasterDeviceLib = "/op_impl/ai_core/tbe/op_master_device/lib/";
-const std::string kOpTilingDeviceLib = "/op_impl/ai_core/tbe/op_tiling_device/lib/";
 const std::string kOppLatest = "opp_latest";
 
 std::string TransRequiredOppAbiVersionToString(const std::vector<std::pair<uint32_t, uint32_t>> &required_version) {
@@ -641,50 +639,6 @@ ge::Status PluginManager::GetUpgradedOpMasterPath(std::string &op_tiling_path) {
   return GetOppPluginPathNew(upgraded_opp_path, "%s/op_impl/ai_core/tbe", op_tiling_path, "");
 }
 
-ge::Status PluginManager::GetCustomOpPath(const std::string &fmk_type, std::string &customop_path) {
-  GELOGI("Enter GetCustomOpPath schedule");
-  std::string opp_path;
-  GE_ASSERT_TRUE(GetOppPath(opp_path) == ge::SUCCESS, "Failed to get opp path!");
-  if (!IsNewOppPathStruct(opp_path)) {
-    GELOGI("Opp plugin path structure is old version!");
-    return GetOppPluginPathOld(opp_path, "framework/%s/" + fmk_type + "/", customop_path, "framework/%s/");
-  } else {
-    GELOGI("Opp plugin path structure is new version!");
-    GetPluginPathFromCustomOppPath("framework/", customop_path);
-    return GetOppPluginPathNew(opp_path, "%s/framework/" + fmk_type + "/", customop_path, "framework/custom/",
-                               "%s/framework/");
-  }
-}
-
-ge::Status PluginManager::GetCustomCaffeProtoPath(std::string &customcaffe_path) {
-  GELOGD("Enter GetCustomCaffeProtoPath schedule");
-  std::string opp_path;
-  GE_ASSERT_TRUE(GetOppPath(opp_path) == ge::SUCCESS, "Failed to get opp path!");
-  if (!IsNewOppPathStruct(opp_path)) {
-    customcaffe_path = opp_path + "framework/custom/caffe/";
-    GELOGI("Opp plugin path structure is old version! customcaffe_path is '%s'", customcaffe_path.c_str());
-    return ge::SUCCESS;
-  } else {
-    GELOGI("Opp plugin path structure is new version!");
-    GetPluginPathFromCustomOppPath("framework/caffe/", customcaffe_path);
-    const std::string vendors_config = opp_path + kVendors + "/" + kConfig;
-    std::vector<std::string> vendors;
-    if (GetOppPluginVendors(vendors_config, vendors) != ge::SUCCESS) {
-      GELOGI("Can not get opp plugin vendors!");
-      customcaffe_path += opp_path + "framework/custom/caffe/";
-    } else {
-      for (const auto &vendor : vendors) {
-        if ((!customcaffe_path.empty()) && (customcaffe_path.back() != ':')) {
-          customcaffe_path += ":";
-        }
-        customcaffe_path += opp_path + kVendors + "/" + vendor + "/framework/caffe/";
-      }
-    }
-    GELOGI("customcaffe_path is '%s'", customcaffe_path.c_str());
-    return ge::SUCCESS;
-  }
-}
-
 ge::Status PluginManager::GetOpTilingForwardOrderPath(std::string &op_tiling_path) {
   GELOGI("Enter GetOpTilingPath schedule");
   std::string opp_path;
@@ -699,28 +653,6 @@ ge::Status PluginManager::GetOpTilingForwardOrderPath(std::string &op_tiling_pat
     GE_ASSERT_TRUE(GetOppPluginPathNew(opp_path, "%s/op_impl/ai_core/tbe/", op_tiling_path,
                                        "op_impl/custom/ai_core/tbe/") == ge::SUCCESS,
                    "GetOppPluginPathNew failed!");
-  }
-  return ge::SUCCESS;
-}
-
-ge::Status PluginManager::GetOpTilingPath(std::string &op_tiling_path) {
-  GE_ASSERT_SUCCESS(GetOpTilingForwardOrderPath(op_tiling_path));
-  return ReversePathString(op_tiling_path);
-}
-
-ge::Status PluginManager::GetConstantFoldingOpsPath(const std::string &path_base, std::string &constant_folding_ops_path) {
-  GELOGI("Enter GetConstantFoldingOpsPath schedule");
-  std::string opp_path;
-  const ge::Status ret = GetOppPath(opp_path);
-  if (ret != ge::SUCCESS) {
-    GELOGW("Failed to get opp path from env and so file! use path_base as opp path");
-    opp_path = path_base;
-  }
-  GE_ASSERT_TRUE(!opp_path.empty(), "[Check]Value of opp_path should not be empty here!");
-  if (!IsNewOppPathStruct(opp_path)) {
-    constant_folding_ops_path = opp_path + kHostCpuLibRelativePathV01;
-  } else {
-    constant_folding_ops_path = opp_path + kHostCpuLibRelativePathV02;
   }
   return ge::SUCCESS;
 }
@@ -1234,30 +1166,6 @@ void PluginManager::FindSoFilesInCustomPassDirs(const std::string &directory,
   }
 
   mmScandirFree(entries, dir_num);
-}
-
-ge::Status PluginManager::GetOpMasterDeviceSoPath(std::string &op_master_device_path) {
-  // op_master_device打包在opp和opp_kernel中，两个路径下的so都需要读取
-  // op_master_device没有先后顺序，按照算子KernelDef中的so_name选择对应的so
-  std::string opp_path;
-  GE_ASSERT_TRUE(GetOppPath(opp_path) == ge::SUCCESS, "Failed to get opp path!");
-  GetPluginPathFromCustomOppPath(kOpMasterDeviceLib, op_master_device_path);
-  std::string sub_pkg_builtin_path = opp_path + "built-in" + kOpTilingDeviceLib;
-  if (mmAccess(sub_pkg_builtin_path.c_str()) == EN_OK) {
-    GELOGI("[GetOpMasterDeviceSoPath] Sub pkg builtin path exists.");
-    GE_ASSERT_SUCCESS(GetOppPluginPathNew(opp_path, "%s" + kOpTilingDeviceLib, op_master_device_path, "", "%s" + kOpMasterDeviceLib));
-  } else {
-    // 兼容老CANN包
-    GELOGI("[GetOpMasterDeviceSoPath] Sub pkg builtin path does not exist.");
-    GE_ASSERT_SUCCESS(GetOppPluginPathNew(opp_path, "%s" + kOpMasterDeviceLib, op_master_device_path, "", "%s" + kOpMasterDeviceLib));
-  }
-  std::string opp_kernel_path;
-  (void) GetUpgradedOppPath(opp_kernel_path);
-  if (!opp_kernel_path.empty()) {
-    op_master_device_path = opp_kernel_path + kBuiltIn + kOpMasterDeviceLib + ":" + op_master_device_path;
-  }
-  GELOGI("Get op master device so path is %s", op_master_device_path.c_str());
-  return ge::SUCCESS;
 }
 
 std::string PluginManager::GetSoPackageName(const std::string &path) {
