@@ -24,32 +24,9 @@ file(GLOB_RECURSE OPP_REGISTRY_SRC_LIST
         asc/tilingdata_base_impl.cc
 )
 
-set(OP_DEF_FILES
-        ${CMAKE_CURRENT_SOURCE_DIR}/asc/opdef/op_config_registry.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/asc/opdef/op_def_aicore.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/asc/opdef/op_def_aicpu.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/asc/opdef/op_def_attr.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/asc/opdef/op_def_factory.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/asc/opdef/op_def_hostcpu.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/asc/opdef/op_def_mc2.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/asc/opdef/op_def_param.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/asc/opdef/op_def.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/asc/opdef/op_def_impl.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/asc/opdef/op_config_registry_impl.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/asc/opdef/op_def_factory_impl.cc
-)
-
-set(OP_CHECK_FILES
-        ${CMAKE_CURRENT_SOURCE_DIR}/asc/opdef/op_config_registry.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/asc/opcheck/op_check_register_impl.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/asc/opcheck/op_check.cc
-)
-
 ############ libopp_registry.so ############
 add_library(opp_registry SHARED
         ${OPP_REGISTRY_SRC_LIST}
-        ${OP_DEF_FILES}
-        ${OP_CHECK_FILES}
 )
 
 target_compile_options(opp_registry PRIVATE
@@ -65,13 +42,11 @@ target_compile_definitions(opp_registry PRIVATE
         $<$<STREQUAL:${TARGET_SYSTEM_NAME},Windows>:SECUREC_USING_STD_SECURE_LIB=0 NOMINMAX>
 )
 
-target_compile_options(opp_registry PRIVATE -O2 -DNO_METADEF_ABI_COMPATIABLE -DNO_OPERATOR_IMPL)
+target_compile_options(opp_registry PRIVATE -O2 -DNO_METADEF_ABI_COMPATIABLE)
 
 target_include_directories(opp_registry PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}
         ${METADEF_DIR}/inc/
-        ${METADEF_DIR}/pkg_inc
-        ${METADEF_DIR}/inc/external/asc
         ${METADEF_DIR}/inc/external/base
 )
 
