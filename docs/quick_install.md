@@ -94,7 +94,7 @@ docker run --name cann_container \
 | `bash` | 容器启动后立即执行的命令。 | 必选 |
 
 > **说明**：
-> - 场景1适用于仅编译构建GE的场合，无需NPU设备支持
+> - 场景1适用于仅编译构建metadef的场合，无需NPU设备支持
 > - 场景2适用于需要运行样例或进行NPU相关测试的场合，需要宿主机已安装NPU驱动和固件
 > - 如果使用其他型号芯片（如950、Atlas A3系列产品），请相应调整 `--device` 参数中的设备名称
 
@@ -103,17 +103,15 @@ docker run --name cann_container \
 
 - **场景1（仅编译构建）**：
     ```bash
-    git clone https://gitcode.com/cann/metadef.git && cp metadef/scripts/init_env.sh ./ && rm -rf metadef && bash init_env.sh
+    curl -fsSL https://raw.gitcode.com/cann/metadef/raw/master/scripts/init_env.sh | bash
     ```
 
 - **场景2（需要运行样例，以Atlas A2系列产品为例）**：
     ```bash
-    git clone https://gitcode.com/cann/metadef.git && cp metadef/scripts/init_env.sh ./ && rm -rf metadef && bash init_env.sh --chip-type 910b
+    curl -fsSL https://raw.gitcode.com/cann/metadef/raw/master/scripts/init_env.sh | bash -s -- --chip-type 910b
     ```
 
 > **说明**：
-> - 场景1使用 `--skip-cann` 参数跳过CANN安装，因为Docker镜像已包含CANN环境
-> - 场景2使用 `--chip-type` 参数指定芯片型号并安装对应的ops包
 > - 对于其他芯片型号，请将 `--chip-type` 参数替换为对应的型号（如 `950`、`A3` ）
 
 ### 方式三：手动安装软件包

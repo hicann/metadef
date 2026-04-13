@@ -192,16 +192,11 @@ mk_dir() {
   echo "created ${create_dir}"
 }
 
-# Metadef build start
-cmake_generate_make() {
-  local build_path="$1"
-  local cmake_args="$2"
-  mk_dir "${build_path}"
-  cd "${build_path}"
-  echo "${cmake_args}"
-  cmake ${cmake_args} ..
+execute_command() {
+  local cmd=$1
+  ${cmd}
   if [ 0 -ne $? ]; then
-    echo "execute command: cmake ${cmake_args} .. failed."
+    echo "Failed command: '${cmd}'."
     exit 1
   fi
 }
@@ -252,15 +247,12 @@ build_metadef() {
               -D FORCE_REBUILD_CANN_3RD=False"
 
   echo "CMAKE_ARGS is: $CMAKE_ARGS"
-  cmake_generate_make "${BUILD_PATH}" "${CMAKE_ARGS}"
-
-  make exe_graph error_manager error_manager_static ${VERBOSE} -j${THREAD_NUM} && \
-    make install && make package
-
-  if [ 0 -ne $? ]; then
-    echo "execute command: make ${VERBOSE} -j${THREAD_NUM} && make install failed."
-    return 1
-  fi
+  mk_dir "${BUILD_PATH}"
+  cd ${BUILD_PATH}
+  execute_command "cmake ${CMAKE_ARGS} .."
+  execute_command "make all -j${THREAD_NUM} ${VERBOSE}"
+  execute_command "make install"
+  execute_command "make package"
   copy_pkg
   echo "Metadef build success!"
 }

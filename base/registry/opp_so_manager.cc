@@ -9,6 +9,7 @@
  */
 
 #include <string>
+#include <algorithm>
 #include "inc/common/plugin/plugin_manager.h"
 #include "common/ge_common/debug/ge_log.h"
 #include "mmpa/mmpa_api.h"

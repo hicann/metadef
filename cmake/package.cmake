@@ -40,6 +40,7 @@ function(install_public_packages)
         OWNER_READ OWNER_WRITE OWNER_EXECUTE  # 目录权限
         GROUP_READ GROUP_EXECUTE
         WORLD_READ WORLD_EXECUTE
+        COMPONENT metadef
     )
     set(SCRIPTS_FILES
         ${CMAKE_SOURCE_DIR}/scripts/package/common/sh/check_version_required.awk
@@ -52,6 +53,7 @@ function(install_public_packages)
 
     install(FILES ${SCRIPTS_FILES}
         DESTINATION share/info/metadef/script
+        COMPONENT metadef
     )
     set(COMMON_FILES
         ${CMAKE_SOURCE_DIR}/scripts/package/common/sh/install_common_parser.sh
@@ -77,18 +79,23 @@ function(install_public_packages)
     install(FILES ${CMAKE_BINARY_DIR}/version.metadef.info
         DESTINATION share/info/metadef
         RENAME version.info
+        COMPONENT metadef
     )
     install(FILES ${CONF_FILES}
         DESTINATION metadef/conf
+        COMPONENT metadef
     )
     install(FILES ${PACKAGE_FILES}
         DESTINATION share/info/metadef/script
+        COMPONENT metadef
     )
     install(FILES ${LATEST_MANGER_FILES}
         DESTINATION latest_manager
+        COMPONENT metadef
     )
     install(DIRECTORY ${CMAKE_SOURCE_DIR}/scripts/package/latest_manager/scripts/
         DESTINATION latest_manager
+        COMPONENT metadef
     )
 endfunction()
 
@@ -97,24 +104,25 @@ install_public_packages()
 
 message(STATUS "************Install metadef packages***************")
 install(TARGETS exe_graph rt2_registry_static opp_registry metadef
-        LIBRARY DESTINATION metadef/lib64
-        ARCHIVE DESTINATION metadef/lib64
+        LIBRARY DESTINATION metadef/lib64 COMPONENT metadef
+        ARCHIVE DESTINATION metadef/lib64 COMPONENT metadef
 )
 install(TARGETS stub_exe_graph stub_metadef stub_opp_registry rt2_registry_static
-        LIBRARY DESTINATION metadef/lib64/stub/linux/${ARCH}
-        ARCHIVE DESTINATION metadef/lib64/stub/linux/${ARCH}
+        LIBRARY DESTINATION metadef/lib64/stub/linux/${ARCH} COMPONENT metadef
+        ARCHIVE DESTINATION metadef/lib64/stub/linux/${ARCH} COMPONENT metadef
 )
 install(TARGETS stub_exe_graph stub_metadef stub_opp_registry rt2_registry_static
-        LIBRARY DESTINATION metadef/lib64/stub/minios/aarch64
-        ARCHIVE DESTINATION metadef/lib64/stub/minios/aarch64
+        LIBRARY DESTINATION metadef/lib64/stub/minios/aarch64 COMPONENT metadef
+        ARCHIVE DESTINATION metadef/lib64/stub/minios/aarch64 COMPONENT metadef
 )
  if(ENABLE_BUILD_DEVICE)
     # 非MDC编译
     install(FILES
-            ${METADEF_DEVICE_OUTPUT}/lib/libtilingdata_base.a
-            ${METADEF_DEVICE_OUTPUT}/lib/libexe_meta_device.a
-            ${METADEF_DEVICE_OUTPUT}/lib/libdevice_register.a
-            DESTINATION metadef/lib64/device/lib64
+            ${METADEF_DEVICE_OUTPUT}/${INSTALL_DEVICE_LIBRARY_DIR}/libtilingdata_base.a
+            ${METADEF_DEVICE_OUTPUT}/${INSTALL_DEVICE_LIBRARY_DIR}/libexe_meta_device.a
+            ${METADEF_DEVICE_OUTPUT}/${INSTALL_DEVICE_LIBRARY_DIR}/libdevice_register.a
+            DESTINATION ${INSTALL_DEVICE_LIBRARY_DIR}
+            COMPONENT metadef
     )
 endif()
 
@@ -148,6 +156,7 @@ set(EXTERNAL_RUNTIME_FILES
 )
 install(FILES ${EXTERNAL_RUNTIME_FILES}
     DESTINATION metadef/include/exe_graph/runtime
+    COMPONENT metadef
 )
 set(EXTERNAL_GRAPH_FILES
     ${CMAKE_SOURCE_DIR}/inc/external/graph/tensor.h
@@ -160,61 +169,75 @@ set(EXTERNAL_GRAPH_FILES
 )
 install(FILES ${EXTERNAL_GRAPH_FILES}
     DESTINATION metadef/include/graph
+    COMPONENT metadef
 )
 install(FILES ${CMAKE_SOURCE_DIR}/inc/external/graph/utils/type_utils.h
     DESTINATION metadef/include/graph/utils
+    COMPONENT metadef
 )
 install(FILES ${CMAKE_SOURCE_DIR}/inc/external/utils/extern_math_util.h
     DESTINATION metadef/include/utils
+    COMPONENT metadef
 )
 install(FILES ${CMAKE_SOURCE_DIR}/inc/external/ge/ge_allocator.h
     DESTINATION metadef/include/ge
+    COMPONENT metadef
 )
 install(FILES ${CMAKE_SOURCE_DIR}/inc/external/ge_common/ge_api_types.h
               ${CMAKE_SOURCE_DIR}/inc/external/ge_common/ge_api_error_codes.h
               ${CMAKE_SOURCE_DIR}/inc/external/ge_common/ge_error_codes.h
     DESTINATION metadef/include/external/ge_common
+    COMPONENT metadef
 )
 install(FILES ${CMAKE_SOURCE_DIR}/inc/external/base/registry/op_impl_space_registry_v2.h
               ${CMAKE_SOURCE_DIR}/inc/external/base/registry/opp_package_utils.h
     DESTINATION metadef/pkg_inc/base/registry
+    COMPONENT metadef
 )
 
 install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/base/type/ascend_string_impl.h
         DESTINATION metadef/pkg_inc/base/type
+        COMPONENT metadef
 )
 
 install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/base/utils/type_utils_impl.h
         DESTINATION metadef/pkg_inc/base/utils
+        COMPONENT metadef
 )
 
 install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/common/checker.h
         DESTINATION metadef/pkg_inc/common
+        COMPONENT metadef
 )
 
 install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/common/ge_common/error_codes_define.h
               ${CMAKE_SOURCE_DIR}/pkg_inc/common/ge_common/scope_guard.h
         DESTINATION metadef/pkg_inc/common/ge_common
+        COMPONENT metadef
 )
 
 install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/common/ge_common/debug/ge_log.h
         DESTINATION metadef/pkg_inc/common/ge_common/debug
+        COMPONENT metadef
 )
 
 install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/exe_graph/runtime/gert_mem_allocator.h
               ${CMAKE_SOURCE_DIR}/pkg_inc/exe_graph/runtime/gert_mem_block.h
               ${CMAKE_SOURCE_DIR}/pkg_inc/exe_graph/runtime/gert_tensor_data.h
         DESTINATION metadef/pkg_inc/exe_graph/runtime
+        COMPONENT metadef
 )
 
 install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/graph/any_value.h
               ${CMAKE_SOURCE_DIR}/pkg_inc/graph/def_types.h
               ${CMAKE_SOURCE_DIR}/pkg_inc/graph/type_utils.h
         DESTINATION metadef/pkg_inc/graph
+        COMPONENT metadef
 )
 
 install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/base/asc/tilingdata_base_impl.h
         DESTINATION metadef/pkg_inc/base/asc
+        COMPONENT metadef
 )
 
 install(FILES ${CMAKE_SOURCE_DIR}/inc/external/base/context_builder/context_holder.h
@@ -226,9 +249,11 @@ install(FILES ${CMAKE_SOURCE_DIR}/inc/external/base/context_builder/context_hold
               ${CMAKE_SOURCE_DIR}/inc/external/base/context_builder/op_infer_shape_range_context_builder.h
               ${CMAKE_SOURCE_DIR}/inc/external/base/context_builder/op_kernel_run_context_builder.h
     DESTINATION metadef/include/base/context_builder
+    COMPONENT metadef
 )
 install(FILES ${CMAKE_SOURCE_DIR}/inc/external/base/runtime/runtime_attrs_def.h
     DESTINATION metadef/include/base/runtime
+    COMPONENT metadef
 )
 set(EXTERNAL_REGISTRY_FILES
     ${CMAKE_SOURCE_DIR}/inc/external/register/op_impl_registry.h
@@ -246,6 +271,7 @@ set(EXTERNAL_REGISTRY_FILES
 )
 install(FILES ${EXTERNAL_REGISTRY_FILES}
     DESTINATION metadef/include/register
+    COMPONENT metadef
 )
 
 # ============= CPack =============
