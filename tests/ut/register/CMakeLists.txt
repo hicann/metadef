@@ -17,6 +17,7 @@ include_directories(${METADEF_DIR})
 include_directories(${METADEF_DIR}/pkg_inc)
 include_directories(${METADEF_DIR}/register)
 include_directories(${METADEF_DIR}/inc/external)
+include_directories(${METADEF_DIR}/inc/external/asc)
 
 file(GLOB_RECURSE REGISTER_UT_FILES CONFIGURE_DEPENDS "${METADEF_DIR}/tests/ut/register/*.cc" )
 
