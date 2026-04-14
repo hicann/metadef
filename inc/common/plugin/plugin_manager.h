@@ -85,15 +85,7 @@ class PluginManager {
 
   static ge::Status GetUpgradedOpMasterPath(std::string &op_tiling_path);
 
-  static ge::Status GetCustomOpPath(const std::string &fmk_type, std::string &customop_path);
-
-  static ge::Status GetCustomCaffeProtoPath(std::string &customcaffe_path);
-
-  static ge::Status GetOpTilingPath(std::string &op_tiling_path);
-
   static ge::Status GetOpTilingForwardOrderPath(std::string &op_tiling_path);
-
-  static ge::Status GetConstantFoldingOpsPath(const std::string &path_base, std::string &constant_folding_ops_path);
 
   ge::Status LoadSoWithFlags(const std::string &path, const int32_t flags,
       const std::vector<std::string> &func_check_list = std::vector<std::string>());
@@ -129,144 +121,10 @@ class PluginManager {
 
   static bool IsEndWith(const std::string &path, const std::string &suff);
 
-  static ge::Status GetOpMasterDeviceSoPath(std::string &op_master_device_path);
-
   static std::string GetSoPackageName(const std::string &path);
 
   static std::string GetOppPkgPath(const std::string &opp_built_in_path, const std::string &whole_pkg_path,
-                                   const std::string &sub_pkg_path, const std::string &os_cpu_type, bool &is_sub_pkg);
-
-  template <typename R, typename... Types>
-  ge::Status GetAllFunctions(const std::string &func_name, std::map<std::string, std::function<R(Types... args)>> &funcs) {
-    for (const auto &handle : handles_) {
-      const auto real_fn = reinterpret_cast<R(*)(Types...)>(mmDlsym(handle.second, func_name.c_str()));
-      if (real_fn == nullptr) {
-        const char *error = mmDlerror();
-        if (error == nullptr) {
-          error = "";
-        }
-        GELOGW("Failed to get function %s in %s! errmsg:%s", func_name.c_str(), handle.first.c_str(), error);
-        return ge::GE_PLGMGR_FUNC_NOT_EXIST;
-      } else {
-        funcs[handle.first] = real_fn;
-      }
-    }
-    return ge::SUCCESS;
-  }
-
-  template <typename... Types>
-  ge::Status InvokeAll(const std::string &func_name, const Types... args) {
-    for (const auto &handle : handles_) {
-      InvokeFuncPerfRecorder recorder(func_name, handle.first);
-      // If the funcName is existed, signature of realFn can be casted to any type
-      const auto real_fn = reinterpret_cast<void (*)(Types...)>(mmDlsym(handle.second, func_name.c_str()));
-      if (real_fn == nullptr) {
-        const char *error = mmDlerror();
-        if (error == nullptr) {
-          error = "";
-        }
-        GELOGW("Failed to invoke function %s in %s! errmsg:%s", func_name.c_str(), handle.first.c_str(), error);
-        return ge::GE_PLGMGR_INVOKE_FAILED;
-      } else {
-        real_fn(args...);
-      }
-    }
-    return ge::SUCCESS;
-  }
-
-  template <typename T>
-  ge::Status InvokeAll(const std::string &func_name, const T arg) {
-    for (const auto &handle : handles_) {
-      // If the funcName is existed, signature of realFn can be casted to any type
-      InvokeFuncPerfRecorder recorder(func_name, handle.first);
-      const auto real_fn = reinterpret_cast<void (*)(T)>(mmDlsym(handle.second, func_name.c_str()));
-      if (real_fn == nullptr) {
-        const ge::char_t *error = mmDlerror();
-        if (error == nullptr) {
-          error = "";
-        }
-        GELOGW("Failed to invoke function %s in %s! errmsg:%s", func_name.c_str(), handle.first.c_str(), error);
-        return ge::GE_PLGMGR_INVOKE_FAILED;
-      }
-      typename std::remove_reference<T>::type arg_temp;
-      real_fn(arg_temp);
-
-      if (std::is_same<typename std::remove_reference<T>::type,
-                       std::map<std::string, std::shared_ptr<DNNEngine>>>::value) {
-        for (const auto &val : arg_temp) {
-          if (arg.find(val.first) != arg.end()) {
-            GELOGW("FuncName %s in so %s find the same key: %s, will replace it", func_name.c_str(),
-                   handle.first.c_str(), val.first.c_str());
-            arg[val.first] = val.second;
-          }
-        }
-      }
-      arg.insert(arg_temp.begin(), arg_temp.end());
-    }
-    return ge::SUCCESS;
-  }
-
-  template <typename... Args>
-  void OptionalInvokeAll(const std::string &func_name, const Args... args) const {
-    for (const auto &handle : handles_) {
-      // If the funcName is existed, signature of realFn can be casted to any type
-      InvokeFuncPerfRecorder recorder(func_name, handle.first);
-      const auto real_fn = reinterpret_cast<void (*)(Args...)>(mmDlsym(handle.second, func_name.c_str()));
-      if (real_fn == nullptr) {
-        GELOGI("func %s does not exist in so %s", func_name.c_str(), handle.first.c_str());
-        continue;
-      } else {
-        GELOGI("func %s exists in so %s", func_name.c_str(), handle.first.c_str());
-        real_fn(args...);
-      }
-    }
-  }
-
-  template <typename T1, typename T2>
-  ge::Status InvokeAll(const std::string &func_name, const T1 arg) {
-    for (const auto &handle : handles_) {
-      // If the funcName is existed, signature of realFn can be casted to any type
-      InvokeFuncPerfRecorder recorder(func_name, handle.first);
-      const auto real_fn = reinterpret_cast<T2(*)(T1)>(mmDlsym(handle.second, func_name.c_str()));
-      if (real_fn == nullptr) {
-        const ge::char_t *error = mmDlerror();
-        if (error == nullptr) {
-          error = "";
-        }
-        GELOGW("Failed to invoke function %s in %s! errmsg:%s", func_name.c_str(), handle.first.c_str(), error);
-        return ge::GE_PLGMGR_INVOKE_FAILED;
-      } else {
-        const T2 res = real_fn(arg);
-        if (res != ge::SUCCESS) {
-          return ge::FAILED;
-        }
-      }
-    }
-    return ge::SUCCESS;
-  }
-
-  template <typename T>
-  ge::Status InvokeAll(const std::string &func_name) {
-    for (const auto &handle : handles_) {
-      // If the funcName is existed, signature of realFn can be casted to any type
-      InvokeFuncPerfRecorder recorder(func_name, handle.first);
-      const auto real_fn = reinterpret_cast<T(*)()>(mmDlsym(handle.second, func_name.c_str()));
-      if (real_fn == nullptr) {
-        const ge::char_t *error = mmDlerror();
-        if (error == nullptr) {
-          error = "";
-        }
-        GELOGW("Failed to invoke function %s in %s! errmsg:%s", func_name.c_str(), handle.first.c_str(), error);
-        return ge::GE_PLGMGR_INVOKE_FAILED;
-      } else {
-        const T res = real_fn();
-        if (res != ge::SUCCESS) {
-          return ge::FAILED;
-        }
-      }
-    }
-    return ge::SUCCESS;
-  }
+                                    const std::string &sub_pkg_path, const std::string &os_cpu_type, bool &is_sub_pkg);
 
  private:
   void ClearHandles_() noexcept;
