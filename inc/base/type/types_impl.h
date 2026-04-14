@@ -11,7 +11,7 @@
 #ifndef BASE_TYPE_TYPES_IMPL_H
 #define BASE_TYPE_TYPES_IMPL_H
 #include "external/graph/types.h"
-#include "external/ge_common/ge_api_types.h"
+#include "graph/ge_error_codes.h"
 
 namespace ge {
 class TypeImpl {

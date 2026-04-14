@@ -183,8 +183,7 @@ install(FILES ${CMAKE_SOURCE_DIR}/inc/external/ge/ge_allocator.h
     DESTINATION metadef/include/ge
     COMPONENT metadef
 )
-install(FILES ${CMAKE_SOURCE_DIR}/inc/external/ge_common/ge_api_types.h
-              ${CMAKE_SOURCE_DIR}/inc/external/ge_common/ge_api_error_codes.h
+install(FILES ${CMAKE_SOURCE_DIR}/inc/external/ge_common/ge_api_error_codes.h
               ${CMAKE_SOURCE_DIR}/inc/external/ge_common/ge_error_codes.h
     DESTINATION metadef/include/external/ge_common
     COMPONENT metadef

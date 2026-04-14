@@ -14,7 +14,6 @@
 #include <map>
 #include <string>
 #include "ge_error_codes.h"
-#include "ge_api_types.h"
 #include "graph/ascend_string.h"
 
 #ifdef __GNUC__
@@ -32,6 +31,7 @@
 #endif
 #endif
 
+namespace ge {using Status = uint32_t;}
 #ifndef GE_ERRORNO_DEFINE
 #define GE_ERRORNO_DEFINE(runtime, type, level, sysid, modid, name, value)                                \
   constexpr ge::Status name = ((static_cast<uint32_t>(0xFFU & (static_cast<uint32_t>(runtime))) << 30U) | \

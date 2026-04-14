@@ -15,6 +15,8 @@
 
 #include <iostream>
 
+#include "graph/ge_error_codes.h"
+
 using namespace testing;
 using namespace std;
 

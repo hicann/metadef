@@ -14,6 +14,7 @@
 
 #include "graph/debug/ge_util.h"
 #include "external/graph/types.h"
+#include "graph/ge_error_codes.h"
 
 namespace ge {
 namespace {

@@ -126,4 +126,9 @@ TEST_F(UtestTypeUtils, AscendStringToDataType) {
   ASSERT_EQ(TypeUtils::AscendStringToDataType("DT_INT2"), DT_INT2);
   ASSERT_EQ(TypeUtils::AscendStringToDataType("DT_MAX"), DT_UNDEFINED);
 }
+
+TEST_F(UtestTypeUtils, GetDataTypeLength) {
+  uint32_t length = 0;
+  ASSERT_TRUE(TypeUtils::GetDataTypeLength(DT_STRING, length));
 }
+}  // namespace ge
