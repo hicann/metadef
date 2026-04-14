@@ -8,11 +8,14 @@
         <path value="$(TARGET_ENV)/include/graph/utils" install_mod="555"/>
         <path value="$(TARGET_ENV)/include/utils" install_mod="555"/>
         <path value="$(TARGET_ENV)/include/register" install_mod="555"/>
+        <path value="$(TARGET_ENV)/include/register/asc" install_mod="555"/>
         <path value="$(TARGET_ENV)/pkg_inc" install_mod="555"/>
         <path value="$(TARGET_ENV)/pkg_inc/base" install_mod="555"/>
         <path value="$(TARGET_ENV)/pkg_inc/base/asc" install_mod="555"/>
         <path value="$(TARGET_ENV)/pkg_inc/base/registry" install_mod="555"/>
         <path value="$(TARGET_ENV)/pkg_inc/base/type" install_mod="555"/>
+        <path value="$(TARGET_ENV)/pkg_inc/base/asc/opcheck" install_mod="555"/>
+        <path value="$(TARGET_ENV)/pkg_inc/base/asc/opdef" install_mod="555"/>
         <path value="$(TARGET_ENV)/pkg_inc/base/utils" install_mod="555"/>
         <path value="$(TARGET_ENV)/pkg_inc/common" install_mod="555"/>
         <path value="$(TARGET_ENV)/pkg_inc/common/ge_common" install_mod="555"/>
@@ -88,6 +91,12 @@
         <file value="device_op_impl_registry.h"/>
         <file value="register.h"/>
     </file_info>
+    <file_info value="include" copy_type="source" dst_path="include/register/asc" install_path="$(TARGET_ENV)/include/register/asc" install_type="devel" install_mod="440">
+        <file value="op_config_registry.h" install_softlink="$(TARGET_ENV)/include/register/op_config_registry.h"/>
+        <file value="op_def_factory.h" install_softlink="$(TARGET_ENV)/include/register/op_def_factory.h"/>
+        <file value="op_def.h" install_softlink="$(TARGET_ENV)/include/register/op_def.h"/>
+        <file value="op_def_registry.h" install_softlink="$(TARGET_ENV)/include/register/op_def_registry.h"/>
+    </file_info>
     <file_info value="include" copy_type="source" dst_path="pkg_inc/base/asc" install_path="$(TARGET_ENV)/pkg_inc/base/asc" install_type="devel" install_mod="440">
         <file value="tilingdata_base_impl.h"/>
     </file_info>
@@ -110,6 +119,14 @@
     </file_info>
     <file_info value="include" copy_type="source" dst_path="pkg_inc/base/type" install_path="$(TARGET_ENV)/pkg_inc/base/type" install_type="devel" install_mod="440">
         <file value="ascend_string_impl.h" pkg_inner_softlink="metadef:/pkg_inc/base/type/ascend_string_impl.h"/>
+    </file_info>
+    <file_info value="include" copy_type="source" dst_path="pkg_inc/base/asc/opcheck" install_path="$(TARGET_ENV)/pkg_inc/base/asc/opcheck" install_type="devel" install_mod="440">
+        <file value="op_check_register_impl.h"/>
+    </file_info>
+    <file_info value="include" copy_type="source" dst_path="pkg_inc/base/asc/opdef" install_path="$(TARGET_ENV)/pkg_inc/base/asc/opdef" install_type="devel" install_mod="440">
+        <file value="op_config_registry_impl.h"/>
+        <file value="op_def_factory_impl.h"/>
+        <file value="op_def_impl.h"/>
     </file_info>
     <file_info value="include" copy_type="source" dst_path="pkg_inc/base/utils" install_path="$(TARGET_ENV)/pkg_inc/base/utils" install_type="devel" install_mod="440">
         <file value="type_utils_impl.h" pkg_inner_softlink="metadef:/pkg_inc/base/utils/type_utils_impl.h"/>
