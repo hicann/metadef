@@ -42,7 +42,6 @@ namespace ge {
 #endif
 #endif
 
-using Status = uint32_t;
 using graphStatus = uint32_t;
 const graphStatus GRAPH_FAILED = 0xFFFFFFFF;
 const graphStatus GRAPH_SUCCESS = 0;

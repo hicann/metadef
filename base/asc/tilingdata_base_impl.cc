@@ -16,7 +16,6 @@
 #include "graph/ascend_string.h"
 #include "register/tilingdata_base.h"
 #include "base/asc/tilingdata_base_impl.h"
-#include "graph/ge_error_codes.h"
 
 namespace optiling {
 bool CheckPathIsHeader(std::string file) {
