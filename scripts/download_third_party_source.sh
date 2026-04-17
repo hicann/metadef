@@ -9,7 +9,6 @@
 # See LICENSE in the root of the software repository for the full text of the License.
 # -----------------------------------------------------------------------------------------------------------
 
-# Format: "URL Dir"
 DOWNLOAD_LIST=(
     "https://gitcode.com/cann-src-third-party/protobuf/releases/download/v25.1/protobuf-25.1.tar.gz protobuf"
     "https://gitcode.com/cann-src-third-party/abseil-cpp/releases/download/20230802.1/abseil-cpp-20230802.1.tar.gz abseil-cpp"
@@ -17,8 +16,10 @@ DOWNLOAD_LIST=(
     "https://gitcode.com/cann-src-third-party/googletest/releases/download/v1.14.0/googletest-1.14.0.tar.gz gtest"
     "https://gitcode.com/cann-src-third-party/json/releases/download/v3.11.3/json-3.11.3.tar.gz json"
     "https://gitcode.com/cann-src-third-party/makeself/releases/download/release-2.5.0-patch1.0/makeself-release-2.5.0-patch1.tar.gz makeself"
-    # Example:
-    # "https://example.com/xxx.tar.gz xxx"
+    "https://cann-3rd.obs.cn-north-4.myhuaweicloud.com/cmake/cmake-master-001.tar.gz"
+    # Examples:
+    # "https://example.com/xxx.tar.gz xxx"          # Creates xxx directory
+    # "https://example.com/yyy.tar.gz"              # Extracts to root opensource directory
 )
 
 # 创建临时工作目录
@@ -35,13 +36,23 @@ for ITEM in "${DOWNLOAD_LIST[@]}"; do
     URL=$(echo "${ITEM}" | awk '{print $1}')
     DIR_NAME=$(echo "${ITEM}" | awk '{print $2}')
     FILE_NAME=$(basename "${URL}")
-    TARGET_DIR="${WORK_DIR}/${DIR_NAME}"
-    
-    # 创建目标目录
-    mkdir -p "${TARGET_DIR}"
-    if [ $? -ne 0 ]; then
-        echo -e "Error: create dir ${TARGET_DIR} failed."
-        exit 1
+
+    # 根据是否指定目录名来确定目标目录
+    if [ -z "${DIR_NAME}" ]; then
+        # 没有指定目录名，直接放到最外层目录
+        TARGET_DIR="${WORK_DIR}"
+        DIR_DISPLAY="root"
+    else
+        # 指定了目录名，创建子目录
+        TARGET_DIR="${WORK_DIR}/${DIR_NAME}"
+        DIR_DISPLAY="${DIR_NAME}"
+
+        # 创建目标目录
+        mkdir -p "${TARGET_DIR}"
+        if [ $? -ne 0 ]; then
+            echo -e "Error: create dir ${TARGET_DIR} failed."
+            exit 1
+        fi
     fi
 
     # 下载文件
@@ -49,7 +60,7 @@ for ITEM in "${DOWNLOAD_LIST[@]}"; do
     wget -q -O "${TARGET_DIR}/${FILE_NAME}" "${URL}" --show-progress
 
     if [ $? -eq 0 ]; then
-        echo -e "Download finished: ${DIR_NAME}."
+        echo -e "Download finished: ${DIR_DISPLAY}."
     else
         echo -e "Download failed: ${URL}."
         exit 1
