@@ -34,11 +34,10 @@ __attribute__((visibility("default"))) uint32_t RunAicpuRpcSrvLaunch(void *args)
   std::string opType = task->opType;
 
   if (&CustSetCpuKernelContext != nullptr) {
-    GEEVENT("Begin to set up the CPU kernel context workspace for op %s", opType.c_str());
+    GELOGI("Begin to set up the CPU kernel context workspace for op %s", opType.c_str());
     int32_t ret = CustSetCpuKernelContext(task->workspaceSize, task->workspaceAddr);
     if (ret != 0) {
-      GELOGE(ge::INTERNAL_ERROR,
-             "Failed to set CPU kernel context workspace for op %s, ret = %d, workspace = %lu, workspaceSize = %lu",
+      GELOGW("Failed to set CPU kernel context workspace for op %s, ret = %d, workspace = %lu, workspaceSize = %lu",
              opType.c_str(), ret, task->workspaceAddr, task->workspaceSize);
     }
     GELOGI("set up the CPU kernel context workspace for op %s succeed, ret = %d, workspace = %lu, workspaceSize = %lu",
