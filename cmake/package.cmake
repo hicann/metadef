@@ -123,7 +123,13 @@ install(TARGETS stub_exe_graph stub_metadef stub_opp_registry rt2_registry_stati
         LIBRARY DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/devlib COMPONENT metadef
         ARCHIVE DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/devlib COMPONENT metadef
 )
- if(ENABLE_BUILD_DEVICE)
+# extract场景下需要存在，install并不需要
+install(TARGETS stub_exe_graph stub_metadef stub_opp_registry rt2_registry_static
+        LIBRARY DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/lib64/stub/linux/${ARCH} COMPONENT metadef
+        ARCHIVE DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/lib64/stub/linux/${ARCH} COMPONENT metadef
+)
+
+if(ENABLE_BUILD_DEVICE)
     # 非MDC编译
     install(FILES
             ${CMAKE_INSTALL_PREFIX}/${INSTALL_DEVICE_LIBRARY_DIR}/libtilingdata_base.a
