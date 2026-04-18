@@ -60,6 +60,7 @@ message(STATUS "Variables in metadef project:")
 cmake_print_variables(ASCEND_INSTALL_PATH)
 cmake_print_variables(CANN_3RD_LIB_PATH)
 cmake_print_variables(CMAKE_SYSTEM_PROCESSOR)
+cmake_print_variables(CMAKE_HOST_SYSTEM_PROCESSOR)
 cmake_print_variables(CMAKE_BUILD_TYPE)
 cmake_print_variables(CMAKE_INSTALL_PREFIX)
 cmake_print_variables(CMAKE_PREFIX_PATH)
@@ -69,7 +70,8 @@ cmake_print_variables(ENABLE_BUILD_DEVICE USE_CXX11_ABI CMAKE_TOOLCHAIN_FILE)
 cmake_print_variables(CMAKE_CXX_COMPILER_ID)
 
 set(INSTALL_BASE_DIR "")
-set(INSTALL_DEVICE_LIBRARY_DIR ${CMAKE_SYSTEM_PROCESSOR}-linux/lib64/device/lib64)
+# 在HOST侧的目录路径下，创建路径给device侧的交叉编译产物存放使用
+set(INSTALL_DEVICE_LIBRARY_DIR ${CMAKE_HOST_SYSTEM_PROCESSOR}-linux/lib64/device/lib64)
 
 include(CMakePackageConfigHelpers)
 

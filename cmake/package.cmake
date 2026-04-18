@@ -132,9 +132,9 @@ install(TARGETS stub_exe_graph stub_metadef stub_opp_registry rt2_registry_stati
 if(ENABLE_BUILD_DEVICE)
     # 非MDC编译
     install(FILES
-            ${CMAKE_INSTALL_PREFIX}/${INSTALL_DEVICE_LIBRARY_DIR}/libtilingdata_base.a
-            ${CMAKE_INSTALL_PREFIX}/${INSTALL_DEVICE_LIBRARY_DIR}/libexe_meta_device.a
-            ${CMAKE_INSTALL_PREFIX}/${INSTALL_DEVICE_LIBRARY_DIR}/libdevice_register.a
+            ${METADEF_DEVICE_OUTPUT}/${INSTALL_DEVICE_LIBRARY_DIR}/libtilingdata_base.a
+            ${METADEF_DEVICE_OUTPUT}/${INSTALL_DEVICE_LIBRARY_DIR}/libexe_meta_device.a
+            ${METADEF_DEVICE_OUTPUT}/${INSTALL_DEVICE_LIBRARY_DIR}/libdevice_register.a
             DESTINATION ${INSTALL_DEVICE_LIBRARY_DIR}
             COMPONENT metadef
     )
