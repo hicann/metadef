@@ -9,6 +9,7 @@
  */
 
 #include <vector>
+#include <algorithm>
 #include "base/asc/opdef/op_def_impl.h"
 #include "common/ge_common/debug/ge_log.h"
 #include "register/op_def.h"
@@ -1460,7 +1461,7 @@ OpMC2Def &OpMC2DefImpl::Eq(OpMC2Def *parent_this, const OpMC2Def &mc2_def) {
 }
 
 OpMC2Def &OpMC2DefImpl::HcclGroup(OpMC2Def *parent_this, const char *value) {
-  if (std::find(parent_this->impl_->group_list.begin(), parent_this->impl_->group_list.end(), value) ==
+  if (std::find(parent_this->impl_->group_list.begin(), parent_this->impl_->group_list.end(), ge::AscendString(value)) ==
       parent_this->impl_->group_list.end()) {
     parent_this->impl_->group_list.emplace_back(value);
   }
@@ -1469,7 +1470,7 @@ OpMC2Def &OpMC2DefImpl::HcclGroup(OpMC2Def *parent_this, const char *value) {
 
 OpMC2Def &OpMC2DefImpl::HcclGroup(OpMC2Def *parent_this, std::vector<const char *> value) {
   for (const char *val : value) {
-    if (std::find(parent_this->impl_->group_list.begin(), parent_this->impl_->group_list.end(), val) ==
+    if (std::find(parent_this->impl_->group_list.begin(), parent_this->impl_->group_list.end(), ge::AscendString(val)) ==
         parent_this->impl_->group_list.end()) {
       parent_this->impl_->group_list.emplace_back(val);
     }
