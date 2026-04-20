@@ -49,11 +49,23 @@ function(install_public_packages)
         ${CMAKE_SOURCE_DIR}/scripts/package/common/sh/common_interface.csh
         ${CMAKE_SOURCE_DIR}/scripts/package/common/sh/common_interface.fish
         ${CMAKE_SOURCE_DIR}/scripts/package/common/sh/version_compatiable.inc
+        ${CMAKE_SOURCE_DIR}/scripts/package/metadef/scripts/cleanup.sh
+        ${CMAKE_SOURCE_DIR}/scripts/package/metadef/scripts/help.info
+        ${CMAKE_SOURCE_DIR}/scripts/package/metadef/scripts/install.sh
+        ${CMAKE_SOURCE_DIR}/scripts/package/metadef/scripts/run_metadef_install.sh
+        ${CMAKE_SOURCE_DIR}/scripts/package/metadef/scripts/run_metadef_uninstall.sh
+        ${CMAKE_SOURCE_DIR}/scripts/package/metadef/scripts/run_metadef_upgrade.sh
+        ${CMAKE_SOURCE_DIR}/scripts/package/metadef/scripts/uninstall.sh
+        ${CMAKE_SOURCE_DIR}/scripts/package/metadef/scripts/ver_check.sh
     )
 
     install(FILES ${SCRIPTS_FILES}
         DESTINATION share/info/metadef/script
         COMPONENT metadef
+        PERMISSIONS
+        OWNER_READ OWNER_WRITE OWNER_EXECUTE  # 文件权限
+        GROUP_READ GROUP_EXECUTE
+        WORLD_READ WORLD_EXECUTE
     )
     set(COMMON_FILES
         ${CMAKE_SOURCE_DIR}/scripts/package/common/sh/install_common_parser.sh
@@ -82,19 +94,11 @@ function(install_public_packages)
         COMPONENT metadef
     )
     install(FILES ${CONF_FILES}
-        DESTINATION metadef/conf
+        DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/conf
         COMPONENT metadef
     )
     install(FILES ${PACKAGE_FILES}
         DESTINATION share/info/metadef/script
-        COMPONENT metadef
-    )
-    install(FILES ${LATEST_MANGER_FILES}
-        DESTINATION latest_manager
-        COMPONENT metadef
-    )
-    install(DIRECTORY ${CMAKE_SOURCE_DIR}/scripts/package/latest_manager/scripts/
-        DESTINATION latest_manager
         COMPONENT metadef
     )
 endfunction()
@@ -104,18 +108,28 @@ install_public_packages()
 
 message(STATUS "************Install metadef packages***************")
 install(TARGETS exe_graph rt2_registry_static opp_registry metadef
-        LIBRARY DESTINATION metadef/lib64 COMPONENT metadef
-        ARCHIVE DESTINATION metadef/lib64 COMPONENT metadef
+        LIBRARY DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/lib64 COMPONENT metadef
+        ARCHIVE DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/lib64 COMPONENT metadef
 )
 install(TARGETS stub_exe_graph stub_metadef stub_opp_registry rt2_registry_static
-        LIBRARY DESTINATION metadef/lib64/stub/linux/${ARCH} COMPONENT metadef
-        ARCHIVE DESTINATION metadef/lib64/stub/linux/${ARCH} COMPONENT metadef
+        LIBRARY DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/devlib/linux/${ARCH} COMPONENT metadef
+        ARCHIVE DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/devlib/linux/${ARCH} COMPONENT metadef
+)
+install(TARGETS stub_exe_graph stub_metadef stub_opp_registry
+        LIBRARY DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/devlib/minios/aarch64 COMPONENT metadef
+        ARCHIVE DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/devlib/minios/aarch64 COMPONENT metadef
 )
 install(TARGETS stub_exe_graph stub_metadef stub_opp_registry rt2_registry_static
-        LIBRARY DESTINATION metadef/lib64/stub/minios/aarch64 COMPONENT metadef
-        ARCHIVE DESTINATION metadef/lib64/stub/minios/aarch64 COMPONENT metadef
+        LIBRARY DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/devlib COMPONENT metadef
+        ARCHIVE DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/devlib COMPONENT metadef
 )
- if(ENABLE_BUILD_DEVICE)
+# extract场景下需要存在，install并不需要
+install(TARGETS stub_exe_graph stub_metadef stub_opp_registry rt2_registry_static
+        LIBRARY DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/lib64/stub/linux/${ARCH} COMPONENT metadef
+        ARCHIVE DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/lib64/stub/linux/${ARCH} COMPONENT metadef
+)
+
+if(ENABLE_BUILD_DEVICE)
     # 非MDC编译
     install(FILES
             ${METADEF_DEVICE_OUTPUT}/${INSTALL_DEVICE_LIBRARY_DIR}/libtilingdata_base.a
@@ -155,7 +169,7 @@ set(EXTERNAL_RUNTIME_FILES
     ${CMAKE_SOURCE_DIR}/inc/external/exe_graph/runtime/op_execute_prepare_context.h
 )
 install(FILES ${EXTERNAL_RUNTIME_FILES}
-    DESTINATION metadef/include/exe_graph/runtime
+    DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/include/exe_graph/runtime
     COMPONENT metadef
 )
 set(EXTERNAL_GRAPH_FILES
@@ -168,95 +182,95 @@ set(EXTERNAL_GRAPH_FILES
     ${CMAKE_SOURCE_DIR}/inc/external/graph/types.h
 )
 install(FILES ${EXTERNAL_GRAPH_FILES}
-    DESTINATION metadef/include/graph
+    DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/include/graph
     COMPONENT metadef
 )
 install(FILES ${CMAKE_SOURCE_DIR}/inc/external/graph/utils/type_utils.h
-    DESTINATION metadef/include/graph/utils
+    DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/include/graph/utils
     COMPONENT metadef
 )
 install(FILES ${CMAKE_SOURCE_DIR}/inc/external/utils/extern_math_util.h
-    DESTINATION metadef/include/utils
+    DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/include/utils
     COMPONENT metadef
 )
 install(FILES ${CMAKE_SOURCE_DIR}/inc/external/ge/ge_allocator.h
-    DESTINATION metadef/include/ge
+    DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/include/ge
     COMPONENT metadef
 )
 install(FILES ${CMAKE_SOURCE_DIR}/inc/external/ge_common/ge_api_types.h
               ${CMAKE_SOURCE_DIR}/inc/external/ge_common/ge_api_error_codes.h
               ${CMAKE_SOURCE_DIR}/inc/external/ge_common/ge_error_codes.h
-    DESTINATION metadef/include/external/ge_common
+    DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/include/external/ge_common
     COMPONENT metadef
 )
 install(FILES ${CMAKE_SOURCE_DIR}/inc/external/base/registry/op_impl_space_registry_v2.h
               ${CMAKE_SOURCE_DIR}/inc/external/base/registry/opp_package_utils.h
-    DESTINATION metadef/pkg_inc/base/registry
+    DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/pkg_inc/base/registry
     COMPONENT metadef
 )
 
 install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/base/type/ascend_string_impl.h
-        DESTINATION metadef/pkg_inc/base/type
+        DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/pkg_inc/base/type
         COMPONENT metadef
 )
 
 install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/base/asc/opcheck/op_check_register_impl.h
-        DESTINATION metadef/pkg_inc/base/asc/opcheck
+        DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/pkg_inc/base/asc/opcheck
         COMPONENT metadef
 )
 
 install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/base/asc/opdef/op_config_registry_impl.h
-        DESTINATION metadef/pkg_inc/base/asc/opdef
+        DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/pkg_inc/base/asc/opdef
         COMPONENT metadef
 )
 
 install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/base/asc/opdef/op_def_factory_impl.h
-        DESTINATION metadef/pkg_inc/base/asc/opdef
+        DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/pkg_inc/base/asc/opdef
         COMPONENT metadef
 )
 
 install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/base/asc/opdef/op_def_impl.h
-        DESTINATION metadef/pkg_inc/base/asc/opdef
+        DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/pkg_inc/base/asc/opdef
         COMPONENT metadef 
 )
 
 install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/base/utils/type_utils_impl.h
-        DESTINATION metadef/pkg_inc/base/utils
+        DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/pkg_inc/base/utils
         COMPONENT metadef
 )
 
 install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/common/checker.h
-        DESTINATION metadef/pkg_inc/common
+        DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/pkg_inc/common
         COMPONENT metadef
 )
 
 install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/common/ge_common/error_codes_define.h
               ${CMAKE_SOURCE_DIR}/pkg_inc/common/ge_common/scope_guard.h
-        DESTINATION metadef/pkg_inc/common/ge_common
+        DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/pkg_inc/common/ge_common
         COMPONENT metadef
 )
 
 install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/common/ge_common/debug/ge_log.h
-        DESTINATION metadef/pkg_inc/common/ge_common/debug
+        DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/pkg_inc/common/ge_common/debug
         COMPONENT metadef
 )
 
 install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/exe_graph/runtime/gert_mem_allocator.h
               ${CMAKE_SOURCE_DIR}/pkg_inc/exe_graph/runtime/gert_mem_block.h
               ${CMAKE_SOURCE_DIR}/pkg_inc/exe_graph/runtime/gert_tensor_data.h
-        DESTINATION metadef/pkg_inc/exe_graph/runtime
+        DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/pkg_inc/exe_graph/runtime
         COMPONENT metadef
 )
 
 install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/graph/any_value.h
               ${CMAKE_SOURCE_DIR}/pkg_inc/graph/def_types.h
               ${CMAKE_SOURCE_DIR}/pkg_inc/graph/type_utils.h
-        DESTINATION metadef/pkg_inc/graph
+        DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/pkg_inc/graph
         COMPONENT metadef
 )
 
 install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/base/asc/tilingdata_base_impl.h
-        DESTINATION metadef/pkg_inc/base/asc
+        DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/pkg_inc/base/asc
         COMPONENT metadef
 )
 
@@ -268,11 +282,11 @@ install(FILES ${CMAKE_SOURCE_DIR}/inc/external/base/context_builder/context_hold
               ${CMAKE_SOURCE_DIR}/inc/external/base/context_builder/op_infer_shape_context_builder.h
               ${CMAKE_SOURCE_DIR}/inc/external/base/context_builder/op_infer_shape_range_context_builder.h
               ${CMAKE_SOURCE_DIR}/inc/external/base/context_builder/op_kernel_run_context_builder.h
-    DESTINATION metadef/include/base/context_builder
+    DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/include/base/context_builder
     COMPONENT metadef
 )
 install(FILES ${CMAKE_SOURCE_DIR}/inc/external/base/runtime/runtime_attrs_def.h
-    DESTINATION metadef/include/base/runtime
+    DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/include/base/runtime
     COMPONENT metadef
 )
 set(EXTERNAL_REGISTRY_FILES
@@ -281,16 +295,13 @@ set(EXTERNAL_REGISTRY_FILES
     ${CMAKE_SOURCE_DIR}/inc/external/register/register_types.h
     ${CMAKE_SOURCE_DIR}/inc/external/register/register_fmk_types.h
     ${CMAKE_SOURCE_DIR}/inc/external/register/register_error_codes.h
-    ${CMAKE_SOURCE_DIR}/inc/external/register/op_ct_impl_kernel_registry.h
-    ${CMAKE_SOURCE_DIR}/inc/external/register/op_ct_impl_registry_api.h
-    ${CMAKE_SOURCE_DIR}/inc/external/register/op_ct_impl_registry.h
     ${CMAKE_SOURCE_DIR}/inc/external/register/op_bin_info.h
     ${CMAKE_SOURCE_DIR}/inc/external/register/tilingdata_base.h
     ${CMAKE_SOURCE_DIR}/inc/external/register/device_op_impl_registry.h
     ${CMAKE_SOURCE_DIR}/inc/external/register/register.h
 )
 install(FILES ${EXTERNAL_REGISTRY_FILES}
-    DESTINATION metadef/include/register
+    DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/include/register
     COMPONENT metadef
 )
 
@@ -301,7 +312,7 @@ set(EXTERNAL_ASC_REGISTRY_FILES
     ${CMAKE_SOURCE_DIR}/inc/external/asc/register/op_def_registry.h
 )
 install(FILES ${EXTERNAL_ASC_REGISTRY_FILES}
-    DESTINATION metadef/include/register/asc
+    DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/include/register/asc
     COMPONENT metadef
 )
 

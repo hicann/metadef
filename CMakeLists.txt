@@ -9,19 +9,14 @@
 # -----------------------------------------------------------------------------------------------------------
 
 cmake_minimum_required(VERSION 3.16)
+include(cmake/fetch_cann_cmake.cmake)
 project (MetaDef[CXX])
 
+init_cann_project()
 set(CMAKE_C_FLAGS_RELEASE "")
 set(CMAKE_CXX_FLAGS_RELEASE "")
 set(PRODUCT_SIDE "host" CACHE STRING "Build target: host or device")
 set(METADEF_DEVICE_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/device_output)
-
-# 编译缓存
-find_program(CCACHE_PROGRAM ccache)
-if(CCACHE_PROGRAM)
-    set(CMAKE_C_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
-    set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
-endif(CCACHE_PROGRAM)
 
 enable_testing()
 
@@ -65,6 +60,7 @@ message(STATUS "Variables in metadef project:")
 cmake_print_variables(ASCEND_INSTALL_PATH)
 cmake_print_variables(CANN_3RD_LIB_PATH)
 cmake_print_variables(CMAKE_SYSTEM_PROCESSOR)
+cmake_print_variables(CMAKE_HOST_SYSTEM_PROCESSOR)
 cmake_print_variables(CMAKE_BUILD_TYPE)
 cmake_print_variables(CMAKE_INSTALL_PREFIX)
 cmake_print_variables(CMAKE_PREFIX_PATH)
@@ -74,11 +70,8 @@ cmake_print_variables(ENABLE_BUILD_DEVICE USE_CXX11_ABI CMAKE_TOOLCHAIN_FILE)
 cmake_print_variables(CMAKE_CXX_COMPILER_ID)
 
 set(INSTALL_BASE_DIR "")
-set(INSTALL_LIBRARY_DIR lib)
-set(INSTALL_RUNTIME_DIR bin)
-set(INSTALL_INCLUDE_DIR include)
-set(INSTALL_CONFIG_DIR cmake)
-set(INSTALL_DEVICE_LIBRARY_DIR metadef/lib64/device/lib64)
+# 在HOST侧的目录路径下，创建路径给device侧的交叉编译产物存放使用
+set(INSTALL_DEVICE_LIBRARY_DIR ${CMAKE_HOST_SYSTEM_PROCESSOR}-linux/lib64/device/lib64)
 
 include(CMakePackageConfigHelpers)
 
@@ -156,7 +149,6 @@ if (ENABLE_OPEN_SRC)
 endif()
 
 include(cmake/common_funcs.cmake)
-set_common_params()
 add_subdirectory(inc)
 add_subdirectory(error_manager)
 add_subdirectory(base)
@@ -201,23 +193,6 @@ install(DIRECTORY ${METADEF_DIR}/pkg_inc/ DESTINATION ${INSTALL_INCLUDE_DIR}/met
         EXCLUDE_FROM_ALL FILES_MATCHING PATTERN "*.h"
 )
 
-if (PACKAGE STREQUAL "opensdk")
-    install(EXPORT metadef-targets DESTINATION ${INSTALL_CONFIG_DIR}
-        FILE metadef-targets.cmake EXCLUDE_FROM_ALL
-    )
-    set(PKG_NAME metadef)
-    configure_package_config_file(${TOP_DIR}/cmake/config/pkg_config_template.cmake.in
-        ${CMAKE_CURRENT_BINARY_DIR}/metadef-config.cmake
-        INSTALL_DESTINATION ${INSTALL_CONFIG_DIR}
-        PATH_VARS INSTALL_BASE_DIR INSTALL_INCLUDE_DIR INSTALL_LIBRARY_DIR INSTALL_RUNTIME_DIR INSTALL_CONFIG_DIR
-        INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}
-    )
-    unset(PKG_NAME)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/metadef-config.cmake
-        DESTINATION ${INSTALL_CONFIG_DIR} EXCLUDE_FROM_ALL
-    )
-endif()
-
 if (ENABLE_OPEN_SRC AND "${PRODUCT_SIDE}" STREQUAL "host" AND ENABLE_BUILD_DEVICE)
     set(TOOLCHAIN_DIR ${ASCEND_INSTALL_PATH}/toolkit/toolchain/hcc)
     include(ExternalProject)
@@ -249,10 +224,8 @@ if (ENABLE_OPEN_SRC AND "${PRODUCT_SIDE}" STREQUAL "host" AND ENABLE_BUILD_DEVIC
 endif()
 
 include(version.cmake)
-if(ENABLE_OPEN_SRC)
-    check_pkg_build_deps("metadef")
-endif()
-add_version_info_targets()
+check_cann_pkg_build_deps("metadef")
+add_cann_version_info_targets()
 
 if (ENABLE_OPEN_SRC AND "${PRODUCT_SIDE}" STREQUAL "host")
     set(ARCH_LINX_PATH "${CMAKE_SYSTEM_PROCESSOR}-linux")

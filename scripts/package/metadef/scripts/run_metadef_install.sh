@@ -16,7 +16,6 @@ pylocal=n
 in_install_for_all=n
 setenv_flag=n
 docker_root=""
-sourcedir="$PWD/metadef"
 curpath=$(dirname $(readlink -f "$0"))
 common_func_path="${curpath}/common_func.inc"
 pkg_version_path="${curpath}/../version.info"
@@ -95,15 +94,11 @@ if [ ! -d "$common_parse_dir" ]; then
 fi
 
 new_install() {
-    if [ ! -d "${sourcedir}" ]; then
-        log "INFO" "no need to install metadef files."
-        return 0
-    fi
     output_progress 10
 
     # 执行安装
     custom_options="--custom-options=--common-parse-dir=$common_parse_dir,--logfile=$logfile,--stage=install,--quiet=$is_quiet,--pylocal=$pylocal"
-    sh "$curpath/install_common_parser.sh" --package="metadef" --install --username="$username" --usergroup="$usergroup" --set-cann-uninstall \
+    sh "$curpath/install_common_parser.sh" --copy_all --package="metadef" --install --username="$username" --usergroup="$usergroup" --set-cann-uninstall \
         --version=$pkg_version --version-dir=$pkg_version_dir --use-share-info \
         $in_install_for_all --docker-root="$docker_root" \
         $custom_options "$common_parse_type" "$input_install_dir" "$curpath/filelist.csv"

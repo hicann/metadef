@@ -8,8 +8,8 @@
 # See LICENSE in the root of the software repository for the full text of the License.
 # -----------------------------------------------------------------------------------------------------------
 
-set_package(metadef VERSION "9.0.0")
+set_cann_package(metadef VERSION "9.0.0")
 
-set_build_dependencies(runtime ">=9.0")
+set_cann_build_dependencies(runtime ">=9.0")
 
-set_run_dependencies(runtime "CUR_MAJOR_MINOR_VER")
+set_cann_run_dependencies(runtime "CUR_MAJOR_MINOR_VER")

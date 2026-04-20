@@ -14,6 +14,8 @@
 #include "tests/depends/mmpa/src/mmpa_stub.h"
 
 #include <iostream>
+#include <filesystem>
+#include <cstdlib>
 
 using namespace testing;
 using namespace std;
@@ -851,7 +853,7 @@ TEST_F(UtestPluginManager, GetUpgradedOppPath_Failed_not_exist_opp_latest) {
 }
 
 TEST_F(UtestPluginManager, GetUpgradedOppPath_Success) {
-  std::string home_path = __FILE__;
+  std::string home_path = std::filesystem::current_path().string();
   home_path = home_path.substr(0, home_path.rfind("/") + 1);
   mmSetEnv(kAscendHomePath, home_path.c_str(), 1);
   const auto opp_latest_path = home_path + "/opp_latest/";
@@ -1059,7 +1061,7 @@ TEST_F(UtestPluginManager, FindSoFilesInCustomPassDirs_04) {
 
 TEST_F(UtestPluginManager, FindSoFilesInCustomPassDirs_05) {
   PluginManager::SetCustomOpLibPath("");
-  std::string path = __FILE__;
+  std::string path = std::filesystem::current_path().string();
   path = path.substr(0, path.rfind('/') + 0);
   mmSetEnv(kCustOppPath, path.c_str(), 1);
   std::string plugin_path;
@@ -1076,7 +1078,7 @@ TEST_F(UtestPluginManager, ReplaceFirst_NotMatch) {
 }
 
 TEST_F(UtestPluginManager, GetOpMasterDeviceSoPath_Whole_Pkg_Success) {
-  std::string opp_path = __FILE__;
+  std::string opp_path = std::filesystem::current_path().string();
   opp_path = opp_path.substr(0, opp_path.rfind("/") + 1UL) + "/test_tmp/";
   mmSetEnv(kEnvName, opp_path.c_str(), 1);
   ConstructOpMasterDeviceSo(opp_path, 1, 2);
@@ -1091,7 +1093,7 @@ TEST_F(UtestPluginManager, GetOpMasterDeviceSoPath_Whole_Pkg_Success) {
 }
 
 TEST_F(UtestPluginManager, GetOpMasterDeviceSoPath_Sub_Pkg_Success) {
-  std::string opp_path = __FILE__;
+  std::string opp_path = std::filesystem::current_path().string();
   opp_path = opp_path.substr(0, opp_path.rfind("/") + 1UL) + "/test_tmp/";
   mmSetEnv(kEnvName, opp_path.c_str(), 1);
   ConstructOpMasterDeviceSoForSubPkg(opp_path, 1, 2);
