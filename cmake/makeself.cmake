@@ -9,6 +9,7 @@
 # -----------------------------------------------------------------------------------------------------------
 # makeself.cmake - 自定义 makeself 打包脚本
 
+set(CMAKE_SYSTEM_PROCESSOR ${CPACK_ARCH})
 # 设置 makeself 路径
 set(MAKESELF_EXE ${CPACK_MAKESELF_PATH}/makeself.sh)
 set(MAKESELF_HEADER_EXE ${CPACK_MAKESELF_PATH}/makeself-header.sh)
