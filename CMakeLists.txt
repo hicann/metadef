@@ -197,28 +197,19 @@ if (ENABLE_OPEN_SRC AND "${PRODUCT_SIDE}" STREQUAL "host" AND ENABLE_BUILD_DEVIC
     set(TOOLCHAIN_DIR ${ASCEND_INSTALL_PATH}/toolkit/toolchain/hcc)
     include(ExternalProject)
     ExternalProject_Add(metadef_device_ep
-        SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}
+        SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cmake/device
         CONFIGURE_COMMAND ${CMAKE_COMMAND}
             -G ${CMAKE_GENERATOR}
-            -DPRODUCT_SIDE=device
             -DTOOLCHAIN_DIR=${TOOLCHAIN_DIR}
             -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/cmake/toolchain/aarch64-hcc-toolchain.cmake
-            -DGE_ONLY=${GE_ONLY}
             -DENABLE_OPEN_SRC=${ENABLE_OPEN_SRC}
-            -DENABLE_METADEF_UT=${ENABLE_METADEF_UT}
-            -DENABLE_METADEF_ST=${ENABLE_METADEF_ST}
-            -DENABLE_METADEF_COV=${DENABLE_METADEF_COV}
-            -DENABLE_BENCHMARK=${ENABLE_BENCHMARK}
-            -DBUILD_WITHOUT_AIR=${BUILD_WITHOUT_AIR}
             -DASCEND_INSTALL_PATH=${ASCEND_INSTALL_PATH}
             -DCANN_3RD_LIB_PATH=${CANN_3RD_LIB_PATH}
             -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-            -DENABLE_SYMENGINE=${ENABLE_SYMENGINE}
             -DCMAKE_INSTALL_PREFIX=${METADEF_DEVICE_OUTPUT}
             -DFORCE_REBUILD_CANN_3RD=${FORCE_REBUILD_CANN_3RD}
             <SOURCE_DIR>
-        BUILD_COMMAND $(MAKE) metadef_device
-        INSTALL_COMMAND ${CMAKE_COMMAND} --install <BINARY_DIR> --component metadef_device
+        INSTALL_COMMAND ${CMAKE_COMMAND} --install <BINARY_DIR> --component metadef
         BUILD_ALWAYS TRUE
     )
 endif()
