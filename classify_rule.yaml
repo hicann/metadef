@@ -5,7 +5,6 @@ metadef:
   src:
     release:
       - inc
-      - error_manager
       - base
       - pkg_inc
     unrelease:

@@ -9,22 +9,11 @@
 # -----------------------------------------------------------------------------------------------------------
 
 ############ exe_meta_device ############
-set(STUB_ERROR_MANAGER_SRC
-        ${CMAKE_CURRENT_BINARY_DIR}/stub_error_manager.cc
-        ${CMAKE_CURRENT_BINARY_DIR}/stub_err_msg.cc
-        )
-add_custom_command(
-        OUTPUT ${STUB_ERROR_MANAGER_SRC}
-        COMMAND echo "Generating stub files."
-        && ${HI_PYTHON} ${CMAKE_CURRENT_LIST_DIR}/../error_manager/stub/gen_stubapi.py ${METADEF_DIR}/inc/common/util ${CMAKE_CURRENT_BINARY_DIR}
-        && ${HI_PYTHON} ${CMAKE_CURRENT_LIST_DIR}/../error_manager/stub/gen_stubapi.py ${METADEF_DIR}/inc/external ${CMAKE_CURRENT_BINARY_DIR}
-        && echo "Generating stub files end."
-)
 add_library(exe_meta_device STATIC
         "${METADEF_DIR}/base/runtime/tiling_data.cc"
         "${METADEF_DIR}/base/runtime/runtime_attrs.cc"
         "${METADEF_DIR}/base/runtime/compute_node_info.cc"
-        "${STUB_ERROR_MANAGER_SRC}")
+        )
 target_include_directories(exe_meta_device PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}
         ${METADEF_DIR}/inc/common/util
@@ -36,7 +25,7 @@ target_include_directories(exe_meta_device_headers INTERFACE
         $<BUILD_INTERFACE:${METADEF_DIR}/inc>
         $<BUILD_INTERFACE:${METADEF_DIR}/inc/external>
         )
-target_link_libraries(exe_meta_device PRIVATE intf_pub slog_headers c_sec_headers)
+target_link_libraries(exe_meta_device PRIVATE intf_pub slog_headers c_sec_headers metadef_headers stub_error_manager)
 target_link_libraries(exe_meta_device PUBLIC exe_meta_device_headers)
 target_compile_options(exe_meta_device PRIVATE
         -O2

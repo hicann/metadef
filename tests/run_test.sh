@@ -156,7 +156,7 @@ build_metadef() {
   cmake_generate_make "${BUILD_PATH}" "${CMAKE_ARGS}"
 
   if [[ "X$ENABLE_METADEF_UT" = "Xon" || "X$ENABLE_METADEF_COV" = "Xon" ]]; then
-    make ut_metadef ut_register ut_error_manager ut_exe_meta_device ut_sc_check ${VERBOSE} -j${THREAD_NUM}
+    make ut_metadef ut_register ut_exe_meta_device ut_sc_check ${VERBOSE} -j${THREAD_NUM}
   fi
 
   if [ 0 -ne $? ]; then
@@ -201,7 +201,6 @@ main() {
         -d ${BUILD_RELATIVE_PATH}/base/CMakeFiles/metadef.dir \
         -d ${BUILD_RELATIVE_PATH}/base/CMakeFiles/opp_registry.dir \
         -d ${BUILD_RELATIVE_PATH}/base/CMakeFiles/tilingdata_base.dir \
-        -d ${BUILD_RELATIVE_PATH}/error_manager/CMakeFiles/error_manager.dir \
         -d ${BUILD_RELATIVE_PATH}/base/CMakeFiles/exe_graph.dir \
         -d ${BUILD_RELATIVE_PATH}/base/CMakeFiles/rt2_registry_objects.dir \
         -o cov/tmp.info $(add_lcov_ops_by_major_version 2 "--ignore-errors empty")

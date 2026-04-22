@@ -146,11 +146,11 @@ if (ENABLE_OPEN_SRC)
     endif()
     find_package(runtime MODULE REQUIRED)
     find_package(platform MODULE REQUIRED)
+    find_package(error_manager MODULE REQUIRED)
 endif()
 
 include(cmake/common_funcs.cmake)
 add_subdirectory(inc)
-add_subdirectory(error_manager)
 add_subdirectory(base)
 
 if (ENABLE_METADEF_UT OR ENABLE_METADEF_ST OR ENABLE_BENCHMARK)
@@ -158,7 +158,7 @@ if (ENABLE_METADEF_UT OR ENABLE_METADEF_ST OR ENABLE_BENCHMARK)
     add_subdirectory(tests)
 endif()
 
-install(TARGETS exe_graph error_manager opp_registry rt2_registry_static metadef
+install(TARGETS exe_graph opp_registry rt2_registry_static metadef
     EXPORT metadef-targets
     LIBRARY DESTINATION ${INSTALL_LIBRARY_DIR} ${INSTALL_OPTIONAL}
     ARCHIVE DESTINATION ${INSTALL_LIBRARY_DIR} ${INSTALL_OPTIONAL}
@@ -221,8 +221,7 @@ add_cann_version_info_targets()
 if (ENABLE_OPEN_SRC AND "${PRODUCT_SIDE}" STREQUAL "host")
     set(ARCH_LINX_PATH "${CMAKE_SYSTEM_PROCESSOR}-linux")
 
-    install(TARGETS error_manager
-                    exe_graph
+    install(TARGETS exe_graph
                     opp_registry
                     rt2_registry_static
                     metadef
