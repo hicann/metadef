@@ -14,8 +14,7 @@
 #include "tests/depends/mmpa/src/mmpa_stub.h"
 
 #include <iostream>
-#include <filesystem>
-#include <cstdlib>
+#include <unistd.h>
 
 using namespace testing;
 using namespace std;
@@ -29,6 +28,14 @@ const ge::char_t *const kBuiltIn = "built-in";
 const ge::char_t *const kVendors = "vendors";
 const ge::char_t *const kOpMasterDeviceLib = "/op_impl/ai_core/tbe/op_master_device/lib/";
 const ge::char_t *const kOpTilingDeviceLib = "/op_impl/ai_core/tbe/op_tiling_device/lib/";
+
+static std::string GetCurrentWorkingDir() {
+  char buffer[PATH_MAX];
+  if (getcwd(buffer, sizeof(buffer)) != nullptr) {
+    return std::string(buffer);
+  }
+  return "";
+}
 
 void WriteRequiredVersion(const std::string &version, std::string &path, std::string &path1) {
   path ="./runtime";
@@ -853,7 +860,7 @@ TEST_F(UtestPluginManager, GetUpgradedOppPath_Failed_not_exist_opp_latest) {
 }
 
 TEST_F(UtestPluginManager, GetUpgradedOppPath_Success) {
-  std::string home_path = std::filesystem::current_path().string();
+  std::string home_path = GetCurrentWorkingDir();
   home_path = home_path.substr(0, home_path.rfind("/") + 1);
   mmSetEnv(kAscendHomePath, home_path.c_str(), 1);
   const auto opp_latest_path = home_path + "/opp_latest/";
@@ -1061,7 +1068,7 @@ TEST_F(UtestPluginManager, FindSoFilesInCustomPassDirs_04) {
 
 TEST_F(UtestPluginManager, FindSoFilesInCustomPassDirs_05) {
   PluginManager::SetCustomOpLibPath("");
-  std::string path = std::filesystem::current_path().string();
+  std::string path = GetCurrentWorkingDir();
   path = path.substr(0, path.rfind('/') + 0);
   mmSetEnv(kCustOppPath, path.c_str(), 1);
   std::string plugin_path;
@@ -1078,7 +1085,7 @@ TEST_F(UtestPluginManager, ReplaceFirst_NotMatch) {
 }
 
 TEST_F(UtestPluginManager, GetOpMasterDeviceSoPath_Whole_Pkg_Success) {
-  std::string opp_path = std::filesystem::current_path().string();
+  std::string opp_path = GetCurrentWorkingDir();
   opp_path = opp_path.substr(0, opp_path.rfind("/") + 1UL) + "/test_tmp/";
   mmSetEnv(kEnvName, opp_path.c_str(), 1);
   ConstructOpMasterDeviceSo(opp_path, 1, 2);
@@ -1093,7 +1100,7 @@ TEST_F(UtestPluginManager, GetOpMasterDeviceSoPath_Whole_Pkg_Success) {
 }
 
 TEST_F(UtestPluginManager, GetOpMasterDeviceSoPath_Sub_Pkg_Success) {
-  std::string opp_path = std::filesystem::current_path().string();
+  std::string opp_path = GetCurrentWorkingDir();
   opp_path = opp_path.substr(0, opp_path.rfind("/") + 1UL) + "/test_tmp/";
   mmSetEnv(kEnvName, opp_path.c_str(), 1);
   ConstructOpMasterDeviceSoForSubPkg(opp_path, 1, 2);

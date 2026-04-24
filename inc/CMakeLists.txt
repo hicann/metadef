@@ -35,6 +35,7 @@ target_include_directories(metadef_headers INTERFACE
     # --------------------start------------------------
     $<BUILD_INTERFACE:${TOP_DIR}/ace/npuruntime/runtime/platform/inc>
     $<BUILD_INTERFACE:${TOP_DIR}/runtime/pkg_inc>
+    $<BUILD_INTERFACE:${TOP_DIR}/runtime/include/dfx>
     # ---------------------end-----------------------
 
     $<INSTALL_INTERFACE:include>

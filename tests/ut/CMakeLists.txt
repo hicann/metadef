@@ -9,7 +9,6 @@
 # -----------------------------------------------------------------------------------------------------------
 
 add_subdirectory(base)
-add_subdirectory(error_manager)
 add_subdirectory(exe_meta_device)
 add_subdirectory(sc_check)
 add_subdirectory(register)
