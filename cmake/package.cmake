@@ -43,12 +43,12 @@ function(install_public_packages)
         COMPONENT metadef
     )
     set(SCRIPTS_FILES
-        ${CMAKE_SOURCE_DIR}/scripts/package/common/sh/check_version_required.awk
-        ${CMAKE_SOURCE_DIR}/scripts/package/common/sh/common_func.inc
-        ${CMAKE_SOURCE_DIR}/scripts/package/common/sh/common_interface.sh
-        ${CMAKE_SOURCE_DIR}/scripts/package/common/sh/common_interface.csh
-        ${CMAKE_SOURCE_DIR}/scripts/package/common/sh/common_interface.fish
-        ${CMAKE_SOURCE_DIR}/scripts/package/common/sh/version_compatiable.inc
+        ${CANN_CMAKE_DIR}/scripts/install/check_version_required.awk
+        ${CANN_CMAKE_DIR}/scripts/install/common_func.inc
+        ${CANN_CMAKE_DIR}/scripts/install/common_interface.sh
+        ${CANN_CMAKE_DIR}/scripts/install/common_interface.csh
+        ${CANN_CMAKE_DIR}/scripts/install/common_interface.fish
+        ${CANN_CMAKE_DIR}/scripts/install/version_compatiable.inc
         ${CMAKE_SOURCE_DIR}/scripts/package/metadef/scripts/cleanup.sh
         ${CMAKE_SOURCE_DIR}/scripts/package/metadef/scripts/help.info
         ${CMAKE_SOURCE_DIR}/scripts/package/metadef/scripts/install.sh
@@ -68,25 +68,19 @@ function(install_public_packages)
         WORLD_READ WORLD_EXECUTE
     )
     set(COMMON_FILES
-        ${CMAKE_SOURCE_DIR}/scripts/package/common/sh/install_common_parser.sh
-        ${CMAKE_SOURCE_DIR}/scripts/package/common/sh/common_func_v2.inc
-        ${CMAKE_SOURCE_DIR}/scripts/package/common/sh/common_installer.inc
-        ${CMAKE_SOURCE_DIR}/scripts/package/common/sh/script_operator.inc
-        ${CMAKE_SOURCE_DIR}/scripts/package/common/sh/version_cfg.inc
+        ${CANN_CMAKE_DIR}/scripts/install/install_common_parser.sh
+        ${CANN_CMAKE_DIR}/scripts/install/common_func_v2.inc
+        ${CANN_CMAKE_DIR}/scripts/install/common_installer.inc
+        ${CANN_CMAKE_DIR}/scripts/install/script_operator.inc
+        ${CANN_CMAKE_DIR}/scripts/install/version_cfg.inc
     )
 
     set(PACKAGE_FILES
         ${COMMON_FILES}
-        ${CMAKE_SOURCE_DIR}/scripts/package/common/sh/multi_version.inc
-    )
-    set(LATEST_MANGER_FILES
-        ${COMMON_FILES}
-        ${CMAKE_SOURCE_DIR}/scripts/package/common/sh/common_func.inc
-        ${CMAKE_SOURCE_DIR}/scripts/package/common/sh/version_compatiable.inc
-        ${CMAKE_SOURCE_DIR}/scripts/package/common/sh/check_version_required.awk
+        ${CANN_CMAKE_DIR}/scripts/install/multi_version.inc
     )
     set(CONF_FILES
-        ${CMAKE_SOURCE_DIR}/scripts/package/common/cfg/path.cfg
+        ${CANN_CMAKE_DIR}/scripts/package/cfg/path.cfg
     )
     install(FILES ${CMAKE_BINARY_DIR}/version.metadef.info
         DESTINATION share/info/metadef
@@ -122,11 +116,6 @@ install(TARGETS stub_exe_graph stub_metadef stub_opp_registry
 install(TARGETS stub_exe_graph stub_metadef stub_opp_registry rt2_registry_static
         LIBRARY DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/devlib COMPONENT metadef
         ARCHIVE DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/devlib COMPONENT metadef
-)
-# extract场景下需要存在，install并不需要
-install(TARGETS stub_exe_graph stub_metadef stub_opp_registry rt2_registry_static
-        LIBRARY DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/lib64/stub/linux/${ARCH} COMPONENT metadef
-        ARCHIVE DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/lib64/stub/linux/${ARCH} COMPONENT metadef
 )
 
 if(ENABLE_BUILD_DEVICE)
@@ -316,20 +305,6 @@ install(FILES ${EXTERNAL_ASC_REGISTRY_FILES}
     COMPONENT metadef
 )
 
-# ============= CPack =============
-
-set(CPACK_COMPONENTS_ALL ".;packages")
-set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
-set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
-set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_NAME}")
-set(CPACK_PACKAGE_DIRECTORY "${CMAKE_BINARY_DIR}")
-set(CPACK_CMAKE_SOURCE_DIR "${CMAKE_SOURCE_DIR}")
-set(CPACK_CMAKE_BINARY_DIR "${CMAKE_BINARY_DIR}")
-set(CPACK_MAKESELF_PATH "${MAKESELF_PATH}")
-set(CPACK_ARCH "${ARCH}")
-set(CPACK_GENERATOR External)
-set(CPACK_EXTERNAL_ENABLE_STAGING TRUE)
-set(CPACK_EXTERNAL_PACKAGE_SCRIPT "${CMAKE_SOURCE_DIR}/cmake/makeself.cmake")
-
-message(STATUS "CMAKE_INSTALL_PREFIX = ${CMAKE_INSTALL_PREFIX}")
-include(CPack)
+if (NOT ENABLE_COV AND NOT ENABLE_UT)
+    set_cann_cpack_config(metadef ENABLE_DEVICE ${ENABLE_DEVICE} SHARE_INFO_NAME metadef)
+endif()

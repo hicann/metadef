@@ -165,26 +165,6 @@ install(TARGETS exe_graph opp_registry rt2_registry_static metadef
     RUNTIME DESTINATION ${INSTALL_RUNTIME_DIR} ${INSTALL_OPTIONAL}
 )
 
-# 下列头文件发布是非法的，需要在后续整改中删掉
-# --------------------start------------------------
-install(FILES   ${METADEF_DIR}/register/op_tiling/op_tiling_constants.h
-                ${METADEF_DIR}/register/op_tiling/op_compile_info_manager.h
-                ${METADEF_DIR}/register/op_tiling/op_tiling_utils.h
-        DESTINATION ${INSTALL_INCLUDE_DIR}/metadef/register/op_tiling EXCLUDE_FROM_ALL
-)
-install(FILES   ${METADEF_DIR}/graph/normal_graph/operator_impl.h
-                ${METADEF_DIR}/graph/normal_graph/op_io.h
-        DESTINATION ${INSTALL_INCLUDE_DIR}/metadef/graph EXCLUDE_FROM_ALL
-)
-install(FILES   ${METADEF_DIR}/inc/graph/debug/ge_log.h
-                ${METADEF_DIR}/inc/graph/debug/ge_util.h # 被air使用
-        DESTINATION ${INSTALL_INCLUDE_DIR}/metadef/graph/debug EXCLUDE_FROM_ALL
-)
-install(FILES   ${METADEF_DIR}/graph/utils/dumper/ge_graph_dumper.h
-        DESTINATION ${INSTALL_INCLUDE_DIR}/metadef/graph/utils/dumper EXCLUDE_FROM_ALL
-)
-# ---------------------end-------------------------
-
 install(DIRECTORY ${METADEF_DIR}/inc/ DESTINATION ${INSTALL_INCLUDE_DIR}/metadef
     EXCLUDE_FROM_ALL FILES_MATCHING PATTERN "*.h"
 )
