@@ -53,8 +53,8 @@ set(USE_CXX11_ABI 0)
 include(${METADEF_DIR}/cmake/intf_pub_linux.cmake)
 
 # 自研软件包
-find_package(securec MODULE REQUIRED)
-find_package(unified_dlog MODULE REQUIRED)
+find_cann_package(securec MODULE REQUIRED)
+find_cann_package(unified_dlog MODULE REQUIRED)
 
 add_cann_subdirectories_relative(${METADEF_DIR}
     ${METADEF_DIR}/base

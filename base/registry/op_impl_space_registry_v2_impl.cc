@@ -42,6 +42,14 @@
       /* 已经注册且没有重复注册 */                                                                        \
     }                                                                                                   \
   } while (0)
+
+// 初次注册打印这个，辅助定位
+#define PRINT_MERGE_FUNCTION_FIRST(merged_funcs, op_type, func_name)                                                   \
+  do {                                                                                                                 \
+    if ((((merged_funcs).func_name) != nullptr)) {                                                                 \
+      GELOGD("op type %s %s func registered first.", (op_type), #func_name);                                                 \
+    }                                                                                                                  \
+  } while (0)
 namespace gert {
 namespace {
 const char_t *const kBuiltIn = "built-in";     // opp built-in directory name
@@ -218,6 +226,23 @@ void OpImplSpaceRegistryImpl::MergeTypesToImpl(OpTypesToImplMap &merged_impl, co
     auto merge_iter = merged_impl.find(op_type);
     if (merge_iter == merged_impl.end()) {
       merged_impl[op_type] = iter.second;
+      PRINT_MERGE_FUNCTION_FIRST(merged_impl[op_type], op_type.GetString(), infer_shape);
+      PRINT_MERGE_FUNCTION_FIRST(merged_impl[op_type], op_type.GetString(), infer_symbol_shape);
+      PRINT_MERGE_FUNCTION_FIRST(merged_impl[op_type], op_type.GetString(), infer_shape_range);
+      PRINT_MERGE_FUNCTION_FIRST(merged_impl[op_type], op_type.GetString(), infer_datatype);
+      PRINT_MERGE_FUNCTION_FIRST(merged_impl[op_type], op_type.GetString(), tiling_parse);
+      PRINT_MERGE_FUNCTION_FIRST(merged_impl[op_type], op_type.GetString(), compile_info_creator);
+      PRINT_MERGE_FUNCTION_FIRST(merged_impl[op_type], op_type.GetString(), compile_info_deleter);
+      PRINT_MERGE_FUNCTION_FIRST(merged_impl[op_type], op_type.GetString(), tiling);
+      PRINT_MERGE_FUNCTION_FIRST(merged_impl[op_type], op_type.GetString(), op_execute_func);
+      PRINT_MERGE_FUNCTION_FIRST(merged_impl[op_type], op_type.GetString(), op_execute_prepare_func);
+      PRINT_MERGE_FUNCTION_FIRST(merged_impl[op_type], op_type.GetString(), op_execute_launch_func);
+      PRINT_MERGE_FUNCTION_FIRST(merged_impl[op_type], op_type.GetString(), gen_simplifiedkey);
+      PRINT_MERGE_FUNCTION_FIRST(merged_impl[op_type], op_type.GetString(), infer_format_func);
+      PRINT_MERGE_FUNCTION_FIRST(merged_impl[op_type], op_type.GetString(), calc_op_param);
+      PRINT_MERGE_FUNCTION_FIRST(merged_impl[op_type], op_type.GetString(), gen_task);
+      PRINT_MERGE_FUNCTION_FIRST(merged_impl[op_type], op_type.GetString(), check_support);
+      PRINT_MERGE_FUNCTION_FIRST(merged_impl[op_type], op_type.GetString(), op_select_format);
       continue;
     }
     const auto &src_funcs = iter.second;
