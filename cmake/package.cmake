@@ -22,10 +22,9 @@ else ()
 endif ()
 # 打印路径
 message(STATUS "CMAKE_INSTALL_PREFIX = ${CMAKE_INSTALL_PREFIX}")
-message(STATUS "CMAKE_SOURCE_DIR = ${CMAKE_SOURCE_DIR}")
+message(STATUS "CMAKE_CURRENT_SOURCE_DIR = ${CMAKE_CURRENT_SOURCE_DIR}")
 message(STATUS "CMAKE_BINARY_DIR = ${CMAKE_BINARY_DIR}")
 set(ARCH_LINUX_PATH "${ARCH}-linux")
-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/third_party/build/modules/makeself-fetch.cmake)
 
 # ============= 组件打包 =============
 function(install_public_packages)
@@ -49,14 +48,14 @@ function(install_public_packages)
         ${CANN_CMAKE_DIR}/scripts/install/common_interface.csh
         ${CANN_CMAKE_DIR}/scripts/install/common_interface.fish
         ${CANN_CMAKE_DIR}/scripts/install/version_compatiable.inc
-        ${CMAKE_SOURCE_DIR}/scripts/package/metadef/scripts/cleanup.sh
-        ${CMAKE_SOURCE_DIR}/scripts/package/metadef/scripts/help.info
-        ${CMAKE_SOURCE_DIR}/scripts/package/metadef/scripts/install.sh
-        ${CMAKE_SOURCE_DIR}/scripts/package/metadef/scripts/run_metadef_install.sh
-        ${CMAKE_SOURCE_DIR}/scripts/package/metadef/scripts/run_metadef_uninstall.sh
-        ${CMAKE_SOURCE_DIR}/scripts/package/metadef/scripts/run_metadef_upgrade.sh
-        ${CMAKE_SOURCE_DIR}/scripts/package/metadef/scripts/uninstall.sh
-        ${CMAKE_SOURCE_DIR}/scripts/package/metadef/scripts/ver_check.sh
+        ${CMAKE_CURRENT_SOURCE_DIR}/scripts/package/metadef/scripts/cleanup.sh
+        ${CMAKE_CURRENT_SOURCE_DIR}/scripts/package/metadef/scripts/help.info
+        ${CMAKE_CURRENT_SOURCE_DIR}/scripts/package/metadef/scripts/install.sh
+        ${CMAKE_CURRENT_SOURCE_DIR}/scripts/package/metadef/scripts/run_metadef_install.sh
+        ${CMAKE_CURRENT_SOURCE_DIR}/scripts/package/metadef/scripts/run_metadef_uninstall.sh
+        ${CMAKE_CURRENT_SOURCE_DIR}/scripts/package/metadef/scripts/run_metadef_upgrade.sh
+        ${CMAKE_CURRENT_SOURCE_DIR}/scripts/package/metadef/scripts/uninstall.sh
+        ${CMAKE_CURRENT_SOURCE_DIR}/scripts/package/metadef/scripts/ver_check.sh
     )
 
     install(FILES ${SCRIPTS_FILES}
@@ -130,164 +129,164 @@ if(ENABLE_BUILD_DEVICE)
 endif()
 
 set(EXTERNAL_RUNTIME_FILES
-    ${CMAKE_SOURCE_DIR}/inc/external/exe_graph/runtime/tiling_context.h
-    ${CMAKE_SOURCE_DIR}/inc/external/exe_graph/runtime/kernel_run_context.h
-    ${CMAKE_SOURCE_DIR}/inc/external/exe_graph/runtime/shape.h
-    ${CMAKE_SOURCE_DIR}/inc/external/exe_graph/runtime/compute_node_info.h
-    ${CMAKE_SOURCE_DIR}/inc/external/exe_graph/runtime/tensor_data.h
-    ${CMAKE_SOURCE_DIR}/inc/external/exe_graph/runtime/op_execute_context.h
-    ${CMAKE_SOURCE_DIR}/inc/external/exe_graph/runtime/op_execute_launch_context.h
-    ${CMAKE_SOURCE_DIR}/inc/external/exe_graph/runtime/storage_format.h
-    ${CMAKE_SOURCE_DIR}/inc/external/exe_graph/runtime/stride.h
-    ${CMAKE_SOURCE_DIR}/inc/external/exe_graph/runtime/tensor.h
-    ${CMAKE_SOURCE_DIR}/inc/external/exe_graph/runtime/continuous_vector.h
-    ${CMAKE_SOURCE_DIR}/inc/external/exe_graph/runtime/exe_res_generation_context.h
-    ${CMAKE_SOURCE_DIR}/inc/external/exe_graph/runtime/infer_shape_context.h
-    ${CMAKE_SOURCE_DIR}/inc/external/exe_graph/runtime/range.h
-    ${CMAKE_SOURCE_DIR}/inc/external/exe_graph/runtime/runtime_attrs.h
-    ${CMAKE_SOURCE_DIR}/inc/external/exe_graph/runtime/base_type.h
-    ${CMAKE_SOURCE_DIR}/inc/external/exe_graph/runtime/expand_dims_type.h
-    ${CMAKE_SOURCE_DIR}/inc/external/exe_graph/runtime/infer_datatype_context.h
-    ${CMAKE_SOURCE_DIR}/inc/external/exe_graph/runtime/infer_shape_range_context.h
-    ${CMAKE_SOURCE_DIR}/inc/external/exe_graph/runtime/context_extend.h
-    ${CMAKE_SOURCE_DIR}/inc/external/exe_graph/runtime/storage_shape.h
-    ${CMAKE_SOURCE_DIR}/inc/external/exe_graph/runtime/tiling_parse_context.h
-    ${CMAKE_SOURCE_DIR}/inc/external/exe_graph/runtime/kernel_context.h
-    ${CMAKE_SOURCE_DIR}/inc/external/exe_graph/runtime/tiling_data.h
-    ${CMAKE_SOURCE_DIR}/inc/external/exe_graph/runtime/extended_kernel_context.h
-    ${CMAKE_SOURCE_DIR}/inc/external/exe_graph/runtime/op_execute_prepare_context.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/tiling_context.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/kernel_run_context.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/shape.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/compute_node_info.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/tensor_data.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/op_execute_context.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/op_execute_launch_context.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/storage_format.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/stride.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/tensor.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/continuous_vector.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/exe_res_generation_context.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/infer_shape_context.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/range.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/runtime_attrs.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/base_type.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/expand_dims_type.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/infer_datatype_context.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/infer_shape_range_context.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/context_extend.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/storage_shape.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/tiling_parse_context.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/kernel_context.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/tiling_data.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/extended_kernel_context.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/op_execute_prepare_context.h
 )
 install(FILES ${EXTERNAL_RUNTIME_FILES}
     DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/include/exe_graph/runtime
     COMPONENT metadef
 )
 set(EXTERNAL_GRAPH_FILES
-    ${CMAKE_SOURCE_DIR}/inc/external/graph/tensor.h
-    ${CMAKE_SOURCE_DIR}/inc/external/graph/c_types.h
-    ${CMAKE_SOURCE_DIR}/inc/external/graph/ge_error_codes.h
-    ${CMAKE_SOURCE_DIR}/inc/external/graph/infer_format_context.h
-    ${CMAKE_SOURCE_DIR}/inc/external/graph/compiler_def.h
-    ${CMAKE_SOURCE_DIR}/inc/external/graph/ascend_string.h
-    ${CMAKE_SOURCE_DIR}/inc/external/graph/types.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/graph/tensor.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/graph/c_types.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/graph/ge_error_codes.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/graph/infer_format_context.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/graph/compiler_def.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/graph/ascend_string.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/graph/types.h
 )
 install(FILES ${EXTERNAL_GRAPH_FILES}
     DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/include/graph
     COMPONENT metadef
 )
-install(FILES ${CMAKE_SOURCE_DIR}/inc/external/graph/utils/type_utils.h
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/graph/utils/type_utils.h
     DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/include/graph/utils
     COMPONENT metadef
 )
-install(FILES ${CMAKE_SOURCE_DIR}/inc/external/utils/extern_math_util.h
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/utils/extern_math_util.h
     DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/include/utils
     COMPONENT metadef
 )
-install(FILES ${CMAKE_SOURCE_DIR}/inc/external/ge/ge_allocator.h
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/ge/ge_allocator.h
     DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/include/ge
     COMPONENT metadef
 )
-install(FILES ${CMAKE_SOURCE_DIR}/inc/external/ge_common/ge_api_types.h
-              ${CMAKE_SOURCE_DIR}/inc/external/ge_common/ge_api_error_codes.h
-              ${CMAKE_SOURCE_DIR}/inc/external/ge_common/ge_error_codes.h
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/ge_common/ge_api_types.h
+              ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/ge_common/ge_api_error_codes.h
+              ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/ge_common/ge_error_codes.h
     DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/include/external/ge_common
     COMPONENT metadef
 )
-install(FILES ${CMAKE_SOURCE_DIR}/inc/external/base/registry/op_impl_space_registry_v2.h
-              ${CMAKE_SOURCE_DIR}/inc/external/base/registry/opp_package_utils.h
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/base/registry/op_impl_space_registry_v2.h
+              ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/base/registry/opp_package_utils.h
     DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/pkg_inc/base/registry
     COMPONENT metadef
 )
 
-install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/base/type/ascend_string_impl.h
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/pkg_inc/base/type/ascend_string_impl.h
         DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/pkg_inc/base/type
         COMPONENT metadef
 )
 
-install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/base/asc/opcheck/op_check_register_impl.h
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/pkg_inc/base/asc/opcheck/op_check_register_impl.h
         DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/pkg_inc/base/asc/opcheck
         COMPONENT metadef
 )
 
-install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/base/asc/opdef/op_config_registry_impl.h
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/pkg_inc/base/asc/opdef/op_config_registry_impl.h
         DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/pkg_inc/base/asc/opdef
         COMPONENT metadef
 )
 
-install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/base/asc/opdef/op_def_factory_impl.h
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/pkg_inc/base/asc/opdef/op_def_factory_impl.h
         DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/pkg_inc/base/asc/opdef
         COMPONENT metadef
 )
 
-install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/base/asc/opdef/op_def_impl.h
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/pkg_inc/base/asc/opdef/op_def_impl.h
         DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/pkg_inc/base/asc/opdef
         COMPONENT metadef 
 )
 
-install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/base/utils/type_utils_impl.h
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/pkg_inc/base/utils/type_utils_impl.h
         DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/pkg_inc/base/utils
         COMPONENT metadef
 )
 
-install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/common/checker.h
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/pkg_inc/common/checker.h
         DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/pkg_inc/common
         COMPONENT metadef
 )
 
-install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/common/ge_common/error_codes_define.h
-              ${CMAKE_SOURCE_DIR}/pkg_inc/common/ge_common/scope_guard.h
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/pkg_inc/common/ge_common/error_codes_define.h
+              ${CMAKE_CURRENT_SOURCE_DIR}/pkg_inc/common/ge_common/scope_guard.h
         DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/pkg_inc/common/ge_common
         COMPONENT metadef
 )
 
-install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/common/ge_common/debug/ge_log.h
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/pkg_inc/common/ge_common/debug/ge_log.h
         DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/pkg_inc/common/ge_common/debug
         COMPONENT metadef
 )
 
-install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/exe_graph/runtime/gert_mem_allocator.h
-              ${CMAKE_SOURCE_DIR}/pkg_inc/exe_graph/runtime/gert_mem_block.h
-              ${CMAKE_SOURCE_DIR}/pkg_inc/exe_graph/runtime/gert_tensor_data.h
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/pkg_inc/exe_graph/runtime/gert_mem_allocator.h
+              ${CMAKE_CURRENT_SOURCE_DIR}/pkg_inc/exe_graph/runtime/gert_mem_block.h
+              ${CMAKE_CURRENT_SOURCE_DIR}/pkg_inc/exe_graph/runtime/gert_tensor_data.h
         DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/pkg_inc/exe_graph/runtime
         COMPONENT metadef
 )
 
-install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/graph/any_value.h
-              ${CMAKE_SOURCE_DIR}/pkg_inc/graph/def_types.h
-              ${CMAKE_SOURCE_DIR}/pkg_inc/graph/type_utils.h
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/pkg_inc/graph/any_value.h
+              ${CMAKE_CURRENT_SOURCE_DIR}/pkg_inc/graph/def_types.h
+              ${CMAKE_CURRENT_SOURCE_DIR}/pkg_inc/graph/type_utils.h
         DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/pkg_inc/graph
         COMPONENT metadef
 )
 
-install(FILES ${CMAKE_SOURCE_DIR}/pkg_inc/base/asc/tilingdata_base_impl.h
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/pkg_inc/base/asc/tilingdata_base_impl.h
         DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/pkg_inc/base/asc
         COMPONENT metadef
 )
 
-install(FILES ${CMAKE_SOURCE_DIR}/inc/external/base/context_builder/context_holder.h
-              ${CMAKE_SOURCE_DIR}/inc/external/base/context_builder/op_context_builder_base.h
-              ${CMAKE_SOURCE_DIR}/inc/external/base/context_builder/op_tiling_parse_context_builder.h
-              ${CMAKE_SOURCE_DIR}/inc/external/base/context_builder/op_tiling_context_builder.h
-              ${CMAKE_SOURCE_DIR}/inc/external/base/context_builder/op_infer_datatype_context_builder.h
-              ${CMAKE_SOURCE_DIR}/inc/external/base/context_builder/op_infer_shape_context_builder.h
-              ${CMAKE_SOURCE_DIR}/inc/external/base/context_builder/op_infer_shape_range_context_builder.h
-              ${CMAKE_SOURCE_DIR}/inc/external/base/context_builder/op_kernel_run_context_builder.h
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/base/context_builder/context_holder.h
+              ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/base/context_builder/op_context_builder_base.h
+              ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/base/context_builder/op_tiling_parse_context_builder.h
+              ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/base/context_builder/op_tiling_context_builder.h
+              ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/base/context_builder/op_infer_datatype_context_builder.h
+              ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/base/context_builder/op_infer_shape_context_builder.h
+              ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/base/context_builder/op_infer_shape_range_context_builder.h
+              ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/base/context_builder/op_kernel_run_context_builder.h
     DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/include/base/context_builder
     COMPONENT metadef
 )
-install(FILES ${CMAKE_SOURCE_DIR}/inc/external/base/runtime/runtime_attrs_def.h
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/base/runtime/runtime_attrs_def.h
     DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/include/base/runtime
     COMPONENT metadef
 )
 set(EXTERNAL_REGISTRY_FILES
-    ${CMAKE_SOURCE_DIR}/inc/external/register/op_impl_registry.h
-    ${CMAKE_SOURCE_DIR}/inc/external/register/op_impl_kernel_registry.h
-    ${CMAKE_SOURCE_DIR}/inc/external/register/register_types.h
-    ${CMAKE_SOURCE_DIR}/inc/external/register/register_fmk_types.h
-    ${CMAKE_SOURCE_DIR}/inc/external/register/register_error_codes.h
-    ${CMAKE_SOURCE_DIR}/inc/external/register/op_bin_info.h
-    ${CMAKE_SOURCE_DIR}/inc/external/register/tilingdata_base.h
-    ${CMAKE_SOURCE_DIR}/inc/external/register/device_op_impl_registry.h
-    ${CMAKE_SOURCE_DIR}/inc/external/register/register.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/register/op_impl_registry.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/register/op_impl_kernel_registry.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/register/register_types.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/register/register_fmk_types.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/register/register_error_codes.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/register/op_bin_info.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/register/tilingdata_base.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/register/device_op_impl_registry.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/register/register.h
 )
 install(FILES ${EXTERNAL_REGISTRY_FILES}
     DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/include/register
@@ -295,10 +294,10 @@ install(FILES ${EXTERNAL_REGISTRY_FILES}
 )
 
 set(EXTERNAL_ASC_REGISTRY_FILES
-    ${CMAKE_SOURCE_DIR}/inc/external/asc/register/op_config_registry.h
-    ${CMAKE_SOURCE_DIR}/inc/external/asc/register/op_def_factory.h
-    ${CMAKE_SOURCE_DIR}/inc/external/asc/register/op_def.h
-    ${CMAKE_SOURCE_DIR}/inc/external/asc/register/op_def_registry.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/asc/register/op_config_registry.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/asc/register/op_def_factory.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/asc/register/op_def.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/asc/register/op_def_registry.h
 )
 install(FILES ${EXTERNAL_ASC_REGISTRY_FILES}
     DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/include/register/asc
