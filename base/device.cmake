@@ -25,7 +25,7 @@ target_include_directories(exe_meta_device_headers INTERFACE
         $<BUILD_INTERFACE:${METADEF_DIR}/inc>
         $<BUILD_INTERFACE:${METADEF_DIR}/inc/external>
         )
-target_link_libraries(exe_meta_device PRIVATE intf_pub slog_headers c_sec_headers metadef_headers stub_error_manager)
+target_link_libraries(exe_meta_device PRIVATE intf_pub slog_headers c_sec_headers metadef_headers error_manager_headers)
 target_link_libraries(exe_meta_device PUBLIC exe_meta_device_headers)
 target_compile_options(exe_meta_device PRIVATE
         -O2
@@ -53,6 +53,7 @@ target_include_directories(device_register PRIVATE
 
 target_link_libraries(device_register PRIVATE
   $<BUILD_INTERFACE:intf_pub>
+  $<BUILD_INTERFACE:error_manager_headers>
   -Wl,--no-as-needed
   -Wl,--whole-archive
   slog_headers
