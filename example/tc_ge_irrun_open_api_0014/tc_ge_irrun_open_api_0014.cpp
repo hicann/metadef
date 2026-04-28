@@ -79,17 +79,13 @@ int32_t GenOnesData(vector<int64_t> shapes, Tensor &input_tensor, TensorDesc &in
         size *= shapes[i];
     }
     uint32_t data_len = size * GetDataTypeSize(data_type);
-    char* pData = new(std::nothrow) char[data_len];
-    for (uint32_t i = 0; i < size; ++i) {
-        *(pData + i) = value;
-    }
-    input_tensor = Tensor(input_tensor_desc, reinterpret_cast<uint8_t*>(pData), data_len);
+    std::vector<uint8_t> pData(data_len, static_cast<uint8_t>(value));
+    input_tensor = Tensor(input_tensor_desc, pData.data(), data_len);
     return SUCCESS;
 }
 
 int32_t WriteDataToFile(string bin_file, uint64_t data_size, uint8_t* inputData) {
-    FILE *fp;
-    fp = fopen(bin_file.c_str(), "w");
+    FILE* fp = fopen(bin_file.c_str(), "w");
     fwrite(inputData, sizeof(uint8_t), data_size, fp);
     fclose(fp);
     return SUCCESS;
@@ -101,8 +97,7 @@ int32_t LoadDataFromFile(string bin_file, vector<int64_t> shapes, Tensor &input_
         size *= shapes[i];
     }
     uint32_t data_size = size * GetDataTypeSize(data_type);
-    FILE *fp;
-    fp = fopen(bin_file.c_str(), "r");
+    FILE* fp = fopen(bin_file.c_str(), "r");
     uint32_t* memory = (uint32_t*)malloc(data_size * sizeof(uint32_t));
     fread(memory, sizeof(uint32_t), data_size, fp);
     fclose(fp);
@@ -119,7 +114,7 @@ int32_t GenOnesDataInt64(vector<int64_t> shapes, Tensor &input_tensor, TensorDes
         size *= shapes[i];
     }
     uint32_t data_len = size * 8;
-    int64_t * pData = nullptr;
+    int64_t* pData = nullptr;
     pData = new int64_t[size];
     for(int i=0; i<size; ++i) {
         *(pData+i) = value;
@@ -135,7 +130,7 @@ int32_t GenOnesDataUint64(vector<int64_t> shapes, Tensor &input_tensor, TensorDe
         size *= shapes[i];
     }
     uint32_t data_len = size * 8;
-    uint64_t * pData = nullptr;
+    uint64_t* pData = nullptr;
     pData = new uint64_t[size];
     for(int i=0; i<size; ++i) {
         *(pData+i) = value;
@@ -181,7 +176,7 @@ int32_t GenOnesDataFloat32(vector<int64_t> shapes, Tensor &input_tensor, TensorD
         size *= shapes[i];
     }
     uint32_t data_len = size * 4;
-    float * pData = nullptr;
+    float* pData = nullptr;
     pData = new float[size];
     for(int i=0; i<size; ++i) {
         *(pData+i) = value;
@@ -254,8 +249,7 @@ static Status BuildReluGraph(Graph& graph, std::vector<ge::Tensor>& input)
     return SUCCESS;
 }
 
-static Status CreateAndAddGraphToSession(Graph& graph, ge::Session*& session)
-{
+static ge::Session CreateAndAddGraphToSession(Graph& graph) {
     printf("[IR run log] - INFO - [XIR]: Start to initialize ge using ge session options\n");
     std::map<AscendString, AscendString> session_options = {};
 
@@ -263,31 +257,24 @@ static Status CreateAndAddGraphToSession(Graph& graph, ge::Session*& session)
     std::map<AscendString, AscendString> graph_options = {};
 
     ge::Session sess = Session(session_options);
-    session = &sess;
-    if (session == nullptr) {
-        printf("[IR run log] - ERROR - [XIR]: Create ir session using build options failed\n");
-        return FAILED;
-    }
     printf("[IR run log] - INFO - [XIR]: Create ir session using build options success\n");
 
     printf("[IR run log] - INFO - [XIR]: Start to add compute graph to ir session\n");
     uint32_t graph_id = 9;
-    Status ret = session->AddGraph(graph_id, graph, graph_options);
+    Status ret = sess.AddGraph(graph_id, graph, graph_options);
     if (ret != SUCCESS) {
-        printf("[IR run log] - INFO - [XIR]: Add graph failed\n");
-        return FAILED;
+      printf("[IR run log] - INFO - [XIR]: Add graph failed\n");
     }
     printf("[IR run log] - INFO - [XIR]: Session add ir compute graph to ir session success\n");
 
     printf("[IR run log] - INFO - [XIR]: Start to compile graph to ir session\n");
-    ret = session->CompileGraph(graph_id);
+    ret = sess.CompileGraph(graph_id);
     if (ret != SUCCESS) {
-        printf("[IR run log] - INFO - [XIR]: compile graph failed, pls check");
-        return FAILED;
+      printf("[IR run log] - INFO - [XIR]: compile graph failed, pls check");
     }
     printf("[IR run log] - INFO - [XIR]: Session run ir compile graph success\n");
 
-    return SUCCESS;
+    return sess;
 }
 
 static Status InitACL(aclrtStream& stream)
@@ -330,7 +317,7 @@ static Status PrepareInputTensors(const std::vector<ge::Tensor>& input,
         auto input_format = input_desc.GetFormat();
         gert::StorageFormat storage_format(input_format, input_format, {});
         auto input_dtype = input_desc.GetDataType();
-        uint8_t* input_buffer = input[i].GetData();
+        const uint8_t* input_buffer = input[i].GetData();
         void* inputdevBuffer = nullptr;
         aclError aclRet = aclrtMalloc(&inputdevBuffer, input_size, ACL_MEM_MALLOC_NORMAL_ONLY);
         if (aclRet != ACL_ERROR_NONE) {
@@ -350,6 +337,7 @@ static Status PrepareInputTensors(const std::vector<ge::Tensor>& input,
 
 static Status ExecuteGraphAndSaveOutput(ge::Session& sess, uint32_t graph_id,
                                         aclrtStream stream,
+                                        const std::vector<ge::Tensor>& input,
                                         std::vector<gert::Tensor>& input_device,
                                         std::vector<gert::Tensor>& output)
 {
@@ -428,43 +416,38 @@ int main(int argc, char* argv[])
     const char* graph_name = "tc_ge_irrun_open_api_0014";
     Graph graph(graph_name);
     std::vector<ge::Tensor> input;
-    ge::Session* session = nullptr;
     aclrtStream stream = nullptr;
     std::vector<gert::Tensor> input_device;
     std::vector<gert::Tensor> output;
 
     Status ret = InitGE();
     if (ret != SUCCESS) {
-        return FAILED;
+      return FAILED;
     }
 
     ret = BuildReluGraph(graph, input);
     if (ret != SUCCESS) {
-        Cleanup();
-        return FAILED;
+      Cleanup();
+      return FAILED;
     }
 
-    ret = CreateAndAddGraphToSession(graph, session);
-    if (ret != SUCCESS) {
-        Cleanup();
-        return FAILED;
-    }
+    auto sess = CreateAndAddGraphToSession(graph);
 
     ret = InitACL(stream);
     if (ret != SUCCESS) {
-        Cleanup();
-        return FAILED;
+      Cleanup();
+      return FAILED;
     }
 
-    ret = ExecuteGraphAndSaveOutput(*session, 9, stream, input_device, output);
+    ret = ExecuteGraphAndSaveOutput(sess, 9, stream, input, input_device, output);
     if (ret != SUCCESS) {
-        Cleanup();
-        return FAILED;
+      Cleanup();
+      return FAILED;
     }
 
     ret = Cleanup();
     if (ret != SUCCESS) {
-        return FAILED;
+      return FAILED;
     }
 
     return SUCCESS;
