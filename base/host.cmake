@@ -79,7 +79,8 @@ target_link_options(opp_registry PRIVATE
 
 target_link_libraries(opp_registry
         PRIVATE
-        intf_pub
+        $<BUILD_INTERFACE:intf_pub>
+        $<BUILD_INTERFACE:error_manager_headers>
         c_sec
         unified_dlog
         platform
@@ -124,6 +125,7 @@ set_target_properties(rt2_registry_objects PROPERTIES
 target_link_libraries(rt2_registry_objects
         PRIVATE
         $<BUILD_INTERFACE:intf_pub>
+        $<BUILD_INTERFACE:error_manager_headers>
         c_sec
         unified_dlog
         static_mmpa
