@@ -8,17 +8,16 @@
 # See LICENSE in the root of the software repository for the full text of the License.
 # -----------------------------------------------------------------------------------------------------------
 if(NOT PROJECT_SOURCE_DIR)
+    set(CANN_CMAKE_TAG "master-006")
     if(CANN_3RD_LIB_PATH AND IS_DIRECTORY "${CANN_3RD_LIB_PATH}/cann-cmake")
         include("${CANN_3RD_LIB_PATH}/cann-cmake/function/prepare.cmake")
     else()
         include(FetchContent)
-
-        set(CANN_CMAKE_TAG "master-003")
         if(CANN_3RD_LIB_PATH AND EXISTS "${CANN_3RD_LIB_PATH}/cmake-${CANN_CMAKE_TAG}.tar.gz")
             FetchContent_Declare(
                 cann-cmake
                 URL "${CANN_3RD_LIB_PATH}/cmake-${CANN_CMAKE_TAG}.tar.gz"
-                URL_HASH SHA256=d199f151d5160d850c19f8f6fce88b0e352ac3f7c84ceb8c3f6f8f638cb3f0f0
+                URL_HASH SHA256=3145ca5e8a8e0956899fd65afab2cb871911593fd051a9b555f5e331381c7197
             )
         else()
             FetchContent_Declare(

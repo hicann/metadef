@@ -30,8 +30,7 @@ endif ()
 
 if (NOT DEFINED CMAKE_MODULE_PATH)
     set(CMAKE_MODULE_PATH
-        ${CMAKE_CURRENT_LIST_DIR}/cmake/modules
-        ${CMAKE_CURRENT_LIST_DIR}/cmake/third_party/scripts/modules
+        ${CANN_CMAKE_DIR}/modules
         ${CANN_3RD_LIB_PATH}/cmake/modules
     )
 endif()
