@@ -14,7 +14,7 @@
 #include <string>
 #include "ge_common/ge_api_error_codes.h"
 
-// Each module defines error codes using the following macros, name can not be modified to (name)
+// Each module defines error codes using the following macros, name cannot be modified to (name)
 #define GE_ERRORNO_COMMON(name, value, desc)                                 \
   GE_ERRORNO(ge::InnLogRuntime::RT_HOST, ge::InnErrorCodeType::ERROR_CODE,   \
              ge::InnErrorLevel::COMMON_LEVEL, ge::InnSystemIdType::SYSID_GE, \

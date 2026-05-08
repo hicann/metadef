@@ -215,7 +215,7 @@ class TilingData {
  */
 template<typename T>
 TilingData &operator<<(TilingData &out, const T &data) {
-  out.Append(data);  // we can not throw exception, so callers can not get the error information
+  out.Append(data);  // we cannot throw exception, so callers cannot get the error information
   return out;
 }
 static_assert(std::is_standard_layout<TilingData>::value, "The class TilingData must be a POD");

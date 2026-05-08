@@ -818,11 +818,11 @@ void OpParamDefImpl::MergeParam(OpParamDef *parent_this, const OpParamDef &def) 
 
 OpParamDef &OpParamDefImpl::DataType(OpParamDef *parent_this, std::vector<ge::DataType> types) {
   if (parent_this->IsDtypeList()) {
-    GELOGE(ge::PARAM_INVALID, "DataTypeList and DataType can not be called at the same time!");
+    GELOGE(ge::PARAM_INVALID, "DataTypeList and DataType cannot be called at the same time!");
     return *parent_this;
   }
   if (types.empty()) {
-    GELOGE(ge::PARAM_INVALID, "DataType can not be empty");
+    GELOGE(ge::PARAM_INVALID, "DataType cannot be empty");
     return *parent_this;
   }
   if (parent_this->impl_->set_type_for_bin && types.size() != parent_this->impl_->types_for_bin.size()) {
@@ -838,11 +838,11 @@ OpParamDef &OpParamDefImpl::DataType(OpParamDef *parent_this, std::vector<ge::Da
 
 OpParamDef &OpParamDefImpl::DataTypeList(OpParamDef *parent_this, std::vector<ge::DataType> types) {
   if (parent_this->IsDtype()) {
-    GELOGE(ge::PARAM_INVALID, "DataTypeList and DataType can not be called at the same time!");
+    GELOGE(ge::PARAM_INVALID, "DataTypeList and DataType cannot be called at the same time!");
     return *parent_this;
   }
   if (types.empty()) {
-    GELOGE(ge::PARAM_INVALID, "DataTypeList can not be empty");
+    GELOGE(ge::PARAM_INVALID, "DataTypeList cannot be empty");
     return *parent_this;
   }
   std::unordered_set<uint32_t> dtype_set(types.begin(), types.end());
@@ -862,11 +862,11 @@ OpParamDef &OpParamDefImpl::DataTypeList(OpParamDef *parent_this, std::vector<ge
 
 OpParamDef &OpParamDefImpl::Format(OpParamDef *parent_this, std::vector<ge::Format> formats) {
   if (parent_this->IsFormatList()) {
-    GELOGE(ge::PARAM_INVALID, "FormatList and Format can not be called at the same time!");
+    GELOGE(ge::PARAM_INVALID, "FormatList and Format cannot be called at the same time!");
     return *parent_this;
   }
   if (formats.empty()) {
-    GELOGE(ge::PARAM_INVALID, "Format can not be empty");
+    GELOGE(ge::PARAM_INVALID, "Format cannot be empty");
     return *parent_this;
   }
   if (parent_this->impl_->set_format_for_bin && formats.size() != parent_this->impl_->formats_for_bin.size()) {
@@ -881,11 +881,11 @@ OpParamDef &OpParamDefImpl::Format(OpParamDef *parent_this, std::vector<ge::Form
 
 OpParamDef &OpParamDefImpl::FormatList(OpParamDef *parent_this, std::vector<ge::Format> formats) {
   if (parent_this->IsFormat()) {
-    GELOGE(ge::PARAM_INVALID, "FormatList and Format can not be called at the same time!");
+    GELOGE(ge::PARAM_INVALID, "FormatList and Format cannot be called at the same time!");
     return *parent_this;
   }
   if (formats.empty()) {
-    GELOGE(ge::PARAM_INVALID, "Format can not be empty");
+    GELOGE(ge::PARAM_INVALID, "Format cannot be empty");
     return *parent_this;
   }
   std::unordered_set<uint32_t> format_set(formats.begin(), formats.end());
@@ -905,7 +905,7 @@ OpParamDef &OpParamDefImpl::FormatList(OpParamDef *parent_this, std::vector<ge::
 
 OpParamDef &OpParamDefImpl::DataTypeForBinQuery(OpParamDef *parent_this, std::vector<ge::DataType> types) {
   if (types.empty()) {
-    GELOGE(ge::PARAM_INVALID, "DataTypeForBinList can not be empty!");
+    GELOGE(ge::PARAM_INVALID, "DataTypeForBinList cannot be empty!");
     return *parent_this;
   }
   if (parent_this->impl_->types_status == NON_LIST && parent_this->impl_->types.size() != types.size()) {
@@ -925,7 +925,7 @@ OpParamDef &OpParamDefImpl::DataTypeForBinQuery(OpParamDef *parent_this, std::ve
 
 OpParamDef &OpParamDefImpl::FormatForBinQuery(OpParamDef *parent_this, std::vector<ge::Format> formats) {
   if (formats.empty()) {
-    GELOGE(ge::PARAM_INVALID, "FormatForBinList can not be empty!");
+    GELOGE(ge::PARAM_INVALID, "FormatForBinList cannot be empty!");
     return *parent_this;
   }
   if (parent_this->impl_->formats_status == NON_LIST && parent_this->impl_->formats.size() != formats.size()) {

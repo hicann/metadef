@@ -45,7 +45,7 @@ std::string RealPath(const char *path) {
   if (realpath(path, resolved_path) != nullptr) {
     return std::string(resolved_path);
   } else {
-    GELOGW("[Util][realpath] Can not get real_path for [%s], reason:%s", path, strerror(errno));
+    GELOGW("[Util][realpath] Cannot get real_path for [%s], reason:%s", path, strerror(errno));
     return "";
   }
 }
