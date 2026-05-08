@@ -16,7 +16,7 @@ add_library(slog_stub SHARED ${SRC_FILES})
 target_compile_options(slog_stub PRIVATE -Wno-unused-parameter)
 target_link_libraries(slog_stub
     PRIVATE
-        intf_pub
+        metadef_intf_pub
     PUBLIC
         slog_headers
 )

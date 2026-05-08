@@ -21,7 +21,7 @@ add_library(mmpa_stub SHARED ${SRCS})
 target_compile_options(mmpa_stub PRIVATE -Wno-unused-parameter)
 target_link_libraries(mmpa_stub
     PRIVATE
-        intf_pub
+        metadef_intf_pub
         -Wl,--no-as-needed
         ascend_protobuf
         -Wl,--as-needed

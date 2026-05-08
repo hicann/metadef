@@ -44,7 +44,7 @@ target_compile_definitions(ut_metadef PRIVATE
 )
 
 target_link_libraries(ut_metadef PRIVATE
-    intf_pub -lgcov
+    metadef_intf_pub -lgcov
     -Wl,--no-as-needed
     slog_headers
     metadef_headers metadef opp_registry error_manager

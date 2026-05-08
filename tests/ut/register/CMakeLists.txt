@@ -38,7 +38,7 @@ target_compile_definitions(ut_register PRIVATE
 )
 
 target_link_libraries(ut_register
-    intf_pub
+    metadef_intf_pub
     metadef_headers
     runtime_headers
     slog_headers

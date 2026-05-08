@@ -18,6 +18,6 @@ add_library(platform_stub SHARED ${SRC_FILES})
 target_compile_options(platform_stub PRIVATE -Wno-unused-parameter)
 target_link_libraries(platform_stub
     PRIVATE
-        intf_pub
+        metadef_intf_pub
         platform_headers
 )
