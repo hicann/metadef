@@ -12,11 +12,13 @@ cmake_minimum_required(VERSION 3.16)
 include(cmake/fetch_cann_cmake.cmake)
 project (MetaDef[CXX])
 
-init_cann_project()
 set(CMAKE_C_FLAGS_RELEASE "")
 set(CMAKE_CXX_FLAGS_RELEASE "")
 set(PRODUCT_SIDE "host" CACHE STRING "Build target: host or device")
 set(METADEF_DEVICE_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/device_output)
+init_cann_project()
+add_cann_target_options()
+include(cmake/intf_pub_linux.cmake)
 
 enable_testing()
 
@@ -78,23 +80,6 @@ set(METADEF_DIR ${CMAKE_CURRENT_LIST_DIR})
 
 option(ENABLE_OPEN_SRC "Enable graphengine compile in opensource." FALSE)
 
-if(ENABLE_BUILD_DEVICE)
-    # 非MDC编译流程
-    set(USE_CXX11_ABI 0)
-else()
-    string(FIND "${CMAKE_TOOLCHAIN_FILE}" "ubuntu18.04-x86_64-llvm-toolchain.cmake" SUBSTRING_FOUND)
-    if(SUBSTRING_FOUND GREATER_EQUAL 0)
-        set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY false)
-        # MDC编译运行态
-        message("MDC compile runtime state.")
-        add_compile_definitions(_GLIBCXX_USE_CXX11_ABI=${USE_CXX11_ABI})
-    else()
-        # MDC编译开发态
-        message("MDC compile develop state.")
-        set(USE_CXX11_ABI 0)
-    endif()
-endif()
-
 # 针对 GCC/Clang 编译器, 开启编译告警转报错
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     add_compile_options(-Wall -Wextra -Werror)
@@ -126,7 +111,6 @@ execute_process(
 if (ENABLE_OPEN_SRC)
     set(HI_PYTHON python3)
     include(cmake/test_funcs.cmake)
-    include(cmake/intf_pub_linux.cmake)
 
     if(ENABLE_METADEF_UT)
         include(cmake/third_party/build/modules/ascend_protobuf.cmake)

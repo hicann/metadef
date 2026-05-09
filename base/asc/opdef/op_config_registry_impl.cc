@@ -60,7 +60,7 @@ std::map<ge::AscendString, OpAICoreConfigFunc> OpConfigRegistryImpl::GetOpAllAIC
   
   auto iter = funcData_.find(ge::AscendString(name));
   if (iter == funcData_.end()) {
-      GELOGD("Can not find aicore config for op[%s].", name);
+      GELOGD("Cannot find aicore config for op[%s].", name);
       return std::map<ge::AscendString, OpAICoreConfigFunc>();
     }
     GELOGD("Found aicore config for op[%s].", name);

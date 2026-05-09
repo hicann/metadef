@@ -12,13 +12,14 @@ cmake_minimum_required(VERSION 3.16)
 include(../fetch_cann_cmake.cmake)
 project (MetaDef[CXX])
 
-init_cann_project()
-
 set(METADEF_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../" CACHE PATH "Project top directory")
-
 set(CMAKE_C_FLAGS_RELEASE "")
 set(CMAKE_CXX_FLAGS_RELEASE "")
 set(PRODUCT_SIDE "device")
+
+init_cann_project()
+add_cann_target_options()
+include(${METADEF_DIR}/cmake/intf_pub_linux.cmake)
 
 if (NOT DEFINED CMAKE_MODULE_PATH OR NOT DEFINED CMAKE_PREFIX_PATH)
     # In a developer environment, neither CMAKE_MODULE_PATH nor CMAKE_PREFIX_PATH is set.
@@ -48,8 +49,6 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 endif()
 
 set(HI_PYTHON python3)
-set(USE_CXX11_ABI 0)
-include(${METADEF_DIR}/cmake/intf_pub_linux.cmake)
 
 # 自研软件包
 find_cann_package(securec MODULE REQUIRED)

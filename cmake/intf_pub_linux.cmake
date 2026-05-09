@@ -8,106 +8,27 @@
 # See LICENSE in the root of the software repository for the full text of the License.
 # -----------------------------------------------------------------------------------------------------------
 
-if (CMAKE_BUILD_TYPE MATCHES GCOV)
-    set(OPTIMIZE_OPTION "-O0")
-else ()
-    set(OPTIMIZE_OPTION "-O2")
-endif ()
+# 默认开启-O2优化选项
+add_library(metadef_intf_pub INTERFACE)
+target_link_libraries(metadef_intf_pub INTERFACE
+    $<BUILD_INTERFACE:intf_pub>
+)
 
-include_guard(GLOBAL)
-if (TARGET intf_pub)
-    return()
-endif()
+target_compile_definitions(metadef_intf_pub INTERFACE
+    $<$<CONFIG:Release>:-D_FORTIFY_SOURCE=2>
+)
 
-########## intf_pub_base ##########
-add_library(intf_pub_base INTERFACE)
-
-target_compile_options(intf_pub_base INTERFACE
-    ${OPTIMIZE_OPTION}
-    -Wall
-    -fPIC
-    $<$<NOT:$<STREQUAL:${CMAKE_BUILD_TYPE},GCOV>>:-D_FORTIFY_SOURCE=2>
-    $<IF:$<STREQUAL:${CMAKE_SYSTEM_NAME},centos>,-fstack-protector-all,-fstack-protector-strong>
+target_compile_options(metadef_intf_pub INTERFACE
+    $<$<CONFIG:Release>:-O2>
     $<$<CONFIG:Debug>:-g>
-    $<$<BOOL:${ENABLE_ASAN}>:-fsanitize=address -fsanitize=leak -fsanitize-recover=address,all -fno-stack-protector -fno-omit-frame-pointer -g>
-    $<$<BOOL:${ENABLE_GCOV}>:-fprofile-arcs -ftest-coverage>
 )
 
-target_compile_definitions(intf_pub_base INTERFACE
-    _GLIBCXX_USE_CXX11_ABI=${USE_CXX11_ABI}
-    $<$<CONFIG:Release>:CFG_BUILD_NDEBUG>
-    $<$<CONFIG:Debug>:CFG_BUILD_DEBUG>
-    LINUX=0
-    $<$<BOOL:${ENABLE_TEST}>:SUPPORT_LARGE_MODEL_ENABLE=1>
+# 支持target定制-Os优化选项
+add_library(metadef_intf_pub_Os INTERFACE)
+target_link_libraries(metadef_intf_pub_Os INTERFACE
+    $<BUILD_INTERFACE:intf_pub>
 )
-
-target_link_options(intf_pub_base INTERFACE
-    -Wl,-z,relro
-    -Wl,-z,now
-    -Wl,-z,noexecstack
-    $<$<CONFIG:Release>:-Wl,--build-id=none>
-    $<$<CONFIG:Release>:-s>
-    $<$<BOOL:${ENABLE_ASAN}>:-fsanitize=address -fsanitize=leak -fsanitize-recover=address>
-    $<$<BOOL:${ENABLE_GCOV}>:-fprofile-arcs -ftest-coverage>
-)
-
-target_link_libraries(intf_pub_base INTERFACE
-    $<$<BOOL:${ENABLE_GCOV}>:-lgcov>
-    -lpthread
-)
-
-########## intf_pub ##########
-add_library(intf_pub INTERFACE)
-
-target_compile_options(intf_pub INTERFACE
+target_compile_options(metadef_intf_pub_Os INTERFACE
+    $<$<CONFIG:Release>:-Os>
     $<$<CONFIG:Debug>:-g>
-    $<$<COMPILE_LANGUAGE:CXX>:-std=c++17>
-    $<$<BOOL:${ENABLE_ASAN}>:-fsanitize=address -fsanitize=leak -fsanitize-recover=address,all -fno-stack-protector -fno-omit-frame-pointer -g>
-    $<$<BOOL:${ENABLE_GCOV}>:-fprofile-arcs -ftest-coverage>
-)
-
-target_link_libraries(intf_pub INTERFACE
-    $<BUILD_INTERFACE:intf_pub_base>
-)
-
-########## intf_pub c++11 ##########
-add_library(intf_pub_cxx11 INTERFACE)
-
-target_compile_options(intf_pub_cxx11 INTERFACE
-    $<$<CONFIG:Debug>:-g>
-    $<$<COMPILE_LANGUAGE:CXX>:-std=c++11>
-    $<$<BOOL:${ENABLE_ASAN}>:-fsanitize=address -fsanitize=leak -fsanitize-recover=address,all -fno-stack-protector -fno-omit-frame-pointer -g>
-    $<$<BOOL:${ENABLE_GCOV}>:-fprofile-arcs -ftest-coverage>
-)
-
-target_link_libraries(intf_pub_cxx11 INTERFACE
-    $<BUILD_INTERFACE:intf_pub_base>
-)
-
-########## intf_pub c++14 ##########
-add_library(intf_pub_cxx14 INTERFACE)
-
-target_compile_options(intf_pub_cxx14 INTERFACE
-    $<$<CONFIG:Debug>:-g>
-    $<$<COMPILE_LANGUAGE:CXX>:-std=c++14>
-    $<$<BOOL:${ENABLE_ASAN}>:-fsanitize=address -fsanitize=leak -fsanitize-recover=address,all -fno-stack-protector -fno-omit-frame-pointer -g>
-    $<$<BOOL:${ENABLE_GCOV}>:-fprofile-arcs -ftest-coverage>
-)
-
-target_link_libraries(intf_pub_cxx14 INTERFACE
-    $<BUILD_INTERFACE:intf_pub_base>
-)
-
-########## intf_pub c++17 ##########
-add_library(intf_pub_cxx17 INTERFACE)
-
-target_compile_options(intf_pub_cxx17 INTERFACE
-    $<$<CONFIG:Debug>:-g>
-    $<$<COMPILE_LANGUAGE:CXX>:-std=c++17>
-    $<$<BOOL:${ENABLE_ASAN}>:-fsanitize=address -fsanitize=leak -fsanitize-recover=address,all -fno-stack-protector -fno-omit-frame-pointer -g>
-    $<$<BOOL:${ENABLE_GCOV}>:-fprofile-arcs -ftest-coverage>
-)
-
-target_link_libraries(intf_pub_cxx17 INTERFACE
-    $<BUILD_INTERFACE:intf_pub_base>
 )

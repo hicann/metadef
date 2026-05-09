@@ -79,7 +79,7 @@ target_link_options(opp_registry PRIVATE
 
 target_link_libraries(opp_registry
         PRIVATE
-        $<BUILD_INTERFACE:intf_pub>
+        $<BUILD_INTERFACE:metadef_intf_pub>
         $<BUILD_INTERFACE:error_manager_headers>
         c_sec
         unified_dlog
@@ -124,7 +124,7 @@ set_target_properties(rt2_registry_objects PROPERTIES
 
 target_link_libraries(rt2_registry_objects
         PRIVATE
-        $<BUILD_INTERFACE:intf_pub>
+        $<BUILD_INTERFACE:metadef_intf_pub>
         $<BUILD_INTERFACE:error_manager_headers>
         c_sec
         unified_dlog
@@ -198,7 +198,7 @@ target_compile_options(stub_opp_registry PRIVATE
 
 target_link_libraries(stub_opp_registry
         PRIVATE
-        intf_pub
+        $<BUILD_INTERFACE:metadef_intf_pub_Os>
         slog_headers
         c_sec_headers
         c_sec
@@ -289,7 +289,7 @@ target_link_options(metadef PRIVATE
 
 target_link_libraries(metadef
     PRIVATE
-        intf_pub
+        $<BUILD_INTERFACE:metadef_intf_pub>
         error_manager
         -Wl,--no-as-needed
         c_sec
@@ -308,7 +308,6 @@ if (NOT ENABLE_OPEN_SRC)
     target_clone(metadef metadef_static STATIC)
 
     target_compile_options(metadef_static PRIVATE
-            -Os
             -fvisibility=hidden
             -fvisibility-inlines-hidden
             -ffunction-sections
@@ -370,7 +369,7 @@ target_compile_options(stub_metadef PRIVATE
 
 target_link_libraries(stub_metadef
     PRIVATE
-        intf_pub
+        $<BUILD_INTERFACE:metadef_intf_pub_Os>
         slog_headers
         c_sec_headers
         c_sec
@@ -392,7 +391,7 @@ if (NOT ENABLE_OPEN_SRC)
     add_dependencies(stub_metadef_static metadef_stub)
 
     target_compile_options(stub_metadef_static PRIVATE
-        $<$<STREQUAL:${TARGET_SYSTEM_NAME},Linux>:-O2 -fPIC -Wextra -Wfloat-equal>)
+        $<$<STREQUAL:${TARGET_SYSTEM_NAME},Linux>:-Os -fPIC -Wextra -Wfloat-equal>)
 
     set_target_properties(stub_metadef_static PROPERTIES
         OUTPUT_NAME metadef
@@ -430,7 +429,7 @@ target_include_directories(exe_graph PRIVATE
         )
 
 target_link_libraries(exe_graph PRIVATE
-        intf_pub
+        $<BUILD_INTERFACE:metadef_intf_pub>
         mmpa_headers
         metadef_headers
         error_manager
@@ -506,7 +505,7 @@ target_compile_options(stub_exe_graph PRIVATE
 
 target_link_libraries(stub_exe_graph
         PRIVATE
-        intf_pub
+        $<BUILD_INTERFACE:metadef_intf_pub_Os>
         c_sec_headers
         PUBLIC
         metadef_headers

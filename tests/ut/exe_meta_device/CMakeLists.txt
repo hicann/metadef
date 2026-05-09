@@ -11,7 +11,7 @@
 add_executable(ut_exe_meta_device ${CMAKE_CURRENT_LIST_DIR}/main.cc)
 target_link_libraries(ut_exe_meta_device PRIVATE exe_meta_device)
 target_link_libraries(ut_exe_meta_device PRIVATE
-        intf_pub
+        metadef_intf_pub
         -Wl,--no-as-needed
         -lrt -ldl -lgcov
         -Wl,--as-needed
