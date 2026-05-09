@@ -113,12 +113,12 @@ if (ENABLE_OPEN_SRC)
     include(cmake/test_funcs.cmake)
 
     if(ENABLE_METADEF_UT)
-        include(cmake/third_party/build/modules/ascend_protobuf.cmake)
-        include(cmake/third_party/build/modules/json.cmake)
-        include(cmake/third_party/build/modules/gtest.cmake)
+        add_cann_third_party(protobuf)
+        add_cann_third_party(json)
+        add_cann_third_party(gtest)
         find_cann_package(msprof MODULE REQUIRED)
     else()
-        include(cmake/third_party/build/modules/json.cmake)	
+        add_cann_third_party(json)
     endif()
 
     # 自研软件包
@@ -137,7 +137,7 @@ add_subdirectory(inc)
 add_subdirectory(base)
 
 if (ENABLE_METADEF_UT OR ENABLE_METADEF_ST OR ENABLE_BENCHMARK)
-    include(cmake/third_party/build/modules/benchmark.cmake)
+    add_cann_third_party(benchmark)
     add_subdirectory(tests)
 endif()
 
