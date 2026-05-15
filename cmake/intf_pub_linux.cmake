@@ -15,7 +15,7 @@ target_link_libraries(metadef_intf_pub INTERFACE
 )
 
 target_compile_definitions(metadef_intf_pub INTERFACE
-    $<$<CONFIG:Release>:-D_FORTIFY_SOURCE=2>
+    $<$<CONFIG:Release>:_FORTIFY_SOURCE=2>
 )
 
 target_compile_options(metadef_intf_pub INTERFACE
