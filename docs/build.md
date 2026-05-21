@@ -53,10 +53,12 @@ cat /usr/local/Ascend/cann/<arch>-linux/ascend_toolkit_install.info
 
 - graph-easy(可选)
 
+- patch
+
   ```bash
   # Ubuntu/Debian操作系统安装命令示例如下，其他操作系统请自行安装
   # asan以gcc 7.5.0版本为例，其他版本请安装对应版本asan
-  sudo apt-get install cmake ccache lcov libasan4 libgraph-easy-perl
+  sudo apt-get install cmake ccache lcov libasan4 libgraph-easy-perl patch
   ```
 
 #### 检查编译环境
