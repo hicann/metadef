@@ -31,28 +31,11 @@ if (NOT DEFINED CMAKE_MODULE_PATH OR NOT DEFINED CMAKE_PREFIX_PATH)
 endif ()
 
 if (NOT DEFINED CMAKE_MODULE_PATH)
-    set(CMAKE_MODULE_PATH
-        ${CANN_CMAKE_DIR}/modules
-        ${CANN_3RD_LIB_PATH}/cmake/modules
-    )
+    set(CMAKE_MODULE_PATH ${CANN_CMAKE_DIR}/modules)
 endif()
 
 if (NOT DEFINED CMAKE_PREFIX_PATH)
-    set(CMAKE_PREFIX_PATH
-        ${CANN_3RD_LIB_PATH}/json
-        ${CANN_3RD_LIB_PATH}/openssl
-        ${CANN_3RD_LIB_PATH}/protoc
-        ${CANN_3RD_LIB_PATH}/protoc_grpc
-        ${CANN_3RD_LIB_PATH}/grpc
-        ${CANN_3RD_LIB_PATH}/protobuf_static
-        ${CANN_3RD_LIB_PATH}/ascend_protobuf
-        ${CANN_3RD_LIB_PATH}/ascend_protobuf_static
-        ${CANN_3RD_LIB_PATH}/gtest_shared/lib64/cmake/GTest
-        ${CANN_3RD_LIB_PATH}/benchmark-1.8.3
-        ${CANN_3RD_LIB_PATH}/pybind11
-        ${CANN_3RD_LIB_PATH}/symengine/lib/cmake/symengine
-        ${CANN_3RD_LIB_PATH}/boost/lib/cmake/Boost-1.87.0
-        ${ASCEND_INSTALL_PATH}
+    set(CMAKE_PREFIX_PATH ${ASCEND_INSTALL_PATH}
     )
 endif()
 

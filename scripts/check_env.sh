@@ -539,6 +539,18 @@ if [ -n "$PYTHON_CMD" ]; then
     fi
 fi
 
+# patch (应用补丁文件需要)
+if check_command patch; then
+    # 获取patch原始版本信息：patch --version 输出版本号（重定向stderr到stdout）
+    PATCH_RAW=$(patch --version 2>&1 | head -n1)
+    # 提取标准化版本号：调用extract_version函数将原始版本转为x.x.x格式
+    PATCH_VER=$(extract_version "$PATCH_RAW")
+    log_pass "patch $PATCH_VER"
+else
+    log_error "未安装 patch (应用补丁文件需要)"
+    log_info "安装 (Ubuntu): sudo apt-get install patch"
+fi
+
 # ==================== 11. 系统资源 ====================
 print_header "11. 系统资源 [可选]"
 
