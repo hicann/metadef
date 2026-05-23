@@ -135,6 +135,10 @@ target_link_options(tilingdata_base PRIVATE
     -Wl,--no-undefined
 )
 
+add_library(tilingdata_base_objs OBJECT
+    $<TARGET_OBJECTS:tilingdata_base>
+)
+
 install(TARGETS tilingdata_base ${INSTALL_OPTIONAL}
   ARCHIVE DESTINATION ${INSTALL_DEVICE_LIBRARY_DIR}
   COMPONENT metadef
