@@ -56,4 +56,5 @@ find_cann_package(unified_dlog MODULE REQUIRED)
 
 add_cann_subdirectories_relative(${METADEF_DIR}
     ${METADEF_DIR}/base
+    ${METADEF_DIR}/inc
 )
