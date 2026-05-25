@@ -192,7 +192,7 @@ RETURN_STATEMENTS = {
     'ParseParamFunc': '    return nullptr;',
     'domi::FrameworkType': '    return FRAMEWORK_RESERVED;',
     'std::set<std::string> OpRegistrationData::': '    return {};',
-    'domi::ImplyType': '    return domi::ImplyType::BUILDIN;',
+    'domi::ImplyType': '    return domi::ImplyType::BUILTIN;',
     'OpRegistrationData& OpRegistrationData::': '    return *this;',
     'Promote& Promote::': '    return *this;',
     'Promote& PromoteImpl::': '    return obj;',
