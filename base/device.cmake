@@ -101,28 +101,22 @@ install(TARGETS device_register ${INSTALL_OPTIONAL}
 )
 
 ##################tilingdata_base##########################
-add_library(tilingdata_base STATIC
-  "${METADEF_DIR}/base/asc/tilingdata_base_impl.cc"
+add_library(tilingdata_base_objs OBJECT
+  ${METADEF_DIR}/base/asc/tilingdata_base_impl.cc
 )
 
-target_include_directories(tilingdata_base PRIVATE
+target_include_directories(tilingdata_base_objs PRIVATE
   ${METADEF_DIR}/pkg_inc/
   ${METADEF_DIR}/inc/external
 )
 
-target_link_libraries(tilingdata_base PRIVATE
-  $<BUILD_INTERFACE:metadef_intf_pub>
-  -Wl,--no-as-needed
-  c_sec
-)
-
-target_compile_definitions(tilingdata_base PRIVATE
+target_compile_definitions(tilingdata_base_objs PRIVATE
     ASCENDC_DEVICE_REG_STATIC
     _FORTIFY_SOURCE=2
     $<$<BOOL:${ENABLE_TEST}>:SUPPORT_LARGE_MODEL_ENABLE=1>
 )
 
-target_compile_options(tilingdata_base PRIVATE
+target_compile_options(tilingdata_base_objs PRIVATE
     -O2
     -fvisibility-inlines-hidden
     -fvisibility=hidden
@@ -130,13 +124,17 @@ target_compile_options(tilingdata_base PRIVATE
     -fpeel-loops
 )
 
-target_link_options(tilingdata_base PRIVATE
-    -Wl,-Bsymbolic
-    -Wl,--no-undefined
+target_link_libraries(tilingdata_base_objs PRIVATE
+  $<BUILD_INTERFACE:metadef_intf_pub>
+  c_sec
 )
 
-add_library(tilingdata_base_objs OBJECT
-    $<TARGET_OBJECTS:tilingdata_base>
+add_library(tilingdata_base STATIC
+    $<TARGET_OBJECTS:tilingdata_base_objs>
+)
+
+target_link_libraries(tilingdata_base PRIVATE
+  $<BUILD_INTERFACE:metadef_intf_pub>
 )
 
 install(TARGETS tilingdata_base ${INSTALL_OPTIONAL}
