@@ -952,15 +952,26 @@ void PluginManager::GetOppSupportedOsAndCpuType(
     return;
   }
 
+  ScanOppLibSubDirs(&(real_path[0U]), opp_supported_os_cpu, opp_path, os_name, layer);
+}
+
+void PluginManager::ScanOppLibSubDirs(
+    const ge::char_t *real_path,
+    std::unordered_map<std::string, std::unordered_set<std::string>> &opp_supported_os_cpu,
+    const std::string &opp_path, const std::string &os_name, uint32_t layer) {
   mmDirent **entries = nullptr;
-  const auto ret = Scandir(&(real_path[0U]), &entries, nullptr, nullptr);
+  const auto ret = Scandir(real_path, &entries, nullptr, nullptr);
   if (ret < EN_OK) {
     GELOGW("Cannot open directory %s, it may be an old version, ret = %d", real_path, ret);
     return;
   }
   for (int32_t i = 0; i < ret; ++i) {
-    const mmDirent *const dir_ent = *ge::PtrAdd<mmDirent*>(entries, static_cast<size_t>(ret), static_cast<size_t>(i));
-    if (dir_ent != nullptr && static_cast<int32_t>(dir_ent->d_type) == DT_DIR) {
+    const auto *entry_ptr = ge::PtrAdd<mmDirent*>(entries, static_cast<size_t>(ret), static_cast<size_t>(i));
+    if (entry_ptr == nullptr) {
+      continue;
+    }
+    const mmDirent *const dir_ent = *entry_ptr;
+    if (static_cast<int32_t>(dir_ent->d_type) == DT_DIR) {
       std::string dir_name = dir_ent->d_name;
       if ((dir_name.compare(".") == 0) || (dir_name.compare("..") == 0)) {
         continue;
@@ -976,7 +987,6 @@ void PluginManager::GetOppSupportedOsAndCpuType(
     }
   }
   mmScandirFree(entries, ret);
-  return;
 }
 
 void PluginManager::GetCurEnvPackageOsAndCpuType(std::string &host_env_os, std::string &host_env_cpu) {
