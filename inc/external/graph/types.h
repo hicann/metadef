@@ -423,7 +423,8 @@ class Promote {
 
 namespace domi {
 enum class ImplyType : unsigned int {
-  BUILDIN = 0,  // Built in operator, normally executed by OME
+  BUILTIN = 0,  // Built in operator, normally executed by OME
+  BUILDIN = BUILTIN,  // Compatible with previous misspelled version, use BUILTIN instead
   TVM,          // Compile to TVM bin file for execution
   CUSTOM,       // User defined calculation logic, executed by CPU
   AI_CPU,       // AICPU

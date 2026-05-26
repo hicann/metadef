@@ -28,10 +28,14 @@ OpRegistrationData &ImplyType(const domi::ImplyType &imply_type)
 <td class="cellrowborder" valign="top" width="56.12561256125613%" headers="mcps1.1.4.1.3 "><p id="zh-cn_topic_0000001312711229_zh-cn_topic_0204328173_p44545009"><a name="zh-cn_topic_0000001312711229_zh-cn_topic_0204328173_p44545009"></a><a name="zh-cn_topic_0000001312711229_zh-cn_topic_0204328173_p44545009"></a>算子执行方式。</p>
 <a name="zh-cn_topic_0000001312711229_screen894110205711"></a><a name="zh-cn_topic_0000001312711229_screen894110205711"></a><pre class="screen" codetype="Cpp" id="zh-cn_topic_0000001312711229_screen894110205711">enum class ImplyType : unsigned int
 {
-BUILDIN = 0,// 内置算子，由OME正常执行
+BUILTIN = 0, // 内置算子，由OME正常执行
+BUILDIN = BUILTIN, // 兼容历史拼写错误版本，请使用BUILTIN
 TVM,        // 编译成tvm bin文件执行
 CUSTOM,     // 由用户自定义计算逻辑，通过CPU执行
 AI_CPU,      // AI CPU 自定义算子类型
+CCE,        // Cce
+GELOCAL,    // GE local, do not need execute by device
+HCCL,       // Hccl
 INVALID = 0xFFFFFFFF,
 };</pre>
 </td>
