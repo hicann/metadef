@@ -101,6 +101,11 @@ class PluginManager {
       std::unordered_map<std::string, std::unordered_set<std::string>> &opp_supported_os_cpu,
       std::string opp_path = "", std::string os_name = "", uint32_t layer = 0U);
 
+  static void ScanOppLibSubDirs(
+      const ge::char_t *real_path,
+      std::unordered_map<std::string, std::unordered_set<std::string>> &opp_supported_os_cpu,
+      const std::string &opp_path, const std::string &os_name, uint32_t layer);
+
   static void GetCurEnvPackageOsAndCpuType(std::string &host_env_os, std::string &host_env_cpu);
 
   static bool GetVersionFromPath(const std::string &file_path, std::string &version);
