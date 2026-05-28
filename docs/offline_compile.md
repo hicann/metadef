@@ -75,7 +75,7 @@ bash scripts/download_third_party_source.sh
 │         └── ...
 ```
 
-完成后回到[构建验证-编译](build.md#4-编译)章节，继续进行编译
+完成后回到[构建验证-编译](build.md#43-编译)章节，继续进行编译
 
 ### 场景二：通过第三方开源软件列表链接逐个手动下载第三方软件
 
@@ -101,4 +101,4 @@ bash scripts/download_third_party_source.sh
 │        └── ...
 ```
 
-完成后回到[构建验证-编译](build.md#4-编译)章节，继续进行编译
+完成后回到[构建验证-编译](build.md#43-编译)章节，继续进行编译。
