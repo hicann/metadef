@@ -2,7 +2,7 @@
 
 ## 函数功能<a name="zh-cn_topic_0000002420158756_zh-cn_topic_0000001576486693_zh-cn_topic_0000001390027241_section36583473819"></a>
 
-设置算子TilingData的大小, 设置该大小后，会申请相应大小的内存用于存储算子的TilingData。相较于[TilingData](TilingData.md)，调用此接口时生成的TilingData指针所有权归属ContextHolder，调用者无需关注TilingData的生命周期。
+设置算子TilingData的大小，设置该大小后，会申请相应大小的内存用于存储算子的TilingData。相较于[TilingData](TilingData.md)，调用此接口时生成的TilingData指针所有权归属ContextHolder，调用者无需关注TilingData的生命周期。
 
 注意该接口与TilingData互斥，如果同时调用TilingDataSize和TilingData接口，后调用的接口会覆盖前一次调用的结果，以最新的为准。
 
