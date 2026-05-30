@@ -2,7 +2,7 @@
 
 ## 函数功能<a name="zh-cn_topic_0000002420158752_zh-cn_topic_0000002027834817_zh-cn_topic_0000001339507276_section36583473819"></a>
 
-设置算子的TilingData指针, 用于算子Tiling计算时，向该指针中写入TilingData数据。
+设置算子的TilingData指针，用于算子Tiling计算时，向该指针中写入TilingData数据。
 
 ## 函数原型<a name="zh-cn_topic_0000002420158752_zh-cn_topic_0000002027834817_zh-cn_topic_0000001339507276_section13230182415108"></a>
 

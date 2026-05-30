@@ -34,7 +34,7 @@ graphStatus SetShapeRange(const std::vector<std::pair<int64_t,int64_t>> &range)
 
 ## 返回值<a name="section60972199"></a>
 
-graphStatus类型：若成功，则该值为GRAPH\_SUCCESS\(即0\)，其他值则为执行失败。
+graphStatus类型：若成功，则该值为GRAPH\_SUCCESS（即0），其他值则为执行失败。
 
 ## 异常处理<a name="section11878883"></a>
 

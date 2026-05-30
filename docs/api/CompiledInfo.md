@@ -2,7 +2,7 @@
 
 ## 函数功能<a name="zh-cn_topic_0000002420158780_zh-cn_topic_0000001602767550_zh-cn_topic_0000001600123102_section36583473819"></a>
 
-设置算子的CompiledInfo指针, 用于存储TilingParse的结果即CompileInfo信息。
+设置算子的CompiledInfo指针，用于存储TilingParse的结果即CompileInfo信息。
 
 ## 函数原型<a name="zh-cn_topic_0000002420158780_zh-cn_topic_0000001602767550_zh-cn_topic_0000001600123102_section13230182415108"></a>
 
