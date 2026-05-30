@@ -8,7 +8,7 @@
  * See LICENSE in the root of the software repository for the full text of the License.
  */
 
-#include "platform/platform_info.h"
+#include "platform_info.h"
 
 extern "C" {
 void ReleaseOpsRegInfo();
