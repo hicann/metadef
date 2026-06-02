@@ -3,10 +3,6 @@
 | Interface Name | Original Semantic | New Semantic | Note |
 | -- | -- | -- | -- |
 | GetAllAttrs | GeAttrValue sharing | GeAttrValue copying | Includes this method under AttrUtils, and this method under OpDesc, TensorDesc classes, all have semantic changes |
-| | | | |
-| | | | |
-| | | | |
-| | | | |
 
 **Sharing Semantic and Copying Semantic**
 
@@ -24,8 +20,6 @@ AttrUtils::SetInt(op_desc, "i", 20); // Sharing semantic: the value of attribute
 | -- | -- | -- |
 | ValueType GetValueType() const noexcept; | Not recommended (performance unrelated) | TypeId GetValueTypeId() const noexcept; |
 | ValueType | Not recommended (performance unrelated) | TypeId |
-| | | |
-| | | |
 
 ## Sample Code
 

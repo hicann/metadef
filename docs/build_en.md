@@ -41,7 +41,7 @@ Developers can download the source code of this repository through the following
 
   The following lists dependencies used for source code compilation. Note version requirements (if you encounter installation issues, try switching mirror sources).
   > [!NOTE] Note
-  > If using the mirror mode for project experience, all dependencies are included in [init_env.sh](../../scripts/init_env.sh). You can skip this dependency installation step.
+  > If using the mirror mode for project experience, all dependencies are included in [init_env.sh](../scripts/init_env.sh). You can skip this dependency installation step.
 
 - GCC >= 7.3.x
 
@@ -76,7 +76,7 @@ Check result descriptions:
 | **[ERROR]** | Critical dependency missing or incompatible version | Must fix, otherwise cannot compile |
 
 > [!NOTE] Note
-> All check items and version constraints in the environment check script strictly come from docs/build.md. If build.md is updated, please synchronously modify the [script](../../scripts/check_env.sh).
+> All check items and version constraints in the environment check script strictly come from docs/build.md. If build.md is updated, please synchronously modify the [script](../scripts/check_env.sh).
 
 ### 4.3 Compilation
 
@@ -95,7 +95,7 @@ For more compilation parameters, check through `bash build.sh -h`. After success
 - `<version>` indicates the version number.
 - `<arch>` indicates the OS architecture, with values including x86_64 and aarch64.
 
-### 4.3. Local Verification (UT)
+### 4.4 Local Verification (UT)
 
 > [!NOTE] Note
 > If your compilation environment cannot access the network, ensure you have completed the [Offline Compilation Guide](offline_compile_en.md) in the [4.3 Compilation](#43-compilation) section.
@@ -108,7 +108,7 @@ The `metadef` repository provides one-click compilation execution for developer 
 bash tests/run_test.sh -u
 ```
 
-### 4.4 Installation and Uninstallation
+### 4.5 Installation and Uninstallation
 
 - Installation
 

@@ -20,7 +20,7 @@ The third-party open source software that metadef depends on during compilation 
 | makeself | 2.5.0 | [makeself-release-2.5.0-patch1.tar.gz](https://gitcode.com/cann-src-third-party/makeself/releases/download/release-2.5.0-patch1.0/makeself-release-2.5.0-patch1.tar.gz) |
 | cann-cmake | master-001 | [cmake-master-001.tar.gz](https://cann-3rd.obs.cn-north-4.myhuaweicloud.com/cmake/cmake-master-001.tar.gz) |
 
-- Method 1 (Recommended): Use the [one-click third-party software download and packaging script](../../scripts/download_third_party_source.sh) provided by the metadef repository. Usage:
+- Method 1 (Recommended): Use the [one-click third-party software download and packaging script](../scripts/download_third_party_source.sh) provided by the metadef repository. Usage:
 
 ```bash
 # Execute in metadef repository root directory in networked environment
@@ -34,7 +34,7 @@ After successful execution, `opensource.tar.gz` will be generated in the metadef
 
 ## 2. After Completing [Networked Environment Preparation](#1-complete-the-following-preparation-in-a-networked-environment), Log in to the Test Environment (Offline) to Continue Compilation Preparation
 
-### Scenario 1: Using Third-Party Software Downloaded Through [One-Click Third-Party Software Download and Packaging Script](../../scripts/download_third_party_source.sh)
+### Scenario 1: Using Third-Party Software Downloaded Through [One-Click Third-Party Software Download and Packaging Script](../scripts/download_third_party_source.sh)
 
 Connect to the test environment (offline) and upload the [repository](#step-1-repository-download) and [third-party software dependencies](#step-2-download-open-source-third-party-software-dependencies) source code obtained from the networked environment to your designated directory. The downloaded files are compressed packages and need to be decompressed.
 
