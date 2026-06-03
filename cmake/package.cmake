@@ -253,6 +253,7 @@ install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/pkg_inc/exe_graph/runtime/gert_mem_all
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/pkg_inc/graph/any_value.h
               ${CMAKE_CURRENT_SOURCE_DIR}/pkg_inc/graph/def_types.h
               ${CMAKE_CURRENT_SOURCE_DIR}/pkg_inc/graph/type_utils.h
+              ${CMAKE_CURRENT_SOURCE_DIR}/pkg_inc/graph/graph_type_utils.h
         DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/pkg_inc/graph
         COMPONENT metadef
 )

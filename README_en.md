@@ -62,7 +62,7 @@ Typically, developers do not need to directly modify the metadef repository, bec
 
 ## Quick Start
 
-To quickly build this project, visit [Source Code Build](docs/en/build_en.md) to learn how to compile, install, and perform basic verification tests.
+To quickly build this project, visit [Source Code Build](docs/build_en.md) to learn how to compile, install, and perform basic verification tests.
 
 ## Learning Tutorials
 

@@ -1,6 +1,6 @@
 # 贡献指南
 
-本项目欢迎广大开发者体验并参与贡献，在参与社区贡献之前。请参见[cann-community](https://gitcode.com/cann/community)了解行为准则，进行CLA协议签署，了解源码仓的贡献流程，该仓详细介绍了如何参与CANN开源项目的贡献的前置条件，包括但不限于：
+本项目欢迎广大开发者体验并参与贡献，在参与社区贡献之前，请参见[cann-community](https://gitcode.com/cann/community)了解行为准则，进行CLA协议签署，了解源码仓的贡献流程，该仓详细介绍了如何参与CANN开源项目的贡献的前置条件，包括但不限于：
 1. 如何提交PR
 2. gitcode工作流
 3. 流水线触发命令（[交互参考](https://gitcode.com/cann/infrastructure/blob/main/docs/robot/robot%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97.md)）

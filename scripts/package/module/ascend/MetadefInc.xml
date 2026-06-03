@@ -150,5 +150,6 @@
         <file value="any_value.h"/>
         <file value="def_types.h"/>
         <file value="type_utils.h"/>
+        <file value="graph_type_utils.h"/>
     </file_info>
 </block>
