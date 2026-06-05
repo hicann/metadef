@@ -140,12 +140,17 @@ ge::graphStatus InferOutDataTypeSameWithFirstInputFunc(InferDataTypeContext *con
 } // namespace
 
 OpImplRegisterV2 &OpImplRegisterV2::ExceptionDumpParseFunc(ExceptionDumpFunc exception_func) {
-  if (impl_ != nullptr && exception_func != nullptr) {
-    impl_->functions.exception_func = exception_func;
-    GELOGI("Register exception function for op type %s", impl_->op_type.GetString());
-  } else {
-    GELOGW("Failed to register exception function for op type%s", impl_->op_type.GetString());
+  if (impl_ == nullptr) {
+    GELOGW("Failed to register exception function: impl_ is null");
+    return *this;
   }
+  if (exception_func == nullptr) {
+    GELOGW("Failed to register exception function for op type %s: exception_func is null",
+            impl_->op_type.GetString());
+    return *this;
+  }
+  impl_->functions.exception_func = exception_func;
+  GELOGI("Register exception function for op type %s", impl_->op_type.GetString());
   return *this;
 }
 
