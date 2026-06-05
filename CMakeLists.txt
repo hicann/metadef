@@ -139,26 +139,7 @@ install(DIRECTORY ${METADEF_DIR}/pkg_inc/ DESTINATION ${INSTALL_INCLUDE_DIR}/met
         EXCLUDE_FROM_ALL FILES_MATCHING PATTERN "*.h"
 )
 
-if (ENABLE_OPEN_SRC AND "${PRODUCT_SIDE}" STREQUAL "host" AND ENABLE_BUILD_DEVICE)
-    set(TOOLCHAIN_DIR ${ASCEND_INSTALL_PATH}/toolkit/toolchain/hcc)
-    include(ExternalProject)
-    ExternalProject_Add(metadef_device_ep
-        SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cmake/device
-        CONFIGURE_COMMAND ${CMAKE_COMMAND}
-            -G ${CMAKE_GENERATOR}
-            -DTOOLCHAIN_DIR=${TOOLCHAIN_DIR}
-            -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/cmake/toolchain/aarch64-hcc-toolchain.cmake
-            -DENABLE_OPEN_SRC=${ENABLE_OPEN_SRC}
-            -DASCEND_INSTALL_PATH=${ASCEND_INSTALL_PATH}
-            -DCANN_3RD_LIB_PATH=${CANN_3RD_LIB_PATH}
-            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-            -DCMAKE_INSTALL_PREFIX=${METADEF_DEVICE_OUTPUT}
-            -DFORCE_REBUILD_CANN_3RD=${FORCE_REBUILD_CANN_3RD}
-            <SOURCE_DIR>
-        INSTALL_COMMAND ${CMAKE_COMMAND} --install <BINARY_DIR> --component metadef
-        BUILD_ALWAYS TRUE
-    )
-endif()
+add_cann_device_project(metadef)
 
 include(version.cmake)
 check_cann_pkg_build_deps("metadef")

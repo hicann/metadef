@@ -117,17 +117,6 @@ install(TARGETS stub_exe_graph stub_metadef stub_opp_registry rt2_registry_stati
         ARCHIVE DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/devlib COMPONENT metadef
 )
 
-if(ENABLE_BUILD_DEVICE)
-    # 非MDC编译
-    install(FILES
-            ${METADEF_DEVICE_OUTPUT}/${INSTALL_DEVICE_LIBRARY_DIR}/libtilingdata_base.a
-            ${METADEF_DEVICE_OUTPUT}/${INSTALL_DEVICE_LIBRARY_DIR}/libexe_meta_device.a
-            ${METADEF_DEVICE_OUTPUT}/${INSTALL_DEVICE_LIBRARY_DIR}/libdevice_register.a
-            DESTINATION ${INSTALL_DEVICE_LIBRARY_DIR}
-            COMPONENT metadef
-    )
-endif()
-
 set(EXTERNAL_RUNTIME_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/tiling_context.h
     ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/kernel_run_context.h
@@ -306,5 +295,5 @@ install(FILES ${EXTERNAL_ASC_REGISTRY_FILES}
 )
 
 if (NOT ENABLE_COV AND NOT ENABLE_UT)
-    set_cann_cpack_config(metadef ENABLE_DEVICE ${ENABLE_DEVICE} SHARE_INFO_NAME metadef)
+    set_cann_cpack_config(metadef ENABLE_DEVICE ${ENABLE_BUILD_DEVICE})
 endif()
