@@ -10,7 +10,7 @@
 
 cmake_minimum_required(VERSION 3.16)
 include(../fetch_cann_cmake.cmake)
-project (MetaDef[CXX])
+project (metadef_device)
 
 set(METADEF_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../" CACHE PATH "Project top directory")
 set(CMAKE_C_FLAGS_RELEASE "")
@@ -58,3 +58,5 @@ add_cann_subdirectories_relative(${METADEF_DIR}
     ${METADEF_DIR}/base
     ${METADEF_DIR}/inc
 )
+
+set_cann_subprj_package()

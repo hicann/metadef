@@ -243,8 +243,7 @@ build_metadef() {
               -D ENABLE_BUILD_DEVICE=${ENABLE_BUILD_DEVICE} \
               -D USE_CXX11_ABI=${USE_CXX11_ABI} \
               -D LLVM_PATH=${LLVM_PATH} \
-              -D CMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE_VAL} \
-              -D FORCE_REBUILD_CANN_3RD=False"
+              -D CMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE_VAL}"
 
   echo "CMAKE_ARGS is: $CMAKE_ARGS"
   mk_dir "${BUILD_PATH}"
