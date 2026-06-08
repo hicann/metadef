@@ -82,15 +82,6 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     add_compile_options(-Wno-error)
 endif()
 
-# 查看三方软件目录，并尝试调整目录结构
-execute_process(
-    COMMAND bash scripts/prepare_third_party.sh ${CANN_3RD_LIB_PATH}
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    RESULT_VARIABLE SCRIPT_RESULT
-    OUTPUT_VARIABLE SCRIPT_OUTPUT
-    ERROR_VARIABLE SCRIPT_ERROR
-)
-
 if (ENABLE_OPEN_SRC)
     set(HI_PYTHON python3)
     include(cmake/test_funcs.cmake)
