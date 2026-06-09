@@ -18,7 +18,7 @@ The third-party open source software that metadef depends on during compilation 
 | googletest | 1.14.0 | [googletest-1.14.0.tar.gz](https://gitcode.com/cann-src-third-party/googletest/releases/download/v1.14.0/googletest-1.14.0.tar.gz) |
 | json | 3.11.3 | [json-3.11.3.tar.gz](https://gitcode.com/cann-src-third-party/json/releases/download/v3.11.3/json-3.11.3.tar.gz) |
 | makeself | 2.5.0 | [makeself-release-2.5.0-patch1.tar.gz](https://gitcode.com/cann-src-third-party/makeself/releases/download/release-2.5.0-patch1.0/makeself-release-2.5.0-patch1.tar.gz) |
-| cann-cmake | master-001 | [cmake-master-001.tar.gz](https://cann-3rd.obs.cn-north-4.myhuaweicloud.com/cmake/cmake-master-001.tar.gz) |
+| cann-cmake | master | [cmake-master.tar.gz](https://raw.gitcode.com/cann/cmake/archive/refs/heads/master.tar.gz) |
 
 - Method 1 (Recommended): Use the [one-click third-party software download and packaging script](../scripts/download_third_party_source.sh) provided by the metadef repository. Usage:
 
@@ -46,10 +46,8 @@ After decompression, the project structure is as follows:
 │  ├── build
 │  └── ...
 ├── opensource                       # third-party software dependencies decompressed directory
-│  └── abseil-cpp
-|     └── abseil-cpp-20230802.1.tar.gz
-│  └── benchmark-1.8.3
-|     └── benchmark-1.8.3.tar.gz
+│  └── abseil-cpp-20230802.1.tar.gz
+│  └── benchmark-1.8.3.tar.gz
 │  └── ...
 ```
 
@@ -72,10 +70,8 @@ After adjustment, the project structure is as follows:
 │  ├── ...
 │  └── output                        # third-party software default directory
 │     └── third_party
-│         └── abseil-cpp
-|             └── abseil-cpp-20230802.1.tar.gz
-│         └── benchmark-1.8.3
-|             └── benchmark-1.8.3.tar.gz
+│         └── abseil-cpp-20230802.1.tar.gz
+│         └── benchmark-1.8.3.tar.gz
 │         └── ...
 ```
 
