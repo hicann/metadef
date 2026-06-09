@@ -135,6 +135,7 @@ add_cann_device_project(metadef)
 include(version.cmake)
 check_cann_pkg_build_deps("metadef")
 add_cann_version_info_targets()
+include(cmake/gen_version_headers.cmake)
 
 if (ENABLE_OPEN_SRC AND "${PRODUCT_SIDE}" STREQUAL "host")
     set(ARCH_LINX_PATH "${CMAKE_SYSTEM_PROCESSOR}-linux")

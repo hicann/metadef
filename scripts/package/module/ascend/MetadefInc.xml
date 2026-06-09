@@ -29,6 +29,9 @@
         <path value="$(TARGET_ENV)/include/external" install_mod="555"/>
         <path value="$(TARGET_ENV)/include/external/ge_common" install_mod="555"/>
     </dir_info>
+    <file_info dst_path="$(TARGET_ENV)/include/version" install_path="$(TARGET_ENV)/include/version" install_type="devel" install_mod="440">
+        <file value="metadef_version.h"/>
+    </file_info>
     <file_info value="include" copy_type="source" dst_path="$(TARGET_ENV)/include/exe_graph/runtime" install_path="$(TARGET_ENV)/include/exe_graph/runtime" install_type="devel" install_mod="440">
         <file value="tiling_context.h"/>
         <file value="kernel_run_context.h"/>
