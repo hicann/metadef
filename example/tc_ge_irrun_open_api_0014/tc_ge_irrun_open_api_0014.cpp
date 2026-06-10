@@ -33,6 +33,7 @@
 #define FAILED -1
 #define SUCCESS 0
 
+
 using namespace ge;
 using std::vector;
 using std::map;
@@ -52,21 +53,21 @@ uint32_t GetDataTypeSize(DataType dt)
 {
     uint32_t dilation =1;
     if(dt == ge::DT_FLOAT)
-        dilation = 4;
+        dilation = 4; // DT_FLOAT: 4 bytes
     else if(dt == ge::DT_FLOAT16)
-        dilation = 2;
+        dilation = 2; // DT_FLOAT16: 2 bytes
     else if(dt == ge::DT_INT16)
-        dilation = 2;
+        dilation = 2; // DT_INT16: 2 bytes
     else if(dt == ge::DT_UINT16)
-        dilation = 2;
+        dilation = 2; // DT_UINT16: 2 bytes
     else if(dt == ge::DT_INT32)
-        dilation = 4;
+        dilation = 4; // DT_INT32: 4 bytes
     else if(dt == ge::DT_UINT32)
-        dilation = 4;
+        dilation = 4; // DT_UINT32: 4 bytes
     else if(dt == ge::DT_INT64)
-        dilation = 8;
+        dilation = 8; // DT_INT64: 8 bytes
     else if(dt == ge::DT_UINT64)
-        dilation = 8;
+        dilation = 8; // DT_UINT64: 8 bytes
     else if(dt == ge::DT_INT8)
         dilation = 1;
     return dilation;
@@ -113,7 +114,7 @@ int32_t GenOnesDataInt64(vector<int64_t> shapes, Tensor &input_tensor, TensorDes
     for (uint32_t i = 0; i < shapes.size(); i++) {
         size *= shapes[i];
     }
-    uint32_t data_len = size * 8;
+    uint32_t data_len = size * 8; // int64: 8 bytes
     int64_t* pData = nullptr;
     pData = new int64_t[size];
     for(int i=0; i<size; ++i) {
@@ -129,7 +130,7 @@ int32_t GenOnesDataUint64(vector<int64_t> shapes, Tensor &input_tensor, TensorDe
     for (uint32_t i = 0; i < shapes.size(); i++) {
         size *= shapes[i];
     }
-    uint32_t data_len = size * 8;
+    uint32_t data_len = size * 8; // uint64: 8 bytes
     uint64_t* pData = nullptr;
     pData = new uint64_t[size];
     for(int i=0; i<size; ++i) {
@@ -145,7 +146,7 @@ int32_t GenOnesDataInt32(vector<int64_t> shapes, Tensor &input_tensor, TensorDes
      for (uint32_t i = 0; i < shapes.size(); i++) {
          size *= shapes[i];
      }
-     uint32_t data_len = size * 4;
+     uint32_t data_len = size * 4; // int32: 4 bytes
      int32_t* pData = new(std::nothrow) int32_t[size];
      for (uint32_t i = 0; i < size; ++i) {
          *(pData + i) = value;
@@ -160,7 +161,7 @@ int32_t GenOnesDataInt32(vector<int64_t> shapes, Tensor &input_tensor, TensorDes
     for (uint32_t i = 0; i < shapes.size(); i++) {
         size *= shapes[i];
     }
-    uint32_t data_len = size * 1;
+    uint32_t data_len = size * 1; // int8: 1 byte
     int8_t* pData = new(std::nothrow) int8_t[data_len];
     for (uint32_t i = 0; i < size; ++i) {
         *(pData + i) = value;
@@ -175,7 +176,7 @@ int32_t GenOnesDataFloat32(vector<int64_t> shapes, Tensor &input_tensor, TensorD
     for (uint32_t i = 0; i < shapes.size(); i++) {
         size *= shapes[i];
     }
-    uint32_t data_len = size * 4;
+    uint32_t data_len = size * 4; // float32: 4 bytes
     float* pData = nullptr;
     pData = new float[size];
     for(int i=0; i<size; ++i) {
@@ -260,7 +261,7 @@ static ge::Session CreateAndAddGraphToSession(Graph& graph) {
     printf("[IR run log] - INFO - [XIR]: Create ir session using build options success\n");
 
     printf("[IR run log] - INFO - [XIR]: Start to add compute graph to ir session\n");
-    uint32_t graph_id = 9;
+    uint32_t graph_id = 9; // graph id 为9
     Status ret = sess.AddGraph(graph_id, graph, graph_options);
     if (ret != SUCCESS) {
       printf("[IR run log] - INFO - [XIR]: Add graph failed\n");
@@ -439,7 +440,7 @@ int main(int argc, char* argv[])
       return FAILED;
     }
 
-    ret = ExecuteGraphAndSaveOutput(sess, 9, stream, input, input_device, output);
+    ret = ExecuteGraphAndSaveOutput(sess, 9, stream, input, input_device, output); // graph id 为9
     if (ret != SUCCESS) {
       Cleanup();
       return FAILED;
