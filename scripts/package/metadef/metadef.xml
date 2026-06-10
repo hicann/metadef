@@ -11,10 +11,6 @@
         <parallel>true</parallel>
         <copy_all>true</copy_all>
     </package_info>
-    <generate_info value="metadef_version.h" dst_path="$(TARGET_ENV)/include/version" install_path="$(TARGET_ENV)/include/version" install_mod="440" install_type="devel" generator="version_header">
-       <METADEF_VERSION>$(ASCEND_VER)</METADEF_VERSION>
-       <METADEF_TIMESTAMP>$(TIMESTAMP_NO)</METADEF_TIMESTAMP>
-    </generate_info>
     <generate_info value="scene.info" dst_path="share/info/metadef" install_path="share/info/metadef" install_mod="440">
         <os>$(OS_NAME)</os>
         <os_version>$(OS_VER)</os_version>
