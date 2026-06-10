@@ -18,6 +18,7 @@ target_include_directories(metadef_headers INTERFACE
     $<BUILD_INTERFACE:${METADEF_DIR}/inc/external>
     $<BUILD_INTERFACE:${METADEF_DIR}/inc/external/asc>
     $<BUILD_INTERFACE:${METADEF_DIR}/inc/external/base>
+    $<BUILD_INTERFACE:${METADEF_DIR}/inc/external/exe_graph/runtime>
     $<BUILD_INTERFACE:${METADEF_DIR}/inc/external/op_common>
     $<BUILD_INTERFACE:${METADEF_DIR}/inc/graph>
     $<BUILD_INTERFACE:${METADEF_DIR}/inc/register>
