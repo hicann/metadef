@@ -11,6 +11,7 @@
 #ifndef INC_EXTERNAL_GE_COMMON_GE_API_TYPES_H_
 #define INC_EXTERNAL_GE_COMMON_GE_API_TYPES_H_
 
+#pragma message("Warning: ge_api_types.h is deprecated and will be removed after 2027-06. Include \"ge_common_api_types.h\" instead.")
 #include <cstdint>
 #include <string>
 #include <vector>
