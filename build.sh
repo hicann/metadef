@@ -109,7 +109,7 @@ checkopts() {
   CMAKE_BUILD_TYPE="Release"
 
   # Process the options
-  parsed_args=$(getopt -a -o j:hv -l help,verbose,enable_symengine,cann_3rd_lib_path:,extra-cmake-args:,build-type:,asan,cov,output_path: -- "$@") || {
+  parsed_args=$(getopt -a -o j:hv -l help,verbose,enable_symengine,cann_3rd_lib_path:,extra-cmake-args:,build-type:,asan,tsan,cov,output_path: -- "$@") || {
     usage
     exit 1
   }
@@ -155,6 +155,10 @@ checkopts() {
         ;;
       --asan)
         ENABLE_ASAN="on"
+        shift
+        ;;
+      --tsan)
+        ENABLE_TSAN="on"
         shift
         ;;
       --cov)
@@ -233,6 +237,7 @@ build_metadef() {
               -D ENABLE_METADEF_COV=${ENABLE_METADEF_COV} \
               -D ENABLE_BENCHMARK=${ENABLE_BENCHMARK} \
               -D ENABLE_ASAN=${ENABLE_ASAN} \
+              -D ENABLE_TSAN=${ENABLE_TSAN} \
               -D ENABLE_GCOV=${ENABLE_GCOV} \
               -D BUILD_WITHOUT_AIR=True \
               -D ASCEND_INSTALL_PATH=${ASCEND_INSTALL_PATH} \
