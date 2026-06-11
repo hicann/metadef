@@ -97,6 +97,51 @@ TEST_F(OpDefUT, Construct) {
   EXPECT_EQ(inputs[2].GetVersion(), 1);
 }
 
+TEST_F(OpDefUT, OpAICoreConfigUnknownShapeFormatMergeTest) {
+  OpDef opDef("TestUnknownShapeFormatMerge");
+  opDef.Input("x")
+      .ParamType(Option::REQUIRED)
+      .DataType({ge::DT_FLOAT16})
+      .Format({ge::FORMAT_ND})
+      .UnknownShapeFormat({ge::FORMAT_NCHW});
+
+  OpAICoreConfig inheritConfig;
+  std::vector<OpParamDef> inputs = opDef.GetMergeInputs(inheritConfig);
+  ASSERT_EQ(inputs.size(), 1);
+  ASSERT_EQ(inputs[0].GetUnknownShapeFormats().size(), 1);
+  EXPECT_EQ(inputs[0].GetUnknownShapeFormats()[0], ge::FORMAT_NCHW);
+
+  OpAICoreConfig clearConfig;
+  clearConfig.Input("x")
+      .ParamType(Option::OPTIONAL)
+      .DataType({ge::DT_FLOAT})
+      .Format({ge::FORMAT_ND})
+      .UnknownShapeFormat({});
+  inputs = opDef.GetMergeInputs(clearConfig);
+  ASSERT_EQ(inputs.size(), 1);
+  EXPECT_TRUE(inputs[0].GetUnknownShapeFormats().empty());
+
+  OpAICoreConfig emptyConfig;
+  emptyConfig.Input("x")
+      .ParamType(Option::OPTIONAL)
+      .DataType({ge::DT_FLOAT})
+      .Format({ge::FORMAT_ND});
+  inputs = opDef.GetMergeInputs(emptyConfig);
+  ASSERT_EQ(inputs.size(), 1);
+  EXPECT_TRUE(inputs[0].GetUnknownShapeFormats().empty());
+
+  OpAICoreConfig overrideConfig;
+  overrideConfig.Input("x")
+      .ParamType(Option::OPTIONAL)
+      .DataType({ge::DT_FLOAT})
+      .Format({ge::FORMAT_ND})
+      .UnknownShapeFormat({ge::FORMAT_ND});
+  inputs = opDef.GetMergeInputs(overrideConfig);
+  ASSERT_EQ(inputs.size(), 1);
+  ASSERT_EQ(inputs[0].GetUnknownShapeFormats().size(), 1);
+  EXPECT_EQ(inputs[0].GetUnknownShapeFormats()[0], ge::FORMAT_ND);
+}
+
 TEST_F(OpDefUT, ListParamTest) {
   OpDef opDef("Test");
   opDef.Input("x1").DataTypeList({ge::DT_FLOAT16, ge::DT_FLOAT}).FormatList({ge::FORMAT_ND});

@@ -785,9 +785,7 @@ void OpParamDefImpl::MergeParam(OpParamDef *parent_this, const OpParamDef &def) 
   if (def.impl_->value_depend.GetLength() > 0) {
     parent_this->impl_->value_depend = def.impl_->value_depend;
   }
-  if (!def.impl_->unknown_shape_formats.empty()) {
-    parent_this->impl_->unknown_shape_formats = def.impl_->unknown_shape_formats;
-  }
+  parent_this->impl_->unknown_shape_formats = def.impl_->unknown_shape_formats;
   if (!def.impl_->types_for_bin.empty()) {
     parent_this->impl_->types_for_bin = def.impl_->types_for_bin;
     parent_this->impl_->set_type_for_bin = def.impl_->set_type_for_bin;
