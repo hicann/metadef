@@ -39,6 +39,7 @@ public:
   ge::AscendString value_depend = "";
   DependScope depend_scope = DependScope::ALL;
   std::vector<ge::Format> unknown_shape_formats;
+  bool unknown_shape_format_set = false;
   bool ignore_contiguous = false;
   bool auto_contiguous = false;
   bool is_scalar = false;

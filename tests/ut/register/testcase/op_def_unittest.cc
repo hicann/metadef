@@ -128,7 +128,8 @@ TEST_F(OpDefUT, OpAICoreConfigUnknownShapeFormatMergeTest) {
       .Format({ge::FORMAT_ND});
   inputs = opDef.GetMergeInputs(emptyConfig);
   ASSERT_EQ(inputs.size(), 1);
-  EXPECT_TRUE(inputs[0].GetUnknownShapeFormats().empty());
+  ASSERT_EQ(inputs[0].GetUnknownShapeFormats().size(), 1);
+  EXPECT_EQ(inputs[0].GetUnknownShapeFormats()[0], ge::FORMAT_NCHW);
 
   OpAICoreConfig overrideConfig;
   overrideConfig.Input("x")

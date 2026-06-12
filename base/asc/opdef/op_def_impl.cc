@@ -690,6 +690,7 @@ void OpParamDefImpl::Construct(OpParamDef *parent_this, const OpParamDef &def) {
   parent_this->impl_->value_depend = def.impl_->value_depend;
   parent_this->impl_->depend_scope = def.impl_->depend_scope;
   parent_this->impl_->unknown_shape_formats = def.impl_->unknown_shape_formats;
+  parent_this->impl_->unknown_shape_format_set = def.impl_->unknown_shape_format_set;
   parent_this->impl_->ignore_contiguous = def.impl_->ignore_contiguous;
   parent_this->impl_->auto_contiguous = def.impl_->auto_contiguous;
   parent_this->impl_->is_scalar = def.impl_->is_scalar;
@@ -733,6 +734,7 @@ OpParamDef &OpParamDefImpl::ParamType(OpParamDef *parent_this, Option param_type
 
 OpParamDef &OpParamDefImpl::UnknownShapeFormat(OpParamDef *parent_this, std::vector<ge::Format> formats) {
   parent_this->impl_->unknown_shape_formats = formats;
+  parent_this->impl_->unknown_shape_format_set = true;
   return *parent_this;
 }
 
@@ -785,7 +787,9 @@ void OpParamDefImpl::MergeParam(OpParamDef *parent_this, const OpParamDef &def) 
   if (def.impl_->value_depend.GetLength() > 0) {
     parent_this->impl_->value_depend = def.impl_->value_depend;
   }
-  parent_this->impl_->unknown_shape_formats = def.impl_->unknown_shape_formats;
+  if (def.impl_->unknown_shape_format_set) {
+    parent_this->impl_->unknown_shape_formats = def.impl_->unknown_shape_formats;
+  }
   if (!def.impl_->types_for_bin.empty()) {
     parent_this->impl_->types_for_bin = def.impl_->types_for_bin;
     parent_this->impl_->set_type_for_bin = def.impl_->set_type_for_bin;
