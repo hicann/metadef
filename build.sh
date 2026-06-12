@@ -28,7 +28,7 @@ usage() {
   echo "  sh build.sh [-h | --help] [-v | --verbose] [-j<N>]"
   echo "              [--output_path=<PATH>] [--cann_3rd_lib_path=<PATH>]"
   echo "              [--enable_symengine] [--build-type]"
-  echo "              [--asan] [--cov]"
+  echo "              [--pkg-type=<TYPE>] [--asan] [--cov]"
   echo ""
   echo "Options:"
   echo "    -h, --help     Print usage"
@@ -42,6 +42,8 @@ usage() {
   echo "                   find symengine and boost"
   echo "    --build-type=<TYPE>"
   echo "                   Specify build type (TYPE option: Release/Debug), Default: Release"
+  echo "    --pkg-type=<TYPE>"
+  echo "                   Specify package type (TYPE option: run/rpm/deb), Default: run"
   echo "    --cann_3rd_lib_path=<PATH>"
   echo "                      Set third_party package install path, default ./output/third_party"
   echo "                      (Third_party package will cost a little time during the first compilation," 
@@ -107,9 +109,10 @@ checkopts() {
   GE_ONLY="on"
   CANN_3RD_LIB_PATH="$BASEPATH/output/third_party"
   CMAKE_BUILD_TYPE="Release"
+  PACKAGE_TYPE="run"
 
   # Process the options
-  parsed_args=$(getopt -a -o j:hv -l help,verbose,enable_symengine,cann_3rd_lib_path:,extra-cmake-args:,build-type:,asan,tsan,cov,output_path: -- "$@") || {
+  parsed_args=$(getopt -a -o j:hv -l help,verbose,enable_symengine,cann_3rd_lib_path:,extra-cmake-args:,build-type:,pkg-type:,asan,tsan,cov,output_path: -- "$@") || {
     usage
     exit 1
   }
@@ -147,6 +150,13 @@ checkopts() {
           usage && echo "Error: Invalid value '$2' for option '$1'" && exit 1
         fi
         CMAKE_BUILD_TYPE="$2"
+        shift 2
+        ;;
+      --pkg-type)
+        if [ "X$2" != "Xrun" ] && [ "X$2" != "Xrpm" ] && [ "X$2" != "Xdeb" ]; then
+          usage && echo "Error: Invalid value '$2' for option '$1'" && exit 1
+        fi
+        PACKAGE_TYPE="$2"
         shift 2
         ;;
       --extra-cmake-args)
@@ -248,7 +258,8 @@ build_metadef() {
               -D ENABLE_BUILD_DEVICE=${ENABLE_BUILD_DEVICE} \
               -D USE_CXX11_ABI=${USE_CXX11_ABI} \
               -D LLVM_PATH=${LLVM_PATH} \
-              -D CMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE_VAL}"
+              -D CMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE_VAL} \
+              -D PACKAGE_TYPE=${PACKAGE_TYPE}"
 
   echo "CMAKE_ARGS is: $CMAKE_ARGS"
   mk_dir "${BUILD_PATH}"
