@@ -295,5 +295,5 @@ install(FILES ${EXTERNAL_ASC_REGISTRY_FILES}
 )
 
 if (NOT ENABLE_COV AND NOT ENABLE_UT)
-    set_cann_cpack_config(metadef ENABLE_DEVICE ${ENABLE_BUILD_DEVICE})
+    set_cann_cpack_config(metadef ENABLE_DEVICE ${ENABLE_BUILD_DEVICE} PACKAGE_TYPE ${PACKAGE_TYPE})
 endif()
