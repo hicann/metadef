@@ -160,6 +160,21 @@ void OppSoManager::LoadOppPackage() const {
     for (const auto &item : package_to_opp_so_desc_opp) {
       auto package_name = item.first;
       auto so_list_opp = item.second;
+      auto so_paths = so_list_opp.GetSoPaths();
+        // 将_legacy.so后缀的so移到最后，保持其他成员顺序不变
+        (void)std::stable_partition(so_paths.begin(), so_paths.end(), [](const ge::AscendString &so_name) {
+          if (so_name.GetString() != nullptr) {
+            std::string so_name_str = so_name.GetString();
+            return so_name_str.size() < std::strlen(kLegacySoSuffix) ||
+                    so_name_str.compare((so_name_str.size() - std::strlen(kLegacySoSuffix)),
+                    std::strlen(kLegacySoSuffix), kLegacySoSuffix) != 0;
+          }
+          return true;
+        });
+        for (const auto &so_name : so_paths) {
+          GELOGI("[LoadOppPackage]load so, so_name is %s", so_name.GetString());
+        }
+        so_list_opp = gert::OppSoDesc(so_paths, AscendString(package_name.c_str()));
       LoadSoAndInitDefault(so_list_opp.GetSoPaths(), version, package_name);
     }
   }
