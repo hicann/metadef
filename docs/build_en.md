@@ -53,10 +53,12 @@ Developers can download the source code of this repository through the following
 
 - graph-easy (optional)
 
+- patch
+
   ```bash
   # Ubuntu/Debian OS installation command examples are shown below. For other OS, install yourself.
   # asan uses gcc 7.5.0 version as example. For other versions, install the corresponding version asan.
-  sudo apt-get install cmake ccache lcov libasan4 libgraph-easy-perl
+  sudo apt-get install cmake ccache lcov libasan4 libgraph-easy-perl patch
   ```
 
 #### Check Build Environment

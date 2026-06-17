@@ -51,7 +51,7 @@ cat /usr/local/Ascend/cann/<arch>-linux/ascend_toolkit_install.info
 
 - ccache/cov/asan
 
-- graph-easy(可选)
+- graph-easy（可选）
 
 - patch
 
