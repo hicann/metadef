@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -24,8 +24,8 @@ namespace error_message {
 using char_t = char;
 std::string TrimPath(const std::string &str);
 #ifdef __GNUC__
-int32_t FormatErrorMessage(char_t *str_dst, size_t dst_max,
-                           const char_t *format, ...)__attribute__((format(printf, 3, 4)));
+int32_t FormatErrorMessage(char_t *str_dst, size_t dst_max, const char_t *format, ...)
+    __attribute__((format(printf, 3, 4)));
 
 void ReportInnerError(const char_t *file_name, const char_t *func, uint32_t line, const std::string error_code,
                       const char_t *format, ...) __attribute__((format(printf, 5, 6)));
@@ -34,7 +34,7 @@ int32_t FormatErrorMessage(char_t *str_dst, size_t dst_max, const char_t *format
 void ReportInnerError(const char_t *file_name, const char_t *func, uint32_t line, const std::string error_code,
                       const char_t *format, ...);
 #endif
-}
+}  // namespace error_message
 
 constexpr size_t const LIMIT_PER_MESSAGE = 1024U;
 
@@ -43,7 +43,7 @@ constexpr size_t const LIMIT_PER_MESSAGE = 1024U;
 /// @param [in] key: vector parameter key
 /// @param [in] value: vector parameter value
 ///
-#define REPORT_INPUT_ERROR(error_code, key, value)                                          \
+#define REPORT_INPUT_ERROR(error_code, key, value) \
   ErrorManager::GetInstance().ATCReportErrMessage(error_code, key, value)
 
 ///
@@ -51,8 +51,7 @@ constexpr size_t const LIMIT_PER_MESSAGE = 1024U;
 /// @param [in] key: vector parameter key
 /// @param [in] value: vector parameter value
 ///
-#define REPORT_ENV_ERROR(error_code, key, value)                                            \
-  ErrorManager::GetInstance().ATCReportErrMessage(error_code, key, value)
+#define REPORT_ENV_ERROR(error_code, key, value) ErrorManager::GetInstance().ATCReportErrMessage(error_code, key, value)
 
 #define REPORT_INNER_ERROR(error_code, fmt, ...) \
   error_message::ReportInnerError(__FILE__, &__FUNCTION__[0], __LINE__, (error_code), (fmt), ##__VA_ARGS__)
@@ -113,7 +112,7 @@ struct ErrorItem {
 
   friend bool operator==(const ErrorItem &lhs, const ErrorItem &rhs) noexcept {
     return (lhs.error_id == rhs.error_id) && (lhs.error_message == rhs.error_message) &&
-        (lhs.possible_cause == rhs.possible_cause) && (lhs.solution == rhs.solution);
+           (lhs.possible_cause == rhs.possible_cause) && (lhs.solution == rhs.solution);
   }
 };
 }  // namespace error_message
@@ -144,10 +143,10 @@ class ErrorManager {
   /// @return int 0(success) -1(fail)
   int32_t ReportErrMessage(const std::string error_code, const std::map<std::string, std::string> &args_map);
 
-   /// @brief Report user defined error message
-   /// @param [in] error_code: user defined error code
-   /// @param [in] errmsg: error message
-   /// @return int 0(success) -1(fail)
+  /// @brief Report user defined error message
+  /// @param [in] error_code: user defined error code
+  /// @param [in] errmsg: error message
+  /// @return int 0(success) -1(fail)
   int32_t ReportErrMsgWithoutTpl(const std::string &error_code, const std::string &errmsg);
 
   /// @brief output error message
@@ -189,8 +188,7 @@ class ErrorManager {
   /// @param [out] msg_map: failed message map, key is error code, value is op_name list
   /// @return int 0(success) -1(fail)
   int32_t GetMstuneCompileFailedMsg(const std::string &graph_name,
-                                std::map<std::string,
-                                std::vector<std::string>> &msg_map);
+                                    std::map<std::string, std::vector<std::string>> &msg_map);
 
   // @brief generate work_stream_id by current pid and tid, clear error_message stored by same work_stream_id
   // used in external api entrance, all sync api can use
@@ -228,16 +226,15 @@ class ErrorManager {
 
   ErrorManager(const ErrorManager &) = delete;
   ErrorManager(ErrorManager &&) = delete;
-  ErrorManager &operator=(const ErrorManager &)& = delete;
-  ErrorManager &operator=(ErrorManager &&)& = delete;
+  ErrorManager &operator=(const ErrorManager &) & = delete;
+  ErrorManager &operator=(ErrorManager &&) & = delete;
 
   int32_t ParseJsonFile(const std::string path);
 
   static int32_t ReadJsonFile(const std::string &file_path, void *const handle);
 
   void ClassifyCompileFailedMsg(const std::map<std::string, std::string> &msg,
-                                std::map<std::string,
-                                std::vector<std::string>> &classified_msg);
+                                std::map<std::string, std::vector<std::string>> &classified_msg);
 
   bool IsInnerErrorCode(const std::string &error_code) const;
 
@@ -276,7 +273,7 @@ class ErrorManager {
   thread_local static error_message::Context error_context_;
 
   error_message::ErrorMsgMode error_mode_ = error_message::ErrorMsgMode::INTERNAL_MODE;
-  std::vector<ErrorItem> error_message_process_; // 进程粒度，所有的errmsg存到同一个vector
-  std::vector<ErrorItem> warning_messages_process_; // 进程粒度，所有的warning msg存到同一个vector
+  std::vector<ErrorItem> error_message_process_;     // 进程粒度，所有的errmsg存到同一个vector
+  std::vector<ErrorItem> warning_messages_process_;  // 进程粒度，所有的warning msg存到同一个vector
 };
 #endif  // ERROR_MANAGER_H_

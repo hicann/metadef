@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -46,7 +46,7 @@ void RegisterOpImplToRegistry(const OpCtImplRegisterV2Impl *rd) {
     funcs.get_op_specific_info = rd->functions.get_op_specific_info;
   }
 }
-}
+}  // namespace
 
 OpCtImplRegistry &OpCtImplRegistry::GetInstance() {
   static OpCtImplRegistry instance;
@@ -64,14 +64,15 @@ const OpCtImplRegistry::OpCtImplFunctions *OpCtImplRegistry::GetOpImpl(const ge:
   }
   return &iter->second;
 }
-const std::map<OpCtImplRegistry::OpType, OpCtImplRegistry::OpCtImplFunctions> &OpCtImplRegistry::GetAllTypesToImpl() const {
+const std::map<OpCtImplRegistry::OpType, OpCtImplRegistry::OpCtImplFunctions> &OpCtImplRegistry::GetAllTypesToImpl()
+    const {
   return types_to_impl_;
 }
 std::map<OpCtImplRegistry::OpType, OpCtImplRegistry::OpCtImplFunctions> &OpCtImplRegistry::GetAllTypesToImpl() {
   return types_to_impl_;
 }
 
-OpCtImplRegisterV2::OpCtImplRegisterV2(const ge::char_t *op_type) : impl_(new(std::nothrow) OpCtImplRegisterV2Impl) {
+OpCtImplRegisterV2::OpCtImplRegisterV2(const ge::char_t *op_type) : impl_(new (std::nothrow) OpCtImplRegisterV2Impl) {
   if (impl_ == nullptr) {
     return;
   }
@@ -128,7 +129,8 @@ OpCtImplRegisterV2 &OpCtImplRegisterV2::OpSelectFormat(OpCtImplKernelRegistry::O
   }
   return *this;
 }
-OpCtImplRegisterV2 &OpCtImplRegisterV2::GetOpSpecificInfo(OpCtImplKernelRegistry::OP_CHECK_FUNC_V2 get_op_specific_info_func) {
+OpCtImplRegisterV2 &OpCtImplRegisterV2::GetOpSpecificInfo(
+    OpCtImplKernelRegistry::OP_CHECK_FUNC_V2 get_op_specific_info_func) {
   if (impl_ != nullptr) {
     GELOGD("Reg op specific info func.");
     impl_->functions.get_op_specific_info = get_op_specific_info_func;
@@ -150,11 +152,10 @@ size_t GetRegisteredOpCtNum(void) {
 int32_t GetOpCtImplFunctions(TypesToCtImpl *impl, size_t impl_num) {
   const auto types_to_impl = gert::OpCtImplRegistry::GetInstance().GetAllTypesToImpl();
   GELOGI("LocalCtRegistry path[%s] all impl size : %zu",
-         metadef::GetSoRealPathByAddr(&gert::OpCtImplRegistry::GetInstance()).c_str(),
-         types_to_impl.size());
+         metadef::GetSoRealPathByAddr(&gert::OpCtImplRegistry::GetInstance()).c_str(), types_to_impl.size());
   if (impl_num != types_to_impl.size()) {
-    GELOGE(ge::FAILED, "Get types_to_impl_ failed, impl_num[%zu] and map size[%zu] not match",
-           impl_num, types_to_impl.size());
+    GELOGE(ge::FAILED, "Get types_to_impl_ failed, impl_num[%zu] and map size[%zu] not match", impl_num,
+           types_to_impl.size());
     return static_cast<int32_t>(ge::GRAPH_FAILED);
   }
   const auto first_st = types_to_impl.cbegin();
@@ -163,7 +164,7 @@ int32_t GetOpCtImplFunctions(TypesToCtImpl *impl, size_t impl_num) {
   GELOGD("Cann version[%d]/size[%zu] with opp version[%d]/size[%zu].", impl[0].funcs.version, real_size,
          first_st->second.version, op_size);
   if (real_size != op_size) {
-    const size_t real_offset = real_size + sizeof(char*);
+    const size_t real_offset = real_size + sizeof(char *);
     const size_t copy_size = std::min(real_size, op_size);
     uint8_t *real_impl_base = reinterpret_cast<uint8_t *>(impl);
     size_t i = 0;

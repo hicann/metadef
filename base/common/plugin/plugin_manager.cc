@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -30,12 +30,12 @@
 namespace metadef {
 namespace {
 constexpr int32_t kMaxNumOfSo = 64;
-constexpr int32_t kMaxSizeOfSo = 838860800;        // = 800M(unit is Byte)
-constexpr int32_t kMaxSizeOfLoadedSo = 1048576000; // = 1000M(unit is Byte)
-const std::string kExt = ".so";                    // supported extension of shared object
-const std::string kBuiltIn = "built-in";           // opp built-in directory name
-const std::string kVendors = "vendors";            // opp vendors directory name
-const std::string kConfig = "config.ini";          // opp vendors config file name 
+constexpr int32_t kMaxSizeOfSo = 838860800;         // = 800M(unit is Byte)
+constexpr int32_t kMaxSizeOfLoadedSo = 1048576000;  // = 1000M(unit is Byte)
+const std::string kExt = ".so";                     // supported extension of shared object
+const std::string kBuiltIn = "built-in";            // opp built-in directory name
+const std::string kVendors = "vendors";             // opp vendors directory name
+const std::string kConfig = "config.ini";           // opp vendors config file name
 constexpr size_t kVendorConfigPartsCount = 2U;
 const std::string kHostCpuLibRelativePathV01 = "/op_impl/built-in/host_cpu";
 const std::string kHostCpuLibRelativePathV02 = "/built-in/op_impl/host_cpu";
@@ -44,7 +44,7 @@ constexpr uint32_t kLibFirstLayer = 0U;
 constexpr uint32_t kLibSecondLayer = 1U;
 const std::string kOppPath = "opp/";
 const std::string kRuntimePath = "runtime/";
-const std::string  kCompilerPath = "compiler/";
+const std::string kCompilerPath = "compiler/";
 const std::string kScene = "scene.info";
 constexpr size_t kSceneValueCount = 2U;
 constexpr size_t kSceneKeyIndex = 0U;
@@ -85,7 +85,7 @@ bool IsVersionWithInRequiredRange(const uint32_t effective_version,
 std::string ReplaceFirst(const std::string &str, const std::string &from, const std::string &to) {
   const size_t start_pos = str.find(from);
   if (start_pos == std::string::npos) {
-    return str; // 如果找不到 %s，就返回原字符串
+    return str;  // 如果找不到 %s，就返回原字符串
   }
   return str.substr(0, start_pos) + to + str.substr(start_pos + from.length());
 }
@@ -151,7 +151,9 @@ void PluginManager::ClearHandles_() noexcept {
   handles_.clear();
 }
 
-PluginManager::~PluginManager() { ClearHandles_(); }
+PluginManager::~PluginManager() {
+  ClearHandles_();
+}
 
 ge::Status PluginManager::GetOppPath(std::string &opp_path) {
   const ge::char_t *path_env = nullptr;
@@ -208,7 +210,7 @@ ge::Status PluginManager::GetOppPluginVendors(const std::string &vendors_config,
     return ge::FAILED;
   }
   std::string content;
-  (void) std::getline(config, content);
+  (void)std::getline(config, content);
   config.close();
   GE_ASSERT_TRUE(!content.empty(), "Content of file '%s' is empty!", vendors_config.c_str());
   std::vector<std::string> v_parts;
@@ -216,7 +218,7 @@ ge::Status PluginManager::GetOppPluginVendors(const std::string &vendors_config,
   GE_ASSERT_TRUE(v_parts.size() == kVendorConfigPartsCount, "Format of file content is invalid!");
   SplitPath(v_parts[1], vendors, ',');
   GE_ASSERT_TRUE(!vendors.empty(), "Format of file content is invalid!");
-  (void) for_each(vendors.begin(), vendors.end(), &ge::StringUtils::Trim);
+  (void)for_each(vendors.begin(), vendors.end(), &ge::StringUtils::Trim);
   return ge::SUCCESS;
 }
 
@@ -272,14 +274,12 @@ void PluginManager::GetPluginPathFromCustomOppPath(const std::string &sub_path, 
   GELOGI("Run GetPluginPathFromCustomOppPath finished, current plugin_path is %s.", plugin_path.c_str());
 }
 
-ge::Status PluginManager::GetOppPluginPathOld(const std::string &opp_path,
-                                              const std::string &path_fmt,
-                                              std::string &plugin_path,
-                                              const std::string &path_fmt_custom) {
+ge::Status PluginManager::GetOppPluginPathOld(const std::string &opp_path, const std::string &path_fmt,
+                                              std::string &plugin_path, const std::string &path_fmt_custom) {
   GELOGI("Enter get opp plugin path old schedule");
-  const std::string &fmt_custom  = path_fmt_custom.empty() ? path_fmt : path_fmt_custom;
-  plugin_path = (opp_path + ReplaceFirst(fmt_custom, "%s", "custom") + ":")
-              + (opp_path + ReplaceFirst(path_fmt, "%s", "built-in"));
+  const std::string &fmt_custom = path_fmt_custom.empty() ? path_fmt : path_fmt_custom;
+  plugin_path = (opp_path + ReplaceFirst(fmt_custom, "%s", "custom") + ":") +
+                (opp_path + ReplaceFirst(path_fmt, "%s", "built-in"));
   GELOGI("plugin_path is '%s'", plugin_path.c_str());
   return ge::SUCCESS;
 }
@@ -311,10 +311,10 @@ bool PluginManager::GetRequiredOppAbiVersion(std::vector<std::pair<uint32_t, uin
 
   // valid required_opp_abi_version: ">=6.3, <=6.4, 6.4"
   version = ge::StringUtils::ReplaceAll(version, "\"", "");
-  (void) ge::StringUtils::Trim(version);
+  (void)ge::StringUtils::Trim(version);
   std::queue<std::string> split_version;
   for (auto &it : ge::StringUtils::Split(version, ',')) {
-    (void) split_version.emplace(ge::StringUtils::Trim(it));
+    (void)split_version.emplace(ge::StringUtils::Trim(it));
   }
   while (!split_version.empty()) {
     auto first = split_version.front();
@@ -339,14 +339,14 @@ bool PluginManager::GetRequiredOppAbiVersion(std::vector<std::pair<uint32_t, uin
         GELOGW("[InvalidVersion] Format of required_opp_abi_version [%s] is not invalid", version.c_str());
         return false;
       }
-      (void) required_opp_abi_version.emplace_back(first_num, second_num);
+      (void)required_opp_abi_version.emplace_back(first_num, second_num);
     } else {
       uint32_t tmp_num = 0U;
       if (!GetEffectiveVersion(first, tmp_num)) {
         GELOGW("[InvalidVersion] Format of required_opp_abi_version [%s] is not invalid", version.c_str());
         return false;
       }
-      (void) required_opp_abi_version.emplace_back(tmp_num, tmp_num);
+      (void)required_opp_abi_version.emplace_back(tmp_num, tmp_num);
     }
   }
   return true;
@@ -363,9 +363,10 @@ bool PluginManager::GetEffectiveVersion(const std::string &opp_version, uint32_t
     // C version 的数字个数要拉齐，不然配 3.20~9.0 之类的会取到空集
     split_version[1].append(c_effective_version_max_num - c_effective_version_size, '0');
   } else {
-    GELOGW("c_effective_version_size:%zu, will reach or over max num:%zu, Ensure that the range of valid version is not "
-           "empty",
-           c_effective_version_size, c_effective_version_max_num);
+    GELOGW(
+        "c_effective_version_size:%zu, will reach or over max num:%zu, Ensure that the range of valid version is not "
+        "empty",
+        c_effective_version_size, c_effective_version_max_num);
   }
   ss << split_version[1];  // C version
   ss >> effective_version;
@@ -413,11 +414,11 @@ void PluginManager::GetOppAndCompilerVersion(const std::string &vendor_path, std
   std::string version_path;
   if (vendor_path.find(kBuiltIn) != std::string::npos) {
     version_path = vendor_path.substr(0, vendor_path.rfind("/")) + kVersionInfo;
-    (void) PluginManager::GetVersionFromPathWithName(version_path, opp_version, kOppVersion);
+    (void)PluginManager::GetVersionFromPathWithName(version_path, opp_version, kOppVersion);
     GELOGD("Get opp_version:%s", opp_version.c_str());
   } else {
     version_path = vendor_path + kVersionInfo;
-    (void) PluginManager::GetVersionFromPathWithName(version_path, compiler_version, kCompilerVersion);
+    (void)PluginManager::GetVersionFromPathWithName(version_path, compiler_version, kCompilerVersion);
     GELOGD("Get compiler_version:%s", compiler_version.c_str());
   }
   return;
@@ -432,8 +433,8 @@ bool PluginManager::CheckOppAndCompilerVersions(const std::string &opp_version, 
       return false;
     }
     if (!IsVersionWithInRequiredRange(effective_opp_version, required_version)) {
-      GELOGW("opp_version:%s is not with in required_opp_abi_version:%s",
-             opp_version.c_str(), TransRequiredOppAbiVersionToString(required_version).c_str());
+      GELOGW("opp_version:%s is not with in required_opp_abi_version:%s", opp_version.c_str(),
+             TransRequiredOppAbiVersionToString(required_version).c_str());
       return false;
     }
   }
@@ -446,16 +447,15 @@ bool PluginManager::CheckOppAndCompilerVersions(const std::string &opp_version, 
         return false;
       }
       if (!IsVersionWithInRequiredRange(effective_compiler_version, required_version)) {
-        GELOGW("compiler version:%s is not with in required_opp_abi_version:%s",
-               opp_version.c_str(), TransRequiredOppAbiVersionToString(required_version).c_str());
+        GELOGW("compiler version:%s is not with in required_opp_abi_version:%s", opp_version.c_str(),
+               TransRequiredOppAbiVersionToString(required_version).c_str());
         return false;
       }
     }
   }
 
-  GELOGD("[ValidVersion] opp version:%s and compiler version:%s are within the required range:%s",
-         opp_version.c_str(), compiler_version.c_str(),
-         TransRequiredOppAbiVersionToString(required_version).c_str());
+  GELOGD("[ValidVersion] opp version:%s and compiler version:%s are within the required range:%s", opp_version.c_str(),
+         compiler_version.c_str(), TransRequiredOppAbiVersionToString(required_version).c_str());
   return true;
 }
 
@@ -468,25 +468,23 @@ void PluginManager::GetPackageSoPath(std::vector<std::string> &vendors) {
   PluginManager::GetPluginPathFromCustomOppPath("", custom_opp_path);
   if (!custom_opp_path.empty()) {
     std::vector<std::string> split_custom_opp_path = ge::StringUtils::Split(custom_opp_path, ':');
-    (void) vendors.insert(vendors.end(), split_custom_opp_path.begin(), split_custom_opp_path.end());
+    (void)vendors.insert(vendors.end(), split_custom_opp_path.begin(), split_custom_opp_path.end());
   }
 
   std::string opp_path;
   if (PluginManager::GetOppPath(opp_path) == ge::SUCCESS) {
     std::string vendors_path;
-    (void) PluginManager::GetOppPluginPathNew(opp_path, "%s", vendors_path, "");
+    (void)PluginManager::GetOppPluginPathNew(opp_path, "%s", vendors_path, "");
     if (!vendors_path.empty()) {
       auto split_vendors_path = ge::StringUtils::Split(vendors_path, ':');
-      (void) vendors.insert(vendors.end(), split_vendors_path.begin(), split_vendors_path.end());
+      (void)vendors.insert(vendors.end(), split_vendors_path.begin(), split_vendors_path.end());
     }
   }
   return;
 }
 
-ge::Status PluginManager::GetOppPluginPathNew(const std::string &opp_path,
-                                              const std::string &path_fmt,
-                                              std::string &plugin_path,
-                                              const std::string &old_custom_path,
+ge::Status PluginManager::GetOppPluginPathNew(const std::string &opp_path, const std::string &path_fmt,
+                                              std::string &plugin_path, const std::string &old_custom_path,
                                               const std::string &path_fmt_custom) {
   GELOGI("Enter get opp plugin path new schedule");
   const std::string vendors_config = opp_path + kVendors + "/" + kConfig;
@@ -495,7 +493,7 @@ ge::Status PluginManager::GetOppPluginPathNew(const std::string &opp_path,
     GELOGI("Cannot get opp plugin vendors!");
     plugin_path += opp_path + old_custom_path + ":";
   } else {
-    const std::string &fmt_custom  = path_fmt_custom.empty() ? path_fmt : path_fmt_custom;
+    const std::string &fmt_custom = path_fmt_custom.empty() ? path_fmt : path_fmt_custom;
     for (const auto &vendor : vendors) {
       if (IsVendorVersionValid(opp_path + kVendors + "/" + vendor)) {
         plugin_path += opp_path + kVendors + "/" + ReplaceFirst(fmt_custom, "%s", vendor) + ":";
@@ -522,8 +520,8 @@ bool PluginManager::IsSplitOpp() {
   std::vector<std::string> so_list;
   std::vector<std::string> path_vec;
   opp_path += "built-in/";
-  (void) path_vec.emplace_back(opp_path + "op_proto/lib/" + os_type + "/" + cpu_type + "/");
-  (void) path_vec.emplace_back(opp_path + "op_impl/ai_core/tbe/op_tiling/lib/" + os_type + "/" + cpu_type + "/");
+  (void)path_vec.emplace_back(opp_path + "op_proto/lib/" + os_type + "/" + cpu_type + "/");
+  (void)path_vec.emplace_back(opp_path + "op_impl/ai_core/tbe/op_tiling/lib/" + os_type + "/" + cpu_type + "/");
   for (const auto &path : path_vec) {
     GetFileListWithSuffix(path, kRtSoSuffix, so_list);
     if (so_list.empty()) {
@@ -672,13 +670,13 @@ void PluginManager::SplitPath(const std::string &mutil_path, std::vector<std::st
 }
 
 ge::Status PluginManager::LoadSo(const std::string &path, const std::vector<std::string> &func_check_list) {
-  constexpr int32_t flags = static_cast<int32_t>(static_cast<uint32_t>(MMPA_RTLD_NOW) |
-      static_cast<uint32_t>(MMPA_RTLD_GLOBAL));
+  constexpr int32_t flags =
+      static_cast<int32_t>(static_cast<uint32_t>(MMPA_RTLD_NOW) | static_cast<uint32_t>(MMPA_RTLD_GLOBAL));
   return LoadSoWithFlags(path, flags, func_check_list);
 }
 
 ge::Status PluginManager::LoadSoWithFlags(const std::string &path, const int32_t flags,
-    const std::vector<std::string> &func_check_list) {
+                                          const std::vector<std::string> &func_check_list) {
   uint32_t num_of_loaded_so = 0U;
   int64_t size_of_loaded_so = 0;
   so_list_.clear();
@@ -687,13 +685,15 @@ ge::Status PluginManager::LoadSoWithFlags(const std::string &path, const int32_t
   std::vector<std::string> path_vec;
   SplitPath(path, path_vec);
   for (const auto &single_path : path_vec) {
-    GE_IF_BOOL_EXEC(single_path.length() >= static_cast<ULONG>(MMPA_MAX_PATH), GELOGE(ge::PARAM_INVALID,
-                    "The shared library file path is too long!");
+    GE_IF_BOOL_EXEC(single_path.length() >= static_cast<ULONG>(MMPA_MAX_PATH),
+                    GELOGE(ge::PARAM_INVALID, "The shared library file path is too long!");
                     continue);
     // load break when number of loaded so reach maximum
     if (num_of_loaded_so >= static_cast<uint32_t>(kMaxNumOfSo)) {
-      GELOGW("The number of dynamic libraries loaded exceeds the kMaxNumOfSo,"
-             " and only the first %d shared libraries will be loaded.", kMaxNumOfSo);
+      GELOGW(
+          "The number of dynamic libraries loaded exceeds the kMaxNumOfSo,"
+          " and only the first %d shared libraries will be loaded.",
+          kMaxNumOfSo);
       break;
     }
 
@@ -721,9 +721,7 @@ ge::Status PluginManager::LoadSoWithFlags(const std::string &path, const int32_t
     if (handle == nullptr) {
       const ge::char_t *error = mmDlerror();
       GE_IF_BOOL_EXEC(error == nullptr, error = "");
-      GELOGW(
-          "[DLOpen][SharedLibraryPath]Failed, path[%s]. Message[%s]!",
-          file_path_dlopen.c_str(), error);
+      GELOGW("[DLOpen][SharedLibraryPath]Failed, path[%s]. Message[%s]!", file_path_dlopen.c_str(), error);
       continue;
     }
 
@@ -736,8 +734,7 @@ ge::Status PluginManager::LoadSoWithFlags(const std::string &path, const int32_t
         GE_IF_BOOL_EXEC(error == nullptr, error = "");
         REPORT_INNER_ERR_MSG("E19999", "[Check][So]%s is skipped since function %s does not exist! errmsg:%s",
                              func_name.c_str(), func_name.c_str(), error);
-        GELOGE(ge::PARAM_INVALID,
-               "[Check][So]%s is skipped since function %s does not exist! errmsg:%s",
+        GELOGE(ge::PARAM_INVALID, "[Check][So]%s is skipped since function %s does not exist! errmsg:%s",
                func_name.c_str(), func_name.c_str(), error);
         is_valid = false;
         break;
@@ -754,7 +751,7 @@ ge::Status PluginManager::LoadSoWithFlags(const std::string &path, const int32_t
 
     // add file to list
     size_of_loaded_so += file_size;
-    (void) so_list_.emplace_back(file_name);
+    (void)so_list_.emplace_back(file_name);
     handles_[std::string(file_name)] = handle;
     num_of_loaded_so++;
   }
@@ -772,8 +769,8 @@ ge::Status PluginManager::LoadSoWithFlags(const std::string &path, const int32_t
   return ge::SUCCESS;
 }
 
-ge::Status PluginManager::ValidateSo(const std::string &file_path,
-                                     const int64_t size_of_loaded_so, int64_t &file_size) const {
+ge::Status PluginManager::ValidateSo(const std::string &file_path, const int64_t size_of_loaded_so,
+                                     int64_t &file_size) const {
   // read file size
   struct stat stat_buf;
   if (stat(file_path.c_str(), &stat_buf) != 0) {
@@ -802,13 +799,13 @@ ge::Status PluginManager::ValidateSo(const std::string &file_path,
 }
 
 ge::Status PluginManager::Load(const std::string &path, const std::vector<std::string> &func_check_list) {
-  constexpr int32_t flags = static_cast<int32_t>(static_cast<uint32_t>(MMPA_RTLD_NOW) |
-      static_cast<uint32_t>(MMPA_RTLD_GLOBAL));
+  constexpr int32_t flags =
+      static_cast<int32_t>(static_cast<uint32_t>(MMPA_RTLD_NOW) | static_cast<uint32_t>(MMPA_RTLD_GLOBAL));
   return LoadWithFlags(path, flags, func_check_list);
 }
 
 ge::Status PluginManager::LoadWithFlags(const std::string &path, const int32_t flags,
-    const std::vector<std::string> &func_check_list) {
+                                        const std::vector<std::string> &func_check_list) {
   uint32_t num_of_loaded_so = 0U;
   int64_t size_of_loaded_so = 0;
   constexpr uint32_t is_folder = 0x4U;
@@ -840,25 +837,27 @@ ge::Status PluginManager::LoadWithFlags(const std::string &path, const int32_t f
     return ge::FAILED;
   }
   for (int32_t i = 0; i < ret; ++i) {
-    mmDirent * const entry = entries[i];
+    mmDirent *const entry = entries[i];
     // read fileName and fileType
     std::string file_name = entry->d_name;
     const auto file_type = static_cast<uint32_t>(entry->d_type);
 
     // ignore folder
     const bool invalid_file = ((file_type == is_folder) ||
-                         // ignore file whose name length is less than 3
-                         (file_name.size() <= ext.size()) ||
-                         // ignore file whose extension is not so
-                         (file_name.compare(file_name.size() - ext.size(), ext.size(), ext) != 0));
+                               // ignore file whose name length is less than 3
+                               (file_name.size() <= ext.size()) ||
+                               // ignore file whose extension is not so
+                               (file_name.compare(file_name.size() - ext.size(), ext.size(), ext) != 0));
     if (invalid_file) {
       continue;
     }
 
     // load break when number of loaded so reach maximum
     if (num_of_loaded_so >= static_cast<uint32_t>(kMaxNumOfSo)) {
-      GELOGW("The number of dynamic libraries loaded exceeds the kMaxNumOfSo,"
-             " and only the first %d shared libraries will be loaded.", kMaxNumOfSo);
+      GELOGW(
+          "The number of dynamic libraries loaded exceeds the kMaxNumOfSo,"
+          " and only the first %d shared libraries will be loaded.",
+          kMaxNumOfSo);
       break;
     }
     const std::string canonical_path_str = (std::string(canonical_path) + "/" + file_name);
@@ -893,8 +892,8 @@ ge::Status PluginManager::LoadWithFlags(const std::string &path, const int32_t f
       if (real_fn == nullptr) {
         const ge::char_t *error = mmDlerror();
         GE_IF_BOOL_EXEC(error == nullptr, error = "");
-        GELOGW("The %s is skipped since function %s does not exist! errmsg:%s",
-               file_name.c_str(), func_name.c_str(), error);
+        GELOGW("The %s is skipped since function %s does not exist! errmsg:%s", file_name.c_str(), func_name.c_str(),
+               error);
         is_valid = false;
         break;
       }
@@ -910,7 +909,7 @@ ge::Status PluginManager::LoadWithFlags(const std::string &path, const int32_t f
 
     // add file to list
     size_of_loaded_so += file_size;
-    (void) so_list_.emplace_back(file_name);
+    (void)so_list_.emplace_back(file_name);
     handles_[std::string(file_name)] = handle;
     num_of_loaded_so++;
   }
@@ -924,8 +923,8 @@ ge::Status PluginManager::LoadWithFlags(const std::string &path, const int32_t f
 }
 
 void PluginManager::GetOppSupportedOsAndCpuType(
-    std::unordered_map<std::string, std::unordered_set<std::string>> &opp_supported_os_cpu,
-    std::string opp_path, std::string os_name, uint32_t layer) {
+    std::unordered_map<std::string, std::unordered_set<std::string>> &opp_supported_os_cpu, std::string opp_path,
+    std::string os_name, uint32_t layer) {
   if (layer > kLibSecondLayer) {
     GELOGW("The lib structure of the current opp package has only 2 layers");
     return;
@@ -933,7 +932,7 @@ void PluginManager::GetOppSupportedOsAndCpuType(
   GELOGD("Enter GetOppSupportedOsAndCpuType schedule");
 
   if (opp_path.empty()) {
-    (void) GetOppPath(opp_path);
+    (void)GetOppPath(opp_path);
     opp_path += "built-in/op_proto/lib/";
     if (opp_path.size() >= static_cast<size_t>(MMPA_MAX_PATH)) {
       GELOGW("param path size:%zu >= max path:%d", opp_path.size(), MMPA_MAX_PATH);
@@ -956,8 +955,7 @@ void PluginManager::GetOppSupportedOsAndCpuType(
 }
 
 void PluginManager::ScanOppLibSubDirs(
-    const ge::char_t *real_path,
-    std::unordered_map<std::string, std::unordered_set<std::string>> &opp_supported_os_cpu,
+    const ge::char_t *real_path, std::unordered_map<std::string, std::unordered_set<std::string>> &opp_supported_os_cpu,
     const std::string &opp_path, const std::string &os_name, uint32_t layer) {
   mmDirent **entries = nullptr;
   const auto ret = Scandir(real_path, &entries, nullptr, nullptr);
@@ -966,7 +964,7 @@ void PluginManager::ScanOppLibSubDirs(
     return;
   }
   for (int32_t i = 0; i < ret; ++i) {
-    const auto *entry_ptr = ge::PtrAdd<mmDirent*>(entries, static_cast<size_t>(ret), static_cast<size_t>(i));
+    const auto *entry_ptr = ge::PtrAdd<mmDirent *>(entries, static_cast<size_t>(ret), static_cast<size_t>(i));
     if (entry_ptr == nullptr) {
       continue;
     }
@@ -981,7 +979,7 @@ void PluginManager::ScanOppLibSubDirs(
         GetOppSupportedOsAndCpuType(opp_supported_os_cpu, opp_path + dir_name, dir_name, 1U);
       }
       if (layer == kLibSecondLayer) {
-        (void) opp_supported_os_cpu[os_name].emplace(dir_name);
+        (void)opp_supported_os_cpu[os_name].emplace(dir_name);
         GELOGD("Get supported os[%s] -> cpu[%s]", os_name.c_str(), dir_name.c_str());
       }
     }
@@ -1123,8 +1121,8 @@ void PluginManager::GetFileListWithSuffix(const std::string &path, const std::st
   mmDirent **entries = nullptr;
   const auto file_num = mmScandir(&(resolved_path[0U]), &entries, nullptr, alphasort);
   if ((file_num < 0) || (entries == nullptr)) {
-    GELOGW("[FindSo][Scan] Scan directory %s failed, ret:%d, reason:%s",
-           &(resolved_path[0U]), file_num, strerror(errno));
+    GELOGW("[FindSo][Scan] Scan directory %s failed, ret:%d, reason:%s", &(resolved_path[0U]), file_num,
+           strerror(errno));
     return;
   }
   for (int32_t i = 0; i < file_num; ++i) {
@@ -1143,8 +1141,7 @@ void PluginManager::GetFileListWithSuffix(const std::string &path, const std::st
   mmScandirFree(entries, file_num);
 }
 
-void PluginManager::FindSoFilesInCustomPassDirs(const std::string &directory,
-                                                std::vector<std::string> &so_files) {
+void PluginManager::FindSoFilesInCustomPassDirs(const std::string &directory, std::vector<std::string> &so_files) {
   ge::char_t resolved_path[MMPA_MAX_PATH] = {};
   if (mmRealPath(directory.c_str(), resolved_path, MMPA_MAX_PATH) != EN_OK) {
     GELOGW("[FindDirs][Check] Get real_path for directory %s failed, reason:%s", directory.c_str(), strerror(errno));
@@ -1233,7 +1230,7 @@ std::string PluginManager::GetOppPkgPath(const std::string &opp_built_in_path, c
 }
 }  // namespace metadef
 
-extern "C" __attribute__((weak)) void SetMetadefPluginCustomOpLibPathForC(const char* custom_op_Lib_path) {
+extern "C" __attribute__((weak)) void SetMetadefPluginCustomOpLibPathForC(const char *custom_op_Lib_path) {
   if (custom_op_Lib_path != nullptr) {
     metadef::PluginManager::SetCustomOpLibPath(custom_op_Lib_path);
   }

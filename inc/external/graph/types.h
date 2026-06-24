@@ -30,7 +30,7 @@ static const int64_t UNKNOWN_DIM_NUM = -2;
 static const std::vector<int64_t> UNKNOWN_SHAPE = {-1};
 static const std::vector<int64_t> UNKNOWN_RANK = {-2};
 static const std::vector<int64_t> DUMMY_SHAPE = {-3};
-#endif // __NPU_DEVICE__
+#endif  // __NPU_DEVICE__
 // When data type unit is bit, this offset need to be added.
 static constexpr int32_t kDataTypeSizeBitOffset = 1000;
 static constexpr uint32_t kBitNumOfOneByte = 8U;
@@ -249,7 +249,6 @@ enum Format {
   FORMAT_MAX = ::C_FORMAT_MAX,
 };
 
-
 /// Get format from primary and sub-format,
 /// in bits field:
 /// ---------------------------------------------
@@ -301,21 +300,21 @@ inline int64_t GetC0Value(int32_t format) {
   if (!HasC0Format(format)) {
     return -1;
   }
-  return static_cast<int64_t>(1 <<
-      (static_cast<int32_t>((static_cast<uint32_t>(format) & 0xf000000U) >> kBitThreeBytes) - 1));
+  return static_cast<int64_t>(
+      1 << (static_cast<int32_t>((static_cast<uint32_t>(format) & 0xf000000U) >> kBitThreeBytes) - 1));
 }
 
 // for unknown shape op type
 enum UnknowShapeOpType {
-  DEPEND_IN_SHAPE    = 1,  // op out shape get by input shape
+  DEPEND_IN_SHAPE = 1,     // op out shape get by input shape
   DEPEND_CONST_VALUE = 2,  // op out shape get by const op value
   DEPEND_SHAPE_RANGE = 3,  // op out shape get by range
-  DEPEND_COMPUTE     = 4   // op out shape get by totally computing
+  DEPEND_COMPUTE = 4       // op out shape get by totally computing
 };
 
 struct TensorDescInfo {
-  Format format_ = FORMAT_RESERVED;  // tbe op register support format
-  DataType dataType_ = DT_UNDEFINED; // tbe op register support datatype
+  Format format_ = FORMAT_RESERVED;   // tbe op register support format
+  DataType dataType_ = DT_UNDEFINED;  // tbe op register support datatype
 };
 
 enum DeviceType {
@@ -324,8 +323,8 @@ enum DeviceType {
 };
 
 enum Placement {
-  kPlacementHost = 0,     // host data addr
-  kPlacementDevice = 1,   // device data addr
+  kPlacementHost = 0,    // host data addr
+  kPlacementDevice = 1,  // device data addr
   kPlacementEnd,
 };
 
@@ -334,8 +333,7 @@ enum Placement {
 /// @param format
 /// @return
 ///
-GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY
-const char_t *GetFormatName(Format format);
+GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY const char_t *GetFormatName(Format format);
 
 class TensorTypeImpl;
 struct TensorType {
@@ -344,31 +342,30 @@ struct TensorType {
   TensorType(const std::initializer_list<DataType> &initial_types);
 
   static TensorType ALL() {
-    return TensorType{DT_BOOL,   DT_COMPLEX128, DT_COMPLEX64, DT_DOUBLE, DT_FLOAT,  DT_FLOAT16, DT_INT16,
-                      DT_INT32,  DT_INT64,      DT_INT8,      DT_QINT16, DT_QINT32, DT_QINT8,   DT_QUINT16,
-                      DT_QUINT8, DT_RESOURCE,   DT_STRING,    DT_UINT16, DT_UINT32, DT_UINT64,  DT_UINT8,
-                      DT_BF16, DT_COMPLEX32};
+    return TensorType{DT_BOOL,   DT_COMPLEX128, DT_COMPLEX64, DT_DOUBLE, DT_FLOAT, DT_FLOAT16, DT_INT16,    DT_INT32,
+                      DT_INT64,  DT_INT8,       DT_QINT16,    DT_QINT32, DT_QINT8, DT_QUINT16, DT_QUINT8,   DT_RESOURCE,
+                      DT_STRING, DT_UINT16,     DT_UINT32,    DT_UINT64, DT_UINT8, DT_BF16,    DT_COMPLEX32};
   }
 
-  static TensorType QuantifiedType() { return TensorType{DT_QINT16, DT_QINT32, DT_QINT8, DT_QUINT16, DT_QUINT8}; }
+  static TensorType QuantifiedType() {
+    return TensorType{DT_QINT16, DT_QINT32, DT_QINT8, DT_QUINT16, DT_QUINT8};
+  }
 
   static TensorType OrdinaryType() {
-    return TensorType{DT_BOOL,  DT_COMPLEX128, DT_COMPLEX64, DT_DOUBLE, DT_FLOAT,  DT_FLOAT16, DT_INT16,
-                      DT_INT32, DT_INT64,      DT_INT8,      DT_UINT16, DT_UINT32, DT_UINT64,  DT_UINT8,
-                      DT_BF16, DT_COMPLEX32};
+    return TensorType{DT_BOOL,  DT_COMPLEX128, DT_COMPLEX64, DT_DOUBLE, DT_FLOAT,  DT_FLOAT16, DT_INT16, DT_INT32,
+                      DT_INT64, DT_INT8,       DT_UINT16,    DT_UINT32, DT_UINT64, DT_UINT8,   DT_BF16,  DT_COMPLEX32};
   }
 
   static TensorType BasicType() {
-    return TensorType{DT_COMPLEX128, DT_COMPLEX64, DT_DOUBLE, DT_FLOAT,  DT_FLOAT16, DT_INT16,
-                      DT_INT32,      DT_INT64,     DT_INT8,   DT_QINT16, DT_QINT32,  DT_QINT8,
-                      DT_QUINT16,    DT_QUINT8,    DT_UINT16, DT_UINT32, DT_UINT64,  DT_UINT8,
-                      DT_BF16, DT_COMPLEX32};
+    return TensorType{DT_COMPLEX128, DT_COMPLEX64, DT_DOUBLE, DT_FLOAT,  DT_FLOAT16, DT_INT16,    DT_INT32,
+                      DT_INT64,      DT_INT8,      DT_QINT16, DT_QINT32, DT_QINT8,   DT_QUINT16,  DT_QUINT8,
+                      DT_UINT16,     DT_UINT32,    DT_UINT64, DT_UINT8,  DT_BF16,    DT_COMPLEX32};
   }
 
   static TensorType NumberType() {
-    return TensorType{DT_COMPLEX128, DT_COMPLEX64, DT_DOUBLE, DT_FLOAT,  DT_FLOAT16, DT_INT16,  DT_INT32,  DT_INT64,
-                      DT_INT8,       DT_QINT32,    DT_QINT8,  DT_QUINT8, DT_UINT16,  DT_UINT32, DT_UINT64, DT_UINT8,
-                      DT_BF16, DT_COMPLEX32};
+    return TensorType{DT_COMPLEX128, DT_COMPLEX64, DT_DOUBLE, DT_FLOAT,  DT_FLOAT16, DT_INT16,
+                      DT_INT32,      DT_INT64,     DT_INT8,   DT_QINT32, DT_QINT8,   DT_QUINT8,
+                      DT_UINT16,     DT_UINT32,    DT_UINT64, DT_UINT8,  DT_BF16,    DT_COMPLEX32};
   }
 
   static TensorType RealNumberType() {
@@ -376,31 +373,43 @@ struct TensorType {
                       DT_INT8,   DT_UINT16, DT_UINT32,  DT_UINT64, DT_UINT8, DT_BF16};
   }
 
-  static TensorType ComplexDataType() { return TensorType{DT_COMPLEX128, DT_COMPLEX64, DT_COMPLEX32}; }
+  static TensorType ComplexDataType() {
+    return TensorType{DT_COMPLEX128, DT_COMPLEX64, DT_COMPLEX32};
+  }
 
   static TensorType IntegerDataType() {
     return TensorType{DT_INT16, DT_INT32, DT_INT64, DT_INT8, DT_UINT16, DT_UINT32, DT_UINT64, DT_UINT8};
   }
 
-  static TensorType SignedDataType() { return TensorType{DT_INT16, DT_INT32, DT_INT64, DT_INT8}; }
+  static TensorType SignedDataType() {
+    return TensorType{DT_INT16, DT_INT32, DT_INT64, DT_INT8};
+  }
 
-  static TensorType UnsignedDataType() { return TensorType{DT_UINT16, DT_UINT32, DT_UINT64, DT_UINT8}; }
+  static TensorType UnsignedDataType() {
+    return TensorType{DT_UINT16, DT_UINT32, DT_UINT64, DT_UINT8};
+  }
 
-  static TensorType FloatingDataType() { return TensorType{DT_DOUBLE, DT_FLOAT, DT_FLOAT16}; }
+  static TensorType FloatingDataType() {
+    return TensorType{DT_DOUBLE, DT_FLOAT, DT_FLOAT16};
+  }
 
-  static TensorType IndexNumberType() { return TensorType{DT_INT32, DT_INT64}; }
+  static TensorType IndexNumberType() {
+    return TensorType{DT_INT32, DT_INT64};
+  }
 
   static TensorType UnaryDataType() {
     return TensorType{DT_COMPLEX128, DT_COMPLEX64, DT_DOUBLE, DT_FLOAT, DT_FLOAT16, DT_BF16, DT_COMPLEX32};
   }
 
-  static TensorType FLOAT() { return TensorType{DT_FLOAT, DT_FLOAT16, DT_BF16}; }
+  static TensorType FLOAT() {
+    return TensorType{DT_FLOAT, DT_FLOAT16, DT_BF16};
+  }
 
   std::shared_ptr<TensorTypeImpl> tensor_type_impl_;
 };
 
 struct ListTensorType {
-  explicit ListTensorType(const TensorType &type) : tensor_type(type) {};
+  explicit ListTensorType(const TensorType &type) : tensor_type(type){};
   TensorType tensor_type;
 };
 
@@ -423,14 +432,14 @@ class Promote {
 
 namespace domi {
 enum class ImplyType : unsigned int {
-  BUILTIN = 0,  // Built in operator, normally executed by OME
+  BUILTIN = 0,        // Built in operator, normally executed by OME
   BUILDIN = BUILTIN,  // Compatible with previous misspelled version, use BUILTIN instead
-  TVM,          // Compile to TVM bin file for execution
-  CUSTOM,       // User defined calculation logic, executed by CPU
-  AI_CPU,       // AICPU
-  CCE,          // Cce
-  GELOCAL,      // GE local, do node need execute by device
-  HCCL,         // Hccl
+  TVM,                // Compile to TVM bin file for execution
+  CUSTOM,             // User defined calculation logic, executed by CPU
+  AI_CPU,             // AICPU
+  CCE,                // Cce
+  GELOCAL,            // GE local, do node need execute by device
+  HCCL,               // Hccl
   INVALID = 0xFFFFFFFF,
 };
 using char_t = ge::char_t;

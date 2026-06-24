@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -21,7 +21,7 @@ class Chain {
    * @tparam T 数据类型
    * @return 指向数据的指针
    */
-  template<typename T, typename std::enable_if<(sizeof(T) <= sizeof(void *)), int>::type = 0>
+  template <typename T, typename std::enable_if<(sizeof(T) <= sizeof(void *)), int>::type = 0>
   const T *GetPointer() const {
     return reinterpret_cast<const T *>(any_value_.data.inplace);
   }
@@ -30,7 +30,7 @@ class Chain {
    * @tparam T 数据类型
    * @return 指向数据的指针
    */
-  template<typename T, typename std::enable_if<(sizeof(T) > sizeof(void *)), int>::type = 0>
+  template <typename T, typename std::enable_if<(sizeof(T) > sizeof(void *)), int>::type = 0>
   const T *GetPointer() const {
     return reinterpret_cast<const T *>(any_value_.data.pointer);
   }
@@ -39,8 +39,8 @@ class Chain {
    * @tparam T 数据类型
    * @return 指向数据的指针
    */
-  template<typename T, typename std::enable_if<(sizeof(T) <= sizeof(void *)), int>::type = 0>
-  auto GetPointer() -> T* {
+  template <typename T, typename std::enable_if<(sizeof(T) <= sizeof(void *)), int>::type = 0>
+  auto GetPointer() -> T * {
     return reinterpret_cast<T *>(any_value_.data.inplace);
   }
   /**
@@ -48,8 +48,8 @@ class Chain {
    * @tparam T 数据类型
    * @return 指向数据的指针
    */
-  template<typename T, typename std::enable_if<(sizeof(T) > sizeof(void *)), int>::type = 0>
-  auto GetPointer() -> T* {
+  template <typename T, typename std::enable_if<(sizeof(T) > sizeof(void *)), int>::type = 0>
+  auto GetPointer() -> T * {
     return reinterpret_cast<T *>(any_value_.data.pointer);
   }
   /**
@@ -57,7 +57,7 @@ class Chain {
    * @tparam T 数据类型
    * @return 数据的值的引用
    */
-  template<typename T, typename std::enable_if<(sizeof(T) <= sizeof(void *)), int>::type = 0>
+  template <typename T, typename std::enable_if<(sizeof(T) <= sizeof(void *)), int>::type = 0>
   const T &GetValue() const {
     return *reinterpret_cast<const T *>(any_value_.data.inplace);
   }
@@ -66,8 +66,8 @@ class Chain {
    * @tparam T 数据类型
    * @return 数据的值的引用
    */
-  template<typename T, typename std::enable_if<(sizeof(T) <= sizeof(void *)), int>::type = 0>
-  auto GetValue() -> T& {
+  template <typename T, typename std::enable_if<(sizeof(T) <= sizeof(void *)), int>::type = 0>
+  auto GetValue() -> T & {
     return *reinterpret_cast<T *>(any_value_.data.inplace);
   }
   /**
@@ -75,7 +75,7 @@ class Chain {
    * @param data 指向数据的指针
    * @param deleter 释放数据的接口，空指针的含义为不需要释放
    */
-  void Set(void * const data, const Chain::Deleter deleter) {
+  void Set(void *const data, const Chain::Deleter deleter) {
     FreeResource();
     any_value_.data.pointer = data;
     any_value_.deleter = deleter;
@@ -85,7 +85,7 @@ class Chain {
    * @tparam T 数据的类型
    * @param data 数据的指针
    */
-  template<typename T, typename std::enable_if<(!std::is_array<T>::value), int>::type = 0>
+  template <typename T, typename std::enable_if<(!std::is_array<T>::value), int>::type = 0>
   void SetWithDefaultDeleter(T *data) {
     Set(data, reinterpret_cast<FreeCallback>(DefaultDeleter<T>));
   }
@@ -94,8 +94,8 @@ class Chain {
    * @tparam T 数据的类型
    * @param data 数据的指针
    */
-  template<typename T, typename PureT = typename std::remove_extent<T>::type,
-           typename std::enable_if<std::is_array<T>::value, int>::type = 0>
+  template <typename T, typename PureT = typename std::remove_extent<T>::type,
+            typename std::enable_if<std::is_array<T>::value, int>::type = 0>
   void SetWithDefaultDeleter(PureT *data) {
     Set(data, reinterpret_cast<FreeCallback>(DefaultArrayDeleter<PureT>));
   }
@@ -108,12 +108,12 @@ class Chain {
   }
 
  private:
-  template<typename T>
+  template <typename T>
   static void DefaultArrayDeleter(T *data) {
     delete[] data;
   }
 
-  template<typename T>
+  template <typename T>
   static void DefaultDeleter(T *data) {
     delete data;
   }
@@ -155,7 +155,7 @@ class KernelContext {
     }
     return reinterpret_cast<const Chain *>(context_.values[i]);
   }
-    /**
+  /**
    * 获取输入的Chain指针
    * @param i kernel的输入index
    * @return 输入Chain的指针
@@ -200,7 +200,7 @@ class KernelContext {
    * @param i kernel的输入index
    * @return 输入的值
    */
-  template<typename T>
+  template <typename T>
   const T GetInputValue(size_t i) const {
     const auto av = GetInput(i);
     if (av == nullptr) {
@@ -214,7 +214,7 @@ class KernelContext {
    * @param i kernel的输入index
    * @return 输入数据的指针
    */
-  template<typename T>
+  template <typename T>
   const T *GetInputPointer(size_t i) const {
     const auto av = GetInput(i);
     if (av == nullptr) {
@@ -228,8 +228,8 @@ class KernelContext {
    * @param i kernel的输入index
    * @return 输入数据的指针
    */
-  template<typename T>
-  auto MutableInputPointer(size_t i) const -> T* {
+  template <typename T>
+  auto MutableInputPointer(size_t i) const -> T * {
     const auto av = MutableInput(i);
     if (av == nullptr) {
       return nullptr;
@@ -270,8 +270,8 @@ class KernelContext {
    * @param i kernel的输出index
    * @return 输出数据的指针
    */
-  template<typename T>
-  auto GetOutputPointer(size_t i) -> T* {
+  template <typename T>
+  auto GetOutputPointer(size_t i) -> T * {
     const auto av = GetOutput(i);
     if (av == nullptr) {
       return nullptr;
@@ -284,7 +284,7 @@ class KernelContext {
    * @param i kernel的输出index
    * @return 输出数据的指针
    */
-  template<typename T>
+  template <typename T>
   const T *GetOutputPointer(size_t i) const {
     const auto av = GetOutput(i);
     if (av == nullptr) {

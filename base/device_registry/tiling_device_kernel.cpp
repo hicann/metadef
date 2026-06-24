@@ -54,7 +54,7 @@ __attribute__((visibility("default"))) uint32_t RunAicpuRpcSrvLaunch(void *args)
     return ge::GRAPH_PARAM_INVALID;
   }
 
-  if ((func) (task->tilingContext) != ge::GRAPH_SUCCESS) {
+  if ((func)(task->tilingContext) != ge::GRAPH_SUCCESS) {
     GELOGE(ge::INTERNAL_ERROR, "Tiling function for op %s executed failed", opType.c_str());
     return ge::INTERNAL_ERROR;
   }

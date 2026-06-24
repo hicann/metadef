@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -30,26 +30,25 @@ class OpInferDataTypeContextBuilderImpl : public ContextBuilderImpl {
       (void)input_values_.emplace_back(std::make_pair<void *, gert::Chain::Deleter>(
           ge::ValueToPtr(MutableOpInfo().input_tensor_descs[i].dtype), nullptr));
     }
-    output_values_.resize(op_info_.output_instance_num, 
+    output_values_.resize(op_info_.output_instance_num,
                           std::make_pair<void *, gert::Chain::Deleter>(ge::ValueToPtr(ge::DT_MAX), nullptr));
     GE_ASSERT_SUCCESS(BuildCtx(*holder), "BuildCtx failed.");
     return holder;
   }
 };
 
-static_assert(sizeof(OpInferDataTypeContextBuilderImpl) == sizeof(ContextBuilderImpl), "OpInferDataTypeContextBuilderImpl size error");
+static_assert(sizeof(OpInferDataTypeContextBuilderImpl) == sizeof(ContextBuilderImpl),
+              "OpInferDataTypeContextBuilderImpl size error");
 
-OpInferDataTypeContextBuilder::OpInferDataTypeContextBuilder()
-    : OpContextBuilderBase<OpInferDataTypeContextBuilder>() {
+OpInferDataTypeContextBuilder::OpInferDataTypeContextBuilder() : OpContextBuilderBase<OpInferDataTypeContextBuilder>() {
   impl_ = ge::ComGraphMakeUnique<OpInferDataTypeContextBuilderImpl>();
 }
 
 OpInferDataTypeContextBuilder::~OpInferDataTypeContextBuilder() = default;
 
-OpInferDataTypeContextBuilder &OpInferDataTypeContextBuilder::InputTensorDesc(size_t index, ge::DataType dtype,
-                                                                              ge::Format origin_format,
-                                                                              ge::Format storage_format,
-                                                                              const gert::ExpandDimsType &expand_dims_type) {
+OpInferDataTypeContextBuilder &OpInferDataTypeContextBuilder::InputTensorDesc(
+    size_t index, ge::DataType dtype, ge::Format origin_format, ge::Format storage_format,
+    const gert::ExpandDimsType &expand_dims_type) {
   GE_CHECK_NOTNULL_EXEC(impl_, return *this);
   MutableInputDataType(index) = dtype;
   MutableInputOriginalFormat(index) = origin_format;
@@ -58,9 +57,8 @@ OpInferDataTypeContextBuilder &OpInferDataTypeContextBuilder::InputTensorDesc(si
   return *this;
 }
 
-OpInferDataTypeContextBuilder &OpInferDataTypeContextBuilder::OutputTensorDesc(size_t index, ge::Format origin_format,
-                                                                               ge::Format storage_format,
-                                                                               const gert::ExpandDimsType &expand_dims_type) {
+OpInferDataTypeContextBuilder &OpInferDataTypeContextBuilder::OutputTensorDesc(
+    size_t index, ge::Format origin_format, ge::Format storage_format, const gert::ExpandDimsType &expand_dims_type) {
   GE_CHECK_NOTNULL_EXEC(impl_, return *this);
   MutableOutputOriginalFormat(index) = origin_format;
   MutableOutputStorageFormat(index) = storage_format;

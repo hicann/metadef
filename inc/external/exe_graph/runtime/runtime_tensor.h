@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2026 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -32,23 +32,26 @@ class Tensor {
  public:
   // memse函数misra告警屏蔽
   Tensor() : version_(kTensorV1) {
-    (void) memset(reserved_, 0, sizeof(reserved_));
-    (void) memset(reserved_field_, 0, sizeof(reserved_field_));
+    (void)memset(reserved_, 0, sizeof(reserved_));
+    (void)memset(reserved_field_, 0, sizeof(reserved_field_));
   }
   Tensor(const StorageShape &storage_shape, const StorageFormat &storage_format, const TensorPlacement placement,
          const ge::DataType data_type, TensorAddress addr)
       : Tensor(storage_shape, storage_format, placement, data_type, addr, nullptr) {}
   Tensor(const StorageShape &storage_shape, const StorageFormat &storage_format, ge::DataType data_type)
       : storage_shape_(storage_shape), storage_format_(storage_format), version_(kTensorV1), data_type_(data_type) {
-    (void) memset(reserved_, 0, sizeof(reserved_));
-    (void) memset(reserved_field_, 0, sizeof(reserved_field_));
+    (void)memset(reserved_, 0, sizeof(reserved_));
+    (void)memset(reserved_field_, 0, sizeof(reserved_field_));
   }
   Tensor(const StorageShape &storage_shape, const StorageFormat &storage_format, const TensorPlacement placement,
          const ge::DataType data_type, TensorAddress addr, TensorAddrManager manager)
-      : storage_shape_(storage_shape), storage_format_(storage_format), version_(kTensorV1), data_type_(data_type),
+      : storage_shape_(storage_shape),
+        storage_format_(storage_format),
+        version_(kTensorV1),
+        data_type_(data_type),
         tensor_data_(addr, manager, static_cast<size_t>(ge::GetSizeInBytes(GetShapeSize(), data_type_)), placement) {
-    (void) memset(reserved_, 0, sizeof(reserved_));
-    (void) memset(reserved_field_, 0, sizeof(reserved_field_));
+    (void)memset(reserved_, 0, sizeof(reserved_));
+    (void)memset(reserved_field_, 0, sizeof(reserved_field_));
   }
   /**
    * 获取shape size，所谓shape size是指本shape中包含的element数量
@@ -62,7 +65,7 @@ class Tensor {
    * @tparam T 数据类型
    * @return 数据地址
    */
-  template<class T>
+  template <class T>
   const T *GetData() const {
     return static_cast<const T *>(GetAddr());
   }
@@ -71,8 +74,8 @@ class Tensor {
    * @tparam T 数据类型
    * @return 数据地址
    */
-  template<class T>
-  auto GetData() -> T* {
+  template <class T>
+  auto GetData() -> T * {
     return static_cast<T *>(GetAddr());
   }
   /**
@@ -299,9 +302,10 @@ class Tensor {
    * 获取tensor的version
    * @return kTensorV1：不携带非连续描述信息， kTensorV2：携带非连续描述信息
    */
-  TensorVersion GetVersion () const {
+  TensorVersion GetVersion() const {
     return version_;
   }
+
  private:
   static std::unique_ptr<uint8_t[]> NewFollowingTensor(const ge::DataType dt, size_t &total_size) {
     if (ge::AddOverflow(total_size, sizeof(Tensor), total_size)) {
@@ -312,7 +316,7 @@ class Tensor {
       return nullptr;
     }
     auto tensor = reinterpret_cast<Tensor *>(holder.get());
-    new (holder.get()) Tensor({}, {},  dt);
+    new (holder.get()) Tensor({}, {}, dt);
     tensor->SetPlacement(kFollowing);
     tensor->tensor_data_ = TensorData(nullptr, nullptr, total_size - sizeof(Tensor), kFollowing);
     return holder;
@@ -324,47 +328,47 @@ class Tensor {
   void SetVersion(const TensorVersion version) {
     version_ = version;
   }
+
  private:
   StorageShape storage_shape_;
   StorageFormat storage_format_;
   TensorVersion version_;
-  uint8_t reserved_[3]; // Reserved field, 3-byte aligned
+  uint8_t reserved_[3];  // Reserved field, 3-byte aligned
   ge::DataType data_type_;
   TensorData tensor_data_;
-  uint8_t reserved_field_[40]; // Reserved field, 32+8, do not directly use when only 8-byte left
+  uint8_t reserved_field_[40];  // Reserved field, 32+8, do not directly use when only 8-byte left
 
   friend class TensorV2;
 };
 static_assert(std::is_standard_layout<Tensor>::value, "The class Tensor must be a POD");
 
-class TensorV2  {
-public:
+class TensorV2 {
+ public:
   // memset函数misra屏蔽
   TensorV2() : tensor_(), offset_(0) {
     tensor_.SetVersion(kTensorV2);
-    (void) memset(reserved_field_, 0, sizeof(reserved_field_));
+    (void)memset(reserved_field_, 0, sizeof(reserved_field_));
   }
   TensorV2(const StorageShape &storage_shape, const StorageFormat &storage_format, const TensorPlacement placement,
            const ge::DataType data_type, TensorAddress addr)
-         : TensorV2(storage_shape, storage_format, placement, data_type, addr, nullptr) {}
+      : TensorV2(storage_shape, storage_format, placement, data_type, addr, nullptr) {}
   TensorV2(const StorageShape &storage_shape, const StorageFormat &storage_format, ge::DataType data_type)
-         : tensor_(storage_shape, storage_format, data_type), offset_(0) {
+      : tensor_(storage_shape, storage_format, data_type), offset_(0) {
     tensor_.SetVersion(kTensorV2);
-    (void) memset(reserved_field_, 0, sizeof(reserved_field_));
+    (void)memset(reserved_field_, 0, sizeof(reserved_field_));
   }
   TensorV2(const StorageShape &storage_shape, const StorageFormat &storage_format, const TensorPlacement placement,
            const ge::DataType data_type, TensorAddress addr, TensorAddrManager manager)
-         : tensor_(storage_shape, storage_format, placement, data_type, addr, manager), offset_(0) {
+      : tensor_(storage_shape, storage_format, placement, data_type, addr, manager), offset_(0) {
     tensor_.SetVersion(kTensorV2);
-    (void) memset(reserved_field_, 0, sizeof(reserved_field_));
+    (void)memset(reserved_field_, 0, sizeof(reserved_field_));
   }
   TensorV2(const StorageShape &storage_shape, const StorageFormat &storage_format, const TensorPlacement placement,
-           const ge::DataType data_type, TensorAddress addr, TensorAddrManager manager,
-           const Stride &stride, const int64_t offset)
-         : tensor_(storage_shape, storage_format, placement, data_type, addr, manager),
-           stride_(stride), offset_(offset) {
+           const ge::DataType data_type, TensorAddress addr, TensorAddrManager manager, const Stride &stride,
+           const int64_t offset)
+      : tensor_(storage_shape, storage_format, placement, data_type, addr, manager), stride_(stride), offset_(offset) {
     tensor_.SetVersion(kTensorV2);
-    (void) memset(reserved_field_, 0, sizeof(reserved_field_));
+    (void)memset(reserved_field_, 0, sizeof(reserved_field_));
   }
   /**
    * 获取shape size，所谓shape size是指本shape中包含的element数量
@@ -378,7 +382,7 @@ public:
    * @tparam T 数据类型
    * @return 数据地址
    */
-  template<class T>
+  template <class T>
   const T *GetData() const {
     return static_cast<const T *>(GetAddr());
   }
@@ -387,8 +391,8 @@ public:
    * @tparam T 数据类型
    * @return 数据地址
    */
-  template<class T>
-  auto GetData() -> T* {
+  template <class T>
+  auto GetData() -> T * {
     return static_cast<T *>(GetAddr());
   }
   /**
@@ -613,7 +617,7 @@ public:
    * 获取tensor的version
    * @return kTensorV1：不携带非连续描述信息， kTensorV2：携带非连续描述信息
    */
-  TensorVersion GetVersion () const {
+  TensorVersion GetVersion() const {
     return tensor_.version_;
   }
   /**
@@ -631,9 +635,9 @@ public:
     return offset_;
   }
   /**
-  * 获取可写的stride引用
-  * @return 可写的stride引用
-  */
+   * 获取可写的stride引用
+   * @return 可写的stride引用
+   */
   Stride &MutableStride() {
     return stride_;
   }
@@ -644,7 +648,8 @@ public:
   void SetOffset(const int64_t offset) {
     offset_ = offset;
   }
-private:
+
+ private:
   static std::unique_ptr<uint8_t[]> NewFollowingTensor(const ge::DataType dt, size_t &total_size) {
     if (ge::AddOverflow(total_size, sizeof(TensorV2), total_size)) {
       return nullptr;
@@ -654,16 +659,17 @@ private:
       return nullptr;
     }
     auto tensor = reinterpret_cast<TensorV2 *>(holder.get());
-    new (holder.get()) TensorV2({}, {},  dt);
+    new (holder.get()) TensorV2({}, {}, dt);
     tensor->tensor_.SetPlacement(kFollowing);
     tensor->tensor_.tensor_data_ = TensorData(nullptr, nullptr, total_size - sizeof(TensorV2), kFollowing);
     return holder;
   }
-private:
+
+ private:
   Tensor tensor_;
   Stride stride_;
   int64_t offset_;
-  uint8_t reserved_field_[40]; // Reserved field, 32+8, do not directly use when only 8-byte left
+  uint8_t reserved_field_[40];  // Reserved field, 32+8, do not directly use when only 8-byte left
 };
 static_assert(std::is_standard_layout<TensorV2>::value, "The class TensorV2 must be a POD");
 }  // namespace gert

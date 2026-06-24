@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -82,7 +82,7 @@ std::string GetRegulatedName(const std::string name);
  * @param input
  * @return
  */
-std::string GetSanitizedName(const std::string& input);
+std::string GetSanitizedName(const std::string &input);
 
 /**
  * @ingroup domi_common
@@ -102,7 +102,7 @@ ge::graphStatus GetBinFromFile(const std::string &path, ge::char_t *buffer, size
  * @param [in] data_len store write size
  * @return graphStatus GRAPH_SUCCESS: success, OTHERS: fail.
  */
-ge::graphStatus WriteBinToFile(const int32_t fd, const ge::char_t * const data, size_t data_len);
+ge::graphStatus WriteBinToFile(const int32_t fd, const ge::char_t *const data, size_t data_len);
 
 /**
  * @ingroup domi_common
@@ -112,7 +112,7 @@ ge::graphStatus WriteBinToFile(const int32_t fd, const ge::char_t * const data, 
  * @param [in] length store read size
  * @return graphStatus GRAPH_SUCCESS: success, OTHERS: fail.
  */
-ge::graphStatus SaveBinToFile(const char * const data, size_t length, const std::string &file_path);
+ge::graphStatus SaveBinToFile(const char *const data, size_t length, const std::string &file_path);
 
 /**
  * @ingroup domi_common
@@ -133,9 +133,9 @@ void SplitFilePath(const std::string &file_path, std::string &dir_path, std::str
 ge::Status GetAscendWorkPath(std::string &ascend_work_path);
 
 int32_t Scandir(const CHAR *path, mmDirent ***entry_list, mmFilter filter_func, mmSort sort);
-} // namespace metadef
+}  // namespace metadef
 
 namespace ge {
 std::string RealPath(const ge::char_t *path);
-} // namespace ge
-#endif // end COMMON_GRAPH_UTILS_FILE_UTILS_H_
+}  // namespace ge
+#endif  // end COMMON_GRAPH_UTILS_FILE_UTILS_H_

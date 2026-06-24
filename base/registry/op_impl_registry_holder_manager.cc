@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -37,7 +37,7 @@ void CloseHandle(void *&handle) {
   }
   handle = nullptr;
 }
-}
+}  // namespace
 
 OpImplRegistryHolder::~OpImplRegistryHolder() {
   types_to_impl_.clear();
@@ -66,11 +66,8 @@ ge::graphStatus OmOpImplRegistryHolder::CreateOmOppDir(std::string &opp_dir) con
   if (opp_dir.back() != '/') {
     opp_dir += '/';
   }
-  opp_dir += ".ascend_temp/.om_exe_data/"
-      + std::to_string(mmGetPid())
-      + "_" + std::to_string(mmGetTid())
-      + "_" + std::to_string(load_so_count++)
-      + "/";
+  opp_dir += ".ascend_temp/.om_exe_data/" + std::to_string(mmGetPid()) + "_" + std::to_string(mmGetTid()) + "_" +
+             std::to_string(load_so_count++) + "/";
   GELOGD("opp_dir is %s", opp_dir.c_str());
 
   GE_ASSERT_TRUE(mmAccess2(opp_dir.c_str(), M_F_OK) != EN_OK);
@@ -96,13 +93,13 @@ ge::graphStatus OmOpImplRegistryHolder::RmOmOppDir(const std::string &opp_dir) c
 }
 
 template <class TypesToImplT, class OpImplFunctionsT, class GetImplFunctionsT>
-ge::graphStatus GetImplFunc(void* impl_func, size_t impl_num, void* types_to_impl_map) {
+ge::graphStatus GetImplFunc(void *impl_func, size_t impl_num, void *types_to_impl_map) {
   if (impl_func == nullptr || types_to_impl_map == nullptr) {
     GELOGE(ge::FAILED, "Input is nullptr");
     return ge::GRAPH_FAILED;
   }
   const auto get_impl_funcs = reinterpret_cast<GetImplFunctionsT>(impl_func);
-  auto impl_funcs = std::unique_ptr<TypesToImplT[]>(new(std::nothrow) TypesToImplT[impl_num]);
+  auto impl_funcs = std::unique_ptr<TypesToImplT[]>(new (std::nothrow) TypesToImplT[impl_num]);
   if (impl_funcs == nullptr) {
     GELOGE(ge::FAILED, "New unique ptr failed");
     return ge::GRAPH_FAILED;
@@ -112,7 +109,7 @@ ge::graphStatus GetImplFunc(void* impl_func, size_t impl_num, void* types_to_imp
     GELOGE(ge::FAILED, "GetOpImplFunctions execute failed");
     return ge::GRAPH_FAILED;
   }
-  auto types_to_impl = reinterpret_cast<std::map<OpImplRegisterV2::OpType, OpImplFunctionsT>*>(types_to_impl_map);
+  auto types_to_impl = reinterpret_cast<std::map<OpImplRegisterV2::OpType, OpImplFunctionsT> *>(types_to_impl_map);
   for (size_t i = 0U; i < impl_num; ++i) {
     types_to_impl->insert({impl_funcs[i].op_type, impl_funcs[i].funcs});
     GELOGD("impl_funcs[%zu], op type: %s", i, impl_funcs[i].op_type);
@@ -120,13 +117,13 @@ ge::graphStatus GetImplFunc(void* impl_func, size_t impl_num, void* types_to_imp
   return ge::GRAPH_SUCCESS;
 }
 
-ge::graphStatus GetCtImplFunc(void* impl_func, size_t impl_num, void* types_to_impl_map) {
+ge::graphStatus GetCtImplFunc(void *impl_func, size_t impl_num, void *types_to_impl_map) {
   if (impl_func == nullptr || types_to_impl_map == nullptr) {
     GELOGE(ge::FAILED, "Input is nullptr");
     return ge::GRAPH_FAILED;
   }
   const auto get_impl_funcs = reinterpret_cast<GetCtImplFunctions>(impl_func);
-  auto impl_funcs = std::unique_ptr<TypesToCtImpl[]>(new(std::nothrow) TypesToCtImpl[impl_num]);
+  auto impl_funcs = std::unique_ptr<TypesToCtImpl[]>(new (std::nothrow) TypesToCtImpl[impl_num]);
   if (impl_funcs == nullptr) {
     GELOGE(ge::FAILED, "New unique ptr failed");
     return ge::GRAPH_FAILED;
@@ -136,15 +133,16 @@ ge::graphStatus GetCtImplFunc(void* impl_func, size_t impl_num, void* types_to_i
     GELOGE(ge::FAILED, "GetOpImplFunctions execute failed");
     return ge::GRAPH_FAILED;
   }
-  auto types_to_ct_impl = reinterpret_cast<std::map<OpCtImplKernelRegistry::OpType,
-                                                    OpCtImplKernelRegistry::OpCtImplFunctions>*>(types_to_impl_map);
+  auto types_to_ct_impl =
+      reinterpret_cast<std::map<OpCtImplKernelRegistry::OpType, OpCtImplKernelRegistry::OpCtImplFunctions> *>(
+          types_to_impl_map);
   for (size_t i = 0U; i < impl_num; ++i) {
     types_to_ct_impl->insert({impl_funcs[i].op_type, impl_funcs[i].funcs});
     GELOGD("ct_impl_funcs[%zu], op type: %s", i, impl_funcs[i].op_type);
   }
   return ge::GRAPH_SUCCESS;
 }
-using ImplGetFunc = std::function<ge::graphStatus(void* impl_func, size_t impl_num, void* types_to_impl_map)>;
+using ImplGetFunc = std::function<ge::graphStatus(void *impl_func, size_t impl_num, void *types_to_impl_map)>;
 
 struct ImplMenu {
   ImplType type;
@@ -175,7 +173,8 @@ ge::graphStatus OpImplRegistryHolder::GetOpImplFunctionsByHandle(const void *han
       return ge::GRAPH_FAILED;
     }
     size_t impl_num = get_impl_num();
-    GELOGI("so_path: %s, get_reg_num_func: %s, get_impl_num: %zu", so_path.c_str(), impl_menu.get_reg_num_func.c_str(), impl_num);
+    GELOGI("so_path: %s, get_reg_num_func: %s, get_impl_num: %zu", so_path.c_str(), impl_menu.get_reg_num_func.c_str(),
+           impl_num);
     if ((impl_num == 0U) && !impl_menu.need_check_empty) {
       continue;
     }
@@ -196,7 +195,7 @@ ge::graphStatus OpImplRegistryHolder::GetOpImplFunctionsByHandle(const void *han
     if (impl_menu.type == ImplType::RT_TYPE && types_v2_to_impl_.empty()) {
       for (auto &it : types_to_impl_) {
         OpImplKernelRegistry::OpImplFunctionsV2 op;
-        static_cast<OpImplKernelRegistry::OpImplFunctions&>(op) = it.second;
+        static_cast<OpImplKernelRegistry::OpImplFunctions &>(op) = it.second;
         types_v2_to_impl_.insert(std::make_pair(it.first, op));
       }
     }
@@ -224,8 +223,8 @@ std::unique_ptr<TypesToImpl[]> OpImplRegistryHolder::GetOpImplFunctionsByHandle(
   GELOGD("get_impl_num: %zu", impl_num);
   GE_ASSERT_TRUE((impl_num != 0U), "get impl num is %zu", impl_num);
 
-  const auto get_impl_funcs
-      = reinterpret_cast<GetImplFunctions>(mmDlsym(const_cast<void *>(handle), "GetOpImplFunctions"));
+  const auto get_impl_funcs =
+      reinterpret_cast<GetImplFunctions>(mmDlsym(const_cast<void *>(handle), "GetOpImplFunctions"));
   if (get_impl_funcs == nullptr) {
     const ge::char_t *error = mmDlerror();
     error = (error == nullptr) ? "" : error;
@@ -233,7 +232,7 @@ std::unique_ptr<TypesToImpl[]> OpImplRegistryHolder::GetOpImplFunctionsByHandle(
     return nullptr;
   }
 
-  auto impl_funcs = std::unique_ptr<TypesToImpl[]>(new(std::nothrow) TypesToImpl[impl_num]);
+  auto impl_funcs = std::unique_ptr<TypesToImpl[]>(new (std::nothrow) TypesToImpl[impl_num]);
   if (impl_funcs == nullptr) {
     GELOGE(ge::FAILED, "New unique ptr failed");
     return nullptr;
@@ -295,8 +294,7 @@ const std::shared_ptr<OpImplRegistryHolder> OpImplRegistryHolderManager::GetOpIm
 }
 
 OpImplRegistryHolderPtr OpImplRegistryHolderManager::GetOrCreateOpImplRegistryHolder(
-    const std::string &so_path,
-    const std::string &so_data,
+    const std::string &so_path, const std::string &so_data,
     const std::function<OpImplRegistryHolderPtr()> &create_func) {
   const std::lock_guard<std::mutex> lock(map_mutex_);
   const auto iter = op_impl_registries_.find(so_data);
@@ -325,7 +323,7 @@ OpImplRegistryHolderManager::~OpImplRegistryHolderManager() {
    * 此处临时地显示地指定这些自注册机制的static变量的析构时机(operator_infer_axis_type_info_funcs等static变量，默认在进程退出前析构)，
    * 显示地指定其在so句柄关闭之前进行析构。
    * */
-  void (*func)() = reinterpret_cast<void(*)()>(mmDlsym(nullptr, "ReleaseOpsRegInfo"));
+  void (*func)() = reinterpret_cast<void (*)()>(mmDlsym(nullptr, "ReleaseOpsRegInfo"));
   if (func != nullptr) {
     func();
   }

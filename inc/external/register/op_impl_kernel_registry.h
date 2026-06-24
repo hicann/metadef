@@ -41,7 +41,7 @@ struct OpImplKernelRegistry {
   using OpType = ge::AscendString;
   using PrivateAttrList = std::vector<std::pair<ge::AscendString, ge::AnyValue>>;
   using PrivateAttrSet = std::unordered_set<ge::AscendString>;
-  using CompileInfoCreatorFunc = void *(*) ();
+  using CompileInfoCreatorFunc = void *(*)();
   using CompileInfoDeleterFunc = void (*)(void *);
   using KernelFunc = UINT32 (*)(KernelContext *context);
   using TilingParseFunc = UINT32 (*)(TilingParseContext *context);

@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -159,7 +159,7 @@ INT32 mmRmdir(const CHAR *lp_path_name) {
   }
 
   const struct dirent *entry = NULL;
-  size_t bufSize = strlen(lp_path_name) + (size_t)(PATH_SIZE + 2); // make sure the length is large enough
+  size_t bufSize = strlen(lp_path_name) + (size_t)(PATH_SIZE + 2);  // make sure the length is large enough
   while ((entry = readdir(dir)) != NULL) {
     if ((strcmp(".", entry->d_name) == MMPA_ZERO) || (strcmp("..", entry->d_name) == MMPA_ZERO)) {
       continue;
@@ -183,8 +183,8 @@ INT32 mmRmdir(const CHAR *lp_path_name) {
 
     childDir = opendir(buf);
     if (childDir != NULL) {
-      (VOID)closedir(childDir);
-      (VOID)mmRmdir(buf);
+      (VOID) closedir(childDir);
+      (VOID) mmRmdir(buf);
       free(buf);
       buf = NULL;
       continue;
@@ -198,7 +198,7 @@ INT32 mmRmdir(const CHAR *lp_path_name) {
     free(buf);
     buf = NULL;
   }
-  (VOID)closedir(dir);
+  (VOID) closedir(dir);
 
   ret = rmdir(lp_path_name);
   if (ret == EN_ERROR) {
@@ -268,21 +268,18 @@ INT32 mmGetFileSize(const CHAR *file_name, ULONGLONG *length) {
   return EN_OK;
 }
 
-INT32 mmScandir(const CHAR *path, mmDirent ***entryList, mmFilter filterFunc,  mmSort sort)
-{
+INT32 mmScandir(const CHAR *path, mmDirent ***entryList, mmFilter filterFunc, mmSort sort) {
   return ge::MmpaStub::GetInstance().GetImpl()->mmScandir(path, entryList, filterFunc, sort);
 }
 
-VOID mmScandirFree(mmDirent **entryList, INT32 count)
-{
+VOID mmScandirFree(mmDirent **entryList, INT32 count) {
   while (count--) {
     free(entryList[count]);
   }
   free(entryList);
 }
 
-INT32 mmAccess2(const CHAR *pathName, INT32 mode)
-{
+INT32 mmAccess2(const CHAR *pathName, INT32 mode) {
   if (pathName == NULL) {
     return EN_INVALID_PARAM;
   }
@@ -293,13 +290,11 @@ INT32 mmAccess2(const CHAR *pathName, INT32 mode)
   return EN_OK;
 }
 
-INT32 mmGetTimeOfDay(mmTimeval *timeVal, mmTimezone *timeZone)
-{
+INT32 mmGetTimeOfDay(mmTimeval *timeVal, mmTimezone *timeZone) {
   return ge::MmpaStub::GetInstance().GetImpl()->mmGetTimeOfDay(timeVal, timeZone);
 }
 
-INT32 mmRealPath(const CHAR *path, CHAR *realPath, INT32 realPathLen)
-{
+INT32 mmRealPath(const CHAR *path, CHAR *realPath, INT32 realPathLen) {
   INT32 ret = EN_OK;
   if ((path == NULL) || (realPath == NULL) || (realPathLen < MMPA_MAX_PATH)) {
     return EN_INVALID_PARAM;
@@ -311,27 +306,25 @@ INT32 mmRealPath(const CHAR *path, CHAR *realPath, INT32 realPathLen)
   return ret;
 }
 
-//INT32 mmGetErrorCode()
+// INT32 mmGetErrorCode()
 //{
 //  return 0;
 //}
 
-INT32 mmIsDir(const CHAR *fileName)
-{
+INT32 mmIsDir(const CHAR *fileName) {
   if (fileName == nullptr) {
     return EN_ERR;
   }
 
-  DIR *pDir = opendir (fileName);
+  DIR *pDir = opendir(fileName);
   if (pDir != nullptr) {
-    (void) closedir (pDir);
+    (void)closedir(pDir);
     return EN_OK;
   }
   return EN_ERR;
 }
 
-INT32 mmGetEnv(const CHAR *name, CHAR *value, UINT32 len)
-{
+INT32 mmGetEnv(const CHAR *name, CHAR *value, UINT32 len) {
   INT32 ret;
   UINT32 envLen = 0;
   if (name == NULL || value == NULL || len == MMPA_ZERO) {
@@ -360,50 +353,43 @@ INT32 mmGetEnv(const CHAR *name, CHAR *value, UINT32 len)
   return EN_OK;
 }
 
-INT32 mmDlclose(VOID *handle)
-{
+INT32 mmDlclose(VOID *handle) {
   if (handle == nullptr) {
     return 1;
   }
   return ge::MmpaStub::GetInstance().GetImpl()->DlClose(handle);
 }
 
-CHAR *mmDlerror()
-{
+CHAR *mmDlerror() {
   return ge::MmpaStub::GetInstance().GetImpl()->Dlerror();
 }
 
-INT32 mmDladdr(VOID *addr, mmDlInfo *info)
-{
+INT32 mmDladdr(VOID *addr, mmDlInfo *info) {
   info->dli_fname = "/tmp/mmDlInfo.txt";
   return 0;
 }
 
-VOID *mmDlopen(const CHAR *fileName, INT32 mode)
-{
+VOID *mmDlopen(const CHAR *fileName, INT32 mode) {
   return ge::MmpaStub::GetInstance().GetImpl()->DlOpen(fileName, mode);
 }
 
 VOID *mmDlsym(VOID *handle, const CHAR *funcName) {
- if ((handle != RTLD_DEFAULT) && (reinterpret_cast<uintptr_t>(handle) < 0x8000)) {
-   return nullptr;
- }
+  if ((handle != RTLD_DEFAULT) && (reinterpret_cast<uintptr_t>(handle) < 0x8000)) {
+    return nullptr;
+  }
   return ge::MmpaStub::GetInstance().GetImpl()->DlSym(handle, funcName);
 }
 
-INT32 mmGetPid()
-{
+INT32 mmGetPid() {
   return (INT32)getpid();
 }
 
-INT32 mmGetErrorCode(VOID)
-{
+INT32 mmGetErrorCode(VOID) {
   INT32 ret = (INT32)errno;
   return ret;
 }
 
-CHAR *mmGetErrorFormatMessage(mmErrorMSg errnum, CHAR *buf, mmSize size)
-{
+CHAR *mmGetErrorFormatMessage(mmErrorMSg errnum, CHAR *buf, mmSize size) {
   if ((buf == NULL) || (size <= 0)) {
     return NULL;
   }

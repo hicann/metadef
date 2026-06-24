@@ -66,7 +66,7 @@ ge::graphStatus TestCalcParamKernelFunc(gert::ExeResGenerationContext *context) 
   return ge::GRAPH_SUCCESS;
 }
 ge::graphStatus TestGenTaskKernelFunc(const gert::ExeResGenerationContext *context,
-    std::vector<std::vector<uint8_t>> &tasks) {
+                                      std::vector<std::vector<uint8_t>> &tasks) {
   return ge::GRAPH_SUCCESS;
 }
 
@@ -102,7 +102,6 @@ struct TilingParseCompileInfo {
 };
 }  // namespace
 class OpImplRegistryUT : public testing::Test {
-
  protected:
   virtual void TearDown() {
     gert::OpImplRegistry::GetInstance().GetAllTypesToImpl().clear();
@@ -110,11 +109,8 @@ class OpImplRegistryUT : public testing::Test {
 };
 
 TEST_F(OpImplRegistryUT, Register_impl_null) {
-  EXPECT_NO_THROW(
-    gert::OpImplRegisterV2 reg("Test");
-    reg.HostInputs({0, 2, 128});
-    reg.TilingInputsDataDependency({0, 1});
-  );
+  EXPECT_NO_THROW(gert::OpImplRegisterV2 reg("Test"); reg.HostInputs({0, 2, 128});
+                  reg.TilingInputsDataDependency({0, 1}););
 }
 
 TEST_F(OpImplRegistryUT, OpImplFunctionsTestConvert) {
@@ -169,25 +165,19 @@ TEST_F(OpImplRegistryUT, Register_Success_RegisterAll) {
       .PrivateAttr("G", std::vector<float>({10.0F, 20.0F}))
       .InputsDataDependency({0, 1, 3, 5});
 
-  IMPL_OP(TestFoo_tilingDepend)
-      .TilingInputsDataDependency({0, 1, 128})
-      .TilingInputsDataDependency({0});
+  IMPL_OP(TestFoo_tilingDepend).TilingInputsDataDependency({0, 1, 128}).TilingInputsDataDependency({0});
 
   IMPL_OP(TestFoo_tilingDependPlacement)
-        .TilingInputsDataDependency({0, 1}, {gert::TilingPlacement::TILING_ON_HOST,
-                                             gert::TilingPlacement::TILING_ON_AICPU})
-        .TilingInputsDataDependency({0}, {gert::TilingPlacement::TILING_ON_AICPU, static_cast<gert::TilingPlacement>(16)});
+      .TilingInputsDataDependency({0, 1},
+                                  {gert::TilingPlacement::TILING_ON_HOST, gert::TilingPlacement::TILING_ON_AICPU})
+      .TilingInputsDataDependency({0},
+                                  {gert::TilingPlacement::TILING_ON_AICPU, static_cast<gert::TilingPlacement>(16)});
 
-  IMPL_OP(TestFoo_error)
-      .TilingInputsDataDependency({0, 1, 128})
-      .InputsDataDependency({0, 1, 3, 5});
+  IMPL_OP(TestFoo_error).TilingInputsDataDependency({0, 1, 128}).InputsDataDependency({0, 1, 3, 5});
 
-  IMPL_OP(TestFoo_error2)
-      .InputsDataDependency({0, 1, 3, 5})
-      .TilingInputsDataDependency({0, 1, 2, 128});
+  IMPL_OP(TestFoo_error2).InputsDataDependency({0, 1, 3, 5}).TilingInputsDataDependency({0, 1, 2, 128});
 
-  IMPL_OP(TestFoo_nullableOutputs)
-      .NullableOutputs({0, 1, 4, 128, 3});
+  IMPL_OP(TestFoo_nullableOutputs).NullableOutputs({0, 1, 4, 128, 3});
 
   funcs = gert::OpImplRegistry::GetInstance().GetOpImpl("TestFoo_tilingDepend");
   EXPECT_TRUE(funcs->IsTilingInputDataDependency(0U));
@@ -311,7 +301,6 @@ TEST_F(OpImplRegistryUT, Register_Success_RegisterMultiple) {
       .InferDataType(TestInferDataTypeFunc)
       .PrivateAttr("A", std::vector<float>({10.0F, 20.0F}))
       .InputsDataDependency({0, 1, 3, 5});
-
 
   funcs = gert::OpImplRegistry::GetInstance().GetOpImpl("TestFoo1");
   ASSERT_NE(funcs, nullptr);
@@ -470,7 +459,8 @@ TEST_F(OpImplRegistryUT, Register_MergeOk_OneOpMultipleTimes2) {
   ASSERT_NE(funcs->private_attrs[6].second.Get<std::vector<float>>(), nullptr);
   ASSERT_EQ(funcs->private_attrs[6].second.Get<std::vector<float>>()->size(), 2U);
   EXPECT_FLOAT_EQ(funcs->private_attrs[6].second.Get<std::vector<float>>()->at(0), 10.0);
-  EXPECT_FLOAT_EQ(funcs->private_attrs[6].second.Get<std::vector<float>>()->at(1), 20.0);}
+  EXPECT_FLOAT_EQ(funcs->private_attrs[6].second.Get<std::vector<float>>()->at(1), 20.0);
+}
 
 TEST_F(OpImplRegistryUT, Register_DefaultValue_WhenNotRegister) {
   IMPL_OP(TestFoo);
@@ -727,9 +717,7 @@ TEST_F(OpImplRegistryUT, RegisterBoolPrivateAttrOk) {
 TEST_F(OpImplRegistryUT, RegisterMixPrivateAttrOk) {
   const char *str_attr_val = "Test";
   std::vector<int64_t> listint_attr_val = {10, 20, 30};
-  IMPL_OP(TestMixOpdesc).PrivateAttr("attr1")
-      .PrivateAttr("attr2", str_attr_val)
-      .PrivateAttr("attr3", listint_attr_val);
+  IMPL_OP(TestMixOpdesc).PrivateAttr("attr1").PrivateAttr("attr2", str_attr_val).PrivateAttr("attr3", listint_attr_val);
   const char *op_type = "TestMixOpdesc";
   const auto &private_attrs = gert::OpImplRegistry::GetInstance().GetPrivateAttrs(op_type);
   constexpr size_t private_attr_size = 3UL;
@@ -756,7 +744,7 @@ TEST_F(OpImplRegistryUT, GetOpImplFunctionsOk) {
   IMPL_OP(TestConv2D).InferShape(TestInferShapeFunc1).InferDataType(TestInferDataTypeFunc);
 
   auto impl_num = GetRegisteredOpNum();
-  auto impl_funcs = std::unique_ptr<TypesToImpl[]>(new(std::nothrow) TypesToImpl[impl_num]);
+  auto impl_funcs = std::unique_ptr<TypesToImpl[]>(new (std::nothrow) TypesToImpl[impl_num]);
   auto ret = GetOpImplFunctions(reinterpret_cast<TypesToImpl *>(impl_funcs.get()), impl_num);
   EXPECT_EQ(ret, ge::GRAPH_SUCCESS);
   bool check = false;
@@ -775,7 +763,7 @@ TEST_F(OpImplRegistryUT, GetOpImplFunctionsERR) {
   IMPL_OP(TestConv2D).InferShape(TestInferShapeFunc1).InferDataType(TestInferDataTypeFunc);
 
   auto impl_num = GetRegisteredOpNum();
-  auto impl_funcs = std::unique_ptr<TypesToImpl[]>(new(std::nothrow) TypesToImpl[impl_num]);
+  auto impl_funcs = std::unique_ptr<TypesToImpl[]>(new (std::nothrow) TypesToImpl[impl_num]);
   auto ret = GetOpImplFunctions(reinterpret_cast<TypesToImpl *>(impl_funcs.get()), 10);
   EXPECT_EQ(ret, ge::GRAPH_FAILED);
 }
@@ -834,7 +822,7 @@ TEST_F(OpImplRegistryUT, Retpeat_register_Both_InferOutDataTypeByFirstInput_Infe
   ASSERT_EQ(funcs, nullptr);
 
   IMPL_OP(TestFoo)
-  .InferShape(TestInferShapeFunc1)
+      .InferShape(TestInferShapeFunc1)
       .InferShapeRange(TestInferShapeRangeFunc1)
       .InferOutDataTypeSameWithFirstInput()
       .InferDataType(TestInferDataTypeFunc);
@@ -872,7 +860,7 @@ TEST_F(OpImplRegistryUT, OutputShapeDependComputeAppendTest) {
   ASSERT_EQ(funcs, nullptr);
 
   IMPL_OP(TestFoo)
-  .InferShape(TestInferShapeFunc1)
+      .InferShape(TestInferShapeFunc1)
       .InferShapeRange(TestInferShapeRangeFunc1)
       .InferOutDataTypeSameWithFirstInput()
       .InferDataType(TestInferDataTypeFunc)
@@ -891,7 +879,7 @@ TEST_F(OpImplRegistryUT, OutputShapeDependComputeDuplicateTest) {
   ASSERT_EQ(funcs, nullptr);
 
   IMPL_OP(TestFoo)
-  .InferShape(TestInferShapeFunc1)
+      .InferShape(TestInferShapeFunc1)
       .InferShapeRange(TestInferShapeRangeFunc1)
       .InferOutDataTypeSameWithFirstInput()
       .InferDataType(TestInferDataTypeFunc)
@@ -910,7 +898,7 @@ TEST_F(OpImplRegistryUT, OutputShapeDependComputeTest_error) {
   ASSERT_EQ(funcs, nullptr);
 
   IMPL_OP(TestFoo)
-  .InferShape(TestInferShapeFunc1)
+      .InferShape(TestInferShapeFunc1)
       .InferShapeRange(TestInferShapeRangeFunc1)
       .InferOutDataTypeSameWithFirstInput()
       .InferDataType(TestInferDataTypeFunc)
@@ -927,14 +915,12 @@ TEST_F(OpImplRegistryUT, OpImplSymbolSpaceRegistryTest) {
   ASSERT_EQ(funcs, nullptr);
 
   IMPL_OP_INFER_SYMBOL_SHAPE(TestFoo).InferSymbolShape(TestInferSymbolShapeFunc);
-  const auto *const space_registry =
-      gert::DefaultOpImplSpaceRegistry::GetInstance().GetDefaultSpaceRegistry().get();
+  const auto *const space_registry = gert::DefaultOpImplSpaceRegistry::GetInstance().GetDefaultSpaceRegistry().get();
   ASSERT_NE(space_registry, nullptr);
   const auto funcs1 = space_registry->GetOpImpl("TestFoo");
   ASSERT_NE(funcs1, nullptr);
   ASSERT_NE(funcs1->infer_symbol_shape, nullptr);
 }
-
 
 TEST_F(OpImplRegistryUT, register_gen_task_and_calc_running_param_success) {
   auto funcs = gert::OpImplRegistry::GetInstance().GetOpImpl("TestFoo");
@@ -958,7 +944,7 @@ TEST_F(OpImplRegistryUT, register_gen_task_and_calc_running_param_success) {
       .CheckSupport(TestCheckSupportKernelFunc)
       .OpSelectFormat(TestOpSelectFormatKernelFunc);
   auto impl_num = GetRegisteredOpNum();
-  auto impl_funcs = std::unique_ptr<TypesToImplV2[]>(new(std::nothrow) TypesToImplV2[impl_num]);
+  auto impl_funcs = std::unique_ptr<TypesToImplV2[]>(new (std::nothrow) TypesToImplV2[impl_num]);
   auto ret = GetOpImplFunctionsV2(reinterpret_cast<TypesToImplV2 *>(impl_funcs.get()), impl_num);
   EXPECT_NE(ret, ge::GRAPH_FAILED);
   for (size_t i = 0; i < impl_num; ++i) {
@@ -973,16 +959,13 @@ TEST_F(OpImplRegistryUT, RegisterExceptionFuncTest) {
   auto funcs = gert::OpImplRegistry::GetInstance().GetOpImpl("TestExceptionOp");
   ASSERT_EQ(funcs, nullptr);
 
-  IMPL_OP(TestExceptionOp)
-      .InferShape(TestInferShapeFunc1)
-      .ExceptionDumpParseFunc(TestExceptionFunc1);
+  IMPL_OP(TestExceptionOp).InferShape(TestInferShapeFunc1).ExceptionDumpParseFunc(TestExceptionFunc1);
 
   funcs = gert::OpImplRegistry::GetInstance().GetOpImpl("TestExceptionOp");
   ASSERT_NE(funcs, nullptr);
   EXPECT_EQ(funcs->exception_func, &TestExceptionFunc1);
 
-  IMPL_OP(TestExceptionOp)
-      .ExceptionDumpParseFunc(TestExceptionFunc2);
+  IMPL_OP(TestExceptionOp).ExceptionDumpParseFunc(TestExceptionFunc2);
 
   funcs = gert::OpImplRegistry::GetInstance().GetOpImpl("TestExceptionOp");
   ASSERT_NE(funcs, nullptr);
@@ -994,9 +977,7 @@ TEST_F(OpImplRegistryUT, RegisterExceptionFuncWithNullTest) {
   auto funcs = gert::OpImplRegistry::GetInstance().GetOpImpl("TestExceptionOpNull");
   ASSERT_EQ(funcs, nullptr);
 
-  IMPL_OP(TestExceptionOpNull)
-      .InferShape(TestInferShapeFunc1)
-      .ExceptionDumpParseFunc(nullptr);
+  IMPL_OP(TestExceptionOpNull).InferShape(TestInferShapeFunc1).ExceptionDumpParseFunc(nullptr);
 
   funcs = gert::OpImplRegistry::GetInstance().GetOpImpl("TestExceptionOpNull");
   ASSERT_NE(funcs, nullptr);
@@ -1008,7 +989,7 @@ TEST_F(OpImplRegistryUT, GetOpImplFunctionsWithExceptionFuncTest) {
   IMPL_OP(TestExceptionOpForApi).ExceptionDumpParseFunc(TestExceptionFunc1);
 
   auto impl_num = GetRegisteredOpNum();
-  auto impl_funcs = std::unique_ptr<TypesToImplV2[]>(new(std::nothrow) TypesToImplV2[impl_num]);
+  auto impl_funcs = std::unique_ptr<TypesToImplV2[]>(new (std::nothrow) TypesToImplV2[impl_num]);
   auto ret = GetOpImplFunctionsV2(reinterpret_cast<TypesToImplV2 *>(impl_funcs.get()), impl_num);
   EXPECT_NE(ret, ge::GRAPH_FAILED);
 

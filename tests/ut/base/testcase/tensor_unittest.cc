@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -16,7 +16,7 @@ TEST_F(TensorUT, ConstructOk_V2) {
   TensorV2 tensor{{{8, 3, 224, 224}, {16, 3, 224, 224}},       // shape
                   {ge::FORMAT_ND, ge::FORMAT_FRACTAL_NZ, {}},  // format
                   kOnDeviceHbm,                                // placement
-                  ge::DT_FLOAT16,                              //dt
+                  ge::DT_FLOAT16,                              // dt
                   nullptr};
   const TensorV2 &t2 = tensor;
 
@@ -35,12 +35,11 @@ TEST_F(TensorUT, ConstructOk_V2) {
   EXPECT_EQ(t2.GetData<int64_t>(), nullptr);
 }
 
-
 TEST_F(TensorUT, GetDataAddrFollowingOk_V2) {
   TensorV2 tensor{{{8, 3, 224, 224}, {16, 3, 224, 224}},       // shape
                   {ge::FORMAT_ND, ge::FORMAT_FRACTAL_NZ, {}},  // format
-                  kFollowing,                                // placement
-                  ge::DT_FLOAT16,                              //dt
+                  kFollowing,                                  // placement
+                  ge::DT_FLOAT16,                              // dt
                   nullptr};
   const TensorV2 &t2 = tensor;
 
@@ -60,8 +59,8 @@ TEST_F(TensorUT, GetDataAddrFollowingOk_V2) {
 TEST_F(TensorUT, GetCopiedDataAddrFollowingOk_V2) {
   TensorV2 tensor{{{8, 3, 224, 224}, {16, 3, 224, 224}},       // shape
                   {ge::FORMAT_ND, ge::FORMAT_FRACTAL_NZ, {}},  // format
-                  kFollowing,                                // placement
-                  ge::DT_FLOAT16,                              //dt
+                  kFollowing,                                  // placement
+                  ge::DT_FLOAT16,                              // dt
                   nullptr};
   TensorV2 t2 = {{}, {}, {}, {}, nullptr};
   memcpy(static_cast<void *>(&t2), static_cast<void *>(&tensor), sizeof(tensor));
@@ -82,12 +81,12 @@ TEST_F(TensorUT, GetCopiedDataAddrFollowingOk_V2) {
 TEST_F(TensorUT, SetGetShapeOk_V2) {
   TensorV2 t2 = {{}, {}, {}, {}, nullptr};
   const TensorV2 &ct = t2;
-  t2.MutableOriginShape() = Shape{8,3,224,224};
-  t2.MutableStorageShape() = Shape{8,1,224,224,16};
-  EXPECT_EQ(t2.GetOriginShape(), Shape({8,3,224,224}));
-  EXPECT_EQ(t2.GetStorageShape(), Shape({8,1,224,224,16}));
-  EXPECT_EQ(ct.GetOriginShape(), Shape({8,3,224,224}));
-  EXPECT_EQ(ct.GetStorageShape(), Shape({8,1,224,224,16}));
+  t2.MutableOriginShape() = Shape{8, 3, 224, 224};
+  t2.MutableStorageShape() = Shape{8, 1, 224, 224, 16};
+  EXPECT_EQ(t2.GetOriginShape(), Shape({8, 3, 224, 224}));
+  EXPECT_EQ(t2.GetStorageShape(), Shape({8, 1, 224, 224, 16}));
+  EXPECT_EQ(ct.GetOriginShape(), Shape({8, 3, 224, 224}));
+  EXPECT_EQ(ct.GetStorageShape(), Shape({8, 1, 224, 224, 16}));
 }
 
 TEST_F(TensorUT, SetGetFormatOk_V2) {
@@ -154,7 +153,6 @@ TEST_F(TensorUT, GetTensorSizeOk_V2) {
   EXPECT_EQ(t2.GetSize(), 24);
 }
 
-
 TEST_F(TensorUT, CreateFollowingCheckTotalSize_V2) {
   size_t total_size;
   auto ptr = TensorV2::CreateFollowing(32, ge::DataType::DT_INT8, total_size);
@@ -203,7 +201,7 @@ TEST_F(TensorUT, GetExpandDimsTypeOk_V2) {
   TensorV2 tensor{{{8, 3, 224, 224}, {16, 3, 224, 224}},       // shape
                   {ge::FORMAT_ND, ge::FORMAT_FRACTAL_NZ, {}},  // format
                   kOnDeviceHbm,                                // placement
-                  ge::DT_FLOAT16,                              //dt
+                  ge::DT_FLOAT16,                              // dt
                   nullptr};
 
   ExpandDimsType expend_dims_type(1);
@@ -215,7 +213,7 @@ TEST_F(TensorUT, GetStorageFormatOk_V2) {
   TensorV2 tensor{{{8, 3, 224, 224}, {16, 3, 224, 224}},       // shape
                   {ge::FORMAT_ND, ge::FORMAT_FRACTAL_NZ, {}},  // format
                   kOnDeviceHbm,                                // placement
-                  ge::DT_FLOAT16,                              //dt
+                  ge::DT_FLOAT16,                              // dt
                   nullptr};
   StorageFormat storage_format{ge::FORMAT_ND, ge::FORMAT_ND, {}};
   tensor.MutableFormat() = storage_format;
@@ -226,10 +224,10 @@ TEST_F(TensorUT, GetOriginShapeOk_V2) {
   TensorV2 tensor{{{8, 3, 224, 224}, {16, 3, 224, 224}},       // shape
                   {ge::FORMAT_ND, ge::FORMAT_FRACTAL_NZ, {}},  // format
                   kOnDeviceHbm,                                // placement
-                  ge::DT_FLOAT16,                              //dt
+                  ge::DT_FLOAT16,                              // dt
                   nullptr};
   EXPECT_EQ(tensor.GetOriginShape(), Shape({8, 3, 224, 224}));
-  Shape modify_shape{1, 2, 3, 4 , 5};
+  Shape modify_shape{1, 2, 3, 4, 5};
   tensor.MutableOriginShape() = modify_shape;
   EXPECT_EQ(tensor.GetOriginShape(), modify_shape);
 }
@@ -238,19 +236,19 @@ TEST_F(TensorUT, GetStorageShapeOk_V2) {
   TensorV2 tensor{{{8, 3, 224, 224}, {16, 3, 224, 224}},       // shape
                   {ge::FORMAT_ND, ge::FORMAT_FRACTAL_NZ, {}},  // format
                   kOnDeviceHbm,                                // placement
-                  ge::DT_FLOAT16,                              //dt
+                  ge::DT_FLOAT16,                              // dt
                   nullptr};
   StorageShape storage_shape{{8, 3, 224, 224}, {16, 3, 224, 224}};
-  const StorageShape& const_storage_shape = tensor.GetShape();
+  const StorageShape &const_storage_shape = tensor.GetShape();
   EXPECT_EQ(const_storage_shape, storage_shape);
-  StorageShape& mutable_storage_shape = tensor.GetShape();
+  StorageShape &mutable_storage_shape = tensor.GetShape();
   EXPECT_EQ(mutable_storage_shape, storage_shape);
 
   mutable_storage_shape.MutableOriginShape() = {10, 10, 10, 10, 10};
   mutable_storage_shape.MutableStorageShape() = {20, 20, 20, 20, 20};
 
-  EXPECT_EQ(mutable_storage_shape, StorageShape({10, 10 ,10, 10, 10}, {20, 20, 20, 20, 20}));
-  EXPECT_EQ(mutable_storage_shape.GetOriginShape(), Shape({10, 10 ,10, 10, 10}));
+  EXPECT_EQ(mutable_storage_shape, StorageShape({10, 10, 10, 10, 10}, {20, 20, 20, 20, 20}));
+  EXPECT_EQ(mutable_storage_shape.GetOriginShape(), Shape({10, 10, 10, 10, 10}));
   EXPECT_EQ(mutable_storage_shape.GetStorageShape(), Shape({20, 20, 20, 20, 20}));
   EXPECT_EQ(tensor.GetShape().GetStorageShape(), Shape({20, 20, 20, 20, 20}));
   EXPECT_EQ(tensor.GetShapeSize(), 3200000);

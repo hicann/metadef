@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -25,11 +25,11 @@
 #include "common/ge_common/util.h"
 
 namespace gert {
-OpImplSpaceRegistry::OpImplSpaceRegistry() : std::enable_shared_from_this<OpImplSpaceRegistry>(),
-                                             impl_(std::make_shared<OpImplSpaceRegistryV2>()) {}
+OpImplSpaceRegistry::OpImplSpaceRegistry()
+    : std::enable_shared_from_this<OpImplSpaceRegistry>(), impl_(std::make_shared<OpImplSpaceRegistryV2>()) {}
 
-OpImplSpaceRegistry::OpImplSpaceRegistry(OpImplSpaceRegistryV2Ptr ptr) :
-  std::enable_shared_from_this<OpImplSpaceRegistry>(), impl_(std::move(ptr)) {}
+OpImplSpaceRegistry::OpImplSpaceRegistry(OpImplSpaceRegistryV2Ptr ptr)
+    : std::enable_shared_from_this<OpImplSpaceRegistry>(), impl_(std::move(ptr)) {}
 
 ge::graphStatus OpImplSpaceRegistry::AddRegistry(const std::shared_ptr<OpImplRegistryHolder> &registry_holder) {
   GE_ASSERT_NOTNULL(impl_);
@@ -83,15 +83,14 @@ ge::graphStatus OpImplSpaceRegistry::ConvertSoToRegistry(const std::string &so_p
          static_cast<int32_t>(opp_impl_version));
   const auto opp_version_tag = static_cast<gert::OppImplVersionTag>(opp_impl_version);
   GE_ASSERT_TRUE(opp_version_tag < gert::OppImplVersionTag::kVersionEnd);
-  auto space_registry_v2 =
-      gert::DefaultOpImplSpaceRegistryV2::GetInstance().GetSpaceRegistry(opp_version_tag);
+  auto space_registry_v2 = gert::DefaultOpImplSpaceRegistryV2::GetInstance().GetSpaceRegistry(opp_version_tag);
   if (space_registry_v2 == nullptr) {
     space_registry_v2 = std::make_shared<gert::OpImplSpaceRegistryV2>();
     GE_CHECK_NOTNULL(space_registry_v2);
     (void)gert::DefaultOpImplSpaceRegistryV2::GetInstance().SetSpaceRegistry(space_registry_v2, opp_version_tag);
   }
   OppSoDesc opp_so_desc({ge::AscendString(so_path.c_str())},
-    ge::AscendString(metadef::PluginManager::GetSoPackageName(so_path).c_str()));
+                        ge::AscendString(metadef::PluginManager::GetSoPackageName(so_path).c_str()));
   return space_registry_v2->AddSoToRegistry(opp_so_desc);
 }
 
@@ -136,7 +135,7 @@ void DefaultOpImplSpaceRegistry::SetDefaultSpaceRegistry(const OpImplSpaceRegist
   if (opp_impl_version > ge::OppImplVersion::kVersionEnd) {
     return;
   }
-  (void) DefaultOpImplSpaceRegistryV2::GetInstance().SetSpaceRegistry(
+  (void)DefaultOpImplSpaceRegistryV2::GetInstance().SetSpaceRegistry(
       space_registry != nullptr ? space_registry->impl_ : nullptr,
       static_cast<gert::OppImplVersionTag>(opp_impl_version));
   const auto version = static_cast<gert::OppImplVersionTag>(opp_impl_version);

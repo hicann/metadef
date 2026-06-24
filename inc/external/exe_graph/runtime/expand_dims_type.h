@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -37,7 +37,7 @@ class ExpandDimsType {
   static constexpr size_t kMaxExpandSize = 56;
 
   ExpandDimsType() : size_(0U), mask_(0U) {
-    (void)memset(reserved_, 0, sizeof(reserved_)); // memse函数misra告警屏蔽
+    (void)memset(reserved_, 0, sizeof(reserved_));  // memse函数misra告警屏蔽
   }
 
   /**
@@ -130,14 +130,14 @@ class ExpandDimsType {
         if (shape_pos >= shape.GetDimNum()) {
           return ge::GRAPH_FAILED;
         }
-        (void) out_shape.AppendDim(shape.GetDim(shape_pos++));
+        (void)out_shape.AppendDim(shape.GetDim(shape_pos++));
       } else {
-        (void) out_shape.AppendDim(1);
+        (void)out_shape.AppendDim(1);
       }
     }
 
     for (; shape_pos < shape.GetDimNum(); ++shape_pos) {
-      (void) out_shape.AppendDim(shape.GetDim(shape_pos));
+      (void)out_shape.AppendDim(shape.GetDim(shape_pos));
     }
     return ge::GRAPH_SUCCESS;
   }
@@ -155,7 +155,7 @@ class ExpandDimsType {
     size_t dim_size = shape.GetDimNum();
     size_t cur_dim_size = dim_size;
     while (cur_dim_size++ < size_) {
-      (void) shape.AppendDim(1);
+      (void)shape.AppendDim(1);
     }
 
     // shape:[A,B,1,1] + 1010 -> [A,1,B,1]

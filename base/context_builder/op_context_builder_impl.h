@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -62,8 +62,8 @@ class ContextHolderImpl {
       value.Set(nullptr, nullptr);
     }
   }
-  template<typename T>
-  auto GetContext() const -> T* {
+  template <typename T>
+  auto GetContext() const -> T * {
     return reinterpret_cast<T *>(context_);
   }
 
@@ -104,7 +104,7 @@ class ContextBuilderImpl {
 
   void SetTilingData(const void *tiling_data, gert::Chain::Deleter deleter) {
     if (tiling_info_.tiling_data_.first != nullptr && tiling_info_.tiling_data_.second != nullptr) {
-      tiling_info_.tiling_data_.second(const_cast<void*>(tiling_info_.tiling_data_.first));
+      tiling_info_.tiling_data_.second(const_cast<void *>(tiling_info_.tiling_data_.first));
     }
     tiling_info_.tiling_data_ = {tiling_data, deleter};
   }
@@ -123,22 +123,22 @@ class ContextBuilderImpl {
 
   void Inputs(std::vector<void *> inputs) {
     for (auto i : inputs) {
-      (void) input_values_.emplace_back(std::make_pair(i, nullptr));
+      (void)input_values_.emplace_back(std::make_pair(i, nullptr));
     }
   }
 
   void Outputs(std::vector<void *> outputs) {
     for (auto i : outputs) {
-      (void) output_values_.emplace_back(std::make_pair(i, nullptr));
+      (void)output_values_.emplace_back(std::make_pair(i, nullptr));
     }
   }
 
  protected:
   ge::graphStatus BuildCtx(ContextHolderImpl &holder);
   ge::graphStatus InitCompileTimeTD(ComputeNodeInfo &compute_node_info);
-  std::unique_ptr<uint8_t[]> CreateComputeNodeInfoImpl(const std::unique_ptr<uint8_t[]> &attr_buf,
-                                                       size_t attr_size, const OpInfo &op_info,
-                                                       std::vector<std::string> &string_pool, size_t &total_size);
+  std::unique_ptr<uint8_t[]> CreateComputeNodeInfoImpl(const std::unique_ptr<uint8_t[]> &attr_buf, size_t attr_size,
+                                                       const OpInfo &op_info, std::vector<std::string> &string_pool,
+                                                       size_t &total_size);
   ge::graphStatus CreateComputeNodeInfo(ContextHolderImpl &holder);
   ge::graphStatus InitIOInstanceInfo(ComputeNodeInfo &compute_node_info);
   ge::graphStatus SetCompileTimeTd(const ContextTensorDesc &desc, CompileTimeTensorDesc &td) const;
@@ -148,6 +148,7 @@ class ContextBuilderImpl {
   TilingParseInfo tiling_parse_info_;
   std::vector<std::pair<const void *, gert::Chain::Deleter>> input_values_;
   std::vector<std::pair<const void *, gert::Chain::Deleter>> output_values_;
+
  private:
   bool use_data_type_ptr_{false};
 };

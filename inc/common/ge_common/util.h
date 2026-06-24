@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -40,7 +40,7 @@
 // new ge marco
 // Encapsulate common resource releases
 #define GE_MAKE_GUARD_RTMEM(var)  \
-  GE_MAKE_GUARD(var, [&var]() { \
+  GE_MAKE_GUARD(var, [&var]() {   \
     if ((var) != nullptr) {       \
       GE_CHK_RT(rtFreeHost(var)); \
     }                             \
@@ -54,12 +54,12 @@
   })
 
 // For propagating errors when calling a function.
-#define GE_RETURN_IF_ERROR(expr)            \
-  do {                                      \
-    const ge::Status _chk_status = (expr);  \
-    if (_chk_status != ge::SUCCESS) {       \
-      return _chk_status;                   \
-    }                                       \
+#define GE_RETURN_IF_ERROR(expr)           \
+  do {                                     \
+    const ge::Status _chk_status = (expr); \
+    if (_chk_status != ge::SUCCESS) {      \
+      return _chk_status;                  \
+    }                                      \
   } while (false)
 
 #define GE_RETURN_WITH_LOG_IF_ERROR(expr, ...) \
@@ -110,13 +110,13 @@
   } while (false)
 
 // Check if the parameter is null. If yes, return PARAM_INVALID and record the error
-#define GE_CHECK_NOTNULL(val, ...)                                                          \
-  do {                                                                                      \
-    if ((val) == nullptr) {                                                                 \
+#define GE_CHECK_NOTNULL(val, ...)                                                            \
+  do {                                                                                        \
+    if ((val) == nullptr) {                                                                   \
       REPORT_INNER_ERR_MSG("E19999", "Param:" #val " is nullptr, check invalid" __VA_ARGS__); \
-      GELOGE(ge::FAILED, "[Check][Param:" #val "]null is invalid" __VA_ARGS__);             \
-      return ge::PARAM_INVALID;                                                             \
-    }                                                                                       \
+      GELOGE(ge::FAILED, "[Check][Param:" #val "]null is invalid" __VA_ARGS__);               \
+      return ge::PARAM_INVALID;                                                               \
+    }                                                                                         \
   } while (false)
 
 // Check if the parameter is null. If yes, just return and record the error
@@ -165,23 +165,23 @@
   } while (false)
 
 // Check if the value on the left is greater than or equal to the value on the right
-#define GE_CHECK_GE(lhs, rhs)                                       \
-  do {                                                              \
-    if ((lhs) < (rhs)) {                                            \
-      GELOGE(ge::FAILED, "param[%s][%ld] is less than[%s][%ld]",    \
-          #lhs, static_cast<int64_t>(lhs), #rhs, static_cast<int64_t>(rhs)); \
-      return ge::PARAM_INVALID;                                     \
-    }                                                               \
+#define GE_CHECK_GE(lhs, rhs)                                                                           \
+  do {                                                                                                  \
+    if ((lhs) < (rhs)) {                                                                                \
+      GELOGE(ge::FAILED, "param[%s][%ld] is less than[%s][%ld]", #lhs, static_cast<int64_t>(lhs), #rhs, \
+             static_cast<int64_t>(rhs));                                                                \
+      return ge::PARAM_INVALID;                                                                         \
+    }                                                                                                   \
   } while (false)
 
 // Check if the value on the left is less than or equal to the value on the right
-#define GE_CHECK_LE(lhs, rhs)                                          \
-  do {                                                                 \
-    if ((lhs) > (rhs)) {                                               \
-      GELOGE(ge::FAILED, "param[%s][%ld] is greater than[%s][%ld]",    \
-          #lhs, static_cast<int64_t>(lhs), #rhs, static_cast<int64_t>(rhs)); \
-      return ge::PARAM_INVALID;                                        \
-    }                                                                  \
+#define GE_CHECK_LE(lhs, rhs)                                                                              \
+  do {                                                                                                     \
+    if ((lhs) > (rhs)) {                                                                                   \
+      GELOGE(ge::FAILED, "param[%s][%ld] is greater than[%s][%ld]", #lhs, static_cast<int64_t>(lhs), #rhs, \
+             static_cast<int64_t>(rhs));                                                                   \
+      return ge::PARAM_INVALID;                                                                            \
+    }                                                                                                      \
   } while (false)
 
 #define GE_DELETE_NEW_SINGLE(var) \
@@ -195,20 +195,20 @@
 #define GE_DELETE_NEW_ARRAY(var) \
   do {                           \
     if ((var) != nullptr) {      \
-      delete[] (var);            \
+      delete[](var);             \
       (var) = nullptr;           \
     }                            \
   } while (false)
 
-#define GE_FREE_RT_LOG(addr)                                        \
-  do {                                                              \
-    if ((addr) != nullptr) {                                        \
-      const rtError_t error = rtFree(addr);                         \
-      if (error != RT_ERROR_NONE) {                                 \
+#define GE_FREE_RT_LOG(addr)                                            \
+  do {                                                                  \
+    if ((addr) != nullptr) {                                            \
+      const rtError_t error = rtFree(addr);                             \
+      if (error != RT_ERROR_NONE) {                                     \
         GELOGE(ge::RT_FAILED, "Call rtFree failed, error: %#x", error); \
-      }                                                             \
-      (addr) = nullptr;                                             \
-    }                                                               \
+      }                                                                 \
+      (addr) = nullptr;                                                 \
+    }                                                                   \
   } while (false)
 
 namespace ge {
@@ -315,7 +315,8 @@ GE_FUNC_VISIBILITY Status ConvertToInt32(const std::string &str, int32_t &val);
 
 GE_FUNC_VISIBILITY std::string GetErrorNumStr(const int32_t errorNum);
 
-GE_FUNC_VISIBILITY Status CheckCoreNumValidAndConvertToInt32(const std::string &key, const std::string &core_num_str, int32_t &core_num);
+GE_FUNC_VISIBILITY Status CheckCoreNumValidAndConvertToInt32(const std::string &key, const std::string &core_num_str,
+                                                             int32_t &core_num);
 }  // namespace ge
 
 #endif  // AIR_INC_COMMON_UTIL_H_

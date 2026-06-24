@@ -72,7 +72,7 @@ class OpImplRegisterV2 {
   using OpType = ge::AscendString;
   using PrivateAttrList = std::vector<std::pair<ge::AscendString, ge::AnyValue>>;
   using PrivateAttrSet = std::unordered_set<ge::AscendString>;
-  using CompileInfoCreatorFunc = void *(*) ();
+  using CompileInfoCreatorFunc = void *(*)();
   using CompileInfoDeleterFunc = void (*)(void *);
   using KernelFunc = UINT32 (*)(KernelContext *context);
   using TilingParseFunc = UINT32 (*)(TilingParseContext *context);
@@ -80,9 +80,8 @@ class OpImplRegisterV2 {
   using OpCalcParamKernelFunc = UINT32 (*)(ExeResGenerationContext *context);
   using OpGenTaskKernelFunc = UINT32 (*)(const ExeResGenerationContext *context,
                                          std::vector<std::vector<uint8_t>> &tasks);
-  using OP_CHECK_FUNC_V2 = ge::graphStatus (*)(const OpCheckContext *context,
-                                               ge::AscendString &result);
-  using ExceptionDumpFunc = void (*) (aclrtExceptionInfo *exception_info, void *reserved);
+  using OP_CHECK_FUNC_V2 = ge::graphStatus (*)(const OpCheckContext *context, ge::AscendString &result);
+  using ExceptionDumpFunc = void (*)(aclrtExceptionInfo *exception_info, void *reserved);
 
  public:
   OpImplRegisterV2 &InferShape(InferShapeKernelFunc infer_shape_func);
@@ -103,14 +102,13 @@ class OpImplRegisterV2 {
   OpImplRegisterV2 &PrivateAttr(const ge::char_t *private_attr, ge::float32_t private_attr_val);
   OpImplRegisterV2 &PrivateAttr(const ge::char_t *private_attr, bool private_attr_val);
   OpImplRegisterV2 &PrivateAttr(const ge::char_t *private_attr, const std::vector<ge::float32_t> &private_attr_val);
-  template<typename T>
+  template <typename T>
   OpImplRegisterV2 &TilingParse(KernelFunc const tiling_parse_func) {
     return TilingParse(tiling_parse_func, CreateCompileInfo<T>, DeleteCompileInfo<T>);
   }
-  template<typename T>
+  template <typename T>
   OpImplRegisterV2 &TilingParse(TilingParseFunc const tiling_parse_func) {
-    return TilingParse(reinterpret_cast<KernelFunc>(tiling_parse_func), CreateCompileInfo<T>,
-                       DeleteCompileInfo<T>);
+    return TilingParse(reinterpret_cast<KernelFunc>(tiling_parse_func), CreateCompileInfo<T>, DeleteCompileInfo<T>);
   }
   OpImplRegisterV2 &InputsDataDependency(std::initializer_list<int32_t> inputs);
   OpImplRegisterV2 &OpExecuteFunc(OpExecFunc op_execute_func);
@@ -118,7 +116,7 @@ class OpImplRegisterV2 {
   OpImplRegisterV2 &HostInputs(std::initializer_list<int32_t> inputs);
   OpImplRegisterV2 &TilingInputsDataDependency(std::initializer_list<int32_t> inputs);
   OpImplRegisterV2 &TilingInputsDataDependency(std::initializer_list<int32_t> inputs,
-                    std::initializer_list<TilingPlacement> placements);
+                                               std::initializer_list<TilingPlacement> placements);
   OpImplRegisterV2 &OutputShapeDependOnCompute(std::initializer_list<int32_t> outputs);
   OpImplRegisterV2 &InferFormat(InferFormatFunc infer_format_func);
   OpImplRegisterV2 &CalcOpParam(OpCalcParamKernelFunc calc_op_param_func);
@@ -129,19 +127,19 @@ class OpImplRegisterV2 {
   OpImplRegisterV2 &NullableOutputs(std::initializer_list<int32_t> outputs);
 
  private:
-  OpImplRegisterV2 &TilingParse(KernelFunc tiling_parse_func,
-                                CompileInfoCreatorFunc creator_func,
+  OpImplRegisterV2 &TilingParse(KernelFunc tiling_parse_func, CompileInfoCreatorFunc creator_func,
                                 CompileInfoDeleterFunc deleter_func);
   OpImplRegisterV2 &PrivateAttr(const ge::char_t *private_attr, ge::AnyValue private_attr_av);
 
-  template<typename T, typename std::enable_if<(!std::is_array<T>::value), int32_t>::type = 0>
+  template <typename T, typename std::enable_if<(!std::is_array<T>::value), int32_t>::type = 0>
   static void *CreateCompileInfo() {
     return new T();
   }
-  template<typename T>
+  template <typename T>
   static void DeleteCompileInfo(void *const obj) {
     delete reinterpret_cast<T *>(obj);
   }
+
  private:
   std::unique_ptr<OpImplRegisterV2Impl> impl_;
 };

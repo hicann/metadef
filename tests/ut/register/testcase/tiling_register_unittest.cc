@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -14,7 +14,6 @@
 #include "register/tilingdata_base.h"
 
 using namespace optiling;
-
 
 std::string AscendCPyInterfaceGetTilingDefInfo(std::shared_ptr<TilingDef> tiling_def) {
   nlohmann::json json_obj;
@@ -39,14 +38,12 @@ std::string AscendCPyInterfaceGetTilingDefInfo(std::shared_ptr<TilingDef> tiling
   return json_obj.dump();
 }
 
-
 class UtestRegister : public testing::Test {
  protected:
   void SetUp() {}
 
   void TearDown() {}
 };
-
 
 BEGIN_TILING_DATA_DEF(TestMaxPoolTilingData)
 // format: TILING_DATA_FIELD_DEF(data_type, field_name);
@@ -76,7 +73,8 @@ REGISTER_TILING_DATA_CLASS(TestMaxPoolStruct, TestMaxPoolTilingDataStruct)
 TEST_F(UtestRegister, ascendC_py_interface_get_tiling_def_ok) {
   setenv("ENABLE_RUNTIME_V2", "1", 0);
   std::string op_type = "TestMaxPool";
-  std::shared_ptr<TilingDef> tiling_def = CTilingDataClassFactory::GetInstance().CreateTilingDataInstance(op_type.c_str());
+  std::shared_ptr<TilingDef> tiling_def =
+      CTilingDataClassFactory::GetInstance().CreateTilingDataInstance(op_type.c_str());
   EXPECT_NE(tiling_def, nullptr);
   EXPECT_NO_THROW(tiling_def->GeLogError("test log error"));
   std::string res_info = AscendCPyInterfaceGetTilingDefInfo(tiling_def);
@@ -90,39 +88,38 @@ TEST_F(UtestRegister, ascendC_py_interface_get_tiling_def_ok) {
   unsetenv("ENABLE_RUNTIME_V2");
 }
 
-
 namespace test1 {
 BEGIN_TILING_DATA_DEF(TestMaxPoolTilingStruct)
 TILING_DATA_FIELD_DEF_ARR(int8_t, 5, dim_0);
 TILING_DATA_FIELD_DEF_STRUCT(TestMaxPoolTilingData, dim_1);
 END_TILING_DATA_DEF
-}
+}  // namespace test1
 
 namespace test2 {
 BEGIN_TILING_DATA_DEF(TestMaxPoolTilingStruct)
 TILING_DATA_FIELD_DEF_ARR(int8_t, 5, dim_1);
 TILING_DATA_FIELD_DEF_STRUCT(TestMaxPoolTilingData, dim_2);
 END_TILING_DATA_DEF
-}  //name
+}  // namespace test2
 
 namespace test3 {
 BEGIN_TILING_DATA_DEF(TestMaxPoolTilingStruct)
 TILING_DATA_FIELD_DEF(uint64_t, dim_1);
 TILING_DATA_FIELD_DEF_STRUCT(TestMaxPoolTilingData, dim_2);
 END_TILING_DATA_DEF
-}  //infosize
+}  // namespace test3
 
 namespace test4 {
 BEGIN_TILING_DATA_DEF(TestMaxPoolTilingStruct)
 TILING_DATA_FIELD_DEF_ARR(int8_t, 4, dim_0);
 TILING_DATA_FIELD_DEF_STRUCT(TestMaxPoolTilingData, dim_1);
 END_TILING_DATA_DEF
-}  //arrsize
+}  // namespace test4
 namespace test5 {
 BEGIN_TILING_DATA_DEF(TestMaxPoolTilingStruct)
 TILING_DATA_FIELD_DEF_ARR(int8_t, 50, dim_0);
 END_TILING_DATA_DEF
-} //datasize
+}  // namespace test5
 
 std::shared_ptr<TilingDef> Test_api1() {
   return std::make_shared<test1::TestMaxPoolTilingStruct>();
@@ -148,7 +145,8 @@ TEST_F(UtestRegister, test_register_tiling_data) {
   setenv("ENABLE_RUNTIME_V2", "1", 0);
   std::string op_type = "Test_MaxPool";
   CTilingDataClassFactory::GetInstance().RegisterTilingData("Test_MaxPool", Test_api1);
-  std::shared_ptr<TilingDef> tiling_def = CTilingDataClassFactory::GetInstance().CreateTilingDataInstance(op_type.c_str());
+  std::shared_ptr<TilingDef> tiling_def =
+      CTilingDataClassFactory::GetInstance().CreateTilingDataInstance(op_type.c_str());
   EXPECT_NE(tiling_def, nullptr);
   std::string res_info = AscendCPyInterfaceGetTilingDefInfo(tiling_def);
   const nlohmann::json result1 =
@@ -197,7 +195,8 @@ TEST_F(UtestRegister, test_register_tiling_data) {
 TEST_F(UtestRegister, ascendC_py_interface_get_tiling_def_without_callback) {
   setenv("ENABLE_RUNTIME_V2", "1", 0);
   std::string op_type = "TestMaxPoolNotExist";
-  std::shared_ptr<TilingDef> tiling_def = CTilingDataClassFactory::GetInstance().CreateTilingDataInstance(op_type.c_str());
+  std::shared_ptr<TilingDef> tiling_def =
+      CTilingDataClassFactory::GetInstance().CreateTilingDataInstance(op_type.c_str());
   EXPECT_EQ(tiling_def, nullptr);
   unsetenv("ENABLE_RUNTIME_V2");
 }
@@ -231,24 +230,24 @@ TEST_F(UtestRegister, ascendC_register_tilingdata_base_ok) {
   params.set_act_core_num(8);
   uint8_t res_data[1024];
   int offset = 0;
-  params.SaveToBuffer((void *) (&res_data), params.GetDataSize());
-  EXPECT_EQ(*((int8_t *) (res_data + offset)), params.get_dim_0());
+  params.SaveToBuffer((void *)(&res_data), params.GetDataSize());
+  EXPECT_EQ(*((int8_t *)(res_data + offset)), params.get_dim_0());
   offset += sizeof(int16_t);
-  EXPECT_EQ(*((int16_t *) (res_data + offset)), params.get_dim_1());
+  EXPECT_EQ(*((int16_t *)(res_data + offset)), params.get_dim_1());
   offset += sizeof(int16_t);
-  EXPECT_EQ(*((int32_t *) (res_data + offset)), params.get_dim_2());
+  EXPECT_EQ(*((int32_t *)(res_data + offset)), params.get_dim_2());
   offset += sizeof(int32_t);
-  EXPECT_EQ(*((int64_t *) (res_data + offset)), params.get_dim_3());
+  EXPECT_EQ(*((int64_t *)(res_data + offset)), params.get_dim_3());
   offset += sizeof(int64_t);
-  EXPECT_EQ(*((uint8_t *) (res_data + offset)), params.get_dim_4());
+  EXPECT_EQ(*((uint8_t *)(res_data + offset)), params.get_dim_4());
   offset += sizeof(uint16_t);
-  EXPECT_EQ(*((uint16_t *) (res_data + offset)), params.get_dim_5());
+  EXPECT_EQ(*((uint16_t *)(res_data + offset)), params.get_dim_5());
   offset += sizeof(uint16_t);
-  EXPECT_EQ(*((uint32_t *) (res_data + offset)), params.get_dim_6());
+  EXPECT_EQ(*((uint32_t *)(res_data + offset)), params.get_dim_6());
   offset += sizeof(uint32_t);
-  EXPECT_EQ(*((uint64_t *) (res_data + offset)), params.get_dim_7());
+  EXPECT_EQ(*((uint64_t *)(res_data + offset)), params.get_dim_7());
   offset += sizeof(uint64_t);
-  EXPECT_EQ(*((int32_t *) (res_data + offset)), params.get_act_core_num());
+  EXPECT_EQ(*((int32_t *)(res_data + offset)), params.get_act_core_num());
   offset += sizeof(int32_t);
   unsetenv("ENABLE_RUNTIME_V2");
 }
@@ -269,9 +268,9 @@ TEST_F(UtestRegister, ascendC_register_tilingdata_base_failed) {
   paramStruct.dim_1.set_dim_6(60);
   paramStruct.dim_1.set_dim_7(70);
   paramStruct.dim_1.set_act_core_num(8);
-  paramStruct.SaveToBuffer((void *) (&res_data), 1024);
+  paramStruct.SaveToBuffer((void *)(&res_data), 1024);
 
-  auto params = TestMaxPoolTilingData((void *) (&res_data));
+  auto params = TestMaxPoolTilingData((void *)(&res_data));
   params.set_dim_0(0);
   params.set_dim_1(10);
   params.set_dim_2(20);
@@ -281,10 +280,10 @@ TEST_F(UtestRegister, ascendC_register_tilingdata_base_failed) {
   params.set_dim_6(60);
   params.set_dim_7(70);
   params.set_act_core_num(8);
-  params.SaveToBuffer((void *) (&res_data), 1024);
-  EXPECT_EQ(*((int8_t *) (res_data + offset)), params.get_dim_0());
+  params.SaveToBuffer((void *)(&res_data), 1024);
+  EXPECT_EQ(*((int8_t *)(res_data + offset)), params.get_dim_0());
   offset += sizeof(int16_t);
-  EXPECT_EQ(*((int16_t *) (res_data + offset)), params.get_dim_1());
+  EXPECT_EQ(*((int16_t *)(res_data + offset)), params.get_dim_1());
   params.SetDataPtr(res_data);
   unsetenv("ENABLE_RUNTIME_V2");
 }
@@ -305,8 +304,8 @@ TEST_F(UtestRegister, ascendC_register_tilingdata_base_struct_ok) {
   paramStruct.dim_1.set_dim_6(60);
   paramStruct.dim_1.set_dim_7(70);
   paramStruct.dim_1.set_act_core_num(8);
-  paramStruct.SetDataPtr((void *) (&res_data));
-  EXPECT_EQ(*((int8_t *) (res_data + offset)), paramStruct.get_dim_0()[0]);
-  
+  paramStruct.SetDataPtr((void *)(&res_data));
+  EXPECT_EQ(*((int8_t *)(res_data + offset)), paramStruct.get_dim_0()[0]);
+
   unsetenv("ENABLE_RUNTIME_V2");
 }

@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -17,7 +17,7 @@ namespace gert {
 struct StorageShape {
  public:
   StorageShape() {
-    (void)memset(reserved_, 0, sizeof(reserved_)); // memset函数misra告警屏蔽
+    (void)memset(reserved_, 0, sizeof(reserved_));  // memset函数misra告警屏蔽
   };
   /**
    * 构造一个运行时shape实例
@@ -26,7 +26,7 @@ struct StorageShape {
    */
   StorageShape(const std::initializer_list<int64_t> &origin_shape, const std::initializer_list<int64_t> &storage_shape)
       : origin_shape_(origin_shape), storage_shape_(storage_shape) {
-    (void)memset(reserved_, 0, sizeof(reserved_)); // memset函数misra告警屏蔽
+    (void)memset(reserved_, 0, sizeof(reserved_));  // memset函数misra告警屏蔽
   }
   /**
    * 获取原始shape
@@ -86,6 +86,7 @@ struct StorageShape {
   bool operator!=(const StorageShape &other) const {
     return !(*this == other);
   }
+
  private:
   Shape origin_shape_;
   Shape storage_shape_;

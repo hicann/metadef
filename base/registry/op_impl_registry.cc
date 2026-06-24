@@ -117,8 +117,8 @@ void RegisterOpImplToRegistry(const OpImplRegisterV2Impl *rd) {
   }
 
   GELOGI("LocalRegistry[%zu] Op type[%s] register OP_IMPL : %s",
-         std::hash<std::string>()(metadef::GetModelPathByAddr(&OpImplRegistry::GetInstance())),
-         rd->op_type.GetString(), ss.str().c_str());
+         std::hash<std::string>()(metadef::GetModelPathByAddr(&OpImplRegistry::GetInstance())), rd->op_type.GetString(),
+         ss.str().c_str());
 }
 
 ge::graphStatus InferOutDataTypeSameWithFirstInputFunc(InferDataTypeContext *context) {
@@ -137,7 +137,7 @@ ge::graphStatus InferOutDataTypeSameWithFirstInputFunc(InferDataTypeContext *con
   }
   return ge::GRAPH_SUCCESS;
 }
-} // namespace
+}  // namespace
 
 OpImplRegisterV2 &OpImplRegisterV2::ExceptionDumpParseFunc(ExceptionDumpFunc exception_func) {
   if (impl_ == nullptr) {
@@ -145,8 +145,7 @@ OpImplRegisterV2 &OpImplRegisterV2::ExceptionDumpParseFunc(ExceptionDumpFunc exc
     return *this;
   }
   if (exception_func == nullptr) {
-    GELOGW("Failed to register exception function for op type %s: exception_func is null",
-            impl_->op_type.GetString());
+    GELOGW("Failed to register exception function for op type %s: exception_func is null", impl_->op_type.GetString());
     return *this;
   }
   impl_->functions.exception_func = exception_func;
@@ -162,17 +161,16 @@ gert::OpImplKernelRegistry::OpImplFunctions &gert::OpImplKernelRegistry::OpImplF
 
 gert::OpImplKernelRegistry::OpImplFunctionsV2 &gert::OpImplKernelRegistry::OpImplFunctionsV2::operator=(
     gert::OpImplKernelRegistry::OpImplFunctions &func) {
-  static_cast<gert::OpImplKernelRegistry::OpImplFunctions&>(*this) = func;
+  static_cast<gert::OpImplKernelRegistry::OpImplFunctions &>(*this) = func;
   return *this;
 }
 
-gert::OpImplKernelRegistry::OpImplFunctionsV2::OpImplFunctionsV2(
-    gert::OpImplKernelRegistry::OpImplFunctions &func) :
-    gert::OpImplKernelRegistry::OpImplFunctions(func) {}
+gert::OpImplKernelRegistry::OpImplFunctionsV2::OpImplFunctionsV2(gert::OpImplKernelRegistry::OpImplFunctions &func)
+    : gert::OpImplKernelRegistry::OpImplFunctions(func) {}
 
-gert::OpImplKernelRegistry::OpImplFunctionsV2::OpImplFunctionsV2 (
-    const gert::OpImplKernelRegistry::OpImplFunctions &func) :
-    gert::OpImplKernelRegistry::OpImplFunctions(func) {}
+gert::OpImplKernelRegistry::OpImplFunctionsV2::OpImplFunctionsV2(
+    const gert::OpImplKernelRegistry::OpImplFunctions &func)
+    : gert::OpImplKernelRegistry::OpImplFunctions(func) {}
 
 OpImplRegistry &OpImplRegistry::GetInstance() {
   static OpImplRegistry instance;
@@ -204,7 +202,7 @@ const std::map<OpImplRegisterV2::OpType, OpImplRegistry::OpImplFunctionsV2> &OpI
 std::map<OpImplRegisterV2::OpType, OpImplRegistry::OpImplFunctionsV2> &OpImplRegistry::GetAllTypesToImpl() {
   return types_to_impl_;
 }
-OpImplRegisterV2::OpImplRegisterV2(const ge::char_t *op_type) : impl_(new(std::nothrow) OpImplRegisterV2Impl) {
+OpImplRegisterV2::OpImplRegisterV2(const ge::char_t *op_type) : impl_(new (std::nothrow) OpImplRegisterV2Impl) {
   if (impl_ == nullptr) {
     return;
   }
@@ -325,8 +323,8 @@ OpImplRegisterV2 &OpImplRegisterV2::TilingInputsDataDependency(std::initializer_
   return TilingInputsDataDependency(inputs, {TilingPlacement::TILING_ON_HOST});
 }
 
-OpImplRegisterV2 &OpImplRegisterV2::TilingInputsDataDependency(
-    std::initializer_list<int32_t> inputs, std::initializer_list<TilingPlacement> placements) {
+OpImplRegisterV2 &OpImplRegisterV2::TilingInputsDataDependency(std::initializer_list<int32_t> inputs,
+                                                               std::initializer_list<TilingPlacement> placements) {
   if (impl_ != nullptr) {
     for (const int32_t index : inputs) {
       if (impl_->functions.IsTilingInputDataDependency(static_cast<size_t>(index))) {
@@ -386,8 +384,8 @@ OpImplRegisterV2 &OpImplRegisterV2::OutputShapeDependOnCompute(std::initializer_
         continue;
       }
       if (impl_->functions.SetOutputShapeDependOnCompute(static_cast<size_t>(index)) != ge::GRAPH_SUCCESS) {
-        GELOGE(ge::FAILED, "Failed to set output shape depend compute for node %s, the output index %d", impl_->op_type.GetString(),
-               index);
+        GELOGE(ge::FAILED, "Failed to set output shape depend compute for node %s, the output index %d",
+               impl_->op_type.GetString(), index);
         return *this;
       }
     }
@@ -444,8 +442,7 @@ OpImplRegisterV2 &OpImplRegisterV2::OpExecuteFunc(OpImplRegisterV2::OpExecFunc o
   }
   return *this;
 }
-OpImplRegisterV2 &OpImplRegisterV2::Op2StageExecuteFuncs(OpExecPrepareFunc prepare_func,
-                                                         OpExecLaunchFunc launch_func) {
+OpImplRegisterV2 &OpImplRegisterV2::Op2StageExecuteFuncs(OpExecPrepareFunc prepare_func, OpExecLaunchFunc launch_func) {
   if (impl_ != nullptr) {
     impl_->functions.op_execute_prepare_func = prepare_func;
     impl_->functions.op_execute_launch_func = launch_func;
@@ -470,8 +467,8 @@ OpImplRegisterV2 &OpImplRegisterV2::NullableOutputs(std::initializer_list<int32_
     impl_->functions.nullable_outputs_ = 0UL;
     for (const int32_t index : outputs) {
       if (impl_->functions.NullableOutput(static_cast<size_t>(index)) != ge::GRAPH_SUCCESS) {
-        GELOGE(ge::FAILED, "Failed to nullable output for node %s, the output index %d",
-               impl_->op_type.GetString(), index);
+        GELOGE(ge::FAILED, "Failed to nullable output for node %s, the output index %d", impl_->op_type.GetString(),
+               index);
         return *this;
       }
     }

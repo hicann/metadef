@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -18,7 +18,7 @@
 #include "exe_graph/runtime/extended_kernel_context.h"
 namespace gert {
 enum class ExecuteMode {
-  kStaticOffloadExecute, // static sink
+  kStaticOffloadExecute,  // static sink
   kDynamicExecute,
   kEnd
 };
@@ -42,11 +42,7 @@ struct StreamInfo {
   int64_t stream_id{-1};
 };
 
-enum class SyncResType {
-  SYNC_RES_EVENT,
-  SYNC_RES_NOTIFY,
-  END
-};
+enum class SyncResType { SYNC_RES_EVENT, SYNC_RES_NOTIFY, END };
 
 /*
  * input:
@@ -75,8 +71,8 @@ class ExeResGenerationContext : public ExtendedKernelContext {
   bool IsConstInput(const ge::AscendString &name) const;
 
   // get input/output shape by index in graph
-  const gert::StorageShape* GetInputShape(int64_t index) const;
-  const gert::StorageShape* GetOutputShape(int64_t index) const;
+  const gert::StorageShape *GetInputShape(int64_t index) const;
+  const gert::StorageShape *GetOutputShape(int64_t index) const;
 
   // set/get stream resource
   ge::graphStatus SetAttachedStreamInfos(std::vector<StreamInfo> &stream_info_vec) const;
@@ -108,21 +104,22 @@ class ExeResGenerationContext : public ExtendedKernelContext {
   // need check valid after construct
   bool CheckContextValid() const;
 };
-static_assert(std::is_standard_layout<ExeResGenerationContext>::value && std::is_trivial<ExeResGenerationContext>::value,
+static_assert(std::is_standard_layout<ExeResGenerationContext>::value &&
+                  std::is_trivial<ExeResGenerationContext>::value,
               "The class ExeResGenerationContext must be a POD");
-
 
 class OpCheckContext : public ExtendedKernelContext {
  public:
-   // get input with index is const data
+  // get input with index is const data
   bool IsConstInput(const ge::AscendString &name) const;
-  const StorageShape* GetInputShape(int64_t index) const;
-  const StorageShape* GetOutputShape(int64_t index) const;
+  const StorageShape *GetInputShape(int64_t index) const;
+  const StorageShape *GetOutputShape(int64_t index) const;
+
  private:
   friend class ExeResGenerationCtxBuilder;
   // need check valid after construct
   bool CheckContextValid() const;
 };
-} // namespace gert
+}  // namespace gert
 
 #endif

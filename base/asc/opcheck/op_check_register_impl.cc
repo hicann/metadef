@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2026 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -13,20 +13,20 @@
 #include "common/ge_common/debug/ge_log.h"
 
 namespace optiling {
-OpCheckFuncRegistryImpl& OpCheckFuncRegistryImpl::GetInstance(){
-    static OpCheckFuncRegistryImpl instance;
-    return instance;
+OpCheckFuncRegistryImpl &OpCheckFuncRegistryImpl::GetInstance() {
+  static OpCheckFuncRegistryImpl instance;
+  return instance;
 }
 
 void OpCheckFuncRegistryImpl::RegisterOpCapability(const ge::AscendString &check_type, const ge::AscendString &op_type,
-                                               OP_CHECK_FUNC func) {
+                                                   OP_CHECK_FUNC func) {
   check_op_capability_instance_[check_type][op_type] = func;
   GELOGI("RegisterOpCapability: check_type:%s, op_type:%s, funcPointer:%p, registered count:%zu",
          check_type.GetString(), op_type.GetString(), func, check_op_capability_instance_[check_type].size());
 }
 
 OP_CHECK_FUNC OpCheckFuncRegistryImpl::GetOpCapability(const ge::AscendString &check_type,
-                                                   const ge::AscendString &op_type) {
+                                                       const ge::AscendString &op_type) {
   const auto &check_map_it = check_op_capability_instance_.find(check_type);
   if (check_map_it == check_op_capability_instance_.end()) {
     GELOGW("GetOpCapability: check_type:%s, op_type:%s, cannot find check_type.", check_type.GetString(),
@@ -42,7 +42,8 @@ OP_CHECK_FUNC OpCheckFuncRegistryImpl::GetOpCapability(const ge::AscendString &c
   return func_it->second;
 }
 
-void OpCheckFuncRegistryImpl::RegisterGenSimplifiedKeyFunc(const ge::AscendString &op_type, GEN_SIMPLIFIEDKEY_FUNC func) {
+void OpCheckFuncRegistryImpl::RegisterGenSimplifiedKeyFunc(const ge::AscendString &op_type,
+                                                           GEN_SIMPLIFIEDKEY_FUNC func) {
   gen_simplifiedkey_instance_[op_type] = func;
   GELOGI("RegisterGenSimplifiedKeyFunc: op_type:%s, registered count:%zu", op_type.GetString(),
          gen_simplifiedkey_instance_.size());
@@ -73,7 +74,7 @@ void OpCheckFuncRegistryImpl::RegisterParamGeneralize(const ge::AscendString &op
 }
 
 void OpCheckFuncRegistryImpl::RegisterReplay(const ge::AscendString &op_type, const ge::AscendString &soc_version,
-                                         REPLAY_FUNC func) {
+                                             REPLAY_FUNC func) {
   replay_instance_[op_type][soc_version] = func;
   GELOGI("RegisterReplay: op_type:%s, soc_version:%s funcPointer:%p, registered count:%zu", op_type.GetString(),
          soc_version.GetString(), func, replay_instance_[op_type].size());

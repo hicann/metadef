@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -43,7 +43,7 @@ class KernelExtendInfo {
    * @param kernel_type kernel type
    */
   void SetKernelType(const ge::char_t *const kernel_type) {
-    (void) reserved_;
+    (void)reserved_;
     kernel_type_ = kernel_type;
   }
 
@@ -56,7 +56,7 @@ class KernelExtendInfo {
  private:
   const ge::char_t *kernel_name_;
   const ge::char_t *kernel_type_;
-  uint8_t reserved_[56]; // Reserved field, 32+8, do not directly use when only 8-byte left
+  uint8_t reserved_[56];  // Reserved field, 32+8, do not directly use when only 8-byte left
 };
 static_assert(std::is_standard_layout<KernelExtendInfo>::value, "The class KernelExtendInfo must be a POD");
 }  // namespace gert

@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -19,12 +19,7 @@
 
 namespace gert {
 
-enum class ImplType {
-  RT_TYPE = 0,
-  CT_TYPE = 1,
-  RT_V2_TYPE = 2,
-  END_TYPE
-};
+enum class ImplType { RT_TYPE = 0, CT_TYPE = 1, RT_V2_TYPE = 2, END_TYPE };
 
 class OpImplRegistryHolder {
  public:
@@ -40,20 +35,22 @@ class OpImplRegistryHolder {
     return types_to_ct_impl_;
   }
 
-  void SetHandle(const void *handle) { handle_ = const_cast<void *>(handle); }
+  void SetHandle(const void *handle) {
+    handle_ = const_cast<void *>(handle);
+  }
 
   ge::graphStatus GetOpImplFunctionsByHandle(const void *handle, const std::string &so_path);
 
-  std::unique_ptr<TypesToImpl[]> GetOpImplFunctionsByHandle(const void *handle,
-                                                            const std::string &so_path,
+  std::unique_ptr<TypesToImpl[]> GetOpImplFunctionsByHandle(const void *handle, const std::string &so_path,
                                                             size_t &impl_num) const;
   void AddTypesToImpl(const gert::OpImplRegisterV2::OpType op_type,
                       const gert::OpImplKernelRegistry::OpImplFunctionsV2 funcs);
+
  protected:
   std::map<OpImplRegisterV2::OpType, OpImplKernelRegistry::OpImplFunctions> types_to_impl_;
   std::map<OpImplRegisterV2::OpType, OpImplKernelRegistry::OpImplFunctionsV2> types_v2_to_impl_;
   std::map<OpCtImplKernelRegistry::OpType, OpCtImplKernelRegistry::OpCtImplFunctions> types_to_ct_impl_;
-  std::vector<void*> impl_map_vec_{&types_v2_to_impl_, &types_to_impl_, &types_to_ct_impl_};
+  std::vector<void *> impl_map_vec_{&types_v2_to_impl_, &types_to_impl_, &types_to_ct_impl_};
   void *handle_ = nullptr;
 };
 using OpImplRegistryHolderPtr = std::shared_ptr<OpImplRegistryHolder>;
@@ -84,8 +81,7 @@ class OpImplRegistryHolderManager {
 
   const OpImplRegistryHolderPtr GetOpImplRegistryHolder(const std::string &so_data);
 
-  OpImplRegistryHolderPtr GetOrCreateOpImplRegistryHolder(const std::string &so_path,
-                                                          const std::string &so_data,
+  OpImplRegistryHolderPtr GetOrCreateOpImplRegistryHolder(const std::string &so_path, const std::string &so_data,
                                                           const std::function<OpImplRegistryHolderPtr()> &create_func);
 
   size_t GetOpImplRegistrySize() {
@@ -104,7 +100,8 @@ class OpImplRegistryHolderManager {
    * 原方案使用weak_ptr管理OpImplRegistryHolder，不影响生命周期，引用计数一旦减为0，将触发析构，并关闭so的句柄；
    * 如果OpImplRegistryHolder在比较早的时机析构，那么进程退出时，operator_infer_axis_type_info_funcs这些static变量将无法正常析构。
    * 此处临时改为shared_ptr，使OpImplRegistryHolder与本类单例的生命周期一致，从而能够确保在进程退出前才触发析构，规避上述问题。
-   * todo 此处是规避方案，后续将继续使用weak_ptr来管理OpImplRegistryHolder，后续将梳理上述自注册机制，修改成space_registry注册机制
+   * todo
+   * 此处是规避方案，后续将继续使用weak_ptr来管理OpImplRegistryHolder，后续将梳理上述自注册机制，修改成space_registry注册机制
    * */
   std::map<std::string, std::shared_ptr<OpImplRegistryHolder>> op_impl_registries_;
   std::mutex map_mutex_;

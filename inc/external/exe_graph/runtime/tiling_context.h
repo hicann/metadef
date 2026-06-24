@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -25,8 +25,7 @@ namespace gert {
 struct Dim3 {
   uint32_t x, y, z;
 
-  Dim3(const uint32_t dim3_x, const uint32_t dim3_y = 1, const uint32_t dim3_z = 1) : x(dim3_x), y(dim3_y), z(dim3_z) {
-  }
+  Dim3(const uint32_t dim3_x, const uint32_t dim3_y = 1, const uint32_t dim3_z = 1) : x(dim3_x), y(dim3_y), z(dim3_z) {}
 };
 
 /**
@@ -52,7 +51,7 @@ class TilingContext : public ExtendedKernelContext {
    * @tparam T CompileInfo的类型
    * @return CompileInfo的指针
    */
-  template<typename T>
+  template <typename T>
   const T *GetCompileInfo() const {
     return reinterpret_cast<const T *>(GetCompileInfo());
   }
@@ -94,7 +93,8 @@ class TilingContext : public ExtendedKernelContext {
    * 基于算子IR原型定义，获取`DYNAMIC_INPUT`类型的输入Tensor指针
    * 若算子被配置为'tiling'数据依赖，则返回的Tensor对象中保存了Host内存地址；反之，内存地址为nullptr。
    * @param ir_index IR原型定义中的index
-   * @param relative_index 该输入实例化后的相对index，例如某个DYNAMIC_INPUT实例化了3个输入，那么relative_index的有效范围是[0,2]
+   * @param relative_index
+   * 该输入实例化后的相对index，例如某个DYNAMIC_INPUT实例化了3个输入，那么relative_index的有效范围是[0,2]
    * @return Tensor指针，index或relative_index非法时，返回空指针
    */
   const Tensor *GetDynamicInputTensor(const size_t ir_index, const size_t relative_index) const {
@@ -128,7 +128,8 @@ class TilingContext : public ExtendedKernelContext {
   /**
    * 基于算子IR原型定义，获取`DYNAMIC_INPUT`类型的输入shape指针，shape中包含了原始shape与运行时shape
    * @param ir_index IR原型定义中的index
-   * @param relative_index 该输入实例化后的相对index，例如某个DYNAMIC_INPUT实例化了3个输入，那么relative_index的有效范围是[0,2]
+   * @param relative_index
+   * 该输入实例化后的相对index，例如某个DYNAMIC_INPUT实例化了3个输入，那么relative_index的有效范围是[0,2]
    * @return shape指针，index或relative_index非法时，返回空指针
    */
   const StorageShape *GetDynamicInputShape(const size_t ir_index, const size_t relative_index) const {
@@ -167,16 +168,16 @@ class TilingContext : public ExtendedKernelContext {
    */
   enum TilingOutputIndex : uint32_t {
     kOutputTilingKey = 0,
-    kOutputBlockDim = 1, // 接口即将废弃；优先选择 kOutputSimdNumBlocks
+    kOutputBlockDim = 1,  // 接口即将废弃；优先选择 kOutputSimdNumBlocks
     kOutputSimdNumBlocks = 1,
     kOutputAtomicCleanFlag = 2,
     kOutputTilingData = 3,
     kOutputWorkspace = 4,
     kOutputTilingCond = 5,
     kOutputScheduleMode = 6,
-    kOutputLocalMemorySize = 7, // 接口即将废弃；优先选择 kOutputDynUBufSize
+    kOutputLocalMemorySize = 7,  // 接口即将废弃；优先选择 kOutputDynUBufSize
     kOutputDynUBufSize = 7,
-    kOutputAicpuBlockDim = 8, // 接口即将废弃；优先选择 kOutputAicpuNumBlocks
+    kOutputAicpuBlockDim = 8,  // 接口即将废弃；优先选择 kOutputAicpuNumBlocks
     kOutputAicpuNumBlocks = 8,
     kOutputSimtBlockDim = 9,
     kOutputSimtGridDim = 10,
@@ -185,8 +186,8 @@ class TilingContext : public ExtendedKernelContext {
   };
 
   /*
-  * outputs[0]: fallible tiling condition
-  */
+   * outputs[0]: fallible tiling condition
+   */
   enum FallibleTilingOutputIndex : uint32_t {
     kTilingStatus = TilingOutputIndex::kOutputNum,
     // add new output definitions here
@@ -247,7 +248,8 @@ class TilingContext : public ExtendedKernelContext {
    * 设置block dim
    * @param block_dim block dim
    * @return 成功时返回ge::GRAPH_SUCCESS
-   * @deprecated SetBlockDim 接口即将废弃，改用 SetSimdNumBlocks 接口；当前同时保留两个接口，后续整改完成后，删除废弃接口
+   * @deprecated SetBlockDim 接口即将废弃，改用 SetSimdNumBlocks
+   * 接口；当前同时保留两个接口，后续整改完成后，删除废弃接口
    */
   ge::graphStatus SetBlockDim(const uint32_t block_dim) {
     return SetSimdNumBlocks(block_dim);
@@ -270,7 +272,8 @@ class TilingContext : public ExtendedKernelContext {
   /**
    * 获取block dim
    * @return block dim
-   * @deprecated GetBlockDim 接口即将废弃，改用 GetSimdNumBlocks 接口；当前同时保留两个接口，后续整改完成后，删除废弃接口
+   * @deprecated GetBlockDim 接口即将废弃，改用 GetSimdNumBlocks
+   * 接口；当前同时保留两个接口，后续整改完成后，删除废弃接口
    */
   uint32_t GetBlockDim() const {
     return GetSimdNumBlocks();
@@ -292,7 +295,8 @@ class TilingContext : public ExtendedKernelContext {
    * 设置aicpu block dim(融合算子使用)
    * @param block_dim block dim
    * @return 成功时返回ge::GRAPH_SUCCESS
-   * @deprecated SetAicpuBlockDim 接口即将废弃，改用 SetAicpuNumBlocks 接口；当前同时保留两个接口，后续整改完成后，删除废弃接口
+   * @deprecated SetAicpuBlockDim 接口即将废弃，改用 SetAicpuNumBlocks
+   * 接口；当前同时保留两个接口，后续整改完成后，删除废弃接口
    */
   ge::graphStatus SetAicpuBlockDim(uint32_t block_dim) {
     return SetAicpuNumBlocks(block_dim);
@@ -315,7 +319,8 @@ class TilingContext : public ExtendedKernelContext {
   /**
    * 获取aicpu block dim(融合算子使用)
    * @return block dim
-   * @deprecated GetAicpuBlockDim 接口即将废弃，改用 GetAicpuNumBlocks 接口；当前同时保留两个接口，后续整改完成后，删除废弃接口
+   * @deprecated GetAicpuBlockDim 接口即将废弃，改用 GetAicpuNumBlocks
+   * 接口；当前同时保留两个接口，后续整改完成后，删除废弃接口
    */
   uint32_t GetAicpuBlockDim() const {
     return GetAicpuNumBlocks();
@@ -386,8 +391,8 @@ class TilingContext : public ExtendedKernelContext {
    * @tparam T tiling data类型，sizeof(T)不可以大于编译结果中指定的最大tiling data长度
    * @return tiling data指针，失败时返回空指针
    */
-  template<typename T>
-  auto GetTilingData() -> T* {
+  template <typename T>
+  auto GetTilingData() -> T * {
     auto tiling_data = GetRawTilingData();
     if (tiling_data == nullptr) {
       return nullptr;
@@ -420,7 +425,7 @@ class TilingContext : public ExtendedKernelContext {
     }
     return workspace->MutableData();
   }
-   /**
+  /**
    * 获取 workspace 个数
    * @return workspace 个数
    */
@@ -491,7 +496,8 @@ class TilingContext : public ExtendedKernelContext {
    * 设置 local memory size, 默认值为0
    * @param local_memory_size
    * @return 成功返回ge::GRAPH_SUCCESS
-   * @deprecated SetLocalMemorySize 接口即将废弃，改用 SetDynUBufSize 接口；当前同时保留两个接口，后续整改完成后，删除废弃接口
+   * @deprecated SetLocalMemorySize 接口即将废弃，改用 SetDynUBufSize
+   * 接口；当前同时保留两个接口，后续整改完成后，删除废弃接口
    */
   ge::graphStatus SetLocalMemorySize(const uint32_t local_memory_size) {
     return SetDynUBufSize(local_memory_size);
@@ -512,7 +518,8 @@ class TilingContext : public ExtendedKernelContext {
   /**
    * 获取 local memory size，默认值为0
    * @return local memory size， 失败返回 std::numeric_limits<uint32_t>::max()
-   * @deprecated GetLocalMemorySize 接口即将废弃，改用 GetDynUBufSize 接口；当前同时保留两个接口，后续整改完成后，删除废弃接口
+   * @deprecated GetLocalMemorySize 接口即将废弃，改用 GetDynUBufSize
+   * 接口；当前同时保留两个接口，后续整改完成后，删除废弃接口
    */
   uint32_t GetLocalMemorySize() const {
     return GetDynUBufSize();
@@ -666,7 +673,8 @@ class TilingContext : public ExtendedKernelContext {
   /**
    * 基于算子IR原型定义，获取`OPTIONAL_INPUT`类型的输入tensor的view信息
    * 获取输入的stride
-   * @param  ir_index IR原型定义中的index，ir_index非法，或该INPUT没有实例化，或者tensor不携带非连续描述信息时，返回空指针
+   * @param  ir_index
+   * IR原型定义中的index，ir_index非法，或该INPUT没有实例化，或者tensor不携带非连续描述信息时，返回空指针
    * @return 输入stride
    */
   const Stride *GetOptionalInputStride(const size_t ir_index) const {
@@ -695,7 +703,8 @@ class TilingContext : public ExtendedKernelContext {
    * 基于算子IR原型定义，获取`DYNAMIC_INPUT`类型的输入Tensor的view信息
    * 判断输入是否为非连续tensor
    * @param ir_index IR原型定义中的index
-   * @param relative_index 该输入实例化后的相对index，例如某个DYNAMIC_INPUT实例化了3个输入，那么relative_index的有效范围是[0,2]
+   * @param relative_index
+   * 该输入实例化后的相对index，例如某个DYNAMIC_INPUT实例化了3个输入，那么relative_index的有效范围是[0,2]
    * @return 是否为非连续tensor，ir_index或relative_index非法，或者tensor不携带非连续描述信息时，返回false
    */
   bool DynamicInputIsView(const size_t ir_index, const size_t relative_index) const {
@@ -710,7 +719,8 @@ class TilingContext : public ExtendedKernelContext {
    * 基于算子IR原型定义，获取`DYNAMIC_INPUT`类型的输入Tensor的view信息
    * 获取输入的stride
    * @param ir_index IR原型定义中的index
-   * @param relative_index 该输入实例化后的相对index，例如某个DYNAMIC_INPUT实例化了3个输入，那么relative_index的有效范围是[0,2]
+   * @param relative_index
+   * 该输入实例化后的相对index，例如某个DYNAMIC_INPUT实例化了3个输入，那么relative_index的有效范围是[0,2]
    * @return 输入stride，ir_index或relative_index非法，或者tensor不携带非连续描述信息时，返回空指针
    */
   const Stride *GetDynamicInputStride(const size_t ir_index, const size_t relative_index) const {
@@ -725,7 +735,8 @@ class TilingContext : public ExtendedKernelContext {
    * 基于算子IR原型定义，获取`DYNAMIC_INPUT`类型的输入Tensor的view信息
    * 获取输入的offset
    * @param ir_index IR原型定义中的index
-   * @param relative_index 该输入实例化后的相对index，例如某个DYNAMIC_INPUT实例化了3个输入，那么relative_index的有效范围是[0,2]
+   * @param relative_index
+   * 该输入实例化后的相对index，例如某个DYNAMIC_INPUT实例化了3个输入，那么relative_index的有效范围是[0,2]
    * @return 输入offset，ir_index或relative_index非法，或者tensor不携带非连续描述信息时，返回-1
    */
   int64_t GetDynamicInputOffset(const size_t ir_index, const size_t relative_index) const {
@@ -778,7 +789,8 @@ class TilingContext : public ExtendedKernelContext {
 
     return tensor->GetOffset();
   }
-private:
+
+ private:
   /**
    * 获取携带非连续描述信息的输入tensor
    * @param index 输入index

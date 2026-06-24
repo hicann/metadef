@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -17,14 +17,14 @@
 #include "shape.h"
 
 namespace gert {
-template<typename T>
+template <typename T>
 class Range {
  public:
   /**
    * 默认构造一个range
    */
   Range() : min_(nullptr), max_(nullptr) {
-    (void)memset(reserved_, 0, sizeof(reserved_)); // memset函数misra告警屏蔽
+    (void)memset(reserved_, 0, sizeof(reserved_));  // memset函数misra告警屏蔽
   }
 
   /**
@@ -32,8 +32,8 @@ class Range {
    * @param min range最小值指针
    * @param max range最大值指针
    */
-  Range(T *min, T* max) : min_(min), max_(max) {
-    (void)memset(reserved_, 0, sizeof(reserved_)); // memset函数misra告警屏蔽
+  Range(T *min, T *max) : min_(min), max_(max) {
+    (void)memset(reserved_, 0, sizeof(reserved_));  // memset函数misra告警屏蔽
   }
 
   /**
@@ -41,7 +41,7 @@ class Range {
    * @param same_ele T指针
    */
   explicit Range(T *same_ele) : min_(same_ele), max_(same_ele) {
-    (void)memset(reserved_, 0, sizeof(reserved_)); // memset函数misra告警屏蔽
+    (void)memset(reserved_, 0, sizeof(reserved_));  // memset函数misra告警屏蔽
   }
 
   /**
@@ -105,6 +105,7 @@ class Range {
   T *GetMax() {
     return max_;
   }
+
  private:
   T *min_;
   T *max_;

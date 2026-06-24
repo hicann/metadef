@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -60,7 +60,8 @@ class InferFormatContext : public ExtendedKernelContext {
   /**
    * 基于算子IR原型定义，获取`DYNAMIC_INPUT`类型的输入format指针
    * @param ir_index IR原型定义中的index
-   * @param relative_index 该输入实例化后的相对index，例如某个DYNAMIC_INPUT实例化了3个输入，那么relative_index的有效范围是[0,2]
+   * @param relative_index
+   * 该输入实例化后的相对index，例如某个DYNAMIC_INPUT实例化了3个输入，那么relative_index的有效范围是[0,2]
    * @return 输入format指针，ir_index或relative_index非法时，返回空指针
    */
   StorageFormat *GetDynamicInputFormat(const size_t ir_index, const size_t relative_index) {
@@ -101,7 +102,8 @@ class InferFormatContext : public ExtendedKernelContext {
   /**
    * 基于算子IR原型定义，获取`DYNAMIC_INPUT`类型的输入shape指针
    * @param ir_index IR原型定义中的index
-   * @param relative_index 该输入实例化后的相对index，例如某个DYNAMIC_INPUT实例化了3个输入，那么relative_index的有效范围是[0,2]
+   * @param relative_index
+   * 该输入实例化后的相对index，例如某个DYNAMIC_INPUT实例化了3个输入，那么relative_index的有效范围是[0,2]
    * @return 输入shape指针，ir_index或relative_index非法时，返回空指针
    */
   const Shape *GetDynamicInputShape(const size_t ir_index, const size_t relative_index) const {
@@ -138,7 +140,8 @@ class InferFormatContext : public ExtendedKernelContext {
   /**
    * 基于算子IR原型定义，获取`DYNAMIC_INPUT`类型的输入tensor指针
    * @param ir_index IR原型定义中的index
-   * @param relative_index 该输入实例化后的相对index，例如某个DYNAMIC_INPUT实例化了3个输入，那么relative_index的有效范围是[0,2]
+   * @param relative_index
+   * 该输入实例化后的相对index，例如某个DYNAMIC_INPUT实例化了3个输入，那么relative_index的有效范围是[0,2]
    * @return 输入tensor指针，ir_index或relative_index非法时，返回空指针
    */
   const Tensor *GetDynamicInputTensor(const size_t ir_index, const size_t relative_index) const {
@@ -174,7 +177,8 @@ class InferFormatContext : public ExtendedKernelContext {
   /**
    * 基于算子IR原型定义，获取`DYNAMIC_OUTPUT`类型的输出format指针
    * @param ir_index IR原型定义中的index
-   * @param relative_index 该输入实例化后的相对index，例如某个DYNAMIC_OUTPUT实例化了3个输入，那么relative_index的有效范围是[0,2]
+   * @param relative_index
+   * 该输入实例化后的相对index，例如某个DYNAMIC_OUTPUT实例化了3个输入，那么relative_index的有效范围是[0,2]
    * @return 输出format指针，ir_index或relative_index非法时，返回空指针
    */
   StorageFormat *GetDynamicOutputFormat(const size_t ir_index, const size_t relative_index) {

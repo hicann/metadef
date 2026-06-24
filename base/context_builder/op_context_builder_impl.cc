@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -46,21 +46,20 @@ ge::graphStatus ContextBuilderImpl::InitCompileTimeTD(ComputeNodeInfo &compute_n
     const auto &ctx_io_desc = op_info_.input_tensor_descs[i];
     auto td = compute_node_info.MutableInputTdInfo(i);
     GE_ASSERT_NOTNULL(td, "tensor desc in compute node info is null");
-    (void) SetCompileTimeTd(ctx_io_desc, *td);
+    (void)SetCompileTimeTd(ctx_io_desc, *td);
   }
 
   for (size_t i = 0U; i < compute_node_info.GetOutputsNum(); ++i) {
     const auto &ctx_io_desc = op_info_.output_tensor_descs[i];
     auto td = compute_node_info.MutableOutputTdInfo(i);
     GE_ASSERT_NOTNULL(td, "tensor desc in compute node info is null");
-    (void) SetCompileTimeTd(ctx_io_desc, *td);
+    (void)SetCompileTimeTd(ctx_io_desc, *td);
   }
   return ge::SUCCESS;
 }
 
 std::unique_ptr<uint8_t[]> ContextBuilderImpl::CreateComputeNodeInfoImpl(const std::unique_ptr<uint8_t[]> &attr_buf,
-                                                                         size_t attr_size,
-                                                                         const OpInfo &op_info,
+                                                                         size_t attr_size, const OpInfo &op_info,
                                                                          std::vector<std::string> &string_pool,
                                                                          size_t &total_size) {
   const size_t ir_input_num = op_info.input_ir_num;
@@ -75,11 +74,12 @@ std::unique_ptr<uint8_t[]> ContextBuilderImpl::CreateComputeNodeInfoImpl(const s
   GE_ASSERT_NOTNULL(compute_node_info_holder, "Create compute node info holder failed");
 
   const auto idx = string_pool.size();
-  (void) string_pool.emplace_back(op_info.op_name);
-  (void) string_pool.emplace_back(op_info.op_type);
+  (void)string_pool.emplace_back(op_info.op_name);
+  (void)string_pool.emplace_back(op_info.op_type);
 
   auto compute_node_info = ge::PtrToPtr<uint8_t, ComputeNodeInfo>(compute_node_info_holder.get());
-  compute_node_info->Init(ir_input_num, ir_output_num, input_num, output_num, attr_size, string_pool[idx].c_str(), string_pool[idx + 1].c_str());
+  compute_node_info->Init(ir_input_num, ir_output_num, input_num, output_num, attr_size, string_pool[idx].c_str(),
+                          string_pool[idx + 1].c_str());
 
   auto ret = InitIOInstanceInfo(*compute_node_info);
   GE_ASSERT_SUCCESS(ret, "Init input instance info for node:%s failed.", op_info.op_name.c_str());
@@ -94,8 +94,8 @@ std::unique_ptr<uint8_t[]> ContextBuilderImpl::CreateComputeNodeInfoImpl(const s
       "Failed to create kernel context extend info, the offset of attr %zu beyond the total size of ExtendInfo %zu",
       offset, total_size);
   const uint64_t outputs_ins_info_size = compute_node_info->GetIrOutputsNum() * sizeof(AnchorInstanceInfo);
-  ret = memcpy_s(ge::PtrToPtr<RuntimeAttrs, uint8_t>(attr), static_cast<uint64_t>(total_size - offset - outputs_ins_info_size),
-                 attr_buf.get(), attr_size);
+  ret = memcpy_s(ge::PtrToPtr<RuntimeAttrs, uint8_t>(attr),
+                 static_cast<uint64_t>(total_size - offset - outputs_ins_info_size), attr_buf.get(), attr_size);
   GE_ASSERT_SUCCESS(ret, "memcpy_s failed, copy size is %zu, dst size is %zu", attr_size,
                     static_cast<uint64_t>(total_size - offset - outputs_ins_info_size));
   GELOGI("Node %s, compute_node_info attr_size %zu, outputs_ins_info_size:%zu, offset:%zu, total_size:%zu.",

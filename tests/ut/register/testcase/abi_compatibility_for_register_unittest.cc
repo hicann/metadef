@@ -21,7 +21,7 @@ constexpr const size_t kReservedFieldSize = 8U;
 constexpr const size_t kReservedFieldSize2 = 40U;
 constexpr const size_t kOpImplRegistrySize = 88U + kVirtualTableSize;
 
-constexpr const size_t kOpImplReservedFieldSize = 500UL * sizeof(void*);
+constexpr const size_t kOpImplReservedFieldSize = 500UL * sizeof(void *);
 constexpr const size_t kOpImplSize = 4304UL;
 
 }  // namespace
@@ -32,8 +32,7 @@ TEST_F(AbiCompatibilityForRegisterUT, OpImplRegistry_CheckMemLayoutNotChanged) {
   ASSERT_EQ(sizeof(r), kOpImplRegistrySize);
   ASSERT_EQ(reinterpret_cast<uintptr_t>(&r.types_to_impl_) - reinterpret_cast<uintptr_t>(&r), kVirtualTableSize);
 
-  EXPECT_EQ(reinterpret_cast<uintptr_t>(&r.reserved_) - reinterpret_cast<uintptr_t>(&r.types_to_impl_),
-            kMapSize);
+  EXPECT_EQ(reinterpret_cast<uintptr_t>(&r.reserved_) - reinterpret_cast<uintptr_t>(&r.types_to_impl_), kMapSize);
   EXPECT_EQ(sizeof(r.reserved_), kReservedFieldSize2);
 }
 

@@ -75,7 +75,7 @@ TEST_F(UtestTypes, GetFormatName) {
   ASSERT_EQ(strcmp(GetFormatName(FORMAT_FRACTAL_NZ_C0_2), "FRACTAL_NZ_C0_2"), 0);
   ASSERT_EQ(strcmp(GetFormatName(FORMAT_FRACTAL_NZ_C0_4), "FRACTAL_NZ_C0_4"), 0);
   ASSERT_EQ(strcmp(GetFormatName(FORMAT_FRACTAL_NZ_C0_8), "FRACTAL_NZ_C0_8"), 0);
-  ASSERT_EQ(FORMAT_END, 55); // if add formats definition, add ut here
+  ASSERT_EQ(FORMAT_END, 55);  // if add formats definition, add ut here
 }
 
 TEST_F(UtestTypes, GetFormatFromSub) {
@@ -175,7 +175,7 @@ TEST_F(UtestTypes, GetSizeInBytes) {
   EXPECT_EQ(GetSizeInBytes(10, DT_FLOAT6_E2M3), 8);  // 10 * 6 / 8 = 7.5
   EXPECT_EQ(GetSizeInBytes(10, DT_FLOAT4_E2M1), 5);  // 10 * 4 / 8 = 5
   EXPECT_EQ(GetSizeInBytes(10, DT_FLOAT4_E1M2), 5);  // 10 * 4 / 8 = 5
-  EXPECT_EQ(GetSizeInBytes(10, DT_HIFLOAT4), 5);  // 10 * 4 / 8 = 5
+  EXPECT_EQ(GetSizeInBytes(10, DT_HIFLOAT4), 5);     // 10 * 4 / 8 = 5
 }
 
 TEST_F(UtestTypes, GetC0ValueFromFormat) {
@@ -204,11 +204,11 @@ TEST_F(UtestTypes, Promote) {
   EXPECT_EQ(syms[1], std::string("b"));
   EXPECT_EQ(syms[2], std::string("c"));
 
-  auto promote_am= std::move(promote_cm);
+  auto promote_am = std::move(promote_cm);
   EXPECT_EQ(promote_cm.Syms().size(), 0U);
   syms = promote_am.Syms();
   EXPECT_EQ(syms[0], std::string("a"));
   EXPECT_EQ(syms[1], std::string("b"));
   EXPECT_EQ(syms[2], std::string("c"));
 }
-}
+}  // namespace ge
