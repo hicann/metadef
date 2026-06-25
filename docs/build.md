@@ -49,11 +49,11 @@ cat /usr/local/Ascend/cann/<arch>-linux/ascend_toolkit_install.info
 
 - CMake >= 3.16.0 （建议使用3.20.0版本）
 
-- ccache/cov/asan
+- ccache/asan/patch
+
+- lcov（可选，用于本地验证覆盖率统计）
 
 - graph-easy（可选）
-
-- patch
 
   ```bash
   # Ubuntu/Debian操作系统安装命令示例如下，其他操作系统请自行安装
