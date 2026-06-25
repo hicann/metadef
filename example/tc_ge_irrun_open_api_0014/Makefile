@@ -10,7 +10,8 @@
 ASCEND_PATH := /usr/local/Ascend/cann/
 
 LOCAL_DIR := ./
-FWK_INCLUDE_DIR := $(ASCEND_PATH)/aarch64-linux/include
+ARCH := $(shell uname -m)
+FWK_INCLUDE_DIR := $(ASCEND_PATH)/$(ARCH)-linux/include
 
 LOCAL_MODULE_NAME := tc_ge_irrun_open_api_0014.bin
 CC := g++
