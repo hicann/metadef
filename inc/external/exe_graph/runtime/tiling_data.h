@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -106,7 +106,7 @@ class TilingData {
    * @param data 添加的tiling data实例
    * @return 成功返回ge::GRAPH_SUCCESS
    */
-  template<typename T, typename std::enable_if<std::is_standard_layout<T>::value, int>::type = 0>
+  template <typename T, typename std::enable_if<std::is_standard_layout<T>::value, int>::type = 0>
   ge::graphStatus Append(const T &data) {
     auto data_ptr = Expand(sizeof(data));
     if (data_ptr == nullptr) {
@@ -116,7 +116,7 @@ class TilingData {
     return ge::GRAPH_SUCCESS;
   }
 
-  template<typename T, typename std::enable_if<std::is_standard_layout<T>::value, int>::type = 0>
+  template <typename T, typename std::enable_if<std::is_standard_layout<T>::value, int>::type = 0>
   ge::graphStatus Append(const T *data, size_t append_num) {
     size_t append_size;
     if (ge::MulOverflow(sizeof(T), append_num, append_size)) {
@@ -203,7 +203,7 @@ class TilingData {
   size_t capacity_;
   size_t data_size_;
   void *data_;
-  uint8_t reserved_[40]; // Reserved field, 32+8, do not directly use when only 8-byte left
+  uint8_t reserved_[40];  // Reserved field, 32+8, do not directly use when only 8-byte left
 };
 
 /**
@@ -213,7 +213,7 @@ class TilingData {
  * @param data 添加的tiling data的实例
  * @return
  */
-template<typename T>
+template <typename T>
 TilingData &operator<<(TilingData &out, const T &data) {
   out.Append(data);  // we cannot throw exception, so callers cannot get the error information
   return out;

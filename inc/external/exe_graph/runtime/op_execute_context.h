@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -20,13 +20,13 @@
 namespace gert {
 using rtStream = void *;
 struct OpExecuteOptions {
-  int32_t precision_mode; // 精度模式
-  int32_t deterministic; // 确定性计算
-  char allow_hf32[3UL]; // hf32
-  char reserve[53]; // 预留
+  int32_t precision_mode;  // 精度模式
+  int32_t deterministic;   // 确定性计算
+  char allow_hf32[3UL];    // hf32
+  char reserve[53];        // 预留
 };
 
-enum class OpExecuteInputExtendIndex{
+enum class OpExecuteInputExtendIndex {
   kAllocate,
   kStream,
   kExecuteOption,
@@ -36,7 +36,7 @@ enum class OpExecuteInputExtendIndex{
   kNum
 };
 
-enum class OpExecuteOutputIndex{
+enum class OpExecuteOutputIndex {
   kBlockMemory,
   // add new extend output here
   kNum
@@ -46,7 +46,7 @@ enum class OpExecuteOutputIndex{
  * Aclnn kernel的context
  */
 class OpExecuteContext : public ExtendedKernelContext {
-public:
+ public:
   /**
    * 根据输入index，获取输出tensor指针
    * @param index 输入index
@@ -66,7 +66,8 @@ public:
   /**
    * 基于算子IR原型定义，获取`DYNAMIC_INPUT`类型的输入Tensor指针
    * @param ir_index IR原型定义中的index
-   * @param relative_index 该输入实例化后的相对index，例如某个DYNAMIC_INPUT实例化了3个输入，那么relative_index的有效范围是[0,2]
+   * @param relative_index
+   * 该输入实例化后的相对index，例如某个DYNAMIC_INPUT实例化了3个输入，那么relative_index的有效范围是[0,2]
    * @return tensor指针，index或relative_index非法时，返回空指针
    */
   const Tensor *GetDynamicInputTensor(const size_t ir_index, const size_t relative_index) const {
@@ -86,11 +87,11 @@ public:
   /**
    * 基于算子IR原型定义，获取`DYNAMIC_OUTPUT`类型的输入Tensor指针
    * @param ir_index IR原型定义中的index
-   * @param relative_index 该输入实例化后的相对index，例如某个DYNAMIC_OUTPUT实例化了3个输入，那么relative_index的有效范围是[0,2]
+   * @param relative_index
+   * 该输入实例化后的相对index，例如某个DYNAMIC_OUTPUT实例化了3个输入，那么relative_index的有效范围是[0,2]
    * @return tensor指针，index或relative_index非法时，返回空指针
    */
-  const Tensor *GetDynamicOutputTensor(const size_t ir_index,
-                                       const size_t relative_index) const {
+  const Tensor *GetDynamicOutputTensor(const size_t ir_index, const size_t relative_index) const {
     return GetDynamicOutputPointer<Tensor>(ir_index, relative_index);
   }
 
@@ -120,8 +121,7 @@ public:
     const size_t input_num = GetComputeNodeInputNum();
     const size_t output_num = GetComputeNodeOutputNum();
     auto stream =
-        GetInputPointer<rtStream>(input_num + output_num +
-        static_cast<size_t>(OpExecuteInputExtendIndex::kStream));
+        GetInputPointer<rtStream>(input_num + output_num + static_cast<size_t>(OpExecuteInputExtendIndex::kStream));
     if (stream == nullptr) {
       return nullptr;
     }
@@ -136,8 +136,7 @@ public:
     const size_t input_num = GetComputeNodeInputNum();
     const size_t output_num = GetComputeNodeOutputNum();
     auto op_execute_func =
-        GetInputPointer<void *>(input_num + output_num +
-        static_cast<size_t>(OpExecuteInputExtendIndex::kExecuteFunc));
+        GetInputPointer<void *>(input_num + output_num + static_cast<size_t>(OpExecuteInputExtendIndex::kExecuteFunc));
     if (op_execute_func == nullptr) {
       return nullptr;
     }
@@ -163,9 +162,8 @@ public:
   bool GetDeterministic() const {
     const size_t input_num = GetComputeNodeInputNum();
     const size_t output_num = GetComputeNodeOutputNum();
-    const OpExecuteOptions *options =
-        GetInputPointer<OpExecuteOptions>(input_num + output_num +
-        static_cast<size_t>(OpExecuteInputExtendIndex::kExecuteOption));
+    const OpExecuteOptions *options = GetInputPointer<OpExecuteOptions>(
+        input_num + output_num + static_cast<size_t>(OpExecuteInputExtendIndex::kExecuteOption));
     if (options == nullptr) {
       return false;
     }
@@ -181,9 +179,8 @@ public:
   const char *GetAllowHf32() const {
     const size_t input_num = GetComputeNodeInputNum();
     const size_t output_num = GetComputeNodeOutputNum();
-    const OpExecuteOptions *options =
-        GetInputPointer<OpExecuteOptions>(input_num + output_num +
-        static_cast<size_t>(OpExecuteInputExtendIndex::kExecuteOption));
+    const OpExecuteOptions *options = GetInputPointer<OpExecuteOptions>(
+        input_num + output_num + static_cast<size_t>(OpExecuteInputExtendIndex::kExecuteOption));
     if (options == nullptr) {
       return nullptr;
     }
@@ -197,9 +194,8 @@ public:
   int32_t GetPrecisionMode() const {
     const size_t input_num = GetComputeNodeInputNum();
     const size_t output_num = GetComputeNodeOutputNum();
-    const OpExecuteOptions *options =
-        GetInputPointer<OpExecuteOptions>(input_num + output_num +
-        static_cast<size_t>(OpExecuteInputExtendIndex::kExecuteOption));
+    const OpExecuteOptions *options = GetInputPointer<OpExecuteOptions>(
+        input_num + output_num + static_cast<size_t>(OpExecuteInputExtendIndex::kExecuteOption));
     if (options == nullptr) {
       return std::numeric_limits<int32_t>::max();
     }

@@ -25,6 +25,6 @@ struct TilingAicpuTask {
   uint64_t workspaceAddr;
   uint64_t workspaceSize;
 };
-}  // namespace optiling
+}  // namespace tilingsink
 
 #endif

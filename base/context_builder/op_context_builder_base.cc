@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -22,26 +22,26 @@
 #include "base/context_builder/op_kernel_run_context_builder.h"
 
 namespace gert {
-template<typename T>
+template <typename T>
 OpContextBuilderBase<T>::OpContextBuilderBase() : impl_(ge::ComGraphMakeUnique<ContextBuilderImpl>()) {}
-template<typename T>
+template <typename T>
 OpContextBuilderBase<T>::~OpContextBuilderBase() = default;
 
-template<typename T>
+template <typename T>
 T &OpContextBuilderBase<T>::OpType(const ge::AscendString &op_type) {
   GE_CHECK_NOTNULL_EXEC(impl_, return static_cast<T &>(*this));
   impl_->MutableOpInfo().op_type = op_type.GetString();
   return static_cast<T &>(*this);
 }
 
-template<typename T>
+template <typename T>
 T &OpContextBuilderBase<T>::OpName(const ge::AscendString &op_name) {
   GE_CHECK_NOTNULL_EXEC(impl_, return static_cast<T &>(*this));
   impl_->MutableOpInfo().op_name = op_name.GetString();
   return static_cast<T &>(*this);
 }
 
-template<typename T>
+template <typename T>
 T &OpContextBuilderBase<T>::IONum(size_t input_ir_num, size_t output_ir_num) {
   GE_CHECK_NOTNULL_EXEC(impl_, return static_cast<T &>(*this));
   auto &op_info = impl_->MutableOpInfo();
@@ -60,7 +60,7 @@ T &OpContextBuilderBase<T>::IONum(size_t input_ir_num, size_t output_ir_num) {
   return static_cast<T &>(*this);
 }
 
-template<typename T>
+template <typename T>
 T &OpContextBuilderBase<T>::IOInstanceNum(const std::vector<uint32_t> &input_instance_num,
                                           const std::vector<uint32_t> &output_instance_num) {
   GE_CHECK_NOTNULL_EXEC(impl_, return static_cast<T &>(*this));
@@ -86,7 +86,7 @@ T &OpContextBuilderBase<T>::IOInstanceNum(const std::vector<uint32_t> &input_ins
   return static_cast<T &>(*this);
 }
 
-template<typename T>
+template <typename T>
 ge::DataType &OpContextBuilderBase<T>::MutableInputDataType(size_t index) {
   if (impl_ == nullptr || index >= impl_->MutableOpInfo().input_tensor_descs.size()) {
     static ge::DataType default_dtype = ge::DT_MAX;
@@ -97,7 +97,7 @@ ge::DataType &OpContextBuilderBase<T>::MutableInputDataType(size_t index) {
   return impl_->MutableOpInfo().input_tensor_descs[index].dtype;
 }
 
-template<typename T>
+template <typename T>
 ge::Format &OpContextBuilderBase<T>::MutableInputOriginalFormat(size_t index) {
   if (impl_ == nullptr || index >= impl_->MutableOpInfo().input_tensor_descs.size()) {
     static ge::Format default_format = ge::FORMAT_MAX;
@@ -108,7 +108,7 @@ ge::Format &OpContextBuilderBase<T>::MutableInputOriginalFormat(size_t index) {
   return impl_->MutableOpInfo().input_tensor_descs[index].origin_format;
 }
 
-template<typename T>
+template <typename T>
 ge::Format &OpContextBuilderBase<T>::MutableInputStorageFormat(size_t index) {
   if (impl_ == nullptr || index >= impl_->MutableOpInfo().input_tensor_descs.size()) {
     static ge::Format default_format = ge::FORMAT_MAX;
@@ -119,7 +119,7 @@ ge::Format &OpContextBuilderBase<T>::MutableInputStorageFormat(size_t index) {
   return impl_->MutableOpInfo().input_tensor_descs[index].storage_format;
 }
 
-template<typename T>
+template <typename T>
 gert::ExpandDimsType &OpContextBuilderBase<T>::MutableInputExpandDimsType(size_t index) {
   if (impl_ == nullptr || index >= impl_->MutableOpInfo().input_tensor_descs.size()) {
     static gert::ExpandDimsType default_expand_dims_type;
@@ -130,7 +130,7 @@ gert::ExpandDimsType &OpContextBuilderBase<T>::MutableInputExpandDimsType(size_t
   return impl_->MutableOpInfo().input_tensor_descs[index].expand_dims_type;
 }
 
-template<typename T>
+template <typename T>
 DataType &OpContextBuilderBase<T>::MutableOutputDataType(size_t index) {
   if (impl_ == nullptr || index >= impl_->MutableOpInfo().output_tensor_descs.size()) {
     static ge::DataType default_dtype = ge::DT_MAX;
@@ -141,7 +141,7 @@ DataType &OpContextBuilderBase<T>::MutableOutputDataType(size_t index) {
   return impl_->MutableOpInfo().output_tensor_descs[index].dtype;
 }
 
-template<typename T>
+template <typename T>
 ge::Format &OpContextBuilderBase<T>::MutableOutputOriginalFormat(size_t index) {
   if (impl_ == nullptr || index >= impl_->MutableOpInfo().output_tensor_descs.size()) {
     static ge::Format default_format = ge::FORMAT_MAX;
@@ -152,7 +152,7 @@ ge::Format &OpContextBuilderBase<T>::MutableOutputOriginalFormat(size_t index) {
   return impl_->MutableOpInfo().output_tensor_descs[index].origin_format;
 }
 
-template<typename T>
+template <typename T>
 ge::Format &OpContextBuilderBase<T>::MutableOutputStorageFormat(size_t index) {
   if (impl_ == nullptr || index >= impl_->MutableOpInfo().output_tensor_descs.size()) {
     static ge::Format default_format = ge::FORMAT_MAX;
@@ -163,7 +163,7 @@ ge::Format &OpContextBuilderBase<T>::MutableOutputStorageFormat(size_t index) {
   return impl_->MutableOpInfo().output_tensor_descs[index].storage_format;
 }
 
-template<typename T>
+template <typename T>
 gert::ExpandDimsType &OpContextBuilderBase<T>::MutableOutputExpandDimsType(size_t index) {
   if (impl_ == nullptr || index >= impl_->MutableOpInfo().output_tensor_descs.size()) {
     static gert::ExpandDimsType default_expand_dims_type;
@@ -174,56 +174,56 @@ gert::ExpandDimsType &OpContextBuilderBase<T>::MutableOutputExpandDimsType(size_
   return impl_->MutableOpInfo().output_tensor_descs[index].expand_dims_type;
 }
 
-template<typename T>
+template <typename T>
 T &OpContextBuilderBase<T>::AppendAttr(bool attr) {
   GE_CHECK_NOTNULL_EXEC(impl_, return static_cast<T &>(*this));
   (void)impl_->MutableOpInfo().attrs.emplace_back(ge::AnyValue::CreateFrom<bool>(attr));
   return static_cast<T &>(*this);
 }
 
-template<typename T>
+template <typename T>
 T &OpContextBuilderBase<T>::AppendAttr(int64_t attr) {
   GE_CHECK_NOTNULL_EXEC(impl_, return static_cast<T &>(*this));
   (void)impl_->MutableOpInfo().attrs.emplace_back(ge::AnyValue::CreateFrom<int64_t>(attr));
   return static_cast<T &>(*this);
 }
 
-template<typename T>
+template <typename T>
 T &OpContextBuilderBase<T>::AppendAttr(float attr) {
   GE_CHECK_NOTNULL_EXEC(impl_, return static_cast<T &>(*this));
   (void)impl_->MutableOpInfo().attrs.emplace_back(ge::AnyValue::CreateFrom<float>(attr));
   return static_cast<T &>(*this);
 }
 
-template<typename T>
+template <typename T>
 T &OpContextBuilderBase<T>::AppendAttr(const ge::AscendString &attr) {
   GE_CHECK_NOTNULL_EXEC(impl_, return static_cast<T &>(*this));
   (void)impl_->MutableOpInfo().attrs.emplace_back(ge::AnyValue::CreateFrom<std::string>(attr.GetString()));
   return static_cast<T &>(*this);
 }
 
-template<typename T>
+template <typename T>
 T &OpContextBuilderBase<T>::AppendAttr(const std::vector<bool> &attr) {
   GE_CHECK_NOTNULL_EXEC(impl_, return static_cast<T &>(*this));
   (void)impl_->MutableOpInfo().attrs.emplace_back(ge::AnyValue::CreateFrom<std::vector<bool>>(attr));
   return static_cast<T &>(*this);
 }
 
-template<typename T>
+template <typename T>
 T &OpContextBuilderBase<T>::AppendAttr(const std::vector<int64_t> &attr) {
   GE_CHECK_NOTNULL_EXEC(impl_, return static_cast<T &>(*this));
   (void)impl_->MutableOpInfo().attrs.emplace_back(ge::AnyValue::CreateFrom<std::vector<int64_t>>(attr));
   return static_cast<T &>(*this);
 }
 
-template<typename T>
+template <typename T>
 T &OpContextBuilderBase<T>::AppendAttr(const std::vector<float> &attr) {
   GE_CHECK_NOTNULL_EXEC(impl_, return static_cast<T &>(*this));
   (void)impl_->MutableOpInfo().attrs.emplace_back(ge::AnyValue::CreateFrom<std::vector<float>>(attr));
   return static_cast<T &>(*this);
 }
 
-template<typename T>
+template <typename T>
 T &OpContextBuilderBase<T>::AppendAttr(const std::vector<ge::AscendString> &attr) {
   GE_CHECK_NOTNULL_EXEC(impl_, return static_cast<T &>(*this));
   std::vector<std::string> attr_str;
@@ -234,7 +234,7 @@ T &OpContextBuilderBase<T>::AppendAttr(const std::vector<ge::AscendString> &attr
   return static_cast<T &>(*this);
 }
 
-template<typename T>
+template <typename T>
 T &OpContextBuilderBase<T>::AppendAttr(const std::vector<std::vector<int64_t>> &attr) {
   GE_CHECK_NOTNULL_EXEC(impl_, return static_cast<T &>(*this));
   (void)impl_->MutableOpInfo().attrs.emplace_back(ge::AnyValue::CreateFrom<std::vector<std::vector<int64_t>>>(attr));

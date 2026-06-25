@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -17,17 +17,17 @@ namespace gert {
 namespace {
 using AppendAttrFunc = std::function<ge::graphStatus(TilingData *, const RuntimeAttrs *, const size_t)>;
 
-template<typename T1, typename T2>
+template <typename T1, typename T2>
 auto GetValue(const T1 attr) -> T2 {
   return static_cast<T2>(attr);
 }
 
-template<>
+template <>
 bool GetValue(const float attr) {
   return (std::abs(attr) > std::numeric_limits<float>::epsilon());
 }
 
-template<typename T>
+template <typename T>
 ge::graphStatus CheckOverFlow(const size_t attr_size, const size_t tiling_data_size, const size_t capacity) {
   size_t append_size;
   if (ge::MulOverflow(sizeof(T), attr_size, append_size)) {
@@ -48,7 +48,7 @@ ge::graphStatus CheckOverFlow(const size_t attr_size, const size_t tiling_data_s
 }
 
 // get basic type attr and append
-template<typename T>
+template <typename T>
 ge::graphStatus AppendAttr(TilingData *tiling_data, const RuntimeAttrs *attrs, const size_t attr_index) {
   GE_CHECK_NOTNULL(tiling_data);
   const T *attr = attrs->GetAttrPointer<T>(attr_index);
@@ -57,7 +57,7 @@ ge::graphStatus AppendAttr(TilingData *tiling_data, const RuntimeAttrs *attrs, c
 }
 
 // get basic list type attr and append
-template<typename T>
+template <typename T>
 ge::graphStatus AppendListAttr(TilingData *tiling_data, const RuntimeAttrs *attrs, const size_t attr_index) {
   GE_CHECK_NOTNULL(tiling_data);
   const ContinuousVector *attr = attrs->GetAttrPointer<ContinuousVector>(attr_index);
@@ -66,7 +66,7 @@ ge::graphStatus AppendListAttr(TilingData *tiling_data, const RuntimeAttrs *attr
 }
 
 // get basic list list type attr and append
-template<typename T>
+template <typename T>
 ge::graphStatus AppendListListAttr(TilingData *tiling_data, const RuntimeAttrs *attrs, const size_t attr_index) {
   GE_CHECK_NOTNULL(tiling_data);
   const ContinuousVectorVector *attr = attrs->GetAttrPointer<ContinuousVectorVector>(attr_index);
@@ -74,15 +74,15 @@ ge::graphStatus AppendListListAttr(TilingData *tiling_data, const RuntimeAttrs *
   for (size_t i = 0UL; i < attr->GetSize(); ++i) {
     const ContinuousVector *attr_data = attr->Get(i);
     GE_CHECK_NOTNULL(attr_data);
-    const auto ret = tiling_data->Append<T>(ge::PtrToPtr<const void, const T>(attr_data->GetData()),
-                                            attr_data->GetSize());
+    const auto ret =
+        tiling_data->Append<T>(ge::PtrToPtr<const void, const T>(attr_data->GetData()), attr_data->GetSize());
     GE_RETURN_IF_ERROR(ret);
   }
   return ge::GRAPH_SUCCESS;
 }
 
 // get basic type attr to convert and append
-template<typename T1, typename T2>
+template <typename T1, typename T2>
 ge::graphStatus AppendConvertedAttr(TilingData *tiling_data, const RuntimeAttrs *attrs, const size_t attr_index) {
   GE_CHECK_NOTNULL(tiling_data);
   const T1 *attr = attrs->GetAttrPointer<T1>(attr_index);
@@ -95,7 +95,7 @@ ge::graphStatus AppendConvertedAttr(TilingData *tiling_data, const RuntimeAttrs 
 }
 
 // get basic list type attr to convert and append
-template<typename T1, typename T2>
+template <typename T1, typename T2>
 ge::graphStatus AppendConvertedListAttr(TilingData *tiling_data, const RuntimeAttrs *attrs, const size_t attr_index) {
   GE_CHECK_NOTNULL(tiling_data);
   const ContinuousVector *attr = attrs->GetAttrPointer<ContinuousVector>(attr_index);
@@ -117,7 +117,7 @@ ge::graphStatus AppendConvertedListAttr(TilingData *tiling_data, const RuntimeAt
 }
 
 // get basic list list type attr to convert and append
-template<typename T1, typename T2>
+template <typename T1, typename T2>
 ge::graphStatus AppendConvertedListListAttr(TilingData *tiling_data, const RuntimeAttrs *attrs,
                                             const size_t attr_index) {
   GE_CHECK_NOTNULL(tiling_data);
@@ -177,8 +177,8 @@ ge::graphStatus AppendConvertedListF32AttrToF16(TilingData *tiling_data, const R
   auto data_size = tiling_data->GetDataSize();
   const float *attr_data = ge::PtrToPtr<const void, const float>(attr->GetData());
   GE_CHECK_NOTNULL(attr_data);
-  uint16_t *tiling_data_ptr = ge::PtrToPtr<uint8_t, uint16_t>(
-      ge::PtrToPtr<void, uint8_t>(tiling_data->GetData()) + data_size);
+  uint16_t *tiling_data_ptr =
+      ge::PtrToPtr<uint8_t, uint16_t>(ge::PtrToPtr<void, uint8_t>(tiling_data->GetData()) + data_size);
   GE_CHECK_NOTNULL(tiling_data_ptr);
   for (size_t i = 0UL; i < attr->GetSize(); ++i) {
     tiling_data_ptr[i] = optiling::Float32ToFloat16(attr_data[i]);
@@ -207,8 +207,8 @@ ge::graphStatus AppendConvertedListListF32AttrToF16(TilingData *tiling_data, con
     GE_CHECK_NOTNULL(attr_data);
     const float *attr_data_data = ge::PtrToPtr<const void, const float>(attr_data->GetData());
     GE_CHECK_NOTNULL(attr_data_data);
-    uint16_t *tiling_data_ptr = ge::PtrToPtr<uint8_t, uint16_t>(
-        ge::PtrToPtr<void, uint8_t>(tiling_data->GetData()) + data_size);
+    uint16_t *tiling_data_ptr =
+        ge::PtrToPtr<uint8_t, uint16_t>(ge::PtrToPtr<void, uint8_t>(tiling_data->GetData()) + data_size);
     GE_CHECK_NOTNULL(tiling_data_ptr);
     for (size_t j = 0UL; j < attr_data->GetSize(); ++j) {
       tiling_data_ptr[j] = optiling::Float32ToFloat16(attr_data_data[j]);
@@ -241,8 +241,8 @@ ge::graphStatus AppendConvertedListF32AttrToBf16(TilingData *tiling_data, const 
   auto data_size = tiling_data->GetDataSize();
   const float *attr_data = ge::PtrToPtr<const void, const float>(attr->GetData());
   GE_CHECK_NOTNULL(attr_data);
-  uint16_t *tiling_data_ptr = ge::PtrToPtr<uint8_t, uint16_t>(
-      ge::PtrToPtr<void, uint8_t>(tiling_data->GetData()) + data_size);
+  uint16_t *tiling_data_ptr =
+      ge::PtrToPtr<uint8_t, uint16_t>(ge::PtrToPtr<void, uint8_t>(tiling_data->GetData()) + data_size);
   GE_CHECK_NOTNULL(tiling_data_ptr);
   for (size_t i = 0UL; i < attr->GetSize(); ++i) {
     tiling_data_ptr[i] = optiling::Float32ToBfloat16(attr_data[i]);
@@ -271,8 +271,8 @@ ge::graphStatus AppendConvertedListListF32AttrToBf16(TilingData *tiling_data, co
     GE_CHECK_NOTNULL(attr_data);
     const float *attr_data_data = ge::PtrToPtr<const void, const float>(attr_data->GetData());
     GE_CHECK_NOTNULL(attr_data_data);
-    uint16_t *tiling_data_ptr = ge::PtrToPtr<uint8_t, uint16_t>(
-        ge::PtrToPtr<void, uint8_t>(tiling_data->GetData()) + data_size);
+    uint16_t *tiling_data_ptr =
+        ge::PtrToPtr<uint8_t, uint16_t>(ge::PtrToPtr<void, uint8_t>(tiling_data->GetData()) + data_size);
     GE_CHECK_NOTNULL(tiling_data_ptr);
     for (size_t j = 0UL; j < attr_data->GetSize(); ++j) {
       tiling_data_ptr[j] = optiling::Float32ToBfloat16(attr_data_data[j]);
@@ -284,9 +284,8 @@ ge::graphStatus AppendConvertedListListF32AttrToBf16(TilingData *tiling_data, co
 }
 
 // convert attr to float16 and append
-template<typename T>
-ge::graphStatus AppendConvertedAttrToF16(TilingData *tiling_data, const RuntimeAttrs *attrs,
-                                         const size_t attr_index) {
+template <typename T>
+ge::graphStatus AppendConvertedAttrToF16(TilingData *tiling_data, const RuntimeAttrs *attrs, const size_t attr_index) {
   GE_CHECK_NOTNULL(tiling_data);
   const T *attr = attrs->GetAttrPointer<T>(attr_index);
   GE_CHECK_NOTNULL(attr);
@@ -295,7 +294,7 @@ ge::graphStatus AppendConvertedAttrToF16(TilingData *tiling_data, const RuntimeA
 }
 
 // convert list attr to list_float16 and append
-template<typename T>
+template <typename T>
 ge::graphStatus AppendConvertedListAttrToF16(TilingData *tiling_data, const RuntimeAttrs *attrs,
                                              const size_t attr_index) {
   GE_CHECK_NOTNULL(tiling_data);
@@ -307,8 +306,8 @@ ge::graphStatus AppendConvertedListAttrToF16(TilingData *tiling_data, const Runt
   auto data_size = tiling_data->GetDataSize();
   const T *attr_data = ge::PtrToPtr<const void, const T>(attr->GetData());
   GE_CHECK_NOTNULL(attr_data);
-  uint16_t *tiling_data_ptr = ge::PtrToPtr<uint8_t, uint16_t>(
-      ge::PtrToPtr<void, uint8_t>(tiling_data->GetData()) + data_size);
+  uint16_t *tiling_data_ptr =
+      ge::PtrToPtr<uint8_t, uint16_t>(ge::PtrToPtr<void, uint8_t>(tiling_data->GetData()) + data_size);
   GE_CHECK_NOTNULL(tiling_data_ptr);
   for (size_t i = 0UL; i < attr->GetSize(); ++i) {
     tiling_data_ptr[i] = optiling::OtherToFloat16<T>(attr_data[i]);
@@ -319,7 +318,7 @@ ge::graphStatus AppendConvertedListAttrToF16(TilingData *tiling_data, const Runt
 }
 
 // convert list_list attr to list_list_float16 and append
-template<typename T>
+template <typename T>
 ge::graphStatus AppendConvertedListListAttrToF16(TilingData *tiling_data, const RuntimeAttrs *attrs,
                                                  const size_t attr_index) {
   GE_CHECK_NOTNULL(tiling_data);
@@ -338,8 +337,8 @@ ge::graphStatus AppendConvertedListListAttrToF16(TilingData *tiling_data, const 
     GE_CHECK_NOTNULL(attr_data);
     const T *attr_data_data = ge::PtrToPtr<const void, const T>(attr_data->GetData());
     GE_CHECK_NOTNULL(attr_data_data);
-    uint16_t *tiling_data_ptr = ge::PtrToPtr<uint8_t, uint16_t>(
-        ge::PtrToPtr<void, uint8_t>(tiling_data->GetData()) + data_size);
+    uint16_t *tiling_data_ptr =
+        ge::PtrToPtr<uint8_t, uint16_t>(ge::PtrToPtr<void, uint8_t>(tiling_data->GetData()) + data_size);
     GE_CHECK_NOTNULL(tiling_data_ptr);
     for (size_t j = 0UL; j < attr_data->GetSize(); ++j) {
       tiling_data_ptr[j] = optiling::OtherToFloat16<T>(attr_data_data[j]);
@@ -351,9 +350,8 @@ ge::graphStatus AppendConvertedListListAttrToF16(TilingData *tiling_data, const 
 }
 
 // convert attr to Bfloat16 and append
-template<typename T>
-ge::graphStatus AppendConvertedAttrToBf16(TilingData *tiling_data, const RuntimeAttrs *attrs,
-                                          const size_t attr_index) {
+template <typename T>
+ge::graphStatus AppendConvertedAttrToBf16(TilingData *tiling_data, const RuntimeAttrs *attrs, const size_t attr_index) {
   GE_CHECK_NOTNULL(tiling_data);
   const T *attr = attrs->GetAttrPointer<T>(attr_index);
   GE_CHECK_NOTNULL(attr);
@@ -362,7 +360,7 @@ ge::graphStatus AppendConvertedAttrToBf16(TilingData *tiling_data, const Runtime
 }
 
 // convert List attr to List_Bfloat16 and append
-template<typename T>
+template <typename T>
 ge::graphStatus AppendConvertedListAttrToBf16(TilingData *tiling_data, const RuntimeAttrs *attrs,
                                               const size_t attr_index) {
   GE_CHECK_NOTNULL(tiling_data);
@@ -374,8 +372,8 @@ ge::graphStatus AppendConvertedListAttrToBf16(TilingData *tiling_data, const Run
   auto data_size = tiling_data->GetDataSize();
   const T *attr_data = ge::PtrToPtr<const void, const T>(attr->GetData());
   GE_CHECK_NOTNULL(attr_data);
-  uint16_t *tiling_data_ptr = ge::PtrToPtr<uint8_t, uint16_t>(
-      ge::PtrToPtr<void, uint8_t>(tiling_data->GetData()) + data_size);
+  uint16_t *tiling_data_ptr =
+      ge::PtrToPtr<uint8_t, uint16_t>(ge::PtrToPtr<void, uint8_t>(tiling_data->GetData()) + data_size);
   GE_CHECK_NOTNULL(tiling_data_ptr);
   for (size_t i = 0UL; i < attr->GetSize(); ++i) {
     tiling_data_ptr[i] = optiling::OtherToBfloat16<T>(attr_data[i]);
@@ -386,7 +384,7 @@ ge::graphStatus AppendConvertedListAttrToBf16(TilingData *tiling_data, const Run
 }
 
 // convert List_List attr to List_List_Bfloat16 and append
-template<typename T>
+template <typename T>
 ge::graphStatus AppendConvertedListListAttrToBf16(TilingData *tiling_data, const RuntimeAttrs *attrs,
                                                   const size_t attr_index) {
   GE_CHECK_NOTNULL(tiling_data);
@@ -405,8 +403,8 @@ ge::graphStatus AppendConvertedListListAttrToBf16(TilingData *tiling_data, const
     GE_CHECK_NOTNULL(attr_data);
     const T *attr_data_data = ge::PtrToPtr<const void, const T>(attr_data->GetData());
     GE_CHECK_NOTNULL(attr_data_data);
-    uint16_t *tiling_data_ptr = ge::PtrToPtr<uint8_t, uint16_t>(
-        ge::PtrToPtr<void, uint8_t>(tiling_data->GetData()) + data_size);
+    uint16_t *tiling_data_ptr =
+        ge::PtrToPtr<uint8_t, uint16_t>(ge::PtrToPtr<void, uint8_t>(tiling_data->GetData()) + data_size);
     GE_CHECK_NOTNULL(tiling_data_ptr);
     for (size_t j = 0UL; j < attr_data->GetSize(); ++j) {
       tiling_data_ptr[j] = optiling::OtherToBfloat16<T>(attr_data_data[j]);
@@ -417,9 +415,9 @@ ge::graphStatus AppendConvertedListListAttrToBf16(TilingData *tiling_data, const
   return ge::GRAPH_SUCCESS;
 }
 
-template<AttrDataType SRC, AttrDataType DST>
+template <AttrDataType SRC, AttrDataType DST>
 class AttrTable {
-public:
+ public:
   explicit AttrTable(const AppendAttrFunc default_val) {
     for (size_t i = 0UL; i < static_cast<size_t>(SRC); ++i) {
       for (size_t j = 0UL; j < static_cast<size_t>(DST); ++j) {
@@ -440,8 +438,8 @@ public:
     return *this;
   }
 
-private:
-  std::array<std::array<AppendAttrFunc,static_cast<size_t>(DST)>,static_cast<size_t>(SRC)> elements{};
+ private:
+  std::array<std::array<AppendAttrFunc, static_cast<size_t>(DST)>, static_cast<size_t>(SRC)> elements{};
 };
 
 const auto kAttrTable =
@@ -503,13 +501,16 @@ const auto kAttrTable =
         .Add(AttrDataType::kListListFloat32, AttrDataType::kListListUint8, &AppendConvertedListListAttr<float, uint8_t>)
         .Add(AttrDataType::kFloat32, AttrDataType::kUint16, &AppendConvertedAttr<float, uint16_t>)
         .Add(AttrDataType::kListFloat32, AttrDataType::kListUint16, &AppendConvertedListAttr<float, uint16_t>)
-        .Add(AttrDataType::kListListFloat32, AttrDataType::kListListUint16, &AppendConvertedListListAttr<float, uint16_t>)
+        .Add(AttrDataType::kListListFloat32, AttrDataType::kListListUint16,
+             &AppendConvertedListListAttr<float, uint16_t>)
         .Add(AttrDataType::kFloat32, AttrDataType::kUint32, &AppendConvertedAttr<float, uint32_t>)
         .Add(AttrDataType::kListFloat32, AttrDataType::kListUint32, &AppendConvertedListAttr<float, uint32_t>)
-        .Add(AttrDataType::kListListFloat32, AttrDataType::kListListUint32, &AppendConvertedListListAttr<float, uint32_t>)
+        .Add(AttrDataType::kListListFloat32, AttrDataType::kListListUint32,
+             &AppendConvertedListListAttr<float, uint32_t>)
         .Add(AttrDataType::kFloat32, AttrDataType::kUint64, &AppendConvertedAttr<float, uint64_t>)
         .Add(AttrDataType::kListFloat32, AttrDataType::kListUint64, &AppendConvertedListAttr<float, uint64_t>)
-        .Add(AttrDataType::kListListFloat32, AttrDataType::kListListUint64, &AppendConvertedListListAttr<float, uint64_t>)
+        .Add(AttrDataType::kListListFloat32, AttrDataType::kListListUint64,
+             &AppendConvertedListListAttr<float, uint64_t>)
         // convert int32 attr to other types
         .Add(AttrDataType::kInt32, AttrDataType::kBool, &AppendConvertedAttr<int32_t, bool>)
         .Add(AttrDataType::kListInt32, AttrDataType::kListBool, &AppendConvertedListAttr<int32_t, bool>)
@@ -540,13 +541,16 @@ const auto kAttrTable =
         .Add(AttrDataType::kListListInt32, AttrDataType::kListListUint8, &AppendConvertedListListAttr<int32_t, uint8_t>)
         .Add(AttrDataType::kInt32, AttrDataType::kUint16, &AppendConvertedAttr<int32_t, uint16_t>)
         .Add(AttrDataType::kListInt32, AttrDataType::kListUint16, &AppendConvertedListAttr<int32_t, uint16_t>)
-        .Add(AttrDataType::kListListInt32, AttrDataType::kListListUint16, &AppendConvertedListListAttr<int32_t, uint16_t>)
+        .Add(AttrDataType::kListListInt32, AttrDataType::kListListUint16,
+             &AppendConvertedListListAttr<int32_t, uint16_t>)
         .Add(AttrDataType::kInt32, AttrDataType::kUint32, &AppendConvertedAttr<int32_t, uint32_t>)
         .Add(AttrDataType::kListInt32, AttrDataType::kListUint32, &AppendConvertedListAttr<int32_t, uint32_t>)
-        .Add(AttrDataType::kListListInt32, AttrDataType::kListListUint32, &AppendConvertedListListAttr<int32_t, uint32_t>)
+        .Add(AttrDataType::kListListInt32, AttrDataType::kListListUint32,
+             &AppendConvertedListListAttr<int32_t, uint32_t>)
         .Add(AttrDataType::kInt32, AttrDataType::kUint64, &AppendConvertedAttr<int32_t, uint64_t>)
         .Add(AttrDataType::kListInt32, AttrDataType::kListUint64, &AppendConvertedListAttr<int32_t, uint64_t>)
-        .Add(AttrDataType::kListListInt32, AttrDataType::kListListUint64, &AppendConvertedListListAttr<int32_t, uint64_t>)
+        .Add(AttrDataType::kListListInt32, AttrDataType::kListListUint64,
+             &AppendConvertedListListAttr<int32_t, uint64_t>)
         // convert int64 attr to other types
         .Add(AttrDataType::kInt64, AttrDataType::kBool, &AppendConvertedAttr<int64_t, bool>)
         .Add(AttrDataType::kListInt64, AttrDataType::kListBool, &AppendConvertedListAttr<int64_t, bool>)
@@ -577,13 +581,16 @@ const auto kAttrTable =
         .Add(AttrDataType::kListListInt64, AttrDataType::kListListUint8, &AppendConvertedListListAttr<int64_t, uint8_t>)
         .Add(AttrDataType::kInt64, AttrDataType::kUint16, &AppendConvertedAttr<int64_t, uint16_t>)
         .Add(AttrDataType::kListInt64, AttrDataType::kListUint16, &AppendConvertedListAttr<int64_t, uint16_t>)
-        .Add(AttrDataType::kListListInt64, AttrDataType::kListListUint16, &AppendConvertedListListAttr<int64_t, uint16_t>)
+        .Add(AttrDataType::kListListInt64, AttrDataType::kListListUint16,
+             &AppendConvertedListListAttr<int64_t, uint16_t>)
         .Add(AttrDataType::kInt64, AttrDataType::kUint32, &AppendConvertedAttr<int64_t, uint32_t>)
         .Add(AttrDataType::kListInt64, AttrDataType::kListUint32, &AppendConvertedListAttr<int64_t, uint32_t>)
-        .Add(AttrDataType::kListListInt64, AttrDataType::kListListUint32, &AppendConvertedListListAttr<int64_t, uint32_t>)
+        .Add(AttrDataType::kListListInt64, AttrDataType::kListListUint32,
+             &AppendConvertedListListAttr<int64_t, uint32_t>)
         .Add(AttrDataType::kInt64, AttrDataType::kUint64, &AppendConvertedAttr<int64_t, uint64_t>)
         .Add(AttrDataType::kListInt64, AttrDataType::kListUint64, &AppendConvertedListAttr<int64_t, uint64_t>)
-        .Add(AttrDataType::kListListInt64, AttrDataType::kListListUint64, &AppendConvertedListListAttr<int64_t, uint64_t>);
+        .Add(AttrDataType::kListListInt64, AttrDataType::kListListUint64,
+             &AppendConvertedListListAttr<int64_t, uint64_t>);
 }  // namespace
 
 // src type and dst type are enum data

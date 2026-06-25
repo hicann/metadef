@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -23,30 +23,30 @@ struct ErrorResult {
   operator ge::graphStatus() const {
     return ge::PARAM_INVALID;
   }
-  template<typename T>
+  template <typename T>
   operator std::unique_ptr<T>() const {
     return nullptr;
   }
-  template<typename T>
+  template <typename T>
   operator std::shared_ptr<T>() const {
     return nullptr;
   }
-  template<typename T>
+  template <typename T>
   operator T *() const {
     return nullptr;
   }
-  template<typename T>
+  template <typename T>
   operator std::vector<std::shared_ptr<T>>() const {
     return {};
   }
-  template<typename T>
+  template <typename T>
   operator std::vector<T>() const {
     return {};
   }
   operator std::string() const {
     return "";
   }
-  template<typename T>
+  template <typename T>
   operator T() const {
     return T();
   }
@@ -69,41 +69,41 @@ inline std::vector<char> CreateErrorMsg() {
   return {};
 }
 
-#define GE_ASSERT_EQ(x, y)                                                                                             \
-  do {                                                                                                                 \
-    const auto &xv = (x);                                                                                              \
-    const auto &yv = (y);                                                                                              \
-    if (xv != yv) {                                                                                                    \
-      std::stringstream ss;                                                                                            \
-      ss << "Assert (" << #x << " == " << #y << ") failed, expect " << yv << " actual " << xv;                         \
-      REPORT_INNER_ERR_MSG("E19999", "%s", ss.str().c_str());                                                            \
-      GELOGE(ge::FAILED, "%s", ss.str().c_str());                                                                      \
-      return ::ErrorResult();                                                                                          \
-    }                                                                                                                  \
+#define GE_ASSERT_EQ(x, y)                                                                     \
+  do {                                                                                         \
+    const auto &xv = (x);                                                                      \
+    const auto &yv = (y);                                                                      \
+    if (xv != yv) {                                                                            \
+      std::stringstream ss;                                                                    \
+      ss << "Assert (" << #x << " == " << #y << ") failed, expect " << yv << " actual " << xv; \
+      REPORT_INNER_ERR_MSG("E19999", "%s", ss.str().c_str());                                  \
+      GELOGE(ge::FAILED, "%s", ss.str().c_str());                                              \
+      return ::ErrorResult();                                                                  \
+    }                                                                                          \
   } while (false)
 
-#define GE_WARN_ASSERT(exp, ...)                                                                                       \
-  do {                                                                                                                 \
-    if (!(exp)) {                                                                                                      \
-      auto msg = CreateErrorMsg(__VA_ARGS__);                                                                          \
-      GELOGW("Assert failed: %s", (msg.empty() ? #exp : msg.data()));                                                  \
-      return ::ErrorResult();                                                                                          \
-    }                                                                                                                  \
+#define GE_WARN_ASSERT(exp, ...)                                      \
+  do {                                                                \
+    if (!(exp)) {                                                     \
+      auto msg = CreateErrorMsg(__VA_ARGS__);                         \
+      GELOGW("Assert failed: %s", (msg.empty() ? #exp : msg.data())); \
+      return ::ErrorResult();                                         \
+    }                                                                 \
   } while (false)
 
-#define GE_ASSERT(exp, ...)                                                                                            \
-  do {                                                                                                                 \
-    if (!(exp)) {                                                                                                      \
-      auto msg = CreateErrorMsg(__VA_ARGS__);                                                                          \
-      if (msg.empty()) {                                                                                               \
-        REPORT_INNER_ERR_MSG("E19999", "Assert %s failed", #exp);                                                        \
-        GELOGE(ge::FAILED, "Assert %s failed", #exp);                                                                  \
-      } else {                                                                                                         \
-        REPORT_INNER_ERR_MSG("E19999", "%s", msg.data());                                                                \
-        GELOGE(ge::FAILED, "%s", msg.data());                                                                          \
-      }                                                                                                                \
-      return ::ErrorResult();                                                                                          \
-    }                                                                                                                  \
+#define GE_ASSERT(exp, ...)                                       \
+  do {                                                            \
+    if (!(exp)) {                                                 \
+      auto msg = CreateErrorMsg(__VA_ARGS__);                     \
+      if (msg.empty()) {                                          \
+        REPORT_INNER_ERR_MSG("E19999", "Assert %s failed", #exp); \
+        GELOGE(ge::FAILED, "Assert %s failed", #exp);             \
+      } else {                                                    \
+        REPORT_INNER_ERR_MSG("E19999", "%s", msg.data());         \
+        GELOGE(ge::FAILED, "%s", msg.data());                     \
+      }                                                           \
+      return ::ErrorResult();                                     \
+    }                                                             \
   } while (false)
 
 #define GE_ASSERT_NOTNULL(v, ...) GE_ASSERT(((v) != nullptr), __VA_ARGS__)

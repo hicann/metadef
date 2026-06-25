@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -21,7 +21,8 @@ namespace {
 ge::graphStatus CalcParamKernelFunc(gert::ExeResGenerationContext *context) {
   return ge::GRAPH_SUCCESS;
 }
-ge::graphStatus GenTaskKernelFunc(const gert::ExeResGenerationContext *context, std::vector<std::vector<uint8_t>> &tasks) {
+ge::graphStatus GenTaskKernelFunc(const gert::ExeResGenerationContext *context,
+                                  std::vector<std::vector<uint8_t>> &tasks) {
   return ge::GRAPH_SUCCESS;
 }
 
@@ -36,7 +37,6 @@ ge::graphStatus GetOpSpecificInfoFunc(const gert::OpCheckContext *context, ge::A
 }
 }  // namespace
 class OpCtImplRegistryUT : public testing::Test {
-
  protected:
   virtual void TearDown() {
     gert::OpCtImplRegistry::GetInstance().GetAllTypesToImpl().clear();
@@ -47,9 +47,7 @@ TEST_F(OpCtImplRegistryUT, Register_Success_RegisterAll) {
   auto funcs = gert::OpCtImplRegistry::GetInstance().GetOpImpl("TestFoo");
   ASSERT_EQ(funcs, nullptr);
 
-  IMPL_OP_CT(TestFoo)
-      .CalcOpParam(CalcParamKernelFunc)
-      .GenerateTask(GenTaskKernelFunc);
+  IMPL_OP_CT(TestFoo).CalcOpParam(CalcParamKernelFunc).GenerateTask(GenTaskKernelFunc);
   auto impl_num = GetRegisteredOpCtNum();
   EXPECT_EQ(impl_num, 1);
   funcs = gert::OpCtImplRegistry::GetInstance().GetOpImpl("TestFoo");
@@ -59,7 +57,7 @@ TEST_F(OpCtImplRegistryUT, Register_Success_RegisterAll) {
 
   IMPL_OP_CT(TestConv2D).CalcOpParam(CalcParamKernelFunc).GenerateTask(GenTaskKernelFunc);
   impl_num = GetRegisteredOpCtNum();
-  auto impl_funcs = std::unique_ptr<TypesToCtImpl[]>(new(std::nothrow) TypesToCtImpl[impl_num]);
+  auto impl_funcs = std::unique_ptr<TypesToCtImpl[]>(new (std::nothrow) TypesToCtImpl[impl_num]);
   EXPECT_EQ(impl_num, 2);
   auto ret = GetOpCtImplFunctions(reinterpret_cast<TypesToCtImpl *>(impl_funcs.get()), impl_num);
   EXPECT_NE(ret, ge::GRAPH_FAILED);
@@ -73,9 +71,7 @@ TEST_F(OpCtImplRegistryUT, Register_Ct_version_test) {
   auto funcs = gert::OpCtImplRegistry::GetInstance().GetOpImpl("TestFoo");
   ASSERT_EQ(funcs, nullptr);
 
-  IMPL_OP_CT(TestFoo)
-  .CalcOpParam(CalcParamKernelFunc)
-      .GenerateTask(GenTaskKernelFunc);
+  IMPL_OP_CT(TestFoo).CalcOpParam(CalcParamKernelFunc).GenerateTask(GenTaskKernelFunc);
   auto impl_num = GetRegisteredOpCtNum();
   EXPECT_EQ(impl_num, 1);
   funcs = gert::OpCtImplRegistry::GetInstance().GetOpImpl("TestFoo");
@@ -86,8 +82,8 @@ TEST_F(OpCtImplRegistryUT, Register_Ct_version_test) {
   IMPL_OP_CT(TestConv2D).CalcOpParam(CalcParamKernelFunc).GenerateTask(GenTaskKernelFunc);
   impl_num = GetRegisteredOpCtNum();
   size_t real_size = sizeof(gert::OpCtImplKernelRegistry::OpCtImplFunctions) + 8;
-  size_t offset = real_size + sizeof(char*);
-  auto mem_ptr = std::unique_ptr<uint8_t[]>(new(std::nothrow) uint8_t [impl_num * offset]);
+  size_t offset = real_size + sizeof(char *);
+  auto mem_ptr = std::unique_ptr<uint8_t[]>(new (std::nothrow) uint8_t[impl_num * offset]);
   EXPECT_EQ(impl_num, 2);
   for (size_t i = 0; i < impl_num; ++i) {
     auto tmp_impl = reinterpret_cast<TypesToCtImpl *>(mem_ptr.get() + offset * i);
@@ -126,7 +122,7 @@ TEST_F(OpCtImplRegistryUT, register_all_success) {
       .OpSelectFormat(OpSelectFormatFunc)
       .GetOpSpecificInfo(GetOpSpecificInfoFunc);
   impl_num = GetRegisteredOpCtNum();
-  auto impl_funcs = std::unique_ptr<TypesToCtImpl[]>(new(std::nothrow) TypesToCtImpl[impl_num]);
+  auto impl_funcs = std::unique_ptr<TypesToCtImpl[]>(new (std::nothrow) TypesToCtImpl[impl_num]);
   EXPECT_EQ(impl_num, 2);
   auto ret = GetOpCtImplFunctions(reinterpret_cast<TypesToCtImpl *>(impl_funcs.get()), impl_num);
   EXPECT_NE(ret, ge::GRAPH_FAILED);

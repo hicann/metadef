@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -25,26 +25,26 @@
 namespace ge {
 inline Status GeMemcpy(uint8_t *dst_ptr, size_t dst_size, const uint8_t *src_ptr, const size_t src_size) {
   GE_CHK_BOOL_RET_STATUS((dst_size >= src_size), PARAM_INVALID, "memcpy_s verify fail, src size %zu, dst size %zu",
-      src_size, dst_size);
+                         src_size, dst_size);
   size_t offset = 0U;
   size_t remain_size = src_size;
   do {
     size_t copy_size = (remain_size > SECUREC_MEM_MAX_LEN) ? SECUREC_MEM_MAX_LEN : remain_size;
     const auto err = memcpy_s((dst_ptr + offset), copy_size, (src_ptr + offset), copy_size);
     GE_CHK_BOOL_RET_STATUS(err == EOK, PARAM_INVALID,
-                           "memcpy_s err, src ptr %p size %zu, dst ptr %p size %zu, offset %zu, err %d",
-                           src_ptr, copy_size, dst_ptr, (dst_size - offset), offset, err);
+                           "memcpy_s err, src ptr %p size %zu, dst ptr %p size %zu, offset %zu, err %d", src_ptr,
+                           copy_size, dst_ptr, (dst_size - offset), offset, err);
     offset += copy_size;
     remain_size -= copy_size;
   } while (remain_size > 0U);
   return SUCCESS;
 }
-}
+}  // namespace ge
 
 namespace gert {
 namespace bg {
 
-template<typename T, typename std::enable_if<std::is_fundamental<T>::value, int32_t>::type = 0>
+template <typename T, typename std::enable_if<std::is_fundamental<T>::value, int32_t>::type = 0>
 bool AppendFundAttr(const ge::AnyValue &attr, std::vector<std::vector<uint8_t>> &attrs) {
   auto val = attr.Get<T>();
   GE_ASSERT_NOTNULL(val);
@@ -61,7 +61,7 @@ inline bool AppendStrAttr(const ge::AnyValue &attr, std::vector<std::vector<uint
   (void)attrs.emplace_back(std::move(runtime_attr));
   return true;
 }
-template<typename T, typename std::enable_if<std::is_fundamental<T>::value, int32_t>::type = 0>
+template <typename T, typename std::enable_if<std::is_fundamental<T>::value, int32_t>::type = 0>
 bool AppendVectorAttr(const ge::AnyValue &attr, std::vector<std::vector<uint8_t>> &attrs) {
   auto val = attr.Get<std::vector<T>>();
   GE_ASSERT_NOTNULL(val);
@@ -116,7 +116,7 @@ inline bool AppendVectorBoolAttr(const ge::AnyValue &attr, std::vector<std::vect
   return true;
 }
 
-template<typename T, typename std::enable_if<std::is_fundamental<T>::value, int32_t>::type = 0>
+template <typename T, typename std::enable_if<std::is_fundamental<T>::value, int32_t>::type = 0>
 bool AppendVectorVectorAttr(const ge::AnyValue &attr, std::vector<std::vector<uint8_t>> &attrs) {
   auto vector_vector_list = attr.Get<std::vector<std::vector<T>>>();
   GE_ASSERT_NOTNULL(vector_vector_list);

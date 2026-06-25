@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -25,13 +25,17 @@ constexpr const char *kHomeEnvName = "HOME";
 size_t g_impl_num = 3;
 size_t g_ct_impl_num = 2;
 const char *type[] = {"Add_0", "Add_1", "Add_2"};
-size_t GetRegisteredOpNum() { return g_impl_num; }
-size_t GetRegisteredOpCtNum() { return g_ct_impl_num; }
+size_t GetRegisteredOpNum() {
+  return g_impl_num;
+}
+size_t GetRegisteredOpCtNum() {
+  return g_ct_impl_num;
+}
 uint32_t GetOpImplFunctions(TypesToImpl *impl, size_t g_impl_num) {
   gert::OpImplKernelRegistry::OpImplFunctions funcs;
   for (size_t i = 0; i < g_impl_num; ++i) {
-    funcs.tiling = (gert::OpImplRegisterV2::TilingKernelFunc) (0x10 + i);
-    funcs.infer_shape = (gert::OpImplRegisterV2::InferShapeKernelFunc) (0x20 + i);
+    funcs.tiling = (gert::OpImplRegisterV2::TilingKernelFunc)(0x10 + i);
+    funcs.infer_shape = (gert::OpImplRegisterV2::InferShapeKernelFunc)(0x20 + i);
     impl[i].op_type = type[i];
     impl[i].funcs = funcs;
   }
@@ -40,8 +44,8 @@ uint32_t GetOpImplFunctions(TypesToImpl *impl, size_t g_impl_num) {
 uint32_t GetOpCtImplFunctions(TypesToCtImpl *impl, size_t g_ct_impl_num) {
   gert::OpCtImplKernelRegistry::OpCtImplFunctions funcs;
   for (size_t i = 0; i < g_ct_impl_num; ++i) {
-    funcs.calc_op_param = (gert::OpCtImplKernelRegistry::OpCalcParamKernelFunc) (0x10 + i);
-    funcs.gen_task = (gert::OpCtImplKernelRegistry::OpGenTaskKernelFunc) (0x20 + i);
+    funcs.calc_op_param = (gert::OpCtImplKernelRegistry::OpCalcParamKernelFunc)(0x10 + i);
+    funcs.gen_task = (gert::OpCtImplKernelRegistry::OpGenTaskKernelFunc)(0x20 + i);
     impl[i].op_type = type[i];
     impl[i].funcs = funcs;
   }
@@ -54,22 +58,22 @@ class MockMmpa : public ge::MmpaStubApi {
  public:
   void *DlSym(void *handle, const char *func_name) override {
     if (std::string(func_name) == "GetRegisteredOpNum") {
-      return (void *) &GetRegisteredOpNum;
+      return (void *)&GetRegisteredOpNum;
     } else if (std::string(func_name) == "GetOpImplFunctions") {
       if (dlsys_get_impl_func_fail) {
         dlsys_get_impl_func_fail = false;
         return nullptr;
       }
-      return (void *) &GetOpImplFunctions;
+      return (void *)&GetOpImplFunctions;
     }
     if (std::string(func_name) == "GetRegisteredOpCtNum") {
-      return (void *) &GetRegisteredOpCtNum;
+      return (void *)&GetRegisteredOpCtNum;
     } else if (std::string(func_name) == "GetOpCtImplFunctions") {
       if (dlsys_get_ct_impl_func_fail) {
         dlsys_get_ct_impl_func_fail = false;
         return nullptr;
       }
-      return (void *) &GetOpCtImplFunctions;
+      return (void *)&GetOpCtImplFunctions;
     }
     return nullptr;
   }
@@ -77,13 +81,13 @@ class MockMmpa : public ge::MmpaStubApi {
     if (mock_handle == nullptr) {
       return nullptr;
     }
-    return (void *) mock_handle;
+    return (void *)mock_handle;
   }
   int32_t DlClose(void *handle) override {
     return 0L;
   }
 };
-}
+}  // namespace
 
 class OpImplRegistryHolderManagerUT : public testing::Test {
  protected:
@@ -112,7 +116,8 @@ TEST_F(OpImplRegistryHolderManagerUT, OpImplRegistryManager_UpdateOpImplRegistri
   gert::OpImplRegistryHolderManager::GetInstance().UpdateOpImplRegistries();
   tmp_registry_holder = gert::OpImplRegistryHolderManager::GetInstance().GetOpImplRegistryHolder(so_data);
   //  EXPECT_EQ(tmp_registry_holder, nullptr);  // 最终方案适配后使用此校验
-  //  EXPECT_EQ(gert::OpImplRegistryHolderManager::GetInstance().GetOpImplRegistrySize(), 0); // 最终方案适配后使用此校验
+  //  EXPECT_EQ(gert::OpImplRegistryHolderManager::GetInstance().GetOpImplRegistrySize(), 0); //
+  //  最终方案适配后使用此校验
   EXPECT_NE(tmp_registry_holder, nullptr);
   EXPECT_EQ(gert::OpImplRegistryHolderManager::GetInstance().GetOpImplRegistrySize(), 1);
 }

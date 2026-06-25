@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -30,9 +30,9 @@ class OpInferShapeRangeContextBuilderImpl : public ContextBuilderImpl {
       if (p == nullptr) {
         return;
       }
-      delete static_cast<Range<gert::Shape>*>(p)->GetMin();
-      delete static_cast<Range<gert::Shape>*>(p)->GetMax();
-      delete static_cast<Range<gert::Shape>*>(p);
+      delete static_cast<Range<gert::Shape> *>(p)->GetMin();
+      delete static_cast<Range<gert::Shape> *>(p)->GetMax();
+      delete static_cast<Range<gert::Shape> *>(p);
     };
     size_t i = 0U;
     while (i < op_info_.output_instance_num) {
@@ -49,7 +49,8 @@ class OpInferShapeRangeContextBuilderImpl : public ContextBuilderImpl {
     return holder;
   }
 };
-static_assert(sizeof(OpInferShapeRangeContextBuilderImpl) == sizeof(ContextBuilderImpl), "OpInferShapeRangeContextBuilderImpl size error");
+static_assert(sizeof(OpInferShapeRangeContextBuilderImpl) == sizeof(ContextBuilderImpl),
+              "OpInferShapeRangeContextBuilderImpl size error");
 
 OpInferShapeRangeContextBuilder::OpInferShapeRangeContextBuilder()
     : OpContextBuilderBase<OpInferShapeRangeContextBuilder>() {
@@ -63,9 +64,9 @@ OpInferShapeRangeContextBuilder &OpInferShapeRangeContextBuilder::InputTensorsRa
   std::vector<void *> tmp_inputs;
   for (size_t i = 0; i < inputs.size(); ++i) {
     if (inputs[i]->GetMin()->GetDataType() != inputs[i]->GetMax()->GetDataType() ||
-      inputs[i]->GetMin()->GetFormat() != inputs[i]->GetMax()->GetFormat() ||
-      inputs[i]->GetMin()->GetStorageFormat() != inputs[i]->GetMax()->GetStorageFormat() ||
-      !(inputs[i]->GetMin()->GetExpandDimsType() == inputs[i]->GetMax()->GetExpandDimsType())) {
+        inputs[i]->GetMin()->GetFormat() != inputs[i]->GetMax()->GetFormat() ||
+        inputs[i]->GetMin()->GetStorageFormat() != inputs[i]->GetMax()->GetStorageFormat() ||
+        !(inputs[i]->GetMin()->GetExpandDimsType() == inputs[i]->GetMax()->GetExpandDimsType())) {
       GELOGE(ge::PARAM_INVALID,
              "Index %zu, Input max and min tensor data type/origin_format/storage_format are not equal, "
              "min data type: %d, max data type: %d, min format: %d, max format: %d, min storage format: %d, max "
@@ -86,10 +87,9 @@ OpInferShapeRangeContextBuilder &OpInferShapeRangeContextBuilder::InputTensorsRa
   return *this;
 }
 
-OpInferShapeRangeContextBuilder &OpInferShapeRangeContextBuilder::OutputTensorDesc(size_t index, ge::DataType dtype,
-                                                                                   ge::Format origin_format,
-                                                                                   ge::Format storage_format,
-                                                                                   const gert::ExpandDimsType &expand_dims_type) {
+OpInferShapeRangeContextBuilder &OpInferShapeRangeContextBuilder::OutputTensorDesc(
+    size_t index, ge::DataType dtype, ge::Format origin_format, ge::Format storage_format,
+    const gert::ExpandDimsType &expand_dims_type) {
   GE_CHECK_NOTNULL_EXEC(impl_, return *this);
   MutableOutputDataType(index) = dtype;
   MutableOutputOriginalFormat(index) = origin_format;

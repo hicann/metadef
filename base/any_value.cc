@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -14,112 +14,112 @@
 #include "external/graph/types.h"
 
 namespace ge {
-template<>
+template <>
 GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<bool>() {
   return reinterpret_cast<TypeId>(1);
 }
 
-template<>
+template <>
 GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<std::string>() {
   return reinterpret_cast<TypeId>(2);
 }
 
-template<>
+template <>
 GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<float>() {
   return reinterpret_cast<TypeId>(3);
 }
 
-template<>
+template <>
 GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<int64_t>() {
   return reinterpret_cast<TypeId>(4);
 }
 
-template<>
+template <>
 GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<GeTensorDesc>() {
   return reinterpret_cast<TypeId>(5);
 }
 
-template<>
+template <>
 GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<GeTensor>() {
   return reinterpret_cast<TypeId>(6);
 }
 
-template<>
+template <>
 GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<Buffer>() {
   return reinterpret_cast<TypeId>(7);
 }
 
-template<>
+template <>
 GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<proto::GraphDef>() {
   return reinterpret_cast<TypeId>(8);
 }
 
-template<>
+template <>
 GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<NamedAttrs>() {
   return reinterpret_cast<TypeId>(9);
 }
 
-template<>
+template <>
 GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<std::vector<std::vector<int64_t>>>() {
   return reinterpret_cast<TypeId>(10);
 }
 
-template<>
+template <>
 GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<DataType>() {
   return reinterpret_cast<TypeId>(11);
 }
 
-template<>
+template <>
 GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<std::vector<std::vector<float>>>() {
   return reinterpret_cast<TypeId>(12);
 }
 
-template<>
+template <>
 GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<std::vector<std::string>>() {
   return reinterpret_cast<TypeId>(13);
 }
 
-template<>
+template <>
 GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<std::vector<float>>() {
   return reinterpret_cast<TypeId>(14);
 }
 
-template<>
+template <>
 GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<std::vector<bool>>() {
   return reinterpret_cast<TypeId>(15);
 }
 
-template<>
+template <>
 GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<std::vector<int64_t>>() {
   return reinterpret_cast<TypeId>(16);
 }
 
-template<>
+template <>
 GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<std::vector<GeTensorDesc>>() {
   return reinterpret_cast<TypeId>(17);
 }
 
-template<>
+template <>
 GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<std::vector<GeTensor>>() {
   return reinterpret_cast<TypeId>(18);
 }
 
-template<>
+template <>
 GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<std::vector<Buffer>>() {
   return reinterpret_cast<TypeId>(19);
 }
 
-template<>
+template <>
 GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<std::vector<proto::GraphDef>>() {
   return reinterpret_cast<TypeId>(20);
 }
 
-template<>
+template <>
 GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<std::vector<NamedAttrs>>() {
   return reinterpret_cast<TypeId>(21);
 }
 
-template<>
+template <>
 GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<std::vector<DataType>>() {
   return reinterpret_cast<TypeId>(22);
 }

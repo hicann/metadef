@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -21,11 +21,11 @@ using TensorAddress = void *;
 using ConstTensorAddressPtr = const void *;
 
 enum TensorPlacement : int32_t {
-    kOnDeviceHbm,  ///< Tensor位于Device上的HBM内存
-    kOnHost,       ///< Tensor位于Host
-    kFollowing,    ///< Tensor位于Host，且数据紧跟在结构体后面
-    kOnDeviceP2p,  ///< Tensor位于Device上的P2p内存
-    kTensorPlacementEnd
+  kOnDeviceHbm,  ///< Tensor位于Device上的HBM内存
+  kOnHost,       ///< Tensor位于Host
+  kFollowing,    ///< Tensor位于Host，且数据紧跟在结构体后面
+  kOnDeviceP2p,  ///< Tensor位于Device上的P2p内存
+  kTensorPlacementEnd
 };
 
 class TensorPlacementUtils {
@@ -71,15 +71,14 @@ class TensorData {
    */
   // memse函数misra告警屏蔽
   explicit TensorData(TensorAddress addr = nullptr, const TensorAddrManager manager = nullptr)
-      : TensorData(addr, manager, 0U, kTensorPlacementEnd) {
-  }
+      : TensorData(addr, manager, 0U, kTensorPlacementEnd) {}
   explicit TensorData(TensorAddress addr, const TensorAddrManager manager, size_t size, TensorPlacement placement)
       : addr_(addr), manager_(manager), size_(size), placement_(placement), reserved_0_(0U) {
     (void)memset(reserved_1_, 0, sizeof(reserved_1_));
   }
   TensorData(const TensorData &) = delete;
-  TensorData(TensorData &&other) noexcept : addr_(other.addr_), manager_(other.manager_),
-    size_(other.size_), placement_(other.placement_) {
+  TensorData(TensorData &&other) noexcept
+      : addr_(other.addr_), manager_(other.manager_), size_(other.size_), placement_(other.placement_) {
     other.addr_ = nullptr;
     other.manager_ = nullptr;
     other.size_ = 0U;
@@ -125,9 +124,9 @@ class TensorData {
   }
 
   /**
-  * 获取tensor的内存大小
-  * @return tensor所占内存大小
-  */
+   * 获取tensor的内存大小
+   * @return tensor所占内存大小
+   */
   size_t GetSize() const {
     return size_;
   }
@@ -140,9 +139,9 @@ class TensorData {
   }
 
   /**
-  * 获取tensor的placement
-  * @return tensor的placement
-  */
+   * 获取tensor的placement
+   * @return tensor的placement
+   */
   TensorPlacement GetPlacement() const {
     return placement_;
   }
@@ -231,8 +230,8 @@ class TensorData {
   TensorAddrManager manager_;
   size_t size_;
   TensorPlacement placement_;
-  uint32_t reserved_0_;  // Reserved field, 8-byte aligned for TensorPlacement
-  uint8_t reserved_1_[40]; // Reserved field, 32+8, do not directly use when only 8-byte left
+  uint32_t reserved_0_;     // Reserved field, 8-byte aligned for TensorPlacement
+  uint8_t reserved_1_[40];  // Reserved field, 32+8, do not directly use when only 8-byte left
 
   friend class TensorUtils;
 };

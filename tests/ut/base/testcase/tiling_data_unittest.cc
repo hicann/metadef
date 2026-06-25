@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -28,8 +28,7 @@ gert::ContextHolder<gert::TilingContext> BuildTestContext() {
   uint8_t tmp_compile_info[] = {1, 2, 3, 4, 5, 6, 7};
   uint8_t tmp_platform_info[] = {1, 2, 3, 4, 5, 6, 7};
   OpTilingContextBuilder ctx_builder;
-  auto holder = ctx_builder
-                    .IONum(1, 1)
+  auto holder = ctx_builder.IONum(1, 1)
                     .OpName("tmp")
                     .OpType("DIY")
                     .CompileInfo(tmp_compile_info)
@@ -172,8 +171,9 @@ TEST_F(TilingDataUT, AppendAttrListBoolOk) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 8, AttrDataType::kListBool, AttrDataType::kListBool), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 8, AttrDataType::kListBool, AttrDataType::kListBool),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(bool) * 3);
   auto ele = reinterpret_cast<bool *>(tiling_data->GetData());
   std::vector<bool> expect_data{true, false, true};
@@ -200,8 +200,9 @@ TEST_F(TilingDataUT, AppendAttrListBoolToListFloat16Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 8, AttrDataType::kListBool, AttrDataType::kListFloat16), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 8, AttrDataType::kListBool, AttrDataType::kListFloat16),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint16_t) * 3);
   auto ele = reinterpret_cast<uint16_t *>(tiling_data->GetData());
   std::vector<bool> expect_data{true, false, true};
@@ -228,8 +229,9 @@ TEST_F(TilingDataUT, AppendAttrListBoolToListBfloat16Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 8, AttrDataType::kListBool, AttrDataType::kListBfloat16), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 8, AttrDataType::kListBool, AttrDataType::kListBfloat16),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint16_t) * 3);
   auto ele = reinterpret_cast<uint16_t *>(tiling_data->GetData());
   std::vector<bool> expect_data{true, false, true};
@@ -256,8 +258,9 @@ TEST_F(TilingDataUT, AppendAttrListBoolToListFloat32Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 8, AttrDataType::kListBool, AttrDataType::kListFloat32), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 8, AttrDataType::kListBool, AttrDataType::kListFloat32),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(float) * 3);
   auto ele = reinterpret_cast<float *>(tiling_data->GetData());
   std::vector<float> expect_data{1.0f, 0.0f, 1.0f};
@@ -284,8 +287,9 @@ TEST_F(TilingDataUT, AppendAttrListBoolToListInt8Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 8, AttrDataType::kListBool, AttrDataType::kListInt8), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 8, AttrDataType::kListBool, AttrDataType::kListInt8),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(int8_t) * 3);
   auto ele = reinterpret_cast<int8_t *>(tiling_data->GetData());
   std::vector<int8_t> expect_data{1, 0, 1};
@@ -312,8 +316,9 @@ TEST_F(TilingDataUT, AppendAttrListBoolToListInt16Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 8, AttrDataType::kListBool, AttrDataType::kListInt16), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 8, AttrDataType::kListBool, AttrDataType::kListInt16),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(int16_t) * 3);
   auto ele = reinterpret_cast<int16_t *>(tiling_data->GetData());
   std::vector<int16_t> expect_data{1, 0, 1};
@@ -340,8 +345,9 @@ TEST_F(TilingDataUT, AppendAttrListBoolToListInt32Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 8, AttrDataType::kListBool, AttrDataType::kListInt32), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 8, AttrDataType::kListBool, AttrDataType::kListInt32),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(int32_t) * 3);
   auto ele = reinterpret_cast<int32_t *>(tiling_data->GetData());
   std::vector<int32_t> expect_data{1, 0, 1};
@@ -368,8 +374,9 @@ TEST_F(TilingDataUT, AppendAttrListBoolToListInt64Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 8, AttrDataType::kListBool, AttrDataType::kListInt64), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 8, AttrDataType::kListBool, AttrDataType::kListInt64),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(int64_t) * 3);
   auto ele = reinterpret_cast<int64_t *>(tiling_data->GetData());
   std::vector<int64_t> expect_data{1, 0, 1};
@@ -396,8 +403,9 @@ TEST_F(TilingDataUT, AppendAttrListBoolToListUint8Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 8, AttrDataType::kListBool, AttrDataType::kListUint8), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 8, AttrDataType::kListBool, AttrDataType::kListUint8),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint8_t) * 3);
   auto ele = reinterpret_cast<uint8_t *>(tiling_data->GetData());
   std::vector<uint8_t> expect_data{1, 0, 1};
@@ -424,8 +432,9 @@ TEST_F(TilingDataUT, AppendAttrListBoolToListUint16Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 8, AttrDataType::kListBool, AttrDataType::kListUint16), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 8, AttrDataType::kListBool, AttrDataType::kListUint16),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint16_t) * 3);
   auto ele = reinterpret_cast<uint16_t *>(tiling_data->GetData());
   std::vector<uint16_t> expect_data{1, 0, 1};
@@ -452,8 +461,9 @@ TEST_F(TilingDataUT, AppendAttrListBoolToListUint32Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 8, AttrDataType::kListBool, AttrDataType::kListUint32), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 8, AttrDataType::kListBool, AttrDataType::kListUint32),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint32_t) * 3);
   auto ele = reinterpret_cast<uint32_t *>(tiling_data->GetData());
   std::vector<uint32_t> expect_data{1, 0, 1};
@@ -480,8 +490,9 @@ TEST_F(TilingDataUT, AppendAttrListBoolToListUint64Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 8, AttrDataType::kListBool, AttrDataType::kListUint64), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 8, AttrDataType::kListBool, AttrDataType::kListUint64),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(int64_t) * 3);
   auto ele = reinterpret_cast<int64_t *>(tiling_data->GetData());
   std::vector<int64_t> expect_data{1UL, 0UL, 1UL};
@@ -496,8 +507,8 @@ TEST_F(TilingDataUT, AppendAttrFloat32ToBoolOk) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 1, AttrDataType::kFloat32, AttrDataType::kBool), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 1, AttrDataType::kFloat32, AttrDataType::kBool),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(*reinterpret_cast<bool *>(tiling_data->GetData()), true);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(bool));
 }
@@ -508,8 +519,9 @@ TEST_F(TilingDataUT, AppendAttrListFloat32ToListBoolOk) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 2, AttrDataType::kListFloat32, AttrDataType::kListBool), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 2, AttrDataType::kListFloat32, AttrDataType::kListBool),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(bool) * 3);
   auto ele = reinterpret_cast<bool *>(tiling_data->GetData());
   for (size_t i = 0UL; i < 3UL; ++i) {
@@ -523,8 +535,8 @@ TEST_F(TilingDataUT, AppendAttrFloat32ToFloat16Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 1, AttrDataType::kFloat32, AttrDataType::kFloat16), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 1, AttrDataType::kFloat32, AttrDataType::kFloat16),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(*reinterpret_cast<uint16_t *>(tiling_data->GetData()), optiling::Float32ToFloat16(10.101));
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint16_t));
 }
@@ -535,8 +547,9 @@ TEST_F(TilingDataUT, AppendAttrListFloat32ToListFloat16Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 2, AttrDataType::kListFloat32, AttrDataType::kListFloat16), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 2, AttrDataType::kListFloat32,
+                                                AttrDataType::kListFloat16),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint16_t) * 3);
   auto ele = reinterpret_cast<uint16_t *>(tiling_data->GetData());
   std::vector<float> expect_data = {1.2, 2.3, 3.4};
@@ -551,8 +564,9 @@ TEST_F(TilingDataUT, AppendAttrFloat32ToBfloat16Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 1, AttrDataType::kFloat32, AttrDataType::kBfloat16), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 1, AttrDataType::kFloat32, AttrDataType::kBfloat16),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(*reinterpret_cast<uint16_t *>(tiling_data->GetData()), optiling::Float32ToBfloat16(10.101));
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint16_t));
 }
@@ -563,8 +577,9 @@ TEST_F(TilingDataUT, AppendAttrListFloat32ToListBfloat16Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 2, AttrDataType::kListFloat32, AttrDataType::kListBfloat16), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 2, AttrDataType::kListFloat32,
+                                                AttrDataType::kListBfloat16),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint16_t) * 3);
   auto ele = reinterpret_cast<uint16_t *>(tiling_data->GetData());
   std::vector<float> expect_data = {1.2, 2.3, 3.4};
@@ -579,8 +594,8 @@ TEST_F(TilingDataUT, AppendAttrFloat32Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 1, AttrDataType::kFloat32, AttrDataType::kFloat32), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 1, AttrDataType::kFloat32, AttrDataType::kFloat32),
+            ge::GRAPH_SUCCESS);
   EXPECT_FLOAT_EQ(*reinterpret_cast<float *>(tiling_data->GetData()), 10.101);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(float));
 }
@@ -591,8 +606,9 @@ TEST_F(TilingDataUT, AppendAttrListFloat32Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 2, AttrDataType::kListFloat32, AttrDataType::kListFloat32), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 2, AttrDataType::kListFloat32,
+                                                AttrDataType::kListFloat32),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(float) * 3);
   auto ele = reinterpret_cast<float *>(tiling_data->GetData());
   std::vector<float> expect_data{1.2, 2.3, 3.4};
@@ -619,8 +635,9 @@ TEST_F(TilingDataUT, AppendAttrListFloat32ToListInt8Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 2, AttrDataType::kListFloat32, AttrDataType::kListInt8), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 2, AttrDataType::kListFloat32, AttrDataType::kListInt8),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(int8_t) * 3);
   auto ele = reinterpret_cast<int8_t *>(tiling_data->GetData());
   std::vector<int8_t> expect_data{1, 2, 3};
@@ -647,8 +664,9 @@ TEST_F(TilingDataUT, AppendAttrListFloat32ToListInt16Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 2, AttrDataType::kListFloat32, AttrDataType::kListInt16), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 2, AttrDataType::kListFloat32, AttrDataType::kListInt16),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(int16_t) * 3);
   auto ele = reinterpret_cast<int16_t *>(tiling_data->GetData());
   std::vector<int16_t> expect_data{1, 2, 3};
@@ -675,8 +693,9 @@ TEST_F(TilingDataUT, AppendAttrListFloat32ToListInt32Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 2, AttrDataType::kListFloat32, AttrDataType::kListInt32), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 2, AttrDataType::kListFloat32, AttrDataType::kListInt32),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(int32_t) * 3);
   auto ele = reinterpret_cast<int32_t *>(tiling_data->GetData());
   std::vector<int32_t> expect_data{1, 2, 3};
@@ -703,8 +722,9 @@ TEST_F(TilingDataUT, AppendAttrListFloat32ToListInt64Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 2, AttrDataType::kListFloat32, AttrDataType::kListInt64), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 2, AttrDataType::kListFloat32, AttrDataType::kListInt64),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(int64_t) * 3);
   auto ele = reinterpret_cast<int64_t *>(tiling_data->GetData());
   std::vector<int64_t> expect_data{1, 2, 3};
@@ -731,8 +751,9 @@ TEST_F(TilingDataUT, AppendAttrListFloat32ToListUint8Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 2, AttrDataType::kListFloat32, AttrDataType::kListUint8), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 2, AttrDataType::kListFloat32, AttrDataType::kListUint8),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint8_t) * 3);
   auto ele = reinterpret_cast<uint8_t *>(tiling_data->GetData());
   std::vector<uint8_t> expect_data{1, 2, 3};
@@ -759,8 +780,9 @@ TEST_F(TilingDataUT, AppendAttrListFloat32ToListUint16Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 2, AttrDataType::kListFloat32, AttrDataType::kListUint16), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 2, AttrDataType::kListFloat32,
+                                                AttrDataType::kListUint16),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint16_t) * 3);
   auto ele = reinterpret_cast<uint16_t *>(tiling_data->GetData());
   std::vector<uint16_t> expect_data{1, 2, 3};
@@ -787,8 +809,9 @@ TEST_F(TilingDataUT, AppendAttrListFloat32ToListUint32Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 2, AttrDataType::kListFloat32, AttrDataType::kListUint32), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 2, AttrDataType::kListFloat32,
+                                                AttrDataType::kListUint32),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint32_t) * 3);
   auto ele = reinterpret_cast<uint32_t *>(tiling_data->GetData());
   std::vector<uint32_t> expect_data{1, 2, 3};
@@ -815,8 +838,9 @@ TEST_F(TilingDataUT, AppendAttrListFloat32ToListUint64Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 2, AttrDataType::kListFloat32, AttrDataType::kListUint64), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 2, AttrDataType::kListFloat32,
+                                                AttrDataType::kListUint64),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint64_t) * 3);
   auto ele = reinterpret_cast<uint64_t *>(tiling_data->GetData());
   std::vector<uint64_t> expect_data{1, 2, 3};
@@ -831,8 +855,8 @@ TEST_F(TilingDataUT, AppendAttrInt32ToBoolOk) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 4, AttrDataType::kInt32, AttrDataType::kBool), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 4, AttrDataType::kInt32, AttrDataType::kBool),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(*reinterpret_cast<bool *>(tiling_data->GetData()), true);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(bool));
 }
@@ -843,8 +867,9 @@ TEST_F(TilingDataUT, AppendAttrListInt32ToListBoolOk) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 5, AttrDataType::kListInt32, AttrDataType::kListBool), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 5, AttrDataType::kListInt32, AttrDataType::kListBool),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(bool) * 3);
   std::vector<int32_t> expect_data{1, 0, 2};
   auto ele = reinterpret_cast<bool *>(tiling_data->GetData());
@@ -859,8 +884,9 @@ TEST_F(TilingDataUT, AppendAttrListListInt32ToListListBoolOk) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 6, AttrDataType::kListListInt32, AttrDataType::kListListBool), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 6, AttrDataType::kListListInt32,
+                                                AttrDataType::kListListBool),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(bool) * 6);
   std::vector<int32_t> expect_data{1, 0, 2, 4, 0, 5};
   auto ele = reinterpret_cast<bool *>(tiling_data->GetData());
@@ -875,8 +901,8 @@ TEST_F(TilingDataUT, AppendAttrInt32ToFloat16Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 4, AttrDataType::kInt32, AttrDataType::kFloat16), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 4, AttrDataType::kInt32, AttrDataType::kFloat16),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(*reinterpret_cast<uint16_t *>(tiling_data->GetData()), optiling::OtherToFloat16<int32_t>(0x7f));
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint16_t));
 }
@@ -887,8 +913,9 @@ TEST_F(TilingDataUT, AppendAttrListInt32ToListFloat16Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 5, AttrDataType::kListInt32, AttrDataType::kListFloat16), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 5, AttrDataType::kListInt32, AttrDataType::kListFloat16),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint16_t) * 3);
   auto ele = reinterpret_cast<uint16_t *>(tiling_data->GetData());
   std::vector<int32_t> expect_data{1, 0, 2};
@@ -903,8 +930,9 @@ TEST_F(TilingDataUT, AppendAttrListListInt32ToListListFloat16Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 6, AttrDataType::kListListInt32, AttrDataType::kListListFloat16), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 6, AttrDataType::kListListInt32,
+                                                AttrDataType::kListListFloat16),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint16_t) * 6);
   auto ele = reinterpret_cast<uint16_t *>(tiling_data->GetData());
   std::vector<int32_t> expect_data{1, 0, 2, 4, 0, 5};
@@ -919,8 +947,8 @@ TEST_F(TilingDataUT, AppendAttrInt32ToBfloat16Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 4, AttrDataType::kInt32, AttrDataType::kBfloat16), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 4, AttrDataType::kInt32, AttrDataType::kBfloat16),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(*reinterpret_cast<uint16_t *>(tiling_data->GetData()), optiling::OtherToBfloat16<int32_t>(0x7f));
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint16_t));
 }
@@ -931,8 +959,9 @@ TEST_F(TilingDataUT, AppendAttrListInt32ToListBfloat16Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 5, AttrDataType::kListInt32, AttrDataType::kListBfloat16), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 5, AttrDataType::kListInt32,
+                                                AttrDataType::kListBfloat16),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint16_t) * 3);
   auto ele = reinterpret_cast<uint16_t *>(tiling_data->GetData());
   std::vector<int32_t> expect_data{1, 0, 2};
@@ -947,8 +976,8 @@ TEST_F(TilingDataUT, AppendAttrListListInt32ToListListBfloat16Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 6, AttrDataType::kListListInt32, AttrDataType::kListListBfloat16),
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 6, AttrDataType::kListListInt32,
+                                                AttrDataType::kListListBfloat16),
             ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint16_t) * 6);
   auto ele = reinterpret_cast<uint16_t *>(tiling_data->GetData());
@@ -964,8 +993,8 @@ TEST_F(TilingDataUT, AppendAttrInt32ToFloat32Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 4, AttrDataType::kInt32, AttrDataType::kFloat32), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 4, AttrDataType::kInt32, AttrDataType::kFloat32),
+            ge::GRAPH_SUCCESS);
   EXPECT_FLOAT_EQ(*reinterpret_cast<float *>(tiling_data->GetData()), static_cast<float>(0x7f));
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(float));
 }
@@ -976,8 +1005,9 @@ TEST_F(TilingDataUT, AppendAttrListInt32ToListFloat32Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 5, AttrDataType::kListInt32, AttrDataType::kListFloat32), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 5, AttrDataType::kListInt32, AttrDataType::kListFloat32),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(float) * 3);
   auto ele = reinterpret_cast<float *>(tiling_data->GetData());
   std::vector<float> expect_data{1.0, 0.0, 2.0};
@@ -992,8 +1022,8 @@ TEST_F(TilingDataUT, AppendAttrListListInt32ToListListFloat32Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 6, AttrDataType::kListListInt32, AttrDataType::kListListFloat32),
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 6, AttrDataType::kListListInt32,
+                                                AttrDataType::kListListFloat32),
             ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(float) * 6);
   auto ele = reinterpret_cast<float *>(tiling_data->GetData());
@@ -1021,8 +1051,9 @@ TEST_F(TilingDataUT, AppendAttrListInt32ToListInt8Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 5, AttrDataType::kListInt32, AttrDataType::kListInt8), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 5, AttrDataType::kListInt32, AttrDataType::kListInt8),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(int8_t) * 3);
   auto ele = reinterpret_cast<int8_t *>(tiling_data->GetData());
   std::vector<int8_t> expect_data{1, 0, 2};
@@ -1037,8 +1068,9 @@ TEST_F(TilingDataUT, AppendAttrListListInt32ToListListInt8Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 6, AttrDataType::kListListInt32, AttrDataType::kListListInt8), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 6, AttrDataType::kListListInt32,
+                                                AttrDataType::kListListInt8),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(int8_t) * 6);
   auto ele = reinterpret_cast<int8_t *>(tiling_data->GetData());
   std::vector<int8_t> expect_data{1, 0, 2, 4, 0, 5};
@@ -1065,8 +1097,9 @@ TEST_F(TilingDataUT, AppendAttrListInt32ToListInt16Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 5, AttrDataType::kListInt32, AttrDataType::kListInt16), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 5, AttrDataType::kListInt32, AttrDataType::kListInt16),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(int16_t) * 3);
   auto ele = reinterpret_cast<int16_t *>(tiling_data->GetData());
   std::vector<int16_t> expect_data{1, 0, 2};
@@ -1081,8 +1114,9 @@ TEST_F(TilingDataUT, AppendAttrListListInt32ToListListInt16Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 6, AttrDataType::kListListInt32, AttrDataType::kListListInt16), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 6, AttrDataType::kListListInt32,
+                                                AttrDataType::kListListInt16),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(int16_t) * 6);
   auto ele = reinterpret_cast<int16_t *>(tiling_data->GetData());
   std::vector<int16_t> expect_data{1, 0, 2, 4, 0, 5};
@@ -1109,8 +1143,9 @@ TEST_F(TilingDataUT, AppendAttrListInt32Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 5, AttrDataType::kListInt32, AttrDataType::kListInt32), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 5, AttrDataType::kListInt32, AttrDataType::kListInt32),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(int32_t) * 3);
   auto ele = reinterpret_cast<int32_t *>(tiling_data->GetData());
   std::vector<int32_t> expect_data{1, 0, 2};
@@ -1125,8 +1160,9 @@ TEST_F(TilingDataUT, AppendAttrListListInt32Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 6, AttrDataType::kListListInt32, AttrDataType::kListListInt32), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 6, AttrDataType::kListListInt32,
+                                                AttrDataType::kListListInt32),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(int32_t) * 6);
   auto ele = reinterpret_cast<int32_t *>(tiling_data->GetData());
   std::vector<int32_t> expect_data{1, 0, 2, 4, 0, 5};
@@ -1153,8 +1189,9 @@ TEST_F(TilingDataUT, AppendAttrListInt32ToListInt64Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 5, AttrDataType::kListInt32, AttrDataType::kListInt64), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 5, AttrDataType::kListInt32, AttrDataType::kListInt64),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(int64_t) * 3);
   auto ele = reinterpret_cast<int64_t *>(tiling_data->GetData());
   std::vector<int64_t> expect_data{1, 0, 2};
@@ -1169,8 +1206,9 @@ TEST_F(TilingDataUT, AppendAttrListListInt32ToListListInt64Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 6, AttrDataType::kListListInt32, AttrDataType::kListListInt64), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 6, AttrDataType::kListListInt32,
+                                                AttrDataType::kListListInt64),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(int64_t) * 6);
   auto ele = reinterpret_cast<int64_t *>(tiling_data->GetData());
   std::vector<int64_t> expect_data{1, 0, 2, 4, 0, 5};
@@ -1197,8 +1235,9 @@ TEST_F(TilingDataUT, AppendAttrListInt32ToListUint8Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 5, AttrDataType::kListInt32, AttrDataType::kListUint8), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 5, AttrDataType::kListInt32, AttrDataType::kListUint8),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint8_t) * 3);
   auto ele = reinterpret_cast<uint8_t *>(tiling_data->GetData());
   std::vector<uint8_t> expect_data{1, 0, 2};
@@ -1213,8 +1252,9 @@ TEST_F(TilingDataUT, AppendAttrListListInt32ToListListUint8Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 6, AttrDataType::kListListInt32, AttrDataType::kListListUint8), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 6, AttrDataType::kListListInt32,
+                                                AttrDataType::kListListUint8),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint8_t) * 6);
   auto ele = reinterpret_cast<uint8_t *>(tiling_data->GetData());
   std::vector<uint8_t> expect_data{1, 0, 2, 4, 0, 5};
@@ -1241,8 +1281,9 @@ TEST_F(TilingDataUT, AppendAttrListInt32ToListUint16Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 5, AttrDataType::kListInt32, AttrDataType::kListUint16), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 5, AttrDataType::kListInt32, AttrDataType::kListUint16),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint16_t) * 3);
   auto ele = reinterpret_cast<uint16_t *>(tiling_data->GetData());
   std::vector<uint16_t> expect_data{1, 0, 2};
@@ -1257,8 +1298,9 @@ TEST_F(TilingDataUT, AppendAttrListListInt32ToListListUint16Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 6, AttrDataType::kListListInt32, AttrDataType::kListListUint16), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 6, AttrDataType::kListListInt32,
+                                                AttrDataType::kListListUint16),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint16_t) * 6);
   auto ele = reinterpret_cast<uint16_t *>(tiling_data->GetData());
   std::vector<uint16_t> expect_data{1, 0, 2, 4, 0, 5};
@@ -1285,8 +1327,9 @@ TEST_F(TilingDataUT, AppendAttrListInt32ToListUint32Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 5, AttrDataType::kListInt32, AttrDataType::kListUint32), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 5, AttrDataType::kListInt32, AttrDataType::kListUint32),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint32_t) * 3);
   auto ele = reinterpret_cast<uint32_t *>(tiling_data->GetData());
   std::vector<uint32_t> expect_data{1, 0, 2};
@@ -1301,8 +1344,9 @@ TEST_F(TilingDataUT, AppendAttrListListInt32ToListListUint32Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 6, AttrDataType::kListListInt32, AttrDataType::kListListUint32), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 6, AttrDataType::kListListInt32,
+                                                AttrDataType::kListListUint32),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint32_t) * 6);
   auto ele = reinterpret_cast<uint32_t *>(tiling_data->GetData());
   std::vector<uint32_t> expect_data{1, 0, 2, 4, 0, 5};
@@ -1329,8 +1373,9 @@ TEST_F(TilingDataUT, AppendAttrListInt32ToListUint64Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 5, AttrDataType::kListInt32, AttrDataType::kListUint64), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 5, AttrDataType::kListInt32, AttrDataType::kListUint64),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint64_t) * 3);
   auto ele = reinterpret_cast<uint64_t *>(tiling_data->GetData());
   std::vector<uint64_t> expect_data{1, 0, 2};
@@ -1345,8 +1390,9 @@ TEST_F(TilingDataUT, AppendAttrListListInt32ToListListUint64Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 6, AttrDataType::kListListInt32, AttrDataType::kListListUint64), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 6, AttrDataType::kListListInt32,
+                                                AttrDataType::kListListUint64),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint64_t) * 6);
   auto ele = reinterpret_cast<uint64_t *>(tiling_data->GetData());
   std::vector<uint64_t> expect_data{1, 0, 2, 4, 0, 5};
@@ -1361,8 +1407,8 @@ TEST_F(TilingDataUT, AppendAttrInt64ToBoolOk) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 4, AttrDataType::kInt64, AttrDataType::kBool), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 4, AttrDataType::kInt64, AttrDataType::kBool),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(*reinterpret_cast<bool *>(tiling_data->GetData()), true);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(bool));
 }
@@ -1373,8 +1419,9 @@ TEST_F(TilingDataUT, AppendAttrListInt64ToListBoolOk) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 5, AttrDataType::kListInt64, AttrDataType::kListBool), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 5, AttrDataType::kListInt64, AttrDataType::kListBool),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(bool) * 3);
   auto ele = reinterpret_cast<bool *>(tiling_data->GetData());
   for (size_t i = 0UL; i < 3UL; ++i) {
@@ -1388,8 +1435,9 @@ TEST_F(TilingDataUT, AppendAttrListListInt64ToListListBoolOk) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 6, AttrDataType::kListListInt64, AttrDataType::kListListBool), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 6, AttrDataType::kListListInt64,
+                                                AttrDataType::kListListBool),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(bool) * 6);
   auto ele = reinterpret_cast<bool *>(tiling_data->GetData());
   for (size_t i = 0UL; i < 6UL; ++i) {
@@ -1403,8 +1451,8 @@ TEST_F(TilingDataUT, AppendAttrInt64ToFloat16Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 4, AttrDataType::kInt64, AttrDataType::kFloat16), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 4, AttrDataType::kInt64, AttrDataType::kFloat16),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(*reinterpret_cast<uint16_t *>(tiling_data->GetData()), optiling::OtherToFloat16<int64_t>(0x7f));
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint16_t));
 }
@@ -1415,8 +1463,9 @@ TEST_F(TilingDataUT, AppendAttrListInt64ToListFloat16Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 5, AttrDataType::kListInt64, AttrDataType::kListFloat16), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 5, AttrDataType::kListInt64, AttrDataType::kListFloat16),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint16_t) * 3);
   auto ele = reinterpret_cast<uint16_t *>(tiling_data->GetData());
   std::vector<int64_t> expect_data = {1, 2, 3};
@@ -1431,8 +1480,9 @@ TEST_F(TilingDataUT, AppendAttrListListInt64ToListListFloat16Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 6, AttrDataType::kListListInt64, AttrDataType::kListListFloat16), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 6, AttrDataType::kListListInt64,
+                                                AttrDataType::kListListFloat16),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint16_t) * 6);
   auto ele = reinterpret_cast<uint16_t *>(tiling_data->GetData());
   std::vector<int64_t> expect_data{1, 2, 3, 4, 5, 6};
@@ -1447,8 +1497,8 @@ TEST_F(TilingDataUT, AppendAttrInt64ToBfloat16Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 4, AttrDataType::kInt64, AttrDataType::kBfloat16), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 4, AttrDataType::kInt64, AttrDataType::kBfloat16),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(*reinterpret_cast<uint16_t *>(tiling_data->GetData()), optiling::OtherToBfloat16<int64_t>(0x7f));
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint16_t));
 }
@@ -1459,8 +1509,9 @@ TEST_F(TilingDataUT, AppendAttrListInt64ToListBfloat16Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 5, AttrDataType::kListInt64, AttrDataType::kListBfloat16), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 5, AttrDataType::kListInt64,
+                                                AttrDataType::kListBfloat16),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint16_t) * 3);
   auto ele = reinterpret_cast<uint16_t *>(tiling_data->GetData());
   std::vector<int64_t> expect_data = {1, 2, 3};
@@ -1475,8 +1526,8 @@ TEST_F(TilingDataUT, AppendAttrListListInt64ToListListBfloat16Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 6, AttrDataType::kListListInt64, AttrDataType::kListListBfloat16),
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 6, AttrDataType::kListListInt64,
+                                                AttrDataType::kListListBfloat16),
             ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint16_t) * 6);
   auto ele = reinterpret_cast<uint16_t *>(tiling_data->GetData());
@@ -1492,8 +1543,8 @@ TEST_F(TilingDataUT, AppendAttrInt64ToFloat32Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 4, AttrDataType::kInt64, AttrDataType::kFloat32), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 4, AttrDataType::kInt64, AttrDataType::kFloat32),
+            ge::GRAPH_SUCCESS);
   EXPECT_FLOAT_EQ(*reinterpret_cast<float *>(tiling_data->GetData()), static_cast<float>(0x7f));
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(float));
 }
@@ -1504,8 +1555,9 @@ TEST_F(TilingDataUT, AppendAttrListInt64ToListFloat32Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 5, AttrDataType::kListInt64, AttrDataType::kListFloat32), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 5, AttrDataType::kListInt64, AttrDataType::kListFloat32),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(float) * 3);
   auto ele = reinterpret_cast<float *>(tiling_data->GetData());
   std::vector<float> expect_data{1.0, 2.0, 3.0};
@@ -1520,8 +1572,8 @@ TEST_F(TilingDataUT, AppendAttrListListInt64ToListListFloat32Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 6, AttrDataType::kListListInt64, AttrDataType::kListListFloat32),
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 6, AttrDataType::kListListInt64,
+                                                AttrDataType::kListListFloat32),
             ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(float) * 6);
   auto ele = reinterpret_cast<float *>(tiling_data->GetData());
@@ -1549,8 +1601,9 @@ TEST_F(TilingDataUT, AppendAttrListInt64ToListInt8Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 5, AttrDataType::kListInt64, AttrDataType::kListInt8), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 5, AttrDataType::kListInt64, AttrDataType::kListInt8),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(int8_t) * 3);
   auto ele = reinterpret_cast<int8_t *>(tiling_data->GetData());
   std::vector<int8_t> expect_data{1, 2, 3};
@@ -1565,8 +1618,9 @@ TEST_F(TilingDataUT, AppendAttrListListInt64ToListListInt8Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 6, AttrDataType::kListListInt64, AttrDataType::kListListInt8), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 6, AttrDataType::kListListInt64,
+                                                AttrDataType::kListListInt8),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(int8_t) * 6);
   auto ele = reinterpret_cast<int8_t *>(tiling_data->GetData());
   std::vector<int8_t> expect_data{1, 2, 3, 4, 5, 6};
@@ -1593,8 +1647,9 @@ TEST_F(TilingDataUT, AppendAttrListInt64ToListInt16Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 5, AttrDataType::kListInt64, AttrDataType::kListInt16), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 5, AttrDataType::kListInt64, AttrDataType::kListInt16),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(int16_t) * 3);
   auto ele = reinterpret_cast<int16_t *>(tiling_data->GetData());
   std::vector<int16_t> expect_data{1, 2, 3};
@@ -1609,8 +1664,9 @@ TEST_F(TilingDataUT, AppendAttrListListInt64ToListListInt16Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 6, AttrDataType::kListListInt64, AttrDataType::kListListInt16), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 6, AttrDataType::kListListInt64,
+                                                AttrDataType::kListListInt16),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(int16_t) * 6);
   auto ele = reinterpret_cast<int16_t *>(tiling_data->GetData());
   std::vector<int16_t> expect_data{1, 2, 3, 4, 5, 6};
@@ -1637,8 +1693,9 @@ TEST_F(TilingDataUT, AppendAttrListInt64ToListInt32Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 5, AttrDataType::kListInt64, AttrDataType::kListInt32), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 5, AttrDataType::kListInt64, AttrDataType::kListInt32),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(int32_t) * 3);
   auto ele = reinterpret_cast<int32_t *>(tiling_data->GetData());
   std::vector<int64_t> expect_data{1, 2, 3};
@@ -1653,8 +1710,9 @@ TEST_F(TilingDataUT, AppendAttrListListInt64ListListInt32Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 6, AttrDataType::kListListInt64, AttrDataType::kListListInt32), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 6, AttrDataType::kListListInt64,
+                                                AttrDataType::kListListInt32),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(int32_t) * 6);
   auto ele = reinterpret_cast<int32_t *>(tiling_data->GetData());
   std::vector<int32_t> expect_data{1, 2, 3, 4, 5, 6};
@@ -1681,8 +1739,9 @@ TEST_F(TilingDataUT, AppendAttrListInt64Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 5, AttrDataType::kListInt64, AttrDataType::kListInt64), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 5, AttrDataType::kListInt64, AttrDataType::kListInt64),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(int64_t) * 3);
   auto ele = reinterpret_cast<int64_t *>(tiling_data->GetData());
   std::vector<int64_t> expect_data{1, 2, 3};
@@ -1697,8 +1756,9 @@ TEST_F(TilingDataUT, AppendAttrListListInt64Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 6, AttrDataType::kListListInt64, AttrDataType::kListListInt64), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 6, AttrDataType::kListListInt64,
+                                                AttrDataType::kListListInt64),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(int64_t) * 6);
   auto ele = reinterpret_cast<int64_t *>(tiling_data->GetData());
   std::vector<int64_t> expect_data{1, 2, 3, 4, 5, 6};
@@ -1725,8 +1785,9 @@ TEST_F(TilingDataUT, AppendAttrListInt64ToListUint8Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 5, AttrDataType::kListInt64, AttrDataType::kListUint8), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 5, AttrDataType::kListInt64, AttrDataType::kListUint8),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint8_t) * 3);
   auto ele = reinterpret_cast<uint8_t *>(tiling_data->GetData());
   std::vector<uint8_t> expect_data{1, 2, 3};
@@ -1741,8 +1802,9 @@ TEST_F(TilingDataUT, AppendAttrListListInt64ToListListUint8Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 6, AttrDataType::kListListInt64, AttrDataType::kListListUint8), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 6, AttrDataType::kListListInt64,
+                                                AttrDataType::kListListUint8),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint8_t) * 6);
   auto ele = reinterpret_cast<uint8_t *>(tiling_data->GetData());
   std::vector<uint8_t> expect_data{1, 2, 3, 4, 5, 6};
@@ -1769,8 +1831,9 @@ TEST_F(TilingDataUT, AppendAttrListInt64ToListUint16Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 5, AttrDataType::kListInt64, AttrDataType::kListUint16), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 5, AttrDataType::kListInt64, AttrDataType::kListUint16),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint16_t) * 3);
   auto ele = reinterpret_cast<uint16_t *>(tiling_data->GetData());
   std::vector<uint16_t> expect_data{1, 2, 3};
@@ -1785,8 +1848,9 @@ TEST_F(TilingDataUT, AppendAttrListListInt64ToListListUint16Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 6, AttrDataType::kListListInt64, AttrDataType::kListListUint16), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 6, AttrDataType::kListListInt64,
+                                                AttrDataType::kListListUint16),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint16_t) * 6);
   auto ele = reinterpret_cast<uint16_t *>(tiling_data->GetData());
   std::vector<uint16_t> expect_data{1, 2, 3, 4, 5, 6};
@@ -1813,8 +1877,9 @@ TEST_F(TilingDataUT, AppendAttrListInt64ToListUint32Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 5, AttrDataType::kListInt64, AttrDataType::kListUint32), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 5, AttrDataType::kListInt64, AttrDataType::kListUint32),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint32_t) * 3);
   auto ele = reinterpret_cast<uint32_t *>(tiling_data->GetData());
   std::vector<uint32_t> expect_data{1, 2, 3};
@@ -1829,8 +1894,9 @@ TEST_F(TilingDataUT, AppendAttrListListInt64ToListListUint32Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 6, AttrDataType::kListListInt64, AttrDataType::kListListUint32), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 6, AttrDataType::kListListInt64,
+                                                AttrDataType::kListListUint32),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint32_t) * 6);
   auto ele = reinterpret_cast<uint32_t *>(tiling_data->GetData());
   std::vector<uint32_t> expect_data{1, 2, 3, 4, 5, 6};
@@ -1857,8 +1923,9 @@ TEST_F(TilingDataUT, AppendAttrListInt64ToListUint64Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 5, AttrDataType::kListInt64, AttrDataType::kListUint64), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 5, AttrDataType::kListInt64, AttrDataType::kListUint64),
+      ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint64_t) * 3);
   auto ele = reinterpret_cast<uint64_t *>(tiling_data->GetData());
   std::vector<uint64_t> expect_data{1, 2, 3};
@@ -1873,8 +1940,9 @@ TEST_F(TilingDataUT, AppendAttrListListInt64ToListListUint64Ok) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 6, AttrDataType::kListListInt64, AttrDataType::kListListUint64), ge::GRAPH_SUCCESS);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 6, AttrDataType::kListListInt64,
+                                                AttrDataType::kListListUint64),
+            ge::GRAPH_SUCCESS);
   EXPECT_EQ(tiling_data->GetDataSize(), sizeof(uint64_t) * 6);
   auto ele = reinterpret_cast<uint64_t *>(tiling_data->GetData());
   std::vector<uint64_t> expect_data{1, 2, 3, 4, 5, 6};
@@ -1911,10 +1979,11 @@ TEST_F(TilingDataUT, AppendAttrDstTypeInvalid) {
   auto holder = BuildTestContext();
   auto context = holder.GetContext();
   EXPECT_NE(context, nullptr);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 7, AttrDataType::kBool, AttrDataType::kListListInt32), ge::GRAPH_FAILED);
-  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(
-            context->GetAttrs(), 7, AttrDataType::kBool, AttrDataType::kString), ge::GRAPH_FAILED);
+  EXPECT_EQ(
+      tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 7, AttrDataType::kBool, AttrDataType::kListListInt32),
+      ge::GRAPH_FAILED);
+  EXPECT_EQ(tiling_data->AppendConvertedAttrVal(context->GetAttrs(), 7, AttrDataType::kBool, AttrDataType::kString),
+            ge::GRAPH_FAILED);
 }
 
 TEST_F(TilingDataUT, AppendListOverCapacity) {

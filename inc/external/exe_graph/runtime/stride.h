@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -30,7 +30,7 @@ struct Stride {
    * 默认构造一个Stride，默认构造的Stride实例中，dim_num长度为0
    */
   Stride() : dim_num_(0), strides_{0} {
-    (void)memset(reserved_, 0, sizeof(reserved_)); // memset函数misra屏蔽
+    (void)memset(reserved_, 0, sizeof(reserved_));  // memset函数misra屏蔽
   }
 
   /**
@@ -58,7 +58,7 @@ struct Stride {
     for (size_t i = 0U; i < dim_num_; ++i) {
       strides_[i] = other.strides_[i];
     }
-    (void)memset(reserved_, 0, sizeof(reserved_)); // memset函数misra屏蔽
+    (void)memset(reserved_, 0, sizeof(reserved_));  // memset函数misra屏蔽
   }
 
   /**
@@ -74,12 +74,13 @@ struct Stride {
         strides_[i] = other.strides_[i];
       }
     }
-    (void)memset(reserved_, 0, sizeof(reserved_)); // memset函数misra屏蔽
+    (void)memset(reserved_, 0, sizeof(reserved_));  // memset函数misra屏蔽
     return *this;
   }
 
   /**
-   * 判断与另外一个Stride对象是否相等，如果两个Stride的dim num相等并且dim num内每个stride的值都相等，那么认为两个Stride相等
+   * 判断与另外一个Stride对象是否相等，如果两个Stride的dim num相等并且dim
+   * num内每个stride的值都相等，那么认为两个Stride相等
    * @param rht 另一个Stride对象
    * @return true/false
    */
@@ -168,7 +169,7 @@ struct Stride {
    * @param 扩展的stride值
    * @return this引用
    */
-  Stride& AppendStride(const int64_t value) {
+  Stride &AppendStride(const int64_t value) {
     if (this->dim_num_ >= kMaxDimNum) {
       return *this;
     }

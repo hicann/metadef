@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -15,7 +15,7 @@
 namespace ge {
 class MemBlock;
 class Allocator {
-public:
+ public:
   Allocator() = default;
   virtual ~Allocator() = default;
   Allocator(const Allocator &) = delete;
@@ -32,7 +32,7 @@ public:
 };
 
 class MemBlock {
-public:
+ public:
   MemBlock(Allocator &allocator, void *addr, size_t block_size)
       : allocator_(allocator), addr_(addr), count_(1U), block_size_(block_size) {}
   virtual ~MemBlock() = default;
@@ -65,7 +65,8 @@ public:
   size_t GetCount() const {
     return count_;
   }
-private:
+
+ private:
   Allocator &allocator_;
   void *addr_;
   size_t count_;

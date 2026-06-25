@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -26,13 +26,17 @@ namespace {
 size_t g_impl_num = 3;
 size_t g_ct_impl_num = 2;
 const char *type[] = {"Add_0", "Add_1", "Add_2"};
-size_t GetRegisteredOpNum() { return g_impl_num; }
-size_t GetRegisteredOpCtNum() { return g_ct_impl_num; }
+size_t GetRegisteredOpNum() {
+  return g_impl_num;
+}
+size_t GetRegisteredOpCtNum() {
+  return g_ct_impl_num;
+}
 uint32_t GetOpImplFunctions(TypesToImpl *impl, size_t g_impl_num) {
   gert::OpImplKernelRegistry::OpImplFunctions funcs;
   for (size_t i = 0; i < g_impl_num; ++i) {
-    funcs.tiling = (gert::OpImplRegisterV2::TilingKernelFunc) (0x10 + i);
-    funcs.infer_shape = (gert::OpImplRegisterV2::InferShapeKernelFunc) (0x20 + i);
+    funcs.tiling = (gert::OpImplRegisterV2::TilingKernelFunc)(0x10 + i);
+    funcs.infer_shape = (gert::OpImplRegisterV2::InferShapeKernelFunc)(0x20 + i);
     funcs.infer_datatype = nullptr;
     funcs.tiling_parse = nullptr;
     funcs.compile_info_deleter = nullptr;
@@ -47,9 +51,9 @@ uint32_t GetOpImplFunctions(TypesToImpl *impl, size_t g_impl_num) {
 uint32_t GetOpImplFunctionsV3(TypesToImplV2 *impl, size_t g_impl_num) {
   gert::OpImplKernelRegistry::OpImplFunctionsV2 funcs;
   for (size_t i = 0; i < g_impl_num; ++i) {
-    funcs.tiling = (gert::OpImplRegisterV2::TilingKernelFunc) (0x10 + i);
-    funcs.infer_shape = (gert::OpImplRegisterV2::InferShapeKernelFunc) (0x20 + i);
-    funcs.infer_symbol_shape = (gert::OpImplKernelRegistry::InferSymbolShapeKernelFunc) (0x30 + i);
+    funcs.tiling = (gert::OpImplRegisterV2::TilingKernelFunc)(0x10 + i);
+    funcs.infer_shape = (gert::OpImplRegisterV2::InferShapeKernelFunc)(0x20 + i);
+    funcs.infer_symbol_shape = (gert::OpImplKernelRegistry::InferSymbolShapeKernelFunc)(0x30 + i);
     funcs.infer_datatype = nullptr;
     funcs.tiling_parse = nullptr;
     funcs.compile_info_deleter = nullptr;
@@ -63,18 +67,18 @@ uint32_t GetOpImplFunctionsV3(TypesToImplV2 *impl, size_t g_impl_num) {
 }
 
 uint32_t GetOpImplFunctionsFailV3(TypesToImplV2 *impl, size_t g_impl_num) {
-    return ge::GRAPH_FAILED;
+  return ge::GRAPH_FAILED;
 }
 
 uint32_t GetOpCtImplFunctions(TypesToCtImpl *impl, size_t g_ct_impl_num) {
   gert::OpCtImplKernelRegistry::OpCtImplFunctions funcs;
   for (size_t i = 0; i < g_ct_impl_num; ++i) {
-    funcs.calc_op_param = (gert::OpCtImplKernelRegistry::OpCalcParamKernelFunc) (0x10 + i);
-    funcs.gen_task = (gert::OpCtImplKernelRegistry::OpGenTaskKernelFunc) (0x20 + i);
-    funcs.check_support = (gert::OpCtImplKernelRegistry::OP_CHECK_FUNC_V2) (0x30 + i);
-    funcs.op_select_format = (gert::OpCtImplKernelRegistry::OP_CHECK_FUNC_V2) (0x40 + i);
-    funcs.get_op_support_info = (gert::OpCtImplKernelRegistry::OP_CHECK_FUNC_V2) (0x50 + i);
-    funcs.get_op_specific_info = (gert::OpCtImplKernelRegistry::OP_CHECK_FUNC_V2) (0x60 + i);
+    funcs.calc_op_param = (gert::OpCtImplKernelRegistry::OpCalcParamKernelFunc)(0x10 + i);
+    funcs.gen_task = (gert::OpCtImplKernelRegistry::OpGenTaskKernelFunc)(0x20 + i);
+    funcs.check_support = (gert::OpCtImplKernelRegistry::OP_CHECK_FUNC_V2)(0x30 + i);
+    funcs.op_select_format = (gert::OpCtImplKernelRegistry::OP_CHECK_FUNC_V2)(0x40 + i);
+    funcs.get_op_support_info = (gert::OpCtImplKernelRegistry::OP_CHECK_FUNC_V2)(0x50 + i);
+    funcs.get_op_specific_info = (gert::OpCtImplKernelRegistry::OP_CHECK_FUNC_V2)(0x60 + i);
     impl[i].op_type = type[i];
     impl[i].funcs = funcs;
   }
@@ -96,23 +100,23 @@ class MockMmpa : public ge::MmpaStubApi {
       return nullptr;
     }
     if (std::string(func_name) == "GetRegisteredOpNum") {
-      return (void *) &GetRegisteredOpNum;
+      return (void *)&GetRegisteredOpNum;
     } else if (std::string(func_name) == "GetOpImplFunctions") {
-      return (void *) &GetOpImplFunctions;
-    } else if (std::string(func_name) == "GetOpImplFunctionsV2" && enable_OpImplFunctions_V2){
+      return (void *)&GetOpImplFunctions;
+    } else if (std::string(func_name) == "GetOpImplFunctionsV2" && enable_OpImplFunctions_V2) {
       enable_OpImplFunctions_V2 = false;
-      return (void *) &GetOpImplFunctionsV2;
-    }else if (std::string(func_name) == "GetOpImplFunctionsV2" && enable_OpImplFunctions_V3){
+      return (void *)&GetOpImplFunctionsV2;
+    } else if (std::string(func_name) == "GetOpImplFunctionsV2" && enable_OpImplFunctions_V3) {
       enable_OpImplFunctions_V3 = false;
-      return (void *) &GetOpImplFunctionsV3;
-    }else if (std::string(func_name) == "GetOpImplFunctionsV2" && enable_OpImplFunctions_V3_fail) {
+      return (void *)&GetOpImplFunctionsV3;
+    } else if (std::string(func_name) == "GetOpImplFunctionsV2" && enable_OpImplFunctions_V3_fail) {
       enable_OpImplFunctions_V3_fail = false;
-      return (void *) &GetOpImplFunctionsFailV3;
+      return (void *)&GetOpImplFunctionsFailV3;
     }
     if (std::string(func_name) == "GetRegisteredOpCtNum") {
-      return (void *) &GetRegisteredOpCtNum;
+      return (void *)&GetRegisteredOpCtNum;
     } else if (std::string(func_name) == "GetOpCtImplFunctions") {
-      return (void *) &GetOpCtImplFunctions;
+      return (void *)&GetOpCtImplFunctions;
     }
     return nullptr;
   }
@@ -120,7 +124,7 @@ class MockMmpa : public ge::MmpaStubApi {
     if (mock_handle == nullptr) {
       return nullptr;
     }
-    return (void *) mock_handle;
+    return (void *)mock_handle;
   }
   int32_t DlClose(void *handle) override {
     if (close_fail) {
@@ -130,7 +134,7 @@ class MockMmpa : public ge::MmpaStubApi {
     return 0L;
   }
 };
-}
+}  // namespace
 
 class OpImplSpaceRegistryUT : public testing::Test {
  protected:
@@ -178,24 +182,32 @@ TEST_F(OpImplSpaceRegistryUT, DefaultOpImplSpaceRegistry_SetSpaceRegistry_null) 
   EXPECT_EQ(gert::DefaultOpImplSpaceRegistry::GetInstance().GetDefaultSpaceRegistry(ge::OppImplVersion::kOpp), nullptr);
   // 通过校验原始类成员变量中space_registries_中存储的智能指针引用计数判断是否析构
   // 不能通过GetDefaultSpaceRegistry接口，该接口里做了封装，如果获取DefaultOpImplSpaceRegistryV2中为nullptr，直接返回nullptr
-  EXPECT_EQ(gert::DefaultOpImplSpaceRegistry::GetInstance().space_registries_[static_cast<size_t>(ge::OppImplVersion::kOpp)].use_count(), 0);
+  EXPECT_EQ(gert::DefaultOpImplSpaceRegistry::GetInstance()
+                .space_registries_[static_cast<size_t>(ge::OppImplVersion::kOpp)]
+                .use_count(),
+            0);
 }
 
 TEST_F(OpImplSpaceRegistryUT, DefaultOpImplSpaceRegistry_SetSpaceRegistry_null_1) {
   auto space_registry = std::make_shared<gert::OpImplSpaceRegistry>();
   gert::DefaultOpImplSpaceRegistry::GetInstance().SetDefaultSpaceRegistry(space_registry, ge::OppImplVersion::kOpp);
-  EXPECT_NE(gert::DefaultOpImplSpaceRegistry::GetInstance().GetDefaultSpaceRegistry(gert::OppImplVersionTag::kOpp), nullptr);
+  EXPECT_NE(gert::DefaultOpImplSpaceRegistry::GetInstance().GetDefaultSpaceRegistry(gert::OppImplVersionTag::kOpp),
+            nullptr);
 
   gert::DefaultOpImplSpaceRegistry::GetInstance().SetDefaultSpaceRegistry(nullptr, ge::OppImplVersion::kOpp);
-  EXPECT_EQ(gert::DefaultOpImplSpaceRegistry::GetInstance().GetDefaultSpaceRegistry(gert::OppImplVersionTag::kOpp), nullptr);
+  EXPECT_EQ(gert::DefaultOpImplSpaceRegistry::GetInstance().GetDefaultSpaceRegistry(gert::OppImplVersionTag::kOpp),
+            nullptr);
   // 通过校验原始类成员变量中space_registries_中存储的智能指针引用计数判断是否析构
   // 不能通过GetDefaultSpaceRegistry接口，该接口里做了封装，如果获取DefaultOpImplSpaceRegistryV2中为nullptr，直接返回nullptr
-  EXPECT_EQ(gert::DefaultOpImplSpaceRegistry::GetInstance().space_registries_[static_cast<size_t>(ge::OppImplVersion::kOpp)].use_count(), 0);
+  EXPECT_EQ(gert::DefaultOpImplSpaceRegistry::GetInstance()
+                .space_registries_[static_cast<size_t>(ge::OppImplVersion::kOpp)]
+                .use_count(),
+            0);
 }
 
 TEST_F(OpImplSpaceRegistryUT, LoadSoAndSaveToRegistry_success) {
   ge::MmpaStub::GetInstance().SetImpl(std::make_shared<MockMmpa>());
-  mock_handle = (void *) 0xffffffff;
+  mock_handle = (void *)0xffffffff;
   g_impl_num = 1;
 
   const std::string so_path = "./libop_master_test.so";
@@ -206,9 +218,10 @@ TEST_F(OpImplSpaceRegistryUT, LoadSoAndSaveToRegistry_success) {
   // 重复load相同so，但是版本一样， load成功
   EXPECT_EQ(gert::OpImplSpaceRegistry::LoadSoAndSaveToRegistry(so_path), ge::GRAPH_SUCCESS);
 
-  // 重复load相同so，但是版本不一样， load失败，之前是load时，如果so内容一样，都不会造一个space_registry，现在是外部造space_registry，
+  // 重复load相同so，但是版本不一样，
+  // load失败，之前是load时，如果so内容一样，都不会造一个space_registry，现在是外部造space_registry，
   // 即使opp跟opp_kenrl内容一样，也会造space registry，但是OpImplHolder会复用
-  mock_handle = (void *) 0xfffffffe;
+  mock_handle = (void *)0xfffffffe;
   EXPECT_EQ(gert::OpImplSpaceRegistry::ConvertSoToRegistry(so_path, ge::OppImplVersion::kOppKernel), ge::GRAPH_SUCCESS);
 
   // 显示释放handle
@@ -227,7 +240,7 @@ TEST_F(OpImplSpaceRegistryUT, LoadSoAndSaveToRegistry_fail) {
   // LoadSoAndSaveToRegistry always success
   EXPECT_EQ(gert::OpImplSpaceRegistry::LoadSoAndSaveToRegistry(so_path), ge::GRAPH_SUCCESS);
 
-  mock_handle = (void *) 0xfffffffc;
+  mock_handle = (void *)0xfffffffc;
   get_func_null = true;
   close_fail = true;
   EXPECT_EQ(gert::OpImplSpaceRegistry::LoadSoAndSaveToRegistry(so_path), ge::GRAPH_SUCCESS);

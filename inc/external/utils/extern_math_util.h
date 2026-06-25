@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -16,10 +16,10 @@
 #include <limits>
 
 namespace ge {
-template<typename T>
+template <typename T>
 class IntegerChecker {
  public:
-  template<typename T1>
+  template <typename T1>
   static bool Compat(const T1 v) {
     static_assert(((sizeof(T) <= sizeof(uint64_t)) && (sizeof(T1) <= sizeof(uint64_t))),
                   "IntegerChecker can only check integers less than 64 bits");
@@ -30,7 +30,7 @@ class IntegerChecker {
   }
 };
 
-template<typename TLhs, typename TRhs, typename TRet>
+template <typename TLhs, typename TRhs, typename TRet>
 bool MulOverflow(TLhs lhs, TRhs rhs, TRet &ret) {
 #if __GNUC__ >= 5
   return __builtin_mul_overflow(lhs, rhs, &ret);
@@ -64,7 +64,7 @@ bool MulOverflow(TLhs lhs, TRhs rhs, TRet &ret) {
 #endif
 }
 
-template<typename TLhs, typename TRhs, typename TRet>
+template <typename TLhs, typename TRhs, typename TRet>
 bool AddOverflow(TLhs lhs, TRhs rhs, TRet &ret) {
 #if __GNUC__ >= 5
   return __builtin_add_overflow(lhs, rhs, &ret);
@@ -85,7 +85,6 @@ bool AddOverflow(TLhs lhs, TRhs rhs, TRet &ret) {
   return false;
 #endif
 }
-} // namespace ge
-
+}  // namespace ge
 
 #endif  // METADEF_CXX_INC_EXTERNAL_UTILS_EXTERN_MATH_UTIL_H

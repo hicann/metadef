@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -33,7 +33,7 @@ void SetRt2OpImplSo(std::set<std::string> &temp_paths, bool flag = true) {
   std::string opp_path = "./";
   mmSetEnv(kEnvName, opp_path.c_str(), 1);
 
-  std::string path ="./opp";
+  std::string path = "./opp";
   temp_paths.insert(path);
   system(("mkdir -p " + path).c_str());
   path += "/scene.info";
@@ -84,7 +84,7 @@ void SetOpHostAndGraphSo(std::set<std::string> &temp_paths, bool flag = true) {
   std::string opp_path = "./";
   mmSetEnv(kEnvName, opp_path.c_str(), 1);
 
-  std::string path ="./opp";
+  std::string path = "./opp";
   temp_paths.insert(path);
   system(("mkdir -p " + path).c_str());
   path += "/scene.info";
@@ -114,7 +114,7 @@ void SetOpHostAndGraphSo(std::set<std::string> &temp_paths, bool flag = true) {
   system(("mkdir -p " + path_custom_tiling).c_str());
   system(("touch " + path_custom_tiling + "libopmaster_customize.so").c_str());
 
-  std::string path_custom_proto = path_vendors +  ("/customize" + kx86OpProtoPath);
+  std::string path_custom_proto = path_vendors + ("/customize" + kx86OpProtoPath);
   system(("mkdir -p " + path_custom_proto).c_str());
   system(("touch " + path_custom_proto + "libopsproto_customize.so").c_str());
 
@@ -163,7 +163,7 @@ void SetOpHostAndGraphSo(std::set<std::string> &temp_paths, bool flag = true) {
   system(("realpath " + op_proto_rt_path).c_str());
   system(command.c_str());
 
-  std::string op_proto_rt2_path =op_proto_path + "libopsproto_success_rt2.0.so";
+  std::string op_proto_rt2_path = op_proto_path + "libopsproto_success_rt2.0.so";
   command = "touch " + op_proto_rt2_path;
   GELOGD("command: %s", command.c_str());
   system(("realpath " + op_proto_rt2_path).c_str());
@@ -195,7 +195,7 @@ std::string CreateBuiltInSplitAndUpgradedSo() {
   system(("mkdir -p " + opp_path).c_str());
   mmSetEnv(kEnvName, opp_path.c_str(), 1);
 
-  std::string path ="./opp";
+  std::string path = "./opp";
   system(("mkdir -p " + path).c_str());
   path += "/scene.info";
   system(("touch " + path).c_str());
@@ -233,13 +233,17 @@ std::string CreateBuiltInSplitAndUpgradedSo() {
 size_t g_impl_num = 3;
 size_t g_ct_impl_num = 2;
 const char *type[] = {"Add_0", "Add_1", "Add_2"};
-size_t GetRegisteredOpNum() { return g_impl_num; }
-size_t GetRegisteredOpCtNum() { return g_ct_impl_num; }
+size_t GetRegisteredOpNum() {
+  return g_impl_num;
+}
+size_t GetRegisteredOpCtNum() {
+  return g_ct_impl_num;
+}
 uint32_t GetOpImplFunctions(TypesToImpl *impl, size_t g_impl_num) {
   gert::OpImplKernelRegistry::OpImplFunctions funcs;
   for (size_t i = 0; i < g_impl_num; ++i) {
-    funcs.tiling = (gert::OpImplRegisterV2::TilingKernelFunc) (0x10 + i);
-    funcs.infer_shape = (gert::OpImplRegisterV2::InferShapeKernelFunc) (0x20 + i);
+    funcs.tiling = (gert::OpImplRegisterV2::TilingKernelFunc)(0x10 + i);
+    funcs.infer_shape = (gert::OpImplRegisterV2::InferShapeKernelFunc)(0x20 + i);
     impl[i].op_type = type[i];
     impl[i].funcs = funcs;
   }
@@ -248,8 +252,8 @@ uint32_t GetOpImplFunctions(TypesToImpl *impl, size_t g_impl_num) {
 uint32_t GetOpCtImplFunctions(TypesToCtImpl *impl, size_t g_ct_impl_num) {
   gert::OpCtImplKernelRegistry::OpCtImplFunctions funcs;
   for (size_t i = 0; i < g_ct_impl_num; ++i) {
-    funcs.calc_op_param = (gert::OpCtImplKernelRegistry::OpCalcParamKernelFunc) (0x10 + i);
-    funcs.gen_task = (gert::OpCtImplKernelRegistry::OpGenTaskKernelFunc) (0x20 + i);
+    funcs.calc_op_param = (gert::OpCtImplKernelRegistry::OpCalcParamKernelFunc)(0x10 + i);
+    funcs.gen_task = (gert::OpCtImplKernelRegistry::OpGenTaskKernelFunc)(0x20 + i);
     impl[i].op_type = type[i];
     impl[i].funcs = funcs;
   }
@@ -261,14 +265,14 @@ class MockMmpa : public ge::MmpaStubApi {
  public:
   void *DlSym(void *handle, const char *func_name) override {
     if (std::string(func_name) == "GetRegisteredOpNum") {
-      return (void *) &GetRegisteredOpNum;
+      return (void *)&GetRegisteredOpNum;
     } else if (std::string(func_name) == "GetOpImplFunctions") {
-      return (void *) &GetOpImplFunctions;
+      return (void *)&GetOpImplFunctions;
     }
     if (std::string(func_name) == "GetRegisteredOpCtNum") {
-      return (void *) &GetRegisteredOpCtNum;
+      return (void *)&GetRegisteredOpCtNum;
     } else if (std::string(func_name) == "GetOpCtImplFunctions") {
-      return (void *) &GetOpCtImplFunctions;
+      return (void *)&GetOpCtImplFunctions;
     }
     return nullptr;
   }
@@ -276,13 +280,13 @@ class MockMmpa : public ge::MmpaStubApi {
     if (mock_handle == nullptr) {
       return nullptr;
     }
-    return (void *) mock_handle;
+    return (void *)mock_handle;
   }
   int32_t DlClose(void *handle) override {
     return 0L;
   }
 };
-} // namespace
+}  // namespace
 
 class OppSoManagerUT : public testing::Test {
  protected:
@@ -308,7 +312,7 @@ TEST_F(OppSoManagerUT, LoadOppSo_fail) {
 }
 
 TEST_F(OppSoManagerUT, LoadOppSo) {
-  mock_handle = (void *) 0xffffffff;
+  mock_handle = (void *)0xffffffff;
   g_impl_num = 1;
   ge::MmpaStub::GetInstance().SetImpl(std::make_shared<MockMmpa>());
   std::set<std::string> temp_paths;
@@ -321,7 +325,7 @@ TEST_F(OppSoManagerUT, LoadOppSo) {
 }
 
 TEST_F(OppSoManagerUT, LoadOppHostAndGraphSo) {
-  mock_handle = (void *) 0xffffffff;
+  mock_handle = (void *)0xffffffff;
   g_impl_num = 1;
   ge::MmpaStub::GetInstance().SetImpl(std::make_shared<MockMmpa>());
   std::set<std::string> temp_paths;
@@ -334,7 +338,7 @@ TEST_F(OppSoManagerUT, LoadOppHostAndGraphSo) {
 }
 
 TEST_F(OppSoManagerUT, LoadSplitAndUpgradedOppSo_suc) {
-  mock_handle = (void *) 0xfffffff0;
+  mock_handle = (void *)0xfffffff0;
   g_impl_num = 1;
   ge::MmpaStub::GetInstance().SetImpl(std::make_shared<MockMmpa>());
   std::vector<std::string> paths;
@@ -349,7 +353,7 @@ TEST_F(OppSoManagerUT, LoadSplitAndUpgradedOppSo_suc) {
 }
 
 TEST_F(OppSoManagerUT, LoadOpsProtoPackage_suc) {
-  mock_handle = (void *) 0xfffffff0;
+  mock_handle = (void *)0xfffffff0;
   g_impl_num = 1;
   ge::MmpaStub::GetInstance().SetImpl(std::make_shared<MockMmpa>());
   std::vector<std::string> paths;

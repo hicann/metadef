@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -30,7 +30,7 @@ struct Shape {
    * 默认构造一个shape，默认构造的shape实例中，dim_num长度为0
    */
   Shape() : dim_num_(0), dims_{0} {
-    (void)memset(reserved_, 0, sizeof(reserved_)); // memset函数misra告警屏蔽
+    (void)memset(reserved_, 0, sizeof(reserved_));  // memset函数misra告警屏蔽
   }
 
   /**
@@ -58,7 +58,7 @@ struct Shape {
     for (size_t i = 0U; i < dim_num_; ++i) {
       dims_[i] = other.dims_[i];
     }
-    (void)memset(reserved_, 0, sizeof(reserved_)); // memset函数misra告警屏蔽
+    (void)memset(reserved_, 0, sizeof(reserved_));  // memset函数misra告警屏蔽
   }
 
   /**
@@ -74,7 +74,7 @@ struct Shape {
         dims_[i] = other.dims_[i];
       }
     }
-    (void)memset(reserved_, 0, sizeof(reserved_)); // memset函数misra告警屏蔽
+    (void)memset(reserved_, 0, sizeof(reserved_));  // memset函数misra告警屏蔽
     return *this;
   }
 
@@ -198,7 +198,7 @@ struct Shape {
    * @param 扩展的dim值
    * @return this引用
    */
-  Shape& AppendDim(const int64_t value) {
+  Shape &AppendDim(const int64_t value) {
     if (this->dim_num_ >= kMaxDimNum) {
       return *this;
     }

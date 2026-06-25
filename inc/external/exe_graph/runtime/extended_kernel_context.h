@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -48,7 +48,8 @@ class ExtendedKernelContext : protected KernelContext {
   /**
    * 基于算子IR原型定义，获取`DYNAMIC_INPUT`类型的输入CompileTimeTensorDesc指针
    * @param ir_index IR原型定义中的index
-   * @param relative_index 该输入实例化后的相对index，例如某个DYNAMIC_INPUT实例化了3个输入，那么relative_index的有效范围是[0,2]
+   * @param relative_index
+   * 该输入实例化后的相对index，例如某个DYNAMIC_INPUT实例化了3个输入，那么relative_index的有效范围是[0,2]
    * @return CompileTimeTensorDesc指针，index或relative_index非法时，返回空指针
    */
   const CompileTimeTensorDesc *GetDynamicInputDesc(const size_t ir_index, const size_t relative_index) const {
@@ -196,7 +197,7 @@ class ExtendedKernelContext : protected KernelContext {
   }
 
  protected:
-  template<typename T, size_t Offset = 0>
+  template <typename T, size_t Offset = 0>
   const T *GetDynamicInputPointer(size_t ir_index, size_t relative_ins_index) const {
     const auto ins_info = GetIrInputInstanceInfo(ir_index);
     if (ins_info == nullptr) {
@@ -208,7 +209,7 @@ class ExtendedKernelContext : protected KernelContext {
     return GetInputPointer<T>(Offset + ins_info->GetInstanceStart() + relative_ins_index);
   }
 
-  template<typename T, size_t Offset = 0>
+  template <typename T, size_t Offset = 0>
   const T *GetDynamicOutputPointer(size_t ir_index, size_t relative_ins_index) const {
     const auto ins_info = GetIrOutputInstanceInfo(ir_index);
     if (ins_info == nullptr) {

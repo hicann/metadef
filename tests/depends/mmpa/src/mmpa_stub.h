@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -47,7 +47,7 @@ class MmpaStubApi {
 
   virtual INT32 WaitPid(mmProcess pid, INT32 *status, INT32 options) {
     if ((options != MMPA_ZERO) && (options != M_WAIT_NOHANG) && (options != M_WAIT_UNTRACED)) {
-    return EN_INVALID_PARAM;
+      return EN_INVALID_PARAM;
     }
 
     INT32 ret = waitpid(pid, status, options);
@@ -59,7 +59,7 @@ class MmpaStubApi {
         if (WIFEXITED(*status)) {
           *status = WEXITSTATUS(*status);
         }
-        if(WIFSIGNALED(*status)) {
+        if (WIFSIGNALED(*status)) {
           *status = WTERMSIG(*status);
         }
       }
@@ -68,8 +68,7 @@ class MmpaStubApi {
     return EN_OK;
   }
 
-  virtual INT32 mmGetTimeOfDay(mmTimeval *timeVal, mmTimezone *timeZone)
-  {
+  virtual INT32 mmGetTimeOfDay(mmTimeval *timeVal, mmTimezone *timeZone) {
     if (timeVal == nullptr) {
       return EN_ERR;
     }
@@ -84,7 +83,7 @@ class MmpaStubApi {
     time(&cur_time);
     tm *now_time = localtime(&cur_time);
     sysTime->wYear = 1900 + now_time->tm_year;
-    sysTime->wMonth = 1+ now_time->tm_mon;
+    sysTime->wMonth = 1 + now_time->tm_mon;
     sysTime->wDay = now_time->tm_mday;
     sysTime->wHour = now_time->tm_hour;
     sysTime->wMinute = now_time->tm_min;
@@ -92,16 +91,15 @@ class MmpaStubApi {
     return EN_OK;
   }
 
-  virtual INT32 mmScandir(const CHAR *path, mmDirent ***entryList, mmFilter filterFunc,  mmSort sort)
-  {
+  virtual INT32 mmScandir(const CHAR *path, mmDirent ***entryList, mmFilter filterFunc, mmSort sort) {
     return scandir(path, entryList, filterFunc, sort);
   }
 };
 
 class MmpaStub {
  public:
-  static MmpaStub& GetInstance() {
-    static MmpaStub* instance = new MmpaStub();
+  static MmpaStub &GetInstance() {
+    static MmpaStub *instance = new MmpaStub();
     return *instance;
   }
 
@@ -109,7 +107,7 @@ class MmpaStub {
     impl_ = impl;
   }
 
-  MmpaStubApi* GetImpl() {
+  MmpaStubApi *GetImpl() {
     return impl_.get();
   }
 
@@ -118,8 +116,7 @@ class MmpaStub {
   }
 
  private:
-  MmpaStub(): impl_(std::make_shared<MmpaStubApi>()) {
-  }
+  MmpaStub() : impl_(std::make_shared<MmpaStubApi>()) {}
 
   std::shared_ptr<MmpaStubApi> impl_;
 };

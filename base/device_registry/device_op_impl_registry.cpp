@@ -16,20 +16,17 @@
 #include "device_op_impl_registry_impl.h"
 
 namespace optiling {
-DeviceOpImplRegistry &DeviceOpImplRegistry::GetSingleton()
-{
+DeviceOpImplRegistry &DeviceOpImplRegistry::GetSingleton() {
   static DeviceOpImplRegistry g_deviceOpImplRegistry;
   return g_deviceOpImplRegistry;
 }
 
-void DeviceOpImplRegistry::RegisterSinkTiling(std::string &opType, SinkTilingFunc &func)
-{
+void DeviceOpImplRegistry::RegisterSinkTiling(std::string &opType, SinkTilingFunc &func) {
   std::string opTypeString = opType;
   sinkTilingFuncsMap_[opTypeString] = func;
 }
 
-SinkTilingFunc DeviceOpImplRegistry::GetSinkTilingFunc(std::string &opType)
-{
+SinkTilingFunc DeviceOpImplRegistry::GetSinkTilingFunc(std::string &opType) {
   std::string opTypeString = opType;
   auto func = sinkTilingFuncsMap_.find(opTypeString);
   if (func == sinkTilingFuncsMap_.end()) {
@@ -38,36 +35,29 @@ SinkTilingFunc DeviceOpImplRegistry::GetSinkTilingFunc(std::string &opType)
   return func->second;
 }
 
-std::string& DeviceOpImplRegisterImpl::GetOpType()
-{
+std::string &DeviceOpImplRegisterImpl::GetOpType() {
   return opType_;
 }
 
-DeviceOpImplRegister::DeviceOpImplRegister(const char *opType)
-{
+DeviceOpImplRegister::DeviceOpImplRegister(const char *opType) {
   impl_ = std::make_unique<DeviceOpImplRegisterImpl>();
   impl_->GetOpType() = opType;
 }
 
-DeviceOpImplRegister &DeviceOpImplRegister::Tiling(SinkTilingFunc func)
-{
+DeviceOpImplRegister &DeviceOpImplRegister::Tiling(SinkTilingFunc func) {
   DeviceOpImplRegistry::GetSingleton().RegisterSinkTiling(impl_->GetOpType(), func);
   return *this;
 }
 
-DeviceOpImplRegister::DeviceOpImplRegister(DeviceOpImplRegister &&other) noexcept
-{
+DeviceOpImplRegister::DeviceOpImplRegister(DeviceOpImplRegister &&other) noexcept {
   impl_ = std::make_unique<DeviceOpImplRegisterImpl>();
   impl_->GetOpType() = other.impl_->GetOpType();
 }
 
-DeviceOpImplRegister::DeviceOpImplRegister(const DeviceOpImplRegister &other)
-{
+DeviceOpImplRegister::DeviceOpImplRegister(const DeviceOpImplRegister &other) {
   impl_ = std::make_unique<DeviceOpImplRegisterImpl>();
   impl_->GetOpType() = other.impl_->GetOpType();
 }
 
-DeviceOpImplRegister::~DeviceOpImplRegister() 
-{
-}
-}
+DeviceOpImplRegister::~DeviceOpImplRegister() {}
+}  // namespace optiling

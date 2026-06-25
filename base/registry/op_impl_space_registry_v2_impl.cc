@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -22,37 +22,37 @@
 #include "graph/any_value.h"
 #include "base/err_msg.h"
 
-#define MERGE_FUNCTION(merged_funcs, src_funcs, op_type, func_name)                                                    \
-  if ((((merged_funcs).func_name) == nullptr) and ((src_funcs).func_name != nullptr)) {                                \
-    ((merged_funcs).func_name) = ((src_funcs).func_name);                                                              \
-    GELOGD("op type %s %s func registered.", (op_type), #func_name);                                                    \
-  } else if (((merged_funcs).func_name) != nullptr and ((src_funcs).func_name != nullptr)) {                                                                  \
-    GELOGW("op type %s %s func has been registered.", (op_type), #func_name);                                           \
-  } else {                                                                                                             \
-    /* 空分支，无需操作 */                                                                                             \
+#define MERGE_FUNCTION(merged_funcs, src_funcs, op_type, func_name)                          \
+  if ((((merged_funcs).func_name) == nullptr) and ((src_funcs).func_name != nullptr)) {      \
+    ((merged_funcs).func_name) = ((src_funcs).func_name);                                    \
+    GELOGD("op type %s %s func registered.", (op_type), #func_name);                         \
+  } else if (((merged_funcs).func_name) != nullptr and ((src_funcs).func_name != nullptr)) { \
+    GELOGW("op type %s %s func has been registered.", (op_type), #func_name);                \
+  } else {                                                                                   \
+    /* 空分支，无需操作 */                                                           \
   }
 
-#define MERGE_SCALAR(merged, src, member)                                                              \
-  do {                                                                                                  \
-    if ((merged).member == 0 && (src).member != 0) {                                                    \
-      (merged).member = (src).member;                                                                   \
-    } else if ((merged).member != 0 && (src).member != 0) {                                             \
-      GELOGW("op type %s " #member " has been registered", op_type.c_str());                            \
-    } else {                                                                                            \
-      /* 已经注册且没有重复注册 */                                                                        \
-    }                                                                                                   \
+#define MERGE_SCALAR(merged, src, member)                                    \
+  do {                                                                       \
+    if ((merged).member == 0 && (src).member != 0) {                         \
+      (merged).member = (src).member;                                        \
+    } else if ((merged).member != 0 && (src).member != 0) {                  \
+      GELOGW("op type %s " #member " has been registered", op_type.c_str()); \
+    } else {                                                                 \
+      /* 已经注册且没有重复注册 */                                \
+    }                                                                        \
   } while (0)
 
 // 初次注册打印这个，辅助定位
-#define PRINT_MERGE_FUNCTION_FIRST(merged_funcs, op_type, func_name)                                                   \
-  do {                                                                                                                 \
-    if ((((merged_funcs).func_name) != nullptr)) {                                                                 \
-      GELOGD("op type %s %s func registered first.", (op_type), #func_name);                                                 \
-    }                                                                                                                  \
+#define PRINT_MERGE_FUNCTION_FIRST(merged_funcs, op_type, func_name)         \
+  do {                                                                       \
+    if ((((merged_funcs).func_name) != nullptr)) {                           \
+      GELOGD("op type %s %s func registered first.", (op_type), #func_name); \
+    }                                                                        \
   } while (0)
 namespace gert {
 namespace {
-const char_t *const kBuiltIn = "built-in";     // opp built-in directory name
+const char_t *const kBuiltIn = "built-in";  // opp built-in directory name
 void CloseHandle(void *const handle) {
   if (handle != nullptr) {
     if (mmDlclose(handle) != 0) {
@@ -96,9 +96,8 @@ ge::graphStatus OpImplSpaceRegistryImpl::AddSoToRegistry(const OppSoDesc &so_des
     const auto so_data = metadef::GetBinDataFromFile(std::string(so_path), len);
     GE_ASSERT_NOTNULL(so_data);
     const auto create_func = [&types_to_impl_from_holder, so_path, so_desc]() -> OpImplRegistryHolderPtr {
-      void *const handle = mmDlopen(
-          so_path,
-          static_cast<int32_t>(static_cast<uint32_t>(MMPA_RTLD_NOW) | static_cast<uint32_t>(MMPA_RTLD_GLOBAL)));
+      void *const handle = mmDlopen(so_path, static_cast<int32_t>(static_cast<uint32_t>(MMPA_RTLD_NOW) |
+                                                                  static_cast<uint32_t>(MMPA_RTLD_GLOBAL)));
       if (handle == nullptr) {
         // 为兼顾兼容性和维测能力，此处算子so加载失败打印ERROR日志，并打屏提示用户
         std::stringstream ss;
@@ -276,16 +275,16 @@ void OpImplSpaceRegistryImpl::MergeTypesToCtImpl(OpTypesToImplMap &merged_impl,
       merged_funcs.op_select_format = iter.second.op_select_format;
       merged_funcs.get_op_support_info = iter.second.get_op_support_info;
       merged_funcs.get_op_specific_info = iter.second.get_op_specific_info;
-      GELOGD("Merge ct version to impl, op type %s, impl version[%zu], ct version[%zu]",
-             op_type.GetString(), merged_funcs.version, iter.second.version);
+      GELOGD("Merge ct version to impl, op type %s, impl version[%zu], ct version[%zu]", op_type.GetString(),
+             merged_funcs.version, iter.second.version);
       merged_funcs.version = iter.second.version;
       continue;
     } else {
       // 后续IMPL_CT_OP合并到IMPL_OP后删除
       // 当前是临时兼容，以version区分IMPL_CT_OP、IMPL_OP
       auto &merged_funcs = merged_impl[op_type];
-      GELOGD("Merge ct version to impl, op type %s, impl version[%zu], ct version[%zu]",
-             op_type.GetString(), merged_funcs.version, iter.second.version);
+      GELOGD("Merge ct version to impl, op type %s, impl version[%zu], ct version[%zu]", op_type.GetString(),
+             merged_funcs.version, iter.second.version);
       merged_funcs.version = iter.second.version;
     }
     const auto &src_funcs = iter.second;

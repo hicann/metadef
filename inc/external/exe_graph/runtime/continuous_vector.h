@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -29,7 +29,7 @@ class ContinuousVector {
    * @param total_size 本实例的总长度
    * @return 指向本实例的指针
    */
-  template<typename T>
+  template <typename T>
   static std::unique_ptr<uint8_t[]> Create(size_t capacity, size_t &total_size) {
     if (ge::MulOverflow(capacity, sizeof(T), total_size)) {
       return nullptr;
@@ -50,7 +50,7 @@ class ContinuousVector {
    * @param capacity 实例的最大容量
    * @return 指向本实例的指针
    */
-  template<typename T>
+  template <typename T>
   static std::unique_ptr<uint8_t[]> Create(const size_t capacity) {
     size_t total_size;
     return Create<T>(capacity, total_size);
@@ -108,12 +108,12 @@ class ContinuousVector {
  private:
   size_t capacity_;
   size_t size_;
-  uint8_t reserved_[40]; // Reserved field, 32+8, do not directly use when only 8-byte left
+  uint8_t reserved_[40];  // Reserved field, 32+8, do not directly use when only 8-byte left
   uint8_t elements[8];
 };
 static_assert(std::is_standard_layout<ContinuousVector>::value, "The ContinuousVector must be a POD");
 
-template<typename T>
+template <typename T>
 class TypedContinuousVector : private ContinuousVector {
  public:
   using ContinuousVector::GetCapacity;
@@ -151,7 +151,7 @@ class ContinuousVectorVector {
     (void)memset_s(reserved_, sizeof(reserved_), 0, sizeof(reserved_));
   }
 
-  template<typename T>
+  template <typename T>
   ContinuousVector *Add(size_t inner_vector_capacity) {
     if (size_ >= capacity_) {
       return nullptr;
@@ -159,7 +159,7 @@ class ContinuousVectorVector {
     const auto inner_vector =
         reinterpret_cast<ContinuousVector *>(reinterpret_cast<uint8_t *>(this) + GetOffset(size_));
     inner_vector->Init(inner_vector_capacity);
-    (void) inner_vector->SetSize(inner_vector_capacity);
+    (void)inner_vector->SetSize(inner_vector_capacity);
     size_t inner_vector_length = 0U;
     if (ge::MulOverflow(inner_vector_capacity, sizeof(T), inner_vector_length)) {
       return nullptr;

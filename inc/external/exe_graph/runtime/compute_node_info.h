@@ -62,7 +62,7 @@ class AnchorInstanceInfo {
  private:
   uint32_t instance_start_;
   uint32_t instantiation_num_;
-  uint8_t reserved_[40]; // Reserved field, 32+8, do not directly use when only 8-byte left
+  uint8_t reserved_[40];  // Reserved field, 32+8, do not directly use when only 8-byte left
 };
 static_assert(std::is_standard_layout<AnchorInstanceInfo>::value, "The class AnchorInstanceInfo must be a POD");
 
@@ -149,6 +149,7 @@ class CompileTimeTensorDesc {
   bool IsExist() const {
     return extend_.not_exist != 1;
   }
+
  private:
   struct Extend {
     uint8_t not_exist : 1;
@@ -157,7 +158,7 @@ class CompileTimeTensorDesc {
   ge::DataType data_type_;
   StorageFormat storage_format_;
   Extend extend_{};
-  uint8_t reserved_[39]; // Reservd field, 31+8, do not directly use when only 8-byte left
+  uint8_t reserved_[39];  // Reservd field, 31+8, do not directly use when only 8-byte left
 };
 static_assert(std::is_standard_layout<CompileTimeTensorDesc>::value, "The class CompileTimeTensorDesc must be a POD");
 
@@ -218,19 +219,17 @@ class ComputeNodeInfo {
     return inputs + ir_index;
   }
   /**
-  * 根据IR原型中的输出index，获取对应的实例化信息
-  * @param ir_index IR原型定义中的输出index
-  * @return 输出的实例化信息
-  */
+   * 根据IR原型中的输出index，获取对应的实例化信息
+   * @param ir_index IR原型定义中的输出index
+   * @return 输出的实例化信息
+   */
   const AnchorInstanceInfo *GetOutputInstanceInfo(const size_t ir_index) const {
     if (ir_index >= ir_outputs_num_) {
       return nullptr;
     }
     const auto outputs = reinterpret_cast<const AnchorInstanceInfo *>(
-        reinterpret_cast<const uint8_t *>(&place_holder) +
-        sizeof(AnchorInstanceInfo) * ir_inputs_num_ +
-        sizeof(CompileTimeTensorDesc) * (inputs_num_ + outputs_num_) +
-        runtime_attr_size_);
+        reinterpret_cast<const uint8_t *>(&place_holder) + sizeof(AnchorInstanceInfo) * ir_inputs_num_ +
+        sizeof(CompileTimeTensorDesc) * (inputs_num_ + outputs_num_) + runtime_attr_size_);
     return outputs + ir_index;
   }
   /**
@@ -312,10 +311,10 @@ class ComputeNodeInfo {
    * @return 所有IR原型定义过的属性值，属性值按照IR原型定义的顺序依次保存
    */
   RuntimeAttrs *MutableAttrs() const;
-  static ge::graphStatus CalcSize(const size_t ir_inputs_num, const size_t inputs_num,
-                                  const size_t outputs_num, size_t &total_size);
-  void Init(const size_t ir_inputs_num, const size_t inputs_num, const size_t outputs_num,
-            const ge::char_t *node_name, const ge::char_t *node_type);
+  static ge::graphStatus CalcSize(const size_t ir_inputs_num, const size_t inputs_num, const size_t outputs_num,
+                                  size_t &total_size);
+  void Init(const size_t ir_inputs_num, const size_t inputs_num, const size_t outputs_num, const ge::char_t *node_name,
+            const ge::char_t *node_type);
   static ge::graphStatus CalcSize(const size_t ir_inputs_num, const size_t ir_outputs_num, const size_t inputs_num,
                                   const size_t outputs_num, size_t &total_size);
   void Init(const size_t ir_inputs_num, const size_t ir_outputs_num, const size_t inputs_num, const size_t outputs_num,

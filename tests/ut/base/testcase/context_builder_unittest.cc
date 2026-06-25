@@ -379,7 +379,7 @@ TEST_F(UtestContextBuilder, CreateTilingContextOK) {
 
   uint8_t data_x[1] = {9};
   gert::Tensor x_tensor(x, {ge::FORMAT_NCDHW, ge::FORMAT_RESERVED, ExpandDimsType()}, TensorPlacement::kOnHost,
-                        ge::DT_FLOAT, (void *) data_x);
+                        ge::DT_FLOAT, (void *)data_x);
   gert::Tensor resultIn_tensor(resultIn, {ge::FORMAT_NCDHW, ge::FORMAT_RESERVED, ExpandDimsType()},
                                TensorPlacement::kOnHost, ge::DT_FLOAT, nullptr);
   gert::Tensor gammax_tensor(gamma, {ge::FORMAT_NCDHW, ge::FORMAT_RESERVED, ExpandDimsType()}, TensorPlacement::kOnHost,
@@ -427,7 +427,7 @@ TEST_F(UtestContextBuilder, CreateTilingContextOK) {
   EXPECT_NE(ctx_compute_node_info, nullptr);
   EXPECT_NE(ctx_compute_node_info->GetOutputTdInfo(0), nullptr);
   EXPECT_EQ(ctx_compute_node_info->GetOutputTdInfo(0)->IsExist(), true);
-  auto no_const_ctx_td = const_cast<CompileTimeTensorDesc*>(ctx_compute_node_info->GetOutputTdInfo(0));
+  auto no_const_ctx_td = const_cast<CompileTimeTensorDesc *>(ctx_compute_node_info->GetOutputTdInfo(0));
   no_const_ctx_td->SetExist(false);
   EXPECT_EQ(ctx_compute_node_info->GetOutputTdInfo(0)->IsExist(), false);
   EXPECT_EQ(ctx->GetCompileInfo(), tmp_compile_info);
@@ -472,12 +472,12 @@ TEST_F(UtestContextBuilder, CreateTilingContextOK) {
   EXPECT_FLOAT_EQ(ctx->GetAttrs()->GetListFloat(6)->GetData()[1], 0.2);
   EXPECT_FLOAT_EQ(ctx->GetAttrs()->GetListFloat(6)->GetData()[2], 0.3);
   auto int_vec_vec = ctx->GetAttrs()->GetListListInt(8);
-  EXPECT_EQ(((int64_t *) (int_vec_vec->Get(0)->GetData()))[0], 1);
-  EXPECT_EQ(((int64_t *) (int_vec_vec->Get(0)->GetData()))[1], 2);
-  EXPECT_EQ(((int64_t *) (int_vec_vec->Get(0)->GetData()))[2], 3);
-  EXPECT_EQ(((int64_t *) (int_vec_vec->Get(1)->GetData()))[0], 4);
-  EXPECT_EQ(((int64_t *) (int_vec_vec->Get(1)->GetData()))[1], 5);
-  EXPECT_EQ(((int64_t *) (int_vec_vec->Get(1)->GetData()))[2], 6);
+  EXPECT_EQ(((int64_t *)(int_vec_vec->Get(0)->GetData()))[0], 1);
+  EXPECT_EQ(((int64_t *)(int_vec_vec->Get(0)->GetData()))[1], 2);
+  EXPECT_EQ(((int64_t *)(int_vec_vec->Get(0)->GetData()))[2], 3);
+  EXPECT_EQ(((int64_t *)(int_vec_vec->Get(1)->GetData()))[0], 4);
+  EXPECT_EQ(((int64_t *)(int_vec_vec->Get(1)->GetData()))[1], 5);
+  EXPECT_EQ(((int64_t *)(int_vec_vec->Get(1)->GetData()))[2], 6);
 }
 
 TEST_F(UtestContextBuilder, CreateTilingContextViewWithTensorV2OK) {
@@ -497,32 +497,35 @@ TEST_F(UtestContextBuilder, CreateTilingContextViewWithTensorV2OK) {
 
   uint8_t data_x[1] = {9};
   gert::TensorV2 x_tensor(x, {ge::FORMAT_NCDHW, ge::FORMAT_RESERVED, ExpandDimsType()}, TensorPlacement::kOnHost,
-                        ge::DT_FLOAT, (void *) data_x);
+                          ge::DT_FLOAT, (void *)data_x);
 
   gert::TensorV2 resultIn_tensor(resultIn, {ge::FORMAT_NCDHW, ge::FORMAT_RESERVED, ExpandDimsType()}, ge::DT_FLOAT);
 
-  gert::TensorV2 gammax_tensor(gamma, {ge::FORMAT_NCDHW, ge::FORMAT_RESERVED, ExpandDimsType()}, TensorPlacement::kOnHost,
-                             ge::DT_FLOAT, nullptr, nullptr);
+  gert::TensorV2 gammax_tensor(gamma, {ge::FORMAT_NCDHW, ge::FORMAT_RESERVED, ExpandDimsType()},
+                               TensorPlacement::kOnHost, ge::DT_FLOAT, nullptr, nullptr);
   Stride gammax_stride({1, 1, 1, 1, 1});
-  gammax_tensor.GetShape().MutableShape()  = view_shape;
-  gammax_tensor.MutableStride()  = gammax_stride;;
+  gammax_tensor.GetShape().MutableShape() = view_shape;
+  gammax_tensor.MutableStride() = gammax_stride;
+  ;
   gammax_tensor.SetOffset(8);
 
   Stride beta_stride({2, 2, 2, 2, 2});
   gert::TensorV2 beta_tensor(beta, {ge::FORMAT_NCDHW, ge::FORMAT_RESERVED, ExpandDimsType()}, TensorPlacement::kOnHost,
-                           ge::DT_FLOAT, nullptr, nullptr, beta_stride, 8);
+                             ge::DT_FLOAT, nullptr, nullptr, beta_stride, 8);
 
   gert::TensorV2 default_tensor;
   Stride default_stride({3, 3, 3, 3, 3});
-  default_tensor.GetShape().MutableShape()  = view_shape;
-  default_tensor.MutableStride()  = default_stride;;
+  default_tensor.GetShape().MutableShape() = view_shape;
+  default_tensor.MutableStride() = default_stride;
+  ;
   default_tensor.SetOffset(8);
 
   gert::TensorV2 result_tensor(result, {ge::FORMAT_NCDHW, ge::FORMAT_RESERVED, ExpandDimsType()},
-                             TensorPlacement::kOnHost, ge::DT_FLOAT, nullptr, nullptr);
+                               TensorPlacement::kOnHost, ge::DT_FLOAT, nullptr, nullptr);
   Stride result_stride({4, 4, 4, 4, 4});
-  result_tensor.GetShape().MutableShape()  = view_shape;
-  result_tensor.MutableStride()  = result_stride;;
+  result_tensor.GetShape().MutableShape() = view_shape;
+  result_tensor.MutableStride() = result_stride;
+  ;
   result_tensor.SetOffset(8);
 
   auto tmp_tiling_data = gert::TilingData::CreateCap(100);
@@ -532,31 +535,31 @@ TEST_F(UtestContextBuilder, CreateTilingContextViewWithTensorV2OK) {
   int32_t deterministic_level = 1;
 
   OpTilingContextBuilder ctx_builder;
-  auto holder = ctx_builder.OpName("tmp")
-                    .OpType("DIY")
-                    .IONum(5, 1)
-                    .AppendAttr(int64_t(1))
-                    .AppendAttr(bool(true))
-                    .AppendAttr(float(0.3))
-                    .AppendAttr(AscendString("my_info"))
-                    .AppendAttr(std::vector<bool>({true, false, true}))
-                    .AppendAttr(std::vector<int64_t>({1, 2, 3}))
-                    .AppendAttr(std::vector<float>({0.1, 0.2, 0.3}))
-                    .AppendAttr(std::vector<AscendString>({"123", "234"}))
-                    .AppendAttr(std::vector<std::vector<int64_t>>({{1, 2, 3}, {4, 5, 6}}))
-                    .TilingData(reinterpret_cast<gert::TilingData *>(tmp_tiling_data.get()))
-                    .Workspace(ws_ptr)
-                    .CompileInfo(tmp_compile_info)
-                    .Deterministic(deterministic)
-                    .DeterministicLevel(deterministic_level)
-                    .PlatformInfo(tmp_platform_info)
-                    .InputTensors({reinterpret_cast<gert::Tensor*>(&x_tensor),
-                                   reinterpret_cast<gert::Tensor*>(&resultIn_tensor),
-                                   reinterpret_cast<gert::Tensor*>(&gammax_tensor),
-                                   reinterpret_cast<gert::Tensor*>(&beta_tensor),
-                                   reinterpret_cast<gert::Tensor*>(&default_tensor)})
-                    .OutputTensors({reinterpret_cast<gert::Tensor*>(&result_tensor)})
-                    .Build();
+  auto holder =
+      ctx_builder.OpName("tmp")
+          .OpType("DIY")
+          .IONum(5, 1)
+          .AppendAttr(int64_t(1))
+          .AppendAttr(bool(true))
+          .AppendAttr(float(0.3))
+          .AppendAttr(AscendString("my_info"))
+          .AppendAttr(std::vector<bool>({true, false, true}))
+          .AppendAttr(std::vector<int64_t>({1, 2, 3}))
+          .AppendAttr(std::vector<float>({0.1, 0.2, 0.3}))
+          .AppendAttr(std::vector<AscendString>({"123", "234"}))
+          .AppendAttr(std::vector<std::vector<int64_t>>({{1, 2, 3}, {4, 5, 6}}))
+          .TilingData(reinterpret_cast<gert::TilingData *>(tmp_tiling_data.get()))
+          .Workspace(ws_ptr)
+          .CompileInfo(tmp_compile_info)
+          .Deterministic(deterministic)
+          .DeterministicLevel(deterministic_level)
+          .PlatformInfo(tmp_platform_info)
+          .InputTensors(
+              {reinterpret_cast<gert::Tensor *>(&x_tensor), reinterpret_cast<gert::Tensor *>(&resultIn_tensor),
+               reinterpret_cast<gert::Tensor *>(&gammax_tensor), reinterpret_cast<gert::Tensor *>(&beta_tensor),
+               reinterpret_cast<gert::Tensor *>(&default_tensor)})
+          .OutputTensors({reinterpret_cast<gert::Tensor *>(&result_tensor)})
+          .Build();
 
   auto ctx = holder.GetContext();
   EXPECT_NE(ctx, nullptr);
@@ -658,7 +661,7 @@ TEST_F(UtestContextBuilder, CreateTilingContextViewWithTensorV1OK) {
   uint8_t data_x[1] = {9};
 
   gert::Tensor x_tensor(x, {ge::FORMAT_NCDHW, ge::FORMAT_RESERVED, ExpandDimsType()}, TensorPlacement::kOnHost,
-                        ge::DT_FLOAT, (void *) data_x, nullptr);
+                        ge::DT_FLOAT, (void *)data_x, nullptr);
 
   gert::Tensor resultIn_tensor(resultIn, {ge::FORMAT_NCDHW, ge::FORMAT_RESERVED, ExpandDimsType()}, ge::DT_FLOAT);
 
@@ -778,7 +781,6 @@ TEST_F(UtestContextBuilder, CreateTilingContextViewWithTensorV1OK) {
   EXPECT_EQ(ctx->GetOutputShape(1), nullptr);
 }
 
-
 TEST_F(UtestContextBuilder, CreateTilingContextTilingDataSizeOK) {
   auto workspace_size_holer = gert::ContinuousVector::Create<size_t>(4096);
   auto ws_ptr = reinterpret_cast<gert::ContinuousVector *>(workspace_size_holer.get());
@@ -813,18 +815,18 @@ TEST_F(UtestContextBuilder, CreateTilingContextTilingDataSizeOK) {
   ctx = holder2.GetContext();
   EXPECT_NE(ctx, nullptr);
   EXPECT_NE(ctx->GetRawTilingData(), nullptr);
-  EXPECT_EQ(ctx->GetRawTilingData(), reinterpret_cast<gert::TilingData*>(tmp_tiling_data_120.get()));
+  EXPECT_EQ(ctx->GetRawTilingData(), reinterpret_cast<gert::TilingData *>(tmp_tiling_data_120.get()));
   EXPECT_EQ(ctx->GetRawTilingData()->GetCapacity(), 120);
 
   holder2 = ctx_builder2.OpName("tmp")
-                   .OpType("DIY")
-                   .IONum(1, 1)
-                   .CompileInfo(tmp_compile_info)
-                   .PlatformInfo(tmp_platform_info)
-                   .TilingData(reinterpret_cast<const gert::TilingData *>(tmp_tiling_data_120.get()))
-                   .TilingDataSize(100)
-                   .Workspace(ws_ptr)
-                   .Build();
+                .OpType("DIY")
+                .IONum(1, 1)
+                .CompileInfo(tmp_compile_info)
+                .PlatformInfo(tmp_platform_info)
+                .TilingData(reinterpret_cast<const gert::TilingData *>(tmp_tiling_data_120.get()))
+                .TilingDataSize(100)
+                .Workspace(ws_ptr)
+                .Build();
   ctx = holder.GetContext();
   EXPECT_NE(ctx, nullptr);
   EXPECT_NE(ctx->GetRawTilingData(), nullptr);
@@ -832,7 +834,6 @@ TEST_F(UtestContextBuilder, CreateTilingContextTilingDataSizeOK) {
 }
 
 TEST_F(UtestContextBuilder, CreateTilingParseContextOK) {
-
   std::string tmp_compile_json = "123.json";
 
   uint8_t tmp_platform_info[] = {1, 2, 3, 4, 5, 6, 7};
@@ -859,8 +860,8 @@ TEST_F(UtestContextBuilder, CreateTilingParseContextOK) {
   EXPECT_NE(ctx_compute_node_info, nullptr);
   EXPECT_EQ(ctx->GetInputDesc(0)->GetOriginFormat(), ge::FORMAT_NCDHW);
   EXPECT_EQ(ctx->GetInputDesc(0)->GetStorageFormat(), ge::FORMAT_RESERVED);
-  EXPECT_EQ((void *) ctx->GetPlatformInfo(), (void *) tmp_platform_info);
-  EXPECT_EQ((void *) ctx->GetPlatformInfo(), (void *) tmp_platform_info);
+  EXPECT_EQ((void *)ctx->GetPlatformInfo(), (void *)tmp_platform_info);
+  EXPECT_EQ((void *)ctx->GetPlatformInfo(), (void *)tmp_platform_info);
   EXPECT_EQ(ctx->GetCompiledJson(), tmp_compile_json.c_str());
   EXPECT_EQ(ctx->GetCompiledInfo<uint8_t>(), tmp_compile_info);
 }
@@ -939,7 +940,7 @@ TEST_F(UtestContextBuilder, OpTilingContextBuilderCStyleApiTest) {
 
   uint8_t data_x[1] = {9};
   gert::Tensor x_tensor(x, {ge::FORMAT_NCDHW, ge::FORMAT_RESERVED, ExpandDimsType()}, TensorPlacement::kOnHost,
-                        ge::DT_FLOAT, (void *) data_x);
+                        ge::DT_FLOAT, (void *)data_x);
   gert::Tensor resultIn_tensor(resultIn, {ge::FORMAT_NCDHW, ge::FORMAT_RESERVED, ExpandDimsType()},
                                TensorPlacement::kOnHost, ge::DT_FLOAT, nullptr);
   gert::Tensor gammax_tensor(gamma, {ge::FORMAT_NCDHW, ge::FORMAT_RESERVED, ExpandDimsType()}, TensorPlacement::kOnHost,

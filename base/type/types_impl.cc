@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -140,10 +140,10 @@ int64_t TypeImpl::GetSizeInBytes(int64_t element_count, DataType data_type) {
 
 void PromoteImpl::Construct(Promote &obj, const std::initializer_list<const char *> &syms) {
   obj.data_ = std::shared_ptr<void>(new (std::nothrow) std::vector<std::string>(),
-                                    [](void * const ptr) { delete static_cast<std::vector<std::string> *>(ptr); });
+                                    [](void *const ptr) { delete static_cast<std::vector<std::string> *>(ptr); });
   if (obj.data_ != nullptr) {
     for (const auto &sym : syms) {
-      (void) static_cast<std::vector<std::string> *>(obj.data_.get())->emplace_back((sym == nullptr) ? "" : sym);
+      (void)static_cast<std::vector<std::string> *>(obj.data_.get())->emplace_back((sym == nullptr) ? "" : sym);
     }
   }
 }

@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -21,7 +21,6 @@
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
-
 
 #include "common/ge_common/debug/ge_log.h"
 #include "mmpa/mmpa_api.h"
@@ -41,6 +40,7 @@ class PluginManager {
       GELOGI("[GEPERFTRACE] The time cost of InvokeAll [%s] in [%s] is [%lu] micro seconds.", func_name_.c_str(),
              lib_name_.c_str(), std::chrono::duration_cast<std::chrono::microseconds>(end - start_).count());
     }
+
    private:
     std::chrono::high_resolution_clock::time_point start_;
     const std::string &func_name_;
@@ -66,19 +66,15 @@ class PluginManager {
 
   static void SetCustomOpLibPath(const std::string &custom_op_Lib_path);
 
-  static ge::Status GetOppPluginPathOld(const std::string &opp_path,
-                                    const std::string &path_fmt,
-                                    std::string &plugin_path,
-                                    const std::string &path_fmt_custom = "");
+  static ge::Status GetOppPluginPathOld(const std::string &opp_path, const std::string &path_fmt,
+                                        std::string &plugin_path, const std::string &path_fmt_custom = "");
 
-  static ge::Status GetOppPluginPathNew(const std::string &opp_path,
-                                    const std::string &path_fmt,
-                                    std::string &plugin_path,
-                                    const std::string &old_custom_path,
-                                    const std::string &path_fmt_custom = "");
+  static ge::Status GetOppPluginPathNew(const std::string &opp_path, const std::string &path_fmt,
+                                        std::string &plugin_path, const std::string &old_custom_path,
+                                        const std::string &path_fmt_custom = "");
 
   static bool IsSplitOpp();
-  
+
   static ge::Status GetOpsProtoPath(std::string &opsproto_path);
 
   static ge::Status GetUpgradedOpsProtoPath(std::string &opsproto_path);
@@ -88,23 +84,24 @@ class PluginManager {
   static ge::Status GetOpTilingForwardOrderPath(std::string &op_tiling_path);
 
   ge::Status LoadSoWithFlags(const std::string &path, const int32_t flags,
-      const std::vector<std::string> &func_check_list = std::vector<std::string>());
+                             const std::vector<std::string> &func_check_list = std::vector<std::string>());
 
-  ge::Status LoadSo(const std::string &path, const std::vector<std::string> &func_check_list = std::vector<std::string>());
+  ge::Status LoadSo(const std::string &path,
+                    const std::vector<std::string> &func_check_list = std::vector<std::string>());
 
-  ge::Status Load(const std::string &path, const std::vector<std::string> &func_check_list = std::vector<std::string>());
+  ge::Status Load(const std::string &path,
+                  const std::vector<std::string> &func_check_list = std::vector<std::string>());
 
   ge::Status LoadWithFlags(const std::string &path, const int32_t flags,
-      const std::vector<std::string> &func_check_list = std::vector<std::string>());
+                           const std::vector<std::string> &func_check_list = std::vector<std::string>());
 
   static void GetOppSupportedOsAndCpuType(
-      std::unordered_map<std::string, std::unordered_set<std::string>> &opp_supported_os_cpu,
-      std::string opp_path = "", std::string os_name = "", uint32_t layer = 0U);
+      std::unordered_map<std::string, std::unordered_set<std::string>> &opp_supported_os_cpu, std::string opp_path = "",
+      std::string os_name = "", uint32_t layer = 0U);
 
-  static void ScanOppLibSubDirs(
-      const ge::char_t *real_path,
-      std::unordered_map<std::string, std::unordered_set<std::string>> &opp_supported_os_cpu,
-      const std::string &opp_path, const std::string &os_name, uint32_t layer);
+  static void ScanOppLibSubDirs(const ge::char_t *real_path,
+                                std::unordered_map<std::string, std::unordered_set<std::string>> &opp_supported_os_cpu,
+                                const std::string &opp_path, const std::string &os_name, uint32_t layer);
 
   static void GetCurEnvPackageOsAndCpuType(std::string &host_env_os, std::string &host_env_cpu);
 
@@ -121,15 +118,14 @@ class PluginManager {
 
   static bool GetVersionFromPathWithName(const std::string &file_path, std::string &version,
                                          const std::string version_name);
-  static void FindSoFilesInCustomPassDirs(const std::string &directory,
-                                          std::vector<std::string> &so_files);
+  static void FindSoFilesInCustomPassDirs(const std::string &directory, std::vector<std::string> &so_files);
 
   static bool IsEndWith(const std::string &path, const std::string &suff);
 
   static std::string GetSoPackageName(const std::string &path);
 
   static std::string GetOppPkgPath(const std::string &opp_built_in_path, const std::string &whole_pkg_path,
-                                    const std::string &sub_pkg_path, const std::string &os_cpu_type, bool &is_sub_pkg);
+                                   const std::string &sub_pkg_path, const std::string &os_cpu_type, bool &is_sub_pkg);
 
  private:
   void ClearHandles_() noexcept;
@@ -187,7 +183,7 @@ inline std::string GetModelPath() {
 #ifdef __cplusplus
 extern "C" {
 #endif
-GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY void SetMetadefPluginCustomOpLibPathForC(const char* custom_op_Lib_path);
+GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY void SetMetadefPluginCustomOpLibPathForC(const char *custom_op_Lib_path);
 #ifdef __cplusplus
 }
 #endif

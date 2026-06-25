@@ -76,11 +76,7 @@ const std::map<Format, std::string> kFormatToStringMap = {
     {FORMAT_MAX, "MAX"}};
 
 const std::map<std::string, Format> kDataFormatMap = {
-    {"NCHW", FORMAT_NCHW},
-    {"NHWC", FORMAT_NHWC},
-    {"NDHWC", FORMAT_NDHWC},
-    {"NCDHW", FORMAT_NCDHW},
-    {"ND",   FORMAT_ND}};
+    {"NCHW", FORMAT_NCHW}, {"NHWC", FORMAT_NHWC}, {"NDHWC", FORMAT_NDHWC}, {"NCDHW", FORMAT_NCDHW}, {"ND", FORMAT_ND}};
 
 const std::map<std::string, Format> kStringToFormatMap = {
     {"NCHW", FORMAT_NCHW},
@@ -139,8 +135,7 @@ const std::map<std::string, Format> kStringToFormatMap = {
     {"FRACTAL_Z_WINO", FORMAT_FRACTAL_Z_WINO},
     {"C1HWC0", FORMAT_C1HWC0},
     {"RESERVED", FORMAT_RESERVED},
-    {"UNDEFINED", FORMAT_RESERVED}
-  };
+    {"UNDEFINED", FORMAT_RESERVED}};
 
 const std::map<DataType, std::string> kDataTypeToStringMap = {
     {DT_UNDEFINED, "DT_UNDEFINED"},            // Used to indicate a DataType field has not been set.
@@ -217,12 +212,12 @@ const std::map<std::string, DataType> kStringTodataTypeMap = {
     {"DT_STRING", DT_STRING},                  // string type
     // add for json input
     {"DT_FLOAT32", DT_FLOAT},
-    {"DT_VARIANT", DT_VARIANT},                // dt_variant type
-    {"DT_BFLOAT16", DT_BF16},                  // dt_bf16 type
-    {"DT_INT4", DT_INT4},                      // dt_int4 type
-    {"DT_UINT1", DT_UINT1},                    // dt_uint1 type
-    {"DT_INT2", DT_INT2},                      // dt_int2 type
-    {"DT_UINT2", DT_UINT2},                    // dt_uint2 type
+    {"DT_VARIANT", DT_VARIANT},  // dt_variant type
+    {"DT_BFLOAT16", DT_BF16},    // dt_bf16 type
+    {"DT_INT4", DT_INT4},        // dt_int4 type
+    {"DT_UINT1", DT_UINT1},      // dt_uint1 type
+    {"DT_INT2", DT_INT2},        // dt_int2 type
+    {"DT_UINT2", DT_UINT2},      // dt_uint2 type
     {"DT_HIFLOAT8", DT_HIFLOAT8},
     {"DT_FLOAT8_E5M2", DT_FLOAT8_E5M2},
     {"DT_FLOAT8_E4M3FN", DT_FLOAT8_E4M3FN},
@@ -232,14 +227,14 @@ const std::map<std::string, DataType> kStringTodataTypeMap = {
     {"DT_HIFLOAT4", DT_HIFLOAT4},
     {"DT_FLOAT4_E2M1", DT_FLOAT4_E2M1},  // mxfp4
     {"DT_FLOAT4_E1M2", DT_FLOAT4_E1M2},  // mxfp4
-    {"RESERVED", DT_UNDEFINED},                // RESERVED will be deserialized to DT_UNDEFINED
+    {"RESERVED", DT_UNDEFINED},          // RESERVED will be deserialized to DT_UNDEFINED
 };
 
 const std::map<ge::DataType, uint32_t> kDataTypeToLength = {
     {DT_STRING_REF, sizeof(uint64_t) * 2U},
     {DT_STRING, sizeof(uint64_t) * 2U},
 };
-}
+}  // namespace
 
 AscendString TypeUtilsImpl::DataTypeToAscendString(const DataType data_type) {
   const auto it = kDataTypeToStringMap.find(data_type);
@@ -285,7 +280,7 @@ graphStatus SplitFormatFromStr(const std::string &str, std::string &primary_form
         REPORT_INNER_ERR_MSG("E18888", "sub_format: %s is not digital.", sub_format_str.c_str());
         GELOGE(GRAPH_FAILED, "[Check][Param] sub_format: %s is not digital.", sub_format_str.c_str());
         return GRAPH_FAILED;
-                      }
+      }
       sub_format = std::stoi(sub_format_str);
     } catch (std::invalid_argument &) {
       REPORT_INNER_ERR_MSG("E18888", "sub_format: %s is invalid.", sub_format_str.c_str());

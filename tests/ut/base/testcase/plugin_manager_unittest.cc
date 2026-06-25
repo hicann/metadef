@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -38,17 +38,17 @@ static std::string GetCurrentWorkingDir() {
 }
 
 void WriteRequiredVersion(const std::string &version, std::string &path, std::string &path1) {
-  path ="./runtime";
+  path = "./runtime";
   system(("mkdir -p " + path).c_str());
   auto version_path = path + "/version.info";
   system(("touch " + version_path).c_str());
-  system(("echo 'required_opp_abi_version=" + version +"' > " + version_path).c_str());
+  system(("echo 'required_opp_abi_version=" + version + "' > " + version_path).c_str());
 
-  path1 ="./../runtime";
+  path1 = "./../runtime";
   system(("mkdir -p " + path1).c_str());
   auto version_path1 = path1 + "/version.info";
   system(("touch " + version_path1).c_str());
-  system(("echo 'required_opp_abi_version=" + version +"' > " + version_path1).c_str());
+  system(("echo 'required_opp_abi_version=" + version + "' > " + version_path1).c_str());
 }
 
 ge::Status CreateSoFile(const char *filename, int32_t filesize) {
@@ -121,7 +121,8 @@ static void ConstructOpMasterDeviceSo(const std::string &opp_path, const size_t 
   }
 }
 
-static void ConstructOpMasterDeviceSoForSubPkg(const std::string &opp_path, const size_t built_in_num, const size_t cust_num) {
+static void ConstructOpMasterDeviceSoForSubPkg(const std::string &opp_path, const size_t built_in_num,
+                                               const size_t cust_num) {
   for (size_t i = 0UL; i < built_in_num; ++i) {
     std::string inner_op_master = opp_path + kBuiltIn + kOpTilingDeviceLib;
     system(("mkdir -p " + inner_op_master).c_str());
@@ -147,7 +148,7 @@ static void ConstructOpMasterDeviceSoForSubPkg(const std::string &opp_path, cons
     system(("echo " + vendor_names + " > " + vendor_config).c_str());
   }
 }
-}
+}  // namespace
 class UtestPluginManager : public testing::Test {
  protected:
   std::string opp_path_;
@@ -231,7 +232,7 @@ TEST_F(UtestPluginManager, test_plugin_manager_load) {
 }
 
 TEST_F(UtestPluginManager, ValidateSo_FAILED_SoSizeExceedkMaxSize) {
-  const int32_t kMaxSizeOfSo = 838860800;        // = 800M(unit is Byte)
+  const int32_t kMaxSizeOfSo = 838860800;  // = 800M(unit is Byte)
   PluginManager manager;
   manager.ClearHandles_();
   ASSERT_EQ(manager.handles_.size(), 0);
@@ -247,8 +248,8 @@ TEST_F(UtestPluginManager, ValidateSo_FAILED_SoSizeExceedkMaxSize) {
 }
 
 TEST_F(UtestPluginManager, ValidateSo_FAILED_LoadedSoSizeExceedkMaxSize) {
-  const int32_t kMaxSizeOfSo = 838860800;        // = 800M(unit is Byte)
-  const int32_t kMaxSizeOfLoadedSo = 1048576000; // = 1000M(unit is Byte)
+  const int32_t kMaxSizeOfSo = 838860800;         // = 800M(unit is Byte)
+  const int32_t kMaxSizeOfLoadedSo = 1048576000;  // = 1000M(unit is Byte)
   PluginManager manager;
   manager.ClearHandles_();
   ASSERT_EQ(manager.handles_.size(), 0);
@@ -364,10 +365,7 @@ TEST_F(UtestPluginManager, test_GetOpsProtoPath_OldPath_PriorityOk) {
   std::string opsproto_path;
   ge::Status ret = PluginManager::GetOpsProtoPath(opsproto_path);
   EXPECT_EQ(ret, ge::SUCCESS);
-  EXPECT_EQ(opsproto_path,
-      opp_path + "op_proto/custom/:" +
-      opp_path + "op_proto/built-in/"
-  );
+  EXPECT_EQ(opsproto_path, opp_path + "op_proto/custom/:" + opp_path + "op_proto/built-in/");
 }
 
 TEST_F(UtestPluginManager, test_GetOpsProtoPath_NewPath_PriorityOk) {
@@ -377,12 +375,8 @@ TEST_F(UtestPluginManager, test_GetOpsProtoPath_NewPath_PriorityOk) {
   std::string opsproto_path;
   ge::Status ret = PluginManager::GetOpsProtoPath(opsproto_path);
   EXPECT_EQ(ret, ge::SUCCESS);
-  EXPECT_EQ(opsproto_path,
-    path_vendors + "/customize/op_proto/:" +
-    path_vendors + "/mdc/op_proto/:" +
-    path_vendors + "/lhisi/op_proto/:" +
-    opp_path + "built-in/op_proto/"
-  );
+  EXPECT_EQ(opsproto_path, path_vendors + "/customize/op_proto/:" + path_vendors + "/mdc/op_proto/:" + path_vendors +
+                               "/lhisi/op_proto/:" + opp_path + "built-in/op_proto/");
 }
 
 TEST_F(UtestPluginManager, test_plugin_manager_GetOpsProtoPath_03) {
@@ -400,10 +394,7 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetOpsProtoPath_03) {
   std::string opsproto_path;
   ge::Status ret = PluginManager::GetOpsProtoPath(opsproto_path);
   EXPECT_EQ(ret, ge::SUCCESS);
-  EXPECT_EQ(opsproto_path,
-    opp_path + "op_proto/custom/:" +
-    opp_path + "built-in/op_proto/"
-  );
+  EXPECT_EQ(opsproto_path, opp_path + "op_proto/custom/:" + opp_path + "built-in/op_proto/");
   system(("rm -rf " + opp_path).c_str());
 }
 
@@ -425,13 +416,9 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetOpsProtoPath_04) {
   std::string opsproto_path;
   ge::Status ret = PluginManager::GetOpsProtoPath(opsproto_path);
   EXPECT_EQ(ret, ge::SUCCESS);
-  EXPECT_EQ(opsproto_path,
-    custom_opp_path + "/op_proto/:" +
-    path_vendors + "/customize/op_proto/:" +
-    path_vendors + "/mdc/op_proto/:" +
-    path_vendors + "/lhisi/op_proto/:" +
-    opp_path + "built-in/op_proto/"
-  );
+  EXPECT_EQ(opsproto_path, custom_opp_path + "/op_proto/:" + path_vendors + "/customize/op_proto/:" + path_vendors +
+                               "/mdc/op_proto/:" + path_vendors + "/lhisi/op_proto/:" + opp_path +
+                               "built-in/op_proto/");
   system(("rm -rf " + opp_path).c_str());
 }
 
@@ -453,12 +440,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetOpsProtoPath_05) {
   std::string opsproto_path;
   ge::Status ret = PluginManager::GetOpsProtoPath(opsproto_path);
   EXPECT_EQ(ret, ge::SUCCESS);
-  EXPECT_EQ(opsproto_path,
-    path_vendors + "/customize/op_proto/:" +
-    path_vendors + "/mdc/op_proto/:" +
-    path_vendors + "/lhisi/op_proto/:" +
-    opp_path + "built-in/op_proto/"
-  );
+  EXPECT_EQ(opsproto_path, path_vendors + "/customize/op_proto/:" + path_vendors + "/mdc/op_proto/:" + path_vendors +
+                               "/lhisi/op_proto/:" + opp_path + "built-in/op_proto/");
   system(("rm -rf " + opp_path).c_str());
 }
 
@@ -482,14 +465,9 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetOpsProtoPath_06) {
   std::string opsproto_path;
   ge::Status ret = PluginManager::GetOpsProtoPath(opsproto_path);
   EXPECT_EQ(ret, ge::SUCCESS);
-  EXPECT_EQ(opsproto_path,
-    custom_opp_path_01 + "/op_proto/:" +
-    custom_opp_path_02 + "/op_proto/:" +
-    path_vendors + "/customize/op_proto/:" +
-    path_vendors + "/mdc/op_proto/:" +
-    path_vendors + "/lhisi/op_proto/:" +
-    opp_path + "built-in/op_proto/"
-  );
+  EXPECT_EQ(opsproto_path, custom_opp_path_01 + "/op_proto/:" + custom_opp_path_02 + "/op_proto/:" + path_vendors +
+                               "/customize/op_proto/:" + path_vendors + "/mdc/op_proto/:" + path_vendors +
+                               "/lhisi/op_proto/:" + opp_path + "built-in/op_proto/");
   system(("rm -rf " + opp_path).c_str());
 }
 
@@ -510,10 +488,7 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetOpsProtoPath_07) {
   ge::Status ret = PluginManager::GetOpsProtoPath(opsproto_path);
   EXPECT_EQ(ret, ge::SUCCESS);
   EXPECT_EQ(opsproto_path,
-    custom_opp_path + "/op_proto/:" +
-    opp_path + "op_proto/custom/:" +
-    opp_path + "built-in/op_proto/"
-  );
+            custom_opp_path + "/op_proto/:" + opp_path + "op_proto/custom/:" + opp_path + "built-in/op_proto/");
   system(("rm -rf " + opp_path).c_str());
 }
 
@@ -526,12 +501,9 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetOpsProtoPath_08) {
   std::string custom_opp_path_02 = opp_path + "custom_opp_path_02";
   std::string custom_opp_path_invalid_02 = opp_path + "custom_opp_path_invalid_02";
   mmSetEnv(kEnvName, opp_path.c_str(), 1);
-  PluginManager::SetCustomOpLibPath((custom_opp_path_01 + ":" +
-                                     custom_opp_path_invalid_01 + ":" +
-                                     custom_opp_path_empty + ":" +
-                                     custom_opp_path_02 + ":" +
-                                     custom_opp_path_invalid_02
-                                    ));
+  PluginManager::SetCustomOpLibPath((custom_opp_path_01 + ":" + custom_opp_path_invalid_01 + ":" +
+                                     custom_opp_path_empty + ":" + custom_opp_path_02 + ":" +
+                                     custom_opp_path_invalid_02));
 
   std::string path_builtin = opp_path + "built-in";
   std::string path_vendors = opp_path + "vendors";
@@ -545,14 +517,9 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetOpsProtoPath_08) {
   std::string opsproto_path;
   ge::Status ret = PluginManager::GetOpsProtoPath(opsproto_path);
   EXPECT_EQ(ret, ge::SUCCESS);
-  EXPECT_EQ(opsproto_path,
-    custom_opp_path_01 + "/op_proto/:" +
-    custom_opp_path_02 + "/op_proto/:" +
-    path_vendors + "/customize/op_proto/:" +
-    path_vendors + "/mdc/op_proto/:" +
-    path_vendors + "/lhisi/op_proto/:" +
-    opp_path + "built-in/op_proto/"
-  );
+  EXPECT_EQ(opsproto_path, custom_opp_path_01 + "/op_proto/:" + custom_opp_path_02 + "/op_proto/:" + path_vendors +
+                               "/customize/op_proto/:" + path_vendors + "/mdc/op_proto/:" + path_vendors +
+                               "/lhisi/op_proto/:" + opp_path + "built-in/op_proto/");
   system(("rm -rf " + opp_path).c_str());
 }
 
@@ -562,11 +529,8 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetOpsProtoPath_09) {
   std::string custom_opp_path_01 = opp_path + "custom_opp_path_01";
   std::string custom_opp_path_02 = opp_path + "custom_opp_path_02";
   mmSetEnv(kEnvName, opp_path.c_str(), 1);
-  PluginManager::SetCustomOpLibPath((custom_opp_path_01 + ":" +
-                                     custom_opp_path_02 + ":" +
-                                     custom_opp_path_01 + ":" +
-                                     custom_opp_path_02
-                                    ));
+  PluginManager::SetCustomOpLibPath(
+      (custom_opp_path_01 + ":" + custom_opp_path_02 + ":" + custom_opp_path_01 + ":" + custom_opp_path_02));
 
   std::string path_builtin = opp_path + "built-in";
   std::string path_vendors = opp_path + "vendors";
@@ -580,16 +544,10 @@ TEST_F(UtestPluginManager, test_plugin_manager_GetOpsProtoPath_09) {
   std::string opsproto_path;
   ge::Status ret = PluginManager::GetOpsProtoPath(opsproto_path);
   EXPECT_EQ(ret, ge::SUCCESS);
-  EXPECT_EQ(opsproto_path,
-    custom_opp_path_01 + "/op_proto/:" +
-    custom_opp_path_02 + "/op_proto/:" +
-    custom_opp_path_01 + "/op_proto/:" +
-    custom_opp_path_02 + "/op_proto/:" +
-    path_vendors + "/customize/op_proto/:" +
-    path_vendors + "/mdc/op_proto/:" +
-    path_vendors + "/lhisi/op_proto/:" +
-    opp_path + "built-in/op_proto/"
-  );
+  EXPECT_EQ(opsproto_path, custom_opp_path_01 + "/op_proto/:" + custom_opp_path_02 + "/op_proto/:" +
+                               custom_opp_path_01 + "/op_proto/:" + custom_opp_path_02 + "/op_proto/:" + path_vendors +
+                               "/customize/op_proto/:" + path_vendors + "/mdc/op_proto/:" + path_vendors +
+                               "/lhisi/op_proto/:" + opp_path + "built-in/op_proto/");
   system(("rm -rf " + opp_path).c_str());
 }
 
@@ -666,14 +624,14 @@ TEST_F(UtestPluginManager, GetVersionFromPath_fail) {
 }
 
 TEST_F(UtestPluginManager, GetCurEnvPackageOsAndCpuType) {
-  std::string path ="./opp";
+  std::string path = "./opp";
   system(("mkdir -p " + path).c_str());
   path += "/scene.info";
   system(("touch " + path).c_str());
   system(("echo 'os=linux' > " + path).c_str());
   system(("echo 'arch=x86_64' >> " + path).c_str());
 
-  std::string path1 ="./../opp";
+  std::string path1 = "./../opp";
   system(("mkdir -p " + path1).c_str());
   path1 += "/scene.info";
   system(("touch " + path1).c_str());
@@ -788,13 +746,13 @@ TEST_F(UtestPluginManager, test_plugin_manager_IsVendorVersionValid) {
 }
 
 TEST_F(UtestPluginManager, test_plugin_manager_GetRequiredOppAbiVersion_InValid) {
-  std::string compiler_path ="./compiler";
+  std::string compiler_path = "./compiler";
   system(("mkdir -p " + compiler_path).c_str());
   auto path = compiler_path + "/version.info";
   system(("touch " + path).c_str());
   system(("echo 'required_opp_abi_version=\">=6.4\"' > " + path).c_str());
 
-  std::string compiler_path1 ="./../compiler";
+  std::string compiler_path1 = "./../compiler";
   system(("mkdir -p " + compiler_path1).c_str());
   auto path1 = compiler_path1 + "/version.info";
   system(("touch " + path1).c_str());
@@ -945,7 +903,7 @@ TEST_F(UtestPluginManager, FindSoFilesInCustomPassDirs_not_dir) {
   path = path.substr(0, path.rfind("/") + 1) + "opp/";
   system(("mkdir -p " + path).c_str());
 
-  std::string custom_path1 = path + "vendors/1/2/custom_fusion_passes"; // invalid
+  std::string custom_path1 = path + "vendors/1/2/custom_fusion_passes";  // invalid
   system(("mkdir -p " + custom_path1).c_str());
   system(("touch " + custom_path1 + "/concat_pass.so").c_str());
 
@@ -963,7 +921,7 @@ TEST_F(UtestPluginManager, FindSoFilesInCustomPassDirs_scan_dir_failed) {
   path = path.substr(0, path.rfind("/") + 1) + "opp/";
   system(("mkdir -p " + path).c_str());
 
-  std::string custom_path1 = path + "vendors/1/2/custom_fusion_passes"; // invalid
+  std::string custom_path1 = path + "vendors/1/2/custom_fusion_passes";  // invalid
   system(("mkdir -p " + custom_path1).c_str());
   system(("touch " + custom_path1 + "/concat_pass.so").c_str());
 
@@ -981,7 +939,7 @@ TEST_F(UtestPluginManager, FindSoFilesInCustomPassDirs_01) {
   path = path.substr(0, path.rfind("/") + 1) + "opp/";
   system(("mkdir -p " + path).c_str());
 
-  std::string custom_path1 = path + "vendors/1/2/custom_fusion_passes"; // invalid
+  std::string custom_path1 = path + "vendors/1/2/custom_fusion_passes";  // invalid
   system(("mkdir -p " + custom_path1).c_str());
   std::string custom_path2 = path + "vendors/2/custom_fusion_passes";
   system(("mkdir -p " + custom_path2).c_str());
@@ -1002,9 +960,9 @@ TEST_F(UtestPluginManager, FindSoFilesInCustomPassDirs_02) {
   mmSetEnv(kEnvName, path.c_str(), 1);
   system(("mkdir -p " + path).c_str());
 
-  std::string custom_path1 = path + "vendors/1/2/custom_fusion_passes"; // invalid
+  std::string custom_path1 = path + "vendors/1/2/custom_fusion_passes";  // invalid
   system(("mkdir -p " + custom_path1).c_str());
-  std::string custom_path2 = path + "vendors/custom_fusion_passes"; // invalid
+  std::string custom_path2 = path + "vendors/custom_fusion_passes";  // invalid
   system(("mkdir -p " + custom_path2).c_str());
 
   std::vector<std::string> so_files;

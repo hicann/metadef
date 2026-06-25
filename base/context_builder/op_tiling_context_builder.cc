@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -28,16 +28,15 @@ class OpTilingContextBuilderImpl : public ContextBuilderImpl {
     auto holder = ge::ComGraphMakeUnique<ContextHolderImpl>();
     GE_ASSERT_NOTNULL(holder, "Create ContextHolderImpl failed.");
     GE_ASSERT_SUCCESS(CreateComputeNodeInfo(*holder), "Create compute node info failed.");
-    for (auto& outvaue : output_values_) {
+    for (auto &outvaue : output_values_) {
       (void)input_values_.emplace_back(outvaue.first, outvaue.second);
     }
     (void)input_values_.emplace_back(tiling_info_.compile_info_, nullptr);   // TilingCompileInfo
     (void)input_values_.emplace_back(tiling_info_.platform_info_, nullptr);  // PlatformInfo
     (void)input_values_.emplace_back(nullptr, nullptr);                      // PrepareTilingFrameworkData
-    (void)input_values_.emplace_back(
-        reinterpret_cast<void *>(tiling_info_.deterministic_), nullptr);  // Deterministic
-    (void)input_values_.emplace_back(
-        reinterpret_cast<void *>(tiling_info_.deterministic_level_), nullptr);  // DeterministicLevel
+    (void)input_values_.emplace_back(reinterpret_cast<void *>(tiling_info_.deterministic_), nullptr);  // Deterministic
+    (void)input_values_.emplace_back(reinterpret_cast<void *>(tiling_info_.deterministic_level_),
+                                     nullptr);  // DeterministicLevel
     output_values_.resize(TilingContext::kOutputNum);
     output_values_[TilingContext::kOutputTilingData] =
         std::make_pair(tiling_info_.tiling_data_.first, tiling_info_.tiling_data_.second);
@@ -48,7 +47,8 @@ class OpTilingContextBuilderImpl : public ContextBuilderImpl {
     return holder;
   }
 };
-static_assert(sizeof(OpTilingContextBuilderImpl) == sizeof(ContextBuilderImpl), "OpTilingContextBuilderImpl size error");
+static_assert(sizeof(OpTilingContextBuilderImpl) == sizeof(ContextBuilderImpl),
+              "OpTilingContextBuilderImpl size error");
 
 OpTilingContextBuilder::OpTilingContextBuilder() : OpContextBuilderBase<OpTilingContextBuilder>() {
   impl_ = ge::ComGraphMakeUnique<OpTilingContextBuilderImpl>();
@@ -98,9 +98,9 @@ OpTilingContextBuilder &OpTilingContextBuilder::TilingData(const gert::TilingDat
 OpTilingContextBuilder &OpTilingContextBuilder::TilingDataSize(size_t tiling_data_size) {
   GE_CHECK_NOTNULL_EXEC(impl_, return *this);
   auto tiling_data = TilingData::CreateCap(tiling_data_size);
-  static auto delete_tiling_data = [] (void *data) {
+  static auto delete_tiling_data = [](void *data) {
     if (data != nullptr) {
-      delete [] static_cast<uint8_t *>(data);
+      delete[] static_cast<uint8_t *>(data);
     }
   };
   impl_->SetTilingData(tiling_data.release(), delete_tiling_data);
@@ -173,7 +173,8 @@ uint32_t gert_TilingContextBuilder_SetDeterministicLevel(void *builder, int32_t 
   }
 
   if (deterministic_level < 0 || deterministic_level > 2) {
-    GELOGE(ge::PARAM_INVALID, "Deterministic level value is invalid, expect 0, 1 or 2, but got %d", deterministic_level);
+    GELOGE(ge::PARAM_INVALID, "Deterministic level value is invalid, expect 0, 1 or 2, but got %d",
+           deterministic_level);
     return ge::GRAPH_PARAM_INVALID;
   }
 
@@ -190,7 +191,7 @@ uint32_t gert_TilingContextBuilder_SetSimtBlockDim(void *builder, const gert::Di
   }
 
   auto *tiling_builder = static_cast<gert::OpTilingContextBuilder *>(builder);
-  (void) tiling_builder->SimtBlockDim(block_dim);
+  (void)tiling_builder->SimtBlockDim(block_dim);
 
   return ge::GRAPH_SUCCESS;
 }
@@ -201,7 +202,7 @@ uint32_t gert_TilingContextBuilder_SetSimtGridDim(void *builder, const gert::Dim
     return ge::GRAPH_PARAM_INVALID;
   }
   auto *tiling_builder = static_cast<gert::OpTilingContextBuilder *>(builder);
-  (void) tiling_builder->SimtGridDim(grid_dim);
+  (void)tiling_builder->SimtGridDim(grid_dim);
 
   return ge::GRAPH_SUCCESS;
 }

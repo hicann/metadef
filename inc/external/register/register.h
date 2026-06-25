@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -28,13 +28,12 @@
 #include "graph/ascend_string.h"
 #include "graph/types.h"
 
-
-using std::unique_ptr;
 using std::make_shared;
-using std::to_string;
-using std::string;
-using std::pair;
 using std::map;
+using std::pair;
+using std::string;
+using std::to_string;
+using std::unique_ptr;
 using std::vector;
 
 /*lint -e148*/
@@ -46,18 +45,14 @@ namespace google {
 namespace protobuf {
 class Message;
 }
-}
+}  // namespace google
 
 namespace domi {
-constexpr int64_t kMaxNameLength = 1048576; // 1M
+constexpr int64_t kMaxNameLength = 1048576;  // 1M
 
-enum DynamicType : int16_t {
-  kInvalid = 0,
-  kInput = 1,
-  kOutput = 2
-};
+enum DynamicType : int16_t { kInvalid = 0, kInput = 1, kOutput = 2 };
 struct DynamicInputOutputInfo {
-  DynamicType type; // input/output
+  DynamicType type;  // input/output
   const char_t *port_name;
   int64_t port_name_len;
   const char_t *attr_name;
@@ -65,8 +60,11 @@ struct DynamicInputOutputInfo {
   DynamicInputOutputInfo(const DynamicType type_instance, const char_t *const port_name_instance,
                          const int64_t port_name_len_instance, const char_t *const attr_name_instance,
                          const int64_t attr_name_len_instance)
-      : type(type_instance), port_name(port_name_instance), port_name_len(port_name_len_instance),
-        attr_name(attr_name_instance), attr_name_len(attr_name_len_instance) {}
+      : type(type_instance),
+        port_name(port_name_instance),
+        port_name_len(port_name_len_instance),
+        attr_name(attr_name_instance),
+        attr_name_len(attr_name_len_instance) {}
   DynamicInputOutputInfo() : DynamicInputOutputInfo(kInvalid, nullptr, 0L, nullptr, 0L) {}
 };
 Status AutoMappingByOpFn(const ge::Operator &op_src, ge::Operator &op);
@@ -75,15 +73,14 @@ Status AutoMappingByOpFnDynamic(const ge::Operator &op_src, ge::Operator &op,
 ATTRIBUTED_DEPRECATED(Status AutoMappingByOpFn(const ge::Operator &, ge::Operator &))
 Status AutoMappingFn(const google::protobuf::Message *op_src, ge::Operator &op);
 ATTRIBUTED_DEPRECATED(Status AutoMappingByOpFnDynamic(const ge::Operator &, ge::Operator &,
-                      const std::vector<DynamicInputOutputInfo> &))
+                                                      const std::vector<DynamicInputOutputInfo> &))
 Status AutoMappingFnDynamic(const google::protobuf::Message *op_src, ge::Operator &op,
                             std::map<std::string, std::pair<std::string, std::string>> dynamic_name_attr_value,
                             int32_t in_pos = -1, int32_t out_pos = -1);
-Status AutoMappingSubgraphIndex(const ge::Graph &graph,
-                                const std::function<int32_t(int32_t data_index)> &input,
+Status AutoMappingSubgraphIndex(const ge::Graph &graph, const std::function<int32_t(int32_t data_index)> &input,
                                 const std::function<int32_t(int32_t netoutput_index)> &output);
-Status AutoMappingSubgraphIndex(const ge::Graph &graph,
-    const std::function<Status(int32_t data_index, int32_t &parent_input_index)> &input,
+Status AutoMappingSubgraphIndex(
+    const ge::Graph &graph, const std::function<Status(int32_t data_index, int32_t &parent_input_index)> &input,
     const std::function<Status(int32_t netoutput_index, int32_t &parent_output_index)> &output);
 using google::protobuf::Message;
 class OpRegistrationDataImpl;
@@ -91,24 +88,25 @@ class FrameworkRegistryImpl;
 
 using ParseParamFunc = std::function<domi::Status(const google::protobuf::Message *, ge::Operator &)>;
 using ParseParamByOpFunc = std::function<domi::Status(const ge::Operator &, ge::Operator &)>;
-using FusionParseParamFunc = std::function<domi::Status(const std::vector<const google::protobuf::Message *>,
-                                                        ge::Operator &)>;
+using FusionParseParamFunc =
+    std::function<domi::Status(const std::vector<const google::protobuf::Message *>, ge::Operator &)>;
 using FusionParseParamByOpFunc = std::function<domi::Status(const std::vector<ge::Operator> &, ge::Operator &)>;
 using ParseSubgraphFunc = std::function<Status(const std::string &subgraph_name, const ge::Graph &graph)>;
 using ParseOpToGraphFunc = std::function<Status(const ge::Operator &, ge::Graph &)>;
 using ParseSubgraphFuncV2 = std::function<Status(const ge::AscendString &subgraph_name, const ge::Graph &graph)>;
-using AutoMappingSubgraphIOIndexFunc = std::function<Status(const ge::Graph &graph,
-    const std::function<Status(int32_t data_index, int32_t &parent_input_index)> &input,
+using AutoMappingSubgraphIOIndexFunc = std::function<Status(
+    const ge::Graph &graph, const std::function<Status(int32_t data_index, int32_t &parent_input_index)> &input,
     const std::function<Status(int32_t netoutput_index, int32_t &parent_output_index)> &output)>;
 
 class FMK_FUNC_HOST_VISIBILITY FMK_FUNC_DEV_VISIBILITY FrameworkRegistry {
  public:
   FrameworkRegistry(const FrameworkRegistry &) = delete;
-  FrameworkRegistry& operator = (const FrameworkRegistry &) = delete;
+  FrameworkRegistry &operator=(const FrameworkRegistry &) = delete;
   ~FrameworkRegistry();
-  static FrameworkRegistry& Instance();
+  static FrameworkRegistry &Instance();
   void AddAutoMappingSubgraphIOIndexFunc(domi::FrameworkType framework, AutoMappingSubgraphIOIndexFunc fun);
   AutoMappingSubgraphIOIndexFunc GetAutoMappingSubgraphIOIndexFunc(domi::FrameworkType framework);
+
  private:
   FrameworkRegistry();
   std::unique_ptr<FrameworkRegistryImpl> impl_;
@@ -170,9 +168,9 @@ class FMK_FUNC_HOST_VISIBILITY FMK_FUNC_DEV_VISIBILITY OpRegistrationData {
 
   OpRegistrationData &ParseOpToGraphFn(const ParseOpToGraphFunc &parse_op_to_graph_fn);
 
-  domi::ImplyType GetImplyType () const;
+  domi::ImplyType GetImplyType() const;
   ATTRIBUTED_DEPRECATED(Status GetOmOptype(ge::AscendString &) const)
-  std::string GetOmOptype () const;
+  std::string GetOmOptype() const;
   Status GetOmOptype(ge::AscendString &om_op_type) const;
   ATTRIBUTED_DEPRECATED(GetOriginOpTypeSet(std::set<ge::AscendString> &) const)
   std::set<std::string> GetOriginOpTypeSet() const;
@@ -202,18 +200,15 @@ class FMK_FUNC_HOST_VISIBILITY FMK_FUNC_DEV_VISIBILITY OpReceiver {
 namespace ge {
 using OpRegistrationData = domi::OpRegistrationData;
 using OpReceiver = domi::OpReceiver;
-} // namespace ge
+}  // namespace ge
 
 #define REGISTER_CUSTOM_OP(name) REGISTER_CUSTOM_OP_UNIQ_HELPER(__COUNTER__, (name))
 #define REGISTER_CUSTOM_OP_UNIQ_HELPER(ctr, name) REGISTER_CUSTOM_OP_UNIQ(ctr, (name))
-#define REGISTER_CUSTOM_OP_UNIQ(ctr, name)     \
-  static OpReceiver register_op##ctr           \
-      __attribute__((unused)) =                \
-          OpRegistrationData(name)
+#define REGISTER_CUSTOM_OP_UNIQ(ctr, name) \
+  static OpReceiver register_op##ctr __attribute__((unused)) = OpRegistrationData(name)
 
-#define REGISTER_AUTOMAPPING_SUBGRAPH_IO_INDEX_FUNC(framework, fun)             \
-  static AutoMappingSubgraphIOIndexFuncRegister                                 \
-    auto_mapping_subgraph_fun_##framework(framework, (fun));
+#define REGISTER_AUTOMAPPING_SUBGRAPH_IO_INDEX_FUNC(framework, fun) \
+  static AutoMappingSubgraphIOIndexFuncRegister auto_mapping_subgraph_fun_##framework(framework, (fun));
 
 /*lint +e148*/
 #endif  // INC_EXTERNAL_REGISTER_REGISTER_H

@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2026 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -27,7 +27,8 @@ OpDef &OpDefImpl::Comment(OpDef *parent_this, CommentSection section, const char
   }
   if (section == CommentSection::CATEGORY) {
     if (strchr(comment, ' ') != nullptr) {
-      GELOGE(ge::PARAM_INVALID, "Ops %s : category names cannot be split by spaces", parent_this->GetOpType().GetString());
+      GELOGE(ge::PARAM_INVALID, "Ops %s : category names cannot be split by spaces",
+             parent_this->GetOpType().GetString());
       return *parent_this;
     }
     parent_this->impl_->category = comment;
@@ -64,8 +65,8 @@ void OpDefImpl::MergeParam(std::vector<OpParamDef> &merge, std::vector<OpParamDe
   return;
 }
 
-void OpDefImpl::DfsDataType(OpDef::DfsParam &dfs_param, const std::vector<OpParamDef> &all_param,
-                        uint32_t list_idx, uint32_t non_list_idx) const {
+void OpDefImpl::DfsDataType(OpDef::DfsParam &dfs_param, const std::vector<OpParamDef> &all_param, uint32_t list_idx,
+                            uint32_t non_list_idx) const {
   constexpr uint32_t two = 2;
   const OpParamDef &def = all_param[list_idx / two];
   if (def.IsScalarOrScalarList() && (def.IsScalarTypeSet() || def.IsScalarNameSet())) {
@@ -86,8 +87,8 @@ void OpDefImpl::DfsDataType(OpDef::DfsParam &dfs_param, const std::vector<OpPara
   return;
 }
 
-void OpDefImpl::DfsFormat(OpDef::DfsParam &dfs_param, const std::vector<OpParamDef> &all_param,
-                      uint32_t list_idx, uint32_t non_list_idx) const {
+void OpDefImpl::DfsFormat(OpDef::DfsParam &dfs_param, const std::vector<OpParamDef> &all_param, uint32_t list_idx,
+                          uint32_t non_list_idx) const {
   constexpr uint32_t two = 2;
   const OpParamDef &def = all_param[list_idx / two];
   if ((def.IsScalarOrScalarList() || def.IsValueDepend())) {
@@ -109,7 +110,7 @@ void OpDefImpl::DfsFormat(OpDef::DfsParam &dfs_param, const std::vector<OpParamD
 }
 
 void OpDefImpl::DfsFullPermutation(OpDef::DfsParam &dfs_param, const std::vector<OpParamDef> &all_param,
-                               uint32_t list_idx, uint32_t non_list_idx) const {
+                                   uint32_t list_idx, uint32_t non_list_idx) const {
   constexpr uint32_t two = 2;
   if (list_idx == all_param.size() * two) {
     dfs_param.full_types.push_back(dfs_param.types);
@@ -138,10 +139,11 @@ ItemFindStatus OpDefImpl::FindAttr(OpDef *parent_this, const char *name, OpAttrD
 
 bool OpDefImpl::IsNonListTypes(const OpParamDef &def) const {
   return (!def.IsScalarOrScalarList() && def.IsDtype()) ||
-    (def.IsScalarOrScalarList() && (!def.IsScalarTypeSet() && !def.IsScalarNameSet()) && def.IsDtype());
+         (def.IsScalarOrScalarList() && (!def.IsScalarTypeSet() && !def.IsScalarNameSet()) && def.IsDtype());
 }
 
-uint32_t OpDefImpl::GetNonListLen(const OpDef *parent_this, std::vector<OpParamDef> &input_param, std::vector<OpParamDef> &output_param) const {
+uint32_t OpDefImpl::GetNonListLen(const OpDef *parent_this, std::vector<OpParamDef> &input_param,
+                                  std::vector<OpParamDef> &output_param) const {
   std::unordered_set<uint32_t> non_list_lens;
   auto set_non_list_len = [parent_this, &non_list_lens](const std::vector<OpParamDef> &params) {
     for (auto &def : params) {
@@ -302,7 +304,7 @@ void OpDefImpl::UpdateInput(OpDef *parent_this, const OpDef::DfsParam &dfs_param
              input[input_idx].GetParamName().GetString());
       continue;
     }
-    input[input_idx].impl_->types =  input[to_param.index_in].impl_->types;
+    input[input_idx].impl_->types = input[to_param.index_in].impl_->types;
     if (input[input_idx].IsSetDtypeForBin()) {
       std::vector<ge::DataType> data_types_for_bin;
       for (uint32_t type_idx = 0; type_idx < dfs_param.full_types.size(); ++type_idx) {
@@ -329,16 +331,15 @@ void OpDefImpl::UpdateOutput(OpDef *parent_this, const OpDef::DfsParam &dfs_para
   return;
 }
 
-void OpDefImpl::SetPermutedParam(OpDef *parent_this, const OpDef::DfsParam &dfs_param,
-                             std::vector<OpParamDef> &input,
-                             std::vector<OpParamDef> &output) {
+void OpDefImpl::SetPermutedParam(OpDef *parent_this, const OpDef::DfsParam &dfs_param, std::vector<OpParamDef> &input,
+                                 std::vector<OpParamDef> &output) {
   parent_this->UpdateInput(dfs_param, input);
   parent_this->UpdateOutput(dfs_param, output);
   parent_this->FollowListImpl(dfs_param, input, output);
   return;
 }
 
-void OpDefImpl::CheckIncompatible(const std::vector<OpParamDef>& all) const {
+void OpDefImpl::CheckIncompatible(const std::vector<OpParamDef> &all) const {
   bool is_unknown_shape_format = false;
   for (auto &def : all) {
     if (!def.impl_->unknown_shape_formats.empty()) {
@@ -358,7 +359,7 @@ void OpDefImpl::CheckIncompatible(const std::vector<OpParamDef>& all) const {
 }
 
 void OpDefImpl::FullPermutation(OpDef *parent_this, std::vector<OpParamDef> &input_param,
-                            std::vector<OpParamDef> &output_param) {
+                                std::vector<OpParamDef> &output_param) {
   parent_this->impl_->non_list_len = parent_this->GetNonListLen(input_param, output_param);
   std::vector<OpParamDef> all_param = input_param;
   all_param.insert(all_param.end(), output_param.begin(), output_param.end());
@@ -392,7 +393,8 @@ void OpDefImpl::SetDefaultND(std::vector<OpParamDef> &defs) const {
   return;
 }
 
-std::vector<std::vector<OpParamDef>> OpDefImpl::GetMergeInputsOutputs(OpDef *parent_this, const OpAICoreConfig &aicore_config) {
+std::vector<std::vector<OpParamDef>> OpDefImpl::GetMergeInputsOutputs(OpDef *parent_this,
+                                                                      const OpAICoreConfig &aicore_config) {
   parent_this->FollowImpl();
   std::vector<OpParamDef> inputs = parent_this->GetInputs();
   std::vector<OpParamDef> outputs = parent_this->GetOutputs();
@@ -421,11 +423,12 @@ void OpDefImpl::Construct(OpDef *parent_this, const char *type) {
   parent_this->impl_->op_type = type;
   auto regConfigs = GetOpAllAICoreConfig(type);
   GELOGD("Aicore op[%s] configs size: %zu", type, regConfigs.size());
-  for (auto it = regConfigs.cbegin(); it!= regConfigs.cend(); ++it) {
-    GELOGD("Found aicore op[%s] at socVersion[%s] registerd by REGISTER_OP_AICORE_CONFIG.",
-      type, it->first.GetString());
+  for (auto it = regConfigs.cbegin(); it != regConfigs.cend(); ++it) {
+    GELOGD("Found aicore op[%s] at socVersion[%s] registerd by REGISTER_OP_AICORE_CONFIG.", type,
+           it->first.GetString());
     if (it->second == nullptr) {
-      GELOGE(ge::PARAM_INVALID, "Aicore func of op[%s] at socVersion[%s] registerd by REGISTER_OP_AICORE_CONFIG is nullptr.");
+      GELOGE(ge::PARAM_INVALID,
+             "Aicore func of op[%s] at socVersion[%s] registerd by REGISTER_OP_AICORE_CONFIG is nullptr.");
       return;
     }
     auto config = it->second();
@@ -581,7 +584,7 @@ OpAttrDef &OpAttrDefImpl::Version(OpAttrDef *parent_this, uint32_t version) {
   return *parent_this;
 }
 
-bool OpAttrDefImpl::DoubleEq(const OpAttrDef *parent_this, const OpAttrDef &attr_def) const{
+bool OpAttrDefImpl::DoubleEq(const OpAttrDef *parent_this, const OpAttrDef &attr_def) const {
   if (parent_this->impl_->name == attr_def.impl_->name) {
     return true;
   }
@@ -616,7 +619,7 @@ ge::AscendString &OpAttrDefImpl::GetProtoDataType(const OpAttrDef *parent_this) 
   return dtype_names[static_cast<size_t>(parent_this->impl_->data_type)];
 }
 
-template<class T>
+template <class T>
 std::string GetListStr(std::vector<T> list, const char *brac, void (*pfSout)(std::stringstream &s, T v)) {
   std::string str = "";
   std::stringstream sstream;
@@ -652,15 +655,18 @@ ge::AscendString &OpAttrDefImpl::GetAttrDefaultVal(OpAttrDef *parent_this, const
     parent_this->impl_->value = parent_this->impl_->str_value;
   } else if (parent_this->impl_->data_type == AttrDataType::ATTR_DT_LIST_BOOL) {
     parent_this->impl_->value = GetListStr<bool>(parent_this->impl_->list_bool, brac, [](std::stringstream &s, bool v) {
-                           s << (v ? "true" : "false") << ",";
-                         }).c_str();
+                                  s << (v ? "true" : "false") << ",";
+                                }).c_str();
   } else if (parent_this->impl_->data_type == AttrDataType::ATTR_DT_LIST_FLOAT) {
     parent_this->impl_->value =
-        GetListStr<float>(parent_this->impl_->list_float, brac, [](std::stringstream &s, float v) { s << v << ","; }).c_str();
+        GetListStr<float>(parent_this->impl_->list_float, brac, [](std::stringstream &s, float v) {
+          s << v << ",";
+        }).c_str();
   } else if (parent_this->impl_->data_type == AttrDataType::ATTR_DT_LIST_INT) {
-    parent_this->impl_->value = GetListStr<int64_t>(parent_this->impl_->list_int, brac, [](std::stringstream &s, int64_t v) {
-                           s << v << ",";
-                         }).c_str();
+    parent_this->impl_->value =
+        GetListStr<int64_t>(parent_this->impl_->list_int, brac, [](std::stringstream &s, int64_t v) {
+          s << v << ",";
+        }).c_str();
   } else if (parent_this->impl_->data_type == AttrDataType::ATTR_DT_LIST_LIST_INT) {
     for (auto listInt : parent_this->impl_->list_list_int) {
       strList.emplace_back(GetListStr<int64_t>(listInt, brac, [](std::stringstream &s, int64_t v) { s << v << ","; }));
@@ -817,7 +823,6 @@ void OpParamDefImpl::MergeParam(OpParamDef *parent_this, const OpParamDef &def) 
   parent_this->impl_->comment = def.impl_->comment;
 }
 
-
 OpParamDef &OpParamDefImpl::DataType(OpParamDef *parent_this, std::vector<ge::DataType> types) {
   if (parent_this->IsDtypeList()) {
     GELOGE(ge::PARAM_INVALID, "DataTypeList and DataType cannot be called at the same time!");
@@ -829,7 +834,7 @@ OpParamDef &OpParamDefImpl::DataType(OpParamDef *parent_this, std::vector<ge::Da
   }
   if (parent_this->impl_->set_type_for_bin && types.size() != parent_this->impl_->types_for_bin.size()) {
     GELOGE(ge::PARAM_INVALID, "Param %s : DataType size is not equal to DataTypeForBinQuery size",
-        parent_this->impl_->name.GetString());
+           parent_this->impl_->name.GetString());
     return *parent_this;
   }
   parent_this->impl_->types_status = NON_LIST;
@@ -854,7 +859,7 @@ OpParamDef &OpParamDefImpl::DataTypeList(OpParamDef *parent_this, std::vector<ge
   }
   if (parent_this->impl_->set_type_for_bin && types.size() != parent_this->impl_->types_for_bin.size()) {
     GELOGE(ge::PARAM_INVALID, "Param %s : DataTypeList size is not equal to DataTypeForBinQuery size",
-        parent_this->impl_->name.GetString());
+           parent_this->impl_->name.GetString());
     return *parent_this;
   }
   parent_this->impl_->types_status = LIST;
@@ -873,7 +878,7 @@ OpParamDef &OpParamDefImpl::Format(OpParamDef *parent_this, std::vector<ge::Form
   }
   if (parent_this->impl_->set_format_for_bin && formats.size() != parent_this->impl_->formats_for_bin.size()) {
     GELOGE(ge::PARAM_INVALID, "Param %s : Format size is not equal to FormatForBinQuery size",
-        parent_this->impl_->name.GetString());
+           parent_this->impl_->name.GetString());
     return *parent_this;
   }
   parent_this->impl_->formats_status = NON_LIST;
@@ -897,7 +902,7 @@ OpParamDef &OpParamDefImpl::FormatList(OpParamDef *parent_this, std::vector<ge::
   }
   if (parent_this->impl_->set_format_for_bin && formats.size() != parent_this->impl_->formats_for_bin.size()) {
     GELOGE(ge::PARAM_INVALID, "Param %s : FormatList size is not equal to FormatForBinQuery size",
-        parent_this->impl_->name.GetString());
+           parent_this->impl_->name.GetString());
     return *parent_this;
   }
   parent_this->impl_->formats_status = LIST;
@@ -912,12 +917,12 @@ OpParamDef &OpParamDefImpl::DataTypeForBinQuery(OpParamDef *parent_this, std::ve
   }
   if (parent_this->impl_->types_status == NON_LIST && parent_this->impl_->types.size() != types.size()) {
     GELOGE(ge::PARAM_INVALID, "Param %s : DataTypeForBinQuery size is not equal to DataType size",
-        parent_this->impl_->name.GetString());
+           parent_this->impl_->name.GetString());
     return *parent_this;
   }
   if (parent_this->impl_->types_status == LIST && parent_this->impl_->types_list.size() != types.size()) {
     GELOGE(ge::PARAM_INVALID, "Param %s : DataTypeForBinQuery size is not equal to DataTypeList size",
-        parent_this->impl_->name.GetString());
+           parent_this->impl_->name.GetString());
     return *parent_this;
   }
   parent_this->impl_->types_for_bin = types;
@@ -932,12 +937,12 @@ OpParamDef &OpParamDefImpl::FormatForBinQuery(OpParamDef *parent_this, std::vect
   }
   if (parent_this->impl_->formats_status == NON_LIST && parent_this->impl_->formats.size() != formats.size()) {
     GELOGE(ge::PARAM_INVALID, "Param %s : FormatForBinQuery size is not equal to Format size",
-        parent_this->impl_->name.GetString());
+           parent_this->impl_->name.GetString());
     return *parent_this;
   }
   if (parent_this->impl_->formats_status == LIST && parent_this->impl_->formats_list.size() != formats.size()) {
     GELOGE(ge::PARAM_INVALID, "Param %s : FormatForBinQuery size is not equal to FormatList size",
-        parent_this->impl_->name.GetString());
+           parent_this->impl_->name.GetString());
     return *parent_this;
   }
   parent_this->impl_->formats_for_bin = formats;
@@ -1008,7 +1013,7 @@ OpParamDef &OpParamDefImpl::InitValue(OpParamDef *parent_this, uint64_t value) {
 OpParamDef &OpParamDefImpl::InitValue(OpParamDef *parent_this, const ScalarVar &value) {
   if (!parent_this->impl_->init_value_list.empty()) {
     GELOGW("InitValue has been set, %s InitValue will be reset, please check whether it is correct.",
-        parent_this->impl_->name.GetString());
+           parent_this->impl_->name.GetString());
     parent_this->impl_->init_value_list.clear();
   }
   parent_this->impl_->init_value_list.emplace_back(value);
@@ -1018,7 +1023,7 @@ OpParamDef &OpParamDefImpl::InitValue(OpParamDef *parent_this, const ScalarVar &
 OpParamDef &OpParamDefImpl::InitValue(OpParamDef *parent_this, const std::vector<ScalarVar> &value) {
   if (!parent_this->impl_->init_value_list.empty()) {
     GELOGW("InitValue has been set, %s InitValue will be reset, please check whether it is correct.",
-        parent_this->impl_->name.GetString());
+           parent_this->impl_->name.GetString());
     parent_this->impl_->init_value_list.clear();
   }
   parent_this->impl_->init_value_list.assign(value.begin(), value.end());
@@ -1030,8 +1035,7 @@ OpParamDef &OpParamDefImpl::OutputShapeDependOnCompute(OpParamDef *parent_this) 
   return *parent_this;
 }
 
-OpParamDef &OpParamDefImpl::Follow(OpParamDef *parent_this, const char *paramName)
-{
+OpParamDef &OpParamDefImpl::Follow(OpParamDef *parent_this, const char *paramName) {
   if (parent_this->IsScalarTypeSet() || parent_this->IsScalarNameSet()) {
     GELOGE(ge::PARAM_INVALID, "Param %s : Follow is incompatible with To", parent_this->impl_->name.GetString());
     return *parent_this;
@@ -1040,9 +1044,8 @@ OpParamDef &OpParamDefImpl::Follow(OpParamDef *parent_this, const char *paramNam
   parent_this->impl_->follow_type = FollowType::ALL;
   return *parent_this;
 }
- 
-OpParamDef &OpParamDefImpl::Follow(OpParamDef *parent_this, const char *paramName, FollowType ftype)
-{
+
+OpParamDef &OpParamDefImpl::Follow(OpParamDef *parent_this, const char *paramName, FollowType ftype) {
   if (parent_this->IsScalarTypeSet() || parent_this->IsScalarNameSet()) {
     GELOGE(ge::PARAM_INVALID, "Param %s : Follow is incompatible with To", parent_this->impl_->name.GetString());
     return *parent_this;
@@ -1084,7 +1087,6 @@ std::vector<ge::DataType> &OpParamDefImpl::GetOriginDataTypes(OpParamDef *parent
   }
   return parent_this->impl_->origin_types;
 }
-
 
 OpParamDef &OpParamTrunk::Input(const char *name) {
   return this->ParamGetOrCreate(name, false);
@@ -1140,9 +1142,9 @@ std::vector<OpParamDef> &OpParamTrunk::GetOutputs(void) {
   return this->outputs_;
 }
 void OpParamTrunk::FollowMapUpdate(OpParamDef &param, bool is_output) {
-  ge::AscendString& cur_name = param.GetParamName();
+  ge::AscendString &cur_name = param.GetParamName();
   if (this->follow_map.find(cur_name) != this->follow_map.end()) {
-    OpDef::PortFollowInfo& follow_info = this->follow_map[param.GetParamName()];
+    OpDef::PortFollowInfo &follow_info = this->follow_map[param.GetParamName()];
     follow_info.port_stat = OpDef::PortStat::INOUT;
     if (is_output) {
       follow_info.index_out = this->outputs_.size();
@@ -1162,24 +1164,24 @@ void OpParamTrunk::FollowMapUpdate(OpParamDef &param, bool is_output) {
   this->follow_map.emplace(cur_name, follow_info);
   return;
 }
- 
-OpParamDef &OpParamTrunk::GetParamDef(const ge::AscendString& name, OpDef::PortStat stat) {
-  OpDef::PortFollowInfo& follow_info = this->follow_map[name];
+
+OpParamDef &OpParamTrunk::GetParamDef(const ge::AscendString &name, OpDef::PortStat stat) {
+  OpDef::PortFollowInfo &follow_info = this->follow_map[name];
   if (stat == OpDef::PortStat::OUT) {
     return this->outputs_[follow_info.index_out];
   } else {
     return this->inputs_[follow_info.index_in];
   }
 }
- 
+
 void OpParamTrunk::FollowDataImpl(void) {
   if (this->follow_isimpl == true) {
     return;
   }
-  for (auto& op_param_def : this->inputs_) {
+  for (auto &op_param_def : this->inputs_) {
     this->DfsFollow(op_param_def, OpDef::PortStat::IN);
   }
-  for (auto& op_param_def : this->outputs_) {
+  for (auto &op_param_def : this->outputs_) {
     this->DfsFollow(op_param_def, OpDef::PortStat::OUT);
   }
   this->follow_isimpl = true;
@@ -1218,7 +1220,7 @@ void OpParamTrunk::ParamFollow(OpParamDef &op_param_def, OpParamDef &target_para
   }
 }
 
-void OpParamTrunk::DfsFollow(OpParamDef& op_param_def, OpDef::PortStat stat) {
+void OpParamTrunk::DfsFollow(OpParamDef &op_param_def, OpDef::PortStat stat) {
   if (op_param_def.GetFollowType() >= FollowType::INVALID_TYPE ||
       op_param_def.GetFollowName() == ge::AscendString("")) {
     return;
@@ -1226,8 +1228,8 @@ void OpParamTrunk::DfsFollow(OpParamDef& op_param_def, OpDef::PortStat stat) {
   ge::AscendString cur_name = op_param_def.GetParamName();
   ge::AscendString follow_name = op_param_def.GetFollowName();
   FollowType ftype = op_param_def.GetFollowType();
-  std::map<ge::AscendString, OpDef::PortFollowInfo>& flw_mp = this->follow_map;
-  OpDef::PortFollowInfo& follow_info = flw_mp[cur_name];
+  std::map<ge::AscendString, OpDef::PortFollowInfo> &flw_mp = this->follow_map;
+  OpDef::PortFollowInfo &follow_info = flw_mp[cur_name];
   if (flw_mp.find(follow_name) == flw_mp.end()) {
     GELOGE(ge::PARAM_INVALID, "PortName %s : FollowPort is Not Exist", cur_name.GetString());
     return;
@@ -1254,7 +1256,7 @@ void OpParamTrunk::DfsFollow(OpParamDef& op_param_def, OpDef::PortStat stat) {
       follow_name = flw_mp[follow_name].follow_port_name;
     }
   }
-  OpDef::PortFollowInfo& target_follow_info = flw_mp[follow_name];
+  OpDef::PortFollowInfo &target_follow_info = flw_mp[follow_name];
   if (target_follow_info.port_stat == OpDef::PortStat::OUT) {
     GELOGE(ge::PARAM_INVALID, "Port %s : FollowData not Found", cur_name.GetString());
     return;
@@ -1262,7 +1264,7 @@ void OpParamTrunk::DfsFollow(OpParamDef& op_param_def, OpDef::PortStat stat) {
   follow_info.follow_port_name = follow_name;
   follow_info.follow_type = ftype;
   op_param_def.impl_->follow_port_name = follow_name;
-  OpParamDef& target_param = this->inputs_[target_follow_info.index_in];
+  OpParamDef &target_param = this->inputs_[target_follow_info.index_in];
   this->ParamFollow(op_param_def, target_param, stat);
 }
 
@@ -1279,11 +1281,11 @@ void OpParamTrunk::FollowListDataImpl(const OpDef::DfsParam &dfs_param, std::vec
       return input[this->follow_map[port_name].index_in];
     }
   };
-  for (const auto& param_pair : this->follow_dtypelist) {
+  for (const auto &param_pair : this->follow_dtypelist) {
     std::tie(name, stat) = param_pair;
     uint32_t target_index = this->follow_map[this->follow_map[name].follow_port_name].index_in;
-    OpParamDef& target_param = input[target_index];
-    OpParamDef& op_param_def = get_param_ref(name, stat);
+    OpParamDef &target_param = input[target_index];
+    OpParamDef &op_param_def = get_param_ref(name, stat);
     op_param_def.impl_->types = target_param.impl_->types;
     if (op_param_def.IsSetDtypeForBin()) {
       std::vector<ge::DataType> data_types_for_bin;
@@ -1294,11 +1296,11 @@ void OpParamTrunk::FollowListDataImpl(const OpDef::DfsParam &dfs_param, std::vec
       op_param_def.impl_->types_for_bin = data_types_for_bin;
     }
   }
-  for (const auto& param_pair : this->follow_formatlist) {
+  for (const auto &param_pair : this->follow_formatlist) {
     std::tie(name, stat) = param_pair;
     uint32_t target_index = this->follow_map[this->follow_map[name].follow_port_name].index_in;
-    OpParamDef& target_param = input[target_index];
-    OpParamDef& op_param_def = get_param_ref(name, stat);
+    OpParamDef &target_param = input[target_index];
+    OpParamDef &op_param_def = get_param_ref(name, stat);
     op_param_def.impl_->formats = target_param.impl_->formats;
     if (op_param_def.IsSetFormatForBin()) {
       std::vector<ge::Format> data_formats_for_bin;
@@ -1463,8 +1465,8 @@ OpMC2Def &OpMC2DefImpl::Eq(OpMC2Def *parent_this, const OpMC2Def &mc2_def) {
 }
 
 OpMC2Def &OpMC2DefImpl::HcclGroup(OpMC2Def *parent_this, const char *value) {
-  if (std::find(parent_this->impl_->group_list.begin(), parent_this->impl_->group_list.end(), ge::AscendString(value)) ==
-      parent_this->impl_->group_list.end()) {
+  if (std::find(parent_this->impl_->group_list.begin(), parent_this->impl_->group_list.end(),
+                ge::AscendString(value)) == parent_this->impl_->group_list.end()) {
     parent_this->impl_->group_list.emplace_back(value);
   }
   return *parent_this;
@@ -1472,8 +1474,8 @@ OpMC2Def &OpMC2DefImpl::HcclGroup(OpMC2Def *parent_this, const char *value) {
 
 OpMC2Def &OpMC2DefImpl::HcclGroup(OpMC2Def *parent_this, std::vector<const char *> value) {
   for (const char *val : value) {
-    if (std::find(parent_this->impl_->group_list.begin(), parent_this->impl_->group_list.end(), ge::AscendString(val)) ==
-        parent_this->impl_->group_list.end()) {
+    if (std::find(parent_this->impl_->group_list.begin(), parent_this->impl_->group_list.end(),
+                  ge::AscendString(val)) == parent_this->impl_->group_list.end()) {
       parent_this->impl_->group_list.emplace_back(val);
     }
   }
@@ -1490,7 +1492,8 @@ void OpMC2DefImpl::HcclServerTypeImpl(OpMC2Def *parent_this, enum HcclServerType
   parent_this->impl_->server_type_[soc_version] = type;
 }
 
-enum ops::HcclServerType OpMC2DefImpl::GetHcclServerType(const OpMC2Def *parent_this, const ge::AscendString &soc_version) const {
+enum ops::HcclServerType OpMC2DefImpl::GetHcclServerType(const OpMC2Def *parent_this,
+                                                         const ge::AscendString &soc_version) const {
   if (parent_this->impl_->server_type_.empty()) {
     return HcclServerType::MAX;
   }

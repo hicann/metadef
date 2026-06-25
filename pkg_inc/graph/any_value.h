@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -93,21 +93,21 @@ class AnyValue {
     Clear();
   }
 
-  template<class T>
+  template <class T>
   static AnyValue CreateFrom(T &&value) {
     AnyValue av;
     av.InnerSet(std::forward<T>(value));
     return av;
   }
   // 如果只有万能引用，那么Set<int>(左值)这种调用方法会出错，因此有了这个函数
-  template<typename T>
+  template <typename T>
   static AnyValue CreateFrom(const T &value) {
     AnyValue av;
     av.InnerSet(value);
     return av;
   }
 
-  template<class T>
+  template <class T>
   graphStatus SetValue(T &&value) {
     Clear();
     InnerSet(std::forward<T>(value));
@@ -115,21 +115,21 @@ class AnyValue {
   }
 
   // 如果只有万能引用，那么Set<int>(左值)这种调用方法会出错，因此有了这个函数
-  template<typename T>
+  template <typename T>
   graphStatus SetValue(const T &value) {
     Clear();
     InnerSet(value);
     return GRAPH_SUCCESS;
   }
 
-  template<typename T>
+  template <typename T>
   graphStatus SetValue(std::initializer_list<T> values) {
     Clear();
     InnerSet(std::vector<T>(std::move(values)));
     return GRAPH_SUCCESS;
   }
 
-  template<typename T>
+  template <typename T>
   graphStatus GetValue(T &value) const {
     auto *const p = Get<T>();
     if (p == nullptr) {
@@ -139,7 +139,7 @@ class AnyValue {
     return GRAPH_SUCCESS;
   }
 
-  template<class T>
+  template <class T>
   const T *Get() const {
     if (!SameType<T>()) {
       return nullptr;
@@ -149,10 +149,10 @@ class AnyValue {
     }
     return PtrToPtr<const void, const T>(GetAddr());
   }
-  template<class T>
+  template <class T>
   T *MutableGet();
 
-  template<class T>
+  template <class T>
   bool SameType() const noexcept {
     if (operate_ == nullptr) {
       return false;
@@ -180,40 +180,33 @@ class AnyValue {
   AnyValue Copy() const;
 
  private:
-  template<typename T>
+  template <typename T>
   void InnerSet(T &&value) {
     using PureT = typename std::remove_cv<typename std::remove_reference<T>::type>::type;
     using Inline = std::integral_constant<bool, sizeof(PureT) <= sizeof(holder_)>;
-    using Operations =
-        typename std::conditional<Inline{}, AnyValue::InlineOperations<PureT>, AnyValue::AllocateOperations<PureT>>::type;
+    using Operations = typename std::conditional<Inline{}, AnyValue::InlineOperations<PureT>,
+                                                 AnyValue::AllocateOperations<PureT>>::type;
 
     Operations::Construct(std::forward<T>(value), this);
   }
   const void *GetAddr() const;
 
-  enum class OperateType : uint32_t {
-    kOpClear,
-    kOpGetAddr,
-    kOpClone,
-    kOpMove,
-    kGetTypeId,
-    kOperateTypeEnd
-  };
+  enum class OperateType : uint32_t { kOpClear, kOpGetAddr, kOpClone, kOpMove, kGetTypeId, kOperateTypeEnd };
 
-  template<typename T>
+  template <typename T>
   class InlineOperations {
-    public:
-      static void Operate(const OperateType ot, const AnyValue *const av, void *const out);
-      static void Construct(const T &value, AnyValue *const av);
-      static void Construct(T &&value, AnyValue *const av);
+   public:
+    static void Operate(const OperateType ot, const AnyValue *const av, void *const out);
+    static void Construct(const T &value, AnyValue *const av);
+    static void Construct(T &&value, AnyValue *const av);
   };
 
-  template<typename T>
+  template <typename T>
   class AllocateOperations {
-    public:
-      static void Operate(const OperateType ot, const AnyValue *const av, void *const out);
-      static void Construct(const T &value, AnyValue *const av);
-      static void Construct(T &&value, AnyValue *const av);
+   public:
+    static void Operate(const OperateType ot, const AnyValue *const av, void *const out);
+    static void Construct(const T &value, AnyValue *const av);
+    static void Construct(T &&value, AnyValue *const av);
   };
 
   using ValueBuf = std::aligned_storage<sizeof(void *)>::type;
@@ -227,17 +220,17 @@ class AnyValue {
 };
 using GeAttrValue = AnyValue;
 
-template<typename T>
+template <typename T>
 void AnyValue::AllocateOperations<T>::Construct(const T &value, AnyValue *const av) {
   av->holder_.pointer = new (std::nothrow) T(value);
   av->operate_ = AnyValue::AllocateOperations<T>::Operate;
 }
-template<typename T>
+template <typename T>
 void AnyValue::AllocateOperations<T>::Construct(T &&value, AnyValue *const av) {
   av->holder_.pointer = ::new (std::nothrow) T(std::forward<T>(value));
   av->operate_ = AnyValue::AllocateOperations<T>::Operate;
 }
-template<typename T>
+template <typename T>
 void AnyValue::AllocateOperations<T>::Operate(const AnyValue::OperateType ot, const AnyValue *const av,
                                               void *const out) {
   switch (ot) {
@@ -270,18 +263,17 @@ void AnyValue::AllocateOperations<T>::Operate(const AnyValue::OperateType ot, co
       break;
   }
 }
-template<typename T>
-void AnyValue::InlineOperations<T>::Construct(const T &value, AnyValue * const av) {
+template <typename T>
+void AnyValue::InlineOperations<T>::Construct(const T &value, AnyValue *const av) {
   (void)::new (&(av->holder_.inline_buf)) T(value);
   av->operate_ = AnyValue::InlineOperations<T>::Operate;
 }
-template<typename T>
+template <typename T>
 void AnyValue::InlineOperations<T>::Construct(T &&value, AnyValue *const av) {
   Construct(value, av);
 }
-template<typename T>
-void AnyValue::InlineOperations<T>::Operate(const AnyValue::OperateType ot, const AnyValue *const av,
-                                            void *const out) {
+template <typename T>
+void AnyValue::InlineOperations<T>::Operate(const AnyValue::OperateType ot, const AnyValue *const av, void *const out) {
   switch (ot) {
     case OperateType::kOpClear: {
       auto *const av_p = PtrToPtr<void, AnyValue>(out);
@@ -294,8 +286,8 @@ void AnyValue::InlineOperations<T>::Operate(const AnyValue::OperateType ot, cons
       break;
     case OperateType::kOpClone: {
       auto *const av_p = PtrToPtr<void, AnyValue>(out);
-      (void)new (&av_p->holder_.inline_buf) T(*PtrToPtr<const std::aligned_storage<sizeof(void *)>::type,
-                                                        const T>(&av->holder_.inline_buf));
+      (void)new (&av_p->holder_.inline_buf)
+          T(*PtrToPtr<const std::aligned_storage<sizeof(void *)>::type, const T>(&av->holder_.inline_buf));
       av_p->operate_ = av->operate_;
       break;
     }
@@ -314,8 +306,8 @@ void AnyValue::InlineOperations<T>::Operate(const AnyValue::OperateType ot, cons
   }
 }
 
-template<class T>
-auto AnyValue::MutableGet() -> T* {
+template <class T>
+auto AnyValue::MutableGet() -> T * {
   if (!SameType<T>()) {
     return nullptr;
   }

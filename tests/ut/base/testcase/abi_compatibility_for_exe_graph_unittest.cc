@@ -162,7 +162,8 @@ TEST_F(AbiCompatibilityForExeGraphUT, ComputeNodeInfo_CheckMemLayoutNotChanged) 
             sizeof(size_t));
   EXPECT_EQ(reinterpret_cast<uintptr_t>(&c->outputs_num_) - reinterpret_cast<uintptr_t>(&c->inputs_num_),
             sizeof(size_t));
-  EXPECT_EQ(reinterpret_cast<uintptr_t>(&c->reserved_) - reinterpret_cast<uintptr_t>(&c->outputs_num_), sizeof(size_t) * 3);
+  EXPECT_EQ(reinterpret_cast<uintptr_t>(&c->reserved_) - reinterpret_cast<uintptr_t>(&c->outputs_num_),
+            sizeof(size_t) * 3);
   EXPECT_EQ(reinterpret_cast<uintptr_t>(&c->place_holder) - reinterpret_cast<uintptr_t>(&c->reserved_),
             kComputeNodeInfoReservedFieldSize);
 
@@ -263,7 +264,6 @@ TEST_F(AbiCompatibilityForExeGraphUT, KernelRunContext_CheckMemLayoutNotChanged)
   EXPECT_EQ(reinterpret_cast<uintptr_t>(&k.values) - reinterpret_cast<uintptr_t>(&k.output_start), kPointerSize);
   EXPECT_EQ(sizeof(k.values), kPointerSize);
 }
-
 
 TEST_F(AbiCompatibilityForExeGraphUT, KernelContext_CheckMemLayoutNotChanged) {
   KernelContext k;

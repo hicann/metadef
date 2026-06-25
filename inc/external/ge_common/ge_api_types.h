@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
  * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
@@ -11,7 +11,8 @@
 #ifndef INC_EXTERNAL_GE_COMMON_GE_API_TYPES_H_
 #define INC_EXTERNAL_GE_COMMON_GE_API_TYPES_H_
 
-#pragma message("Warning: ge_api_types.h is deprecated and will be removed after 2027-06. Include \"ge_common_api_types.h\" instead.")
+#pragma message( \
+    "Warning: ge_api_types.h is deprecated and will be removed after 2027-06. Include \"ge_common_api_types.h\" instead.")
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -568,7 +569,7 @@ struct OutputTensorInfo {
   int64_t length{};                 // tensor length
   OutputTensorInfo() : dims({}), data(nullptr) {}
   OutputTensorInfo(OutputTensorInfo &&out) noexcept = default;
-  OutputTensorInfo &operator=(OutputTensorInfo &&out)& noexcept {
+  OutputTensorInfo &operator=(OutputTensorInfo &&out) &noexcept {
     if (this != &out) {
       data_type = out.data_type;
       dims = out.dims;
@@ -578,7 +579,7 @@ struct OutputTensorInfo {
     return *this;
   }
   OutputTensorInfo(const OutputTensorInfo &) = delete;
-  OutputTensorInfo &operator=(const OutputTensorInfo &)& = delete;
+  OutputTensorInfo &operator=(const OutputTensorInfo &) & = delete;
 };
 
 struct ModelDistibuteDesc {
@@ -740,8 +741,8 @@ const std::set<std::string> ir_builder_suppported_options = {INPUT_FORMAT,
 
 // for interface: aclgrphParse
 const std::set<std::string> ir_parser_suppported_options = {
-    INPUT_FP16_NODES, IS_INPUT_ADJUST_HW_LAYOUT, IS_OUTPUT_ADJUST_HW_LAYOUT, OUTPUT,
-    OUT_NODES, ENABLE_SCOPE_FUSION_PASSES, INPUT_DATA_NAMES, INPUT_SHAPE};
+    INPUT_FP16_NODES, IS_INPUT_ADJUST_HW_LAYOUT,  IS_OUTPUT_ADJUST_HW_LAYOUT, OUTPUT,
+    OUT_NODES,        ENABLE_SCOPE_FUSION_PASSES, INPUT_DATA_NAMES,           INPUT_SHAPE};
 
 // for interface: aclgrphBuildInitialize
 const std::set<std::string> global_options = {CORE_TYPE,
@@ -792,7 +793,8 @@ const std::set<std::string> global_options = {CORE_TYPE,
 namespace public_attr {
 // user can set stream label to define concurrent structure
 static const char_t *const USER_STREAM_LABEL = "_user_stream_label";
-static const char_t *const ENABLE_INNER_PARALLEL = "_enable_inner_parallel"; // 配合USER_STREAM_LABEL使用，当该属性为true时，USER_STREAM_LABEL范围内的算子还按照GE原有的并发策略分流
+static const char_t *const ENABLE_INNER_PARALLEL =
+    "_enable_inner_parallel";  // 配合USER_STREAM_LABEL使用，当该属性为true时，USER_STREAM_LABEL范围内的算子还按照GE原有的并发策略分流
 static const char_t *const USER_STREAM_PRIORITY = "_user_stream_priority";
 static const char_t *const OP_AI_CORE_NUM = "_op_aicore_num";
 static const char_t *const OP_VECTOR_CORE_NUM = "_op_vectorcore_num";
@@ -803,7 +805,7 @@ static const char_t *const AI_CORE_CNT = "ai_core_cnt";
 static const char_t *const CUBE_CORE_CNT = "cube_core_cnt";
 static const char_t *const VECTOR_CORE_CNT = "vector_core_cnt";
 static const char_t *const OP_EXEC_NEVER_TIMEOUT = "_op_exec_never_timeout";
-} // public_attr
+}  // namespace public_attr
 }  // namespace ge
-#endif // GE_API_TYPES_DEF
+#endif  // GE_API_TYPES_DEF
 #endif  // INC_EXTERNAL_GE_COMMON_GE_API_TYPES_H_

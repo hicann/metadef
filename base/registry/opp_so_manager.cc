@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
- * This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+ * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
  * See LICENSE in the root of the software repository for the full text of the License.
  */
@@ -33,24 +33,18 @@ const std::string kOpHostPath = "/op_impl/ai_core/tbe/op_host/lib/";
 
 using GetPathFunc = std::function<Status(std::string &)>;
 const std::map<gert::OppImplVersionTag, GetPathFunc> kVersion2GetProtoPathFunc = {
-  {gert::OppImplVersionTag::kOpp, [](std::string &path) {
-    return metadef::PluginManager::GetOpsProtoPath(path);
-  }},
- {gert::OppImplVersionTag::kOppKernel, [](std::string &path) {
-   return metadef::PluginManager::GetUpgradedOpsProtoPath(path);
- }}
-};
+    {gert::OppImplVersionTag::kOpp, [](std::string &path) { return metadef::PluginManager::GetOpsProtoPath(path); }},
+    {gert::OppImplVersionTag::kOppKernel,
+     [](std::string &path) { return metadef::PluginManager::GetUpgradedOpsProtoPath(path); }}};
 
 const std::map<gert::OppImplVersionTag, GetPathFunc> kVersion2GetMasterPathFunc = {
-  {gert::OppImplVersionTag::kOpp, [](std::string &path) {
-    return metadef::PluginManager::GetOpTilingForwardOrderPath(path);
-  }},
- {gert::OppImplVersionTag::kOppKernel, [](std::string &path) {
-   return metadef::PluginManager::GetUpgradedOpMasterPath(path);
- }}
-};
+    {gert::OppImplVersionTag::kOpp,
+     [](std::string &path) { return metadef::PluginManager::GetOpTilingForwardOrderPath(path); }},
+    {gert::OppImplVersionTag::kOppKernel,
+     [](std::string &path) { return metadef::PluginManager::GetUpgradedOpMasterPath(path); }}};
 
-gert::OppSoDesc* GetOppSoDescPtr(std::vector<std::pair<std::string, gert::OppSoDesc>> &vec, const std::string &package_name) {
+gert::OppSoDesc *GetOppSoDescPtr(std::vector<std::pair<std::string, gert::OppSoDesc>> &vec,
+                                 const std::string &package_name) {
   for (auto &item : vec) {
     if (item.first == package_name) {
       return &item.second;
@@ -59,7 +53,8 @@ gert::OppSoDesc* GetOppSoDescPtr(std::vector<std::pair<std::string, gert::OppSoD
   return nullptr;
 }
 
-void GetOppSoList(const std::string &opp_so_path, const std::vector<std::string>& so_suffix_list, std::vector<std::pair<std::string, gert::OppSoDesc>> &package_to_opp_so_desc,
+void GetOppSoList(const std::string &opp_so_path, const std::vector<std::string> &so_suffix_list,
+                  std::vector<std::pair<std::string, gert::OppSoDesc>> &package_to_opp_so_desc,
                   gert::OppImplVersionTag opp_version_tag) {
   std::vector<std::string> so_list;
   for (auto &so_suffix : so_suffix_list) {
@@ -68,7 +63,8 @@ void GetOppSoList(const std::string &opp_so_path, const std::vector<std::string>
   // 排序，将"_legacy.so"移到到最后
   (void)std::stable_partition(so_list.begin(), so_list.end(), [](const std::string &so_name) {
     return so_name.size() < std::strlen(kLegacySoSuffix) ||
-           so_name.compare((so_name.size() - std::strlen(kLegacySoSuffix)), std::strlen(kLegacySoSuffix), kLegacySoSuffix) != 0;
+           so_name.compare((so_name.size() - std::strlen(kLegacySoSuffix)), std::strlen(kLegacySoSuffix),
+                           kLegacySoSuffix) != 0;
   });
   for (const auto &so_name : so_list) {
     GELOGD("GetOppSoList from path %s, so_name is %s", opp_so_path.c_str(), so_name.c_str());
@@ -82,37 +78,35 @@ void GetOppSoList(const std::string &opp_so_path, const std::vector<std::string>
   }
   std::vector<ge::AscendString> new_so_path_vector;
   new_so_path_vector.reserve(so_list.size());
-  (void)std::transform(so_list.begin(), so_list.end(),
-                 std::back_inserter(new_so_path_vector),
-                 [](const std::string &s) {
-                     return ge::AscendString(s.c_str());
-                 });
+  (void)std::transform(so_list.begin(), so_list.end(), std::back_inserter(new_so_path_vector),
+                       [](const std::string &s) { return ge::AscendString(s.c_str()); });
 
   auto opp_so_desc_ptr = GetOppSoDescPtr(package_to_opp_so_desc, package_name);
   if (opp_so_desc_ptr == nullptr) {
-    GELOGI("Created new opp so list for package [%s], so num is [%zu], opp_impl_version: [%d]",
-           package_name.c_str(), new_so_path_vector.size(), static_cast<int32_t>(opp_version_tag));
+    GELOGI("Created new opp so list for package [%s], so num is [%zu], opp_impl_version: [%d]", package_name.c_str(),
+           new_so_path_vector.size(), static_cast<int32_t>(opp_version_tag));
     // 无则创建
     gert::OppSoDesc opp_so_desc = gert::OppSoDesc(new_so_path_vector, AscendString(package_name.c_str()));
     (void)package_to_opp_so_desc.emplace_back(package_name, opp_so_desc);
   } else {
-    GELOGI("Merged opp so list for package [%s], so num is [%zu], opp_impl_version: [%d]",
-           package_name.c_str(), so_list.size(), static_cast<int32_t>(opp_version_tag));
+    GELOGI("Merged opp so list for package [%s], so num is [%zu], opp_impl_version: [%d]", package_name.c_str(),
+           so_list.size(), static_cast<int32_t>(opp_version_tag));
     // 有则追加合并
     auto existing_so_path_vector = opp_so_desc_ptr->GetSoPaths();
-    (void)existing_so_path_vector.insert(existing_so_path_vector.end(),
-                                   new_so_path_vector.begin(),
-                                   new_so_path_vector.end());
+    (void)existing_so_path_vector.insert(existing_so_path_vector.end(), new_so_path_vector.begin(),
+                                         new_so_path_vector.end());
     *opp_so_desc_ptr = gert::OppSoDesc(existing_so_path_vector, AscendString(package_name.c_str()));
   }
 }
 }  // namespace
 
-void OppSoManager::LoadSoAndInitDefault(const std::vector<AscendString> &so_list, gert::OppImplVersionTag opp_version_tag, const std::string &package_name) const {
-  GELOGI("Start to LoadSoAndInitDefault, opp_impl_version: %d, package name:%s", static_cast<int32_t>(opp_version_tag), package_name.c_str());
+void OppSoManager::LoadSoAndInitDefault(const std::vector<AscendString> &so_list,
+                                        gert::OppImplVersionTag opp_version_tag,
+                                        const std::string &package_name) const {
+  GELOGI("Start to LoadSoAndInitDefault, opp_impl_version: %d, package name:%s", static_cast<int32_t>(opp_version_tag),
+         package_name.c_str());
   gert::OppSoDesc opp_so_desc(so_list, AscendString(package_name.c_str()));
-  auto space_registry_v2 =
-      gert::DefaultOpImplSpaceRegistryV2::GetInstance().GetSpaceRegistry(opp_version_tag);
+  auto space_registry_v2 = gert::DefaultOpImplSpaceRegistryV2::GetInstance().GetSpaceRegistry(opp_version_tag);
   if (space_registry_v2 == nullptr) {
     space_registry_v2 = std::make_shared<gert::OpImplSpaceRegistryV2>();
     (void)gert::DefaultOpImplSpaceRegistryV2::GetInstance().SetSpaceRegistry(space_registry_v2, opp_version_tag);
@@ -166,8 +160,8 @@ void OppSoManager::LoadOppPackage() const {
         if (so_name.GetString() != nullptr) {
           std::string so_name_str = so_name.GetString();
           return so_name_str.size() < std::strlen(kLegacySoSuffix) ||
-                  so_name_str.compare((so_name_str.size() - std::strlen(kLegacySoSuffix)),
-                  std::strlen(kLegacySoSuffix), kLegacySoSuffix) != 0;
+                 so_name_str.compare((so_name_str.size() - std::strlen(kLegacySoSuffix)), std::strlen(kLegacySoSuffix),
+                                     kLegacySoSuffix) != 0;
         }
         return true;
       });
@@ -180,14 +174,17 @@ void OppSoManager::LoadOppPackage() const {
   }
 }
 
-void OppSoManager::LoadOpsProtoSo(gert::OppImplVersionTag version, std::vector<std::pair<std::string, gert::OppSoDesc>> &package_to_opp_so_desc, bool is_split) const {
+void OppSoManager::LoadOpsProtoSo(gert::OppImplVersionTag version,
+                                  std::vector<std::pair<std::string, gert::OppSoDesc>> &package_to_opp_so_desc,
+                                  bool is_split) const {
   std::string ops_proto_path;
   auto it = kVersion2GetProtoPathFunc.find(version);
   if (it == kVersion2GetProtoPathFunc.end()) {
     GELOGW("[LoadOpsProtoSo] Not find get ops proto function with version:%d", static_cast<int32_t>(version));
     return;
   }
-  GELOGI("Start to load ops proto package, opp_impl_version: %d, is_split:[%d].", static_cast<int32_t>(version), is_split);
+  GELOGI("Start to load ops proto package, opp_impl_version: %d, is_split:[%d].", static_cast<int32_t>(version),
+         is_split);
   if (it->second(ops_proto_path) != ge::SUCCESS) {
     GELOGW("[LoadOpsProtoSo] Get ops proto path failed, opp_impl_version: %d", static_cast<int32_t>(version));
     return;
@@ -201,7 +198,7 @@ void OppSoManager::LoadOpsProtoSo(gert::OppImplVersionTag version, std::vector<s
   metadef::PluginManager::SplitPath(ops_proto_path, v_path);
   for (size_t i = 0UL; i < v_path.size(); ++i) {
     if (v_path[i].back() != '/') {
-       v_path[i] += '/';
+      v_path[i] += '/';
     }
     std::array<char_t, MMPA_MAX_PATH> resolved_path{};
     // 加载自定义算子so
@@ -219,7 +216,8 @@ void OppSoManager::LoadOpsProtoSo(gert::OppImplVersionTag version, std::vector<s
     // 加载built-in算子so
     std::string path = v_path[i].substr(0, idx) + kBuiltIn;
     bool is_sub_pkg = false;
-    path = metadef::PluginManager::GetOppPkgPath(path, kOpsProtoPath, kOpsGraphPath, os_type + "/" + cpu_type + "/", is_sub_pkg);
+    path = metadef::PluginManager::GetOppPkgPath(path, kOpsProtoPath, kOpsGraphPath, os_type + "/" + cpu_type + "/",
+                                                 is_sub_pkg);
     if (is_sub_pkg) {
       GetOppSoList(path, {kSoSuffix}, package_to_opp_so_desc, version);
     } else {
@@ -236,14 +234,17 @@ void OppSoManager::LoadOpsProtoSo(gert::OppImplVersionTag version, std::vector<s
   }
 }
 
-void OppSoManager::LoadOpMasterSo(gert::OppImplVersionTag version, std::vector<std::pair<std::string, gert::OppSoDesc>> &package_to_opp_so_desc, bool is_split) const {
+void OppSoManager::LoadOpMasterSo(gert::OppImplVersionTag version,
+                                  std::vector<std::pair<std::string, gert::OppSoDesc>> &package_to_opp_so_desc,
+                                  bool is_split) const {
   std::string op_tiling_path;
   auto it = kVersion2GetMasterPathFunc.find(version);
   if (it == kVersion2GetMasterPathFunc.end()) {
     GELOGW("[LoadOpsProtoSo] Not find get ops proto function with version:%d", static_cast<int32_t>(version));
     return;
   }
-  GELOGI("Start to load ops master package, opp_impl_version: %d, is_split:[%d].", static_cast<int32_t>(version), is_split);
+  GELOGI("Start to load ops master package, opp_impl_version: %d, is_split:[%d].", static_cast<int32_t>(version),
+         is_split);
   if (it->second(op_tiling_path) != ge::SUCCESS) {
     GELOGW("[LoadOpsProtoSo] Get ops proto path failed, opp_impl_version: %d", static_cast<int32_t>(version));
     return;
@@ -278,8 +279,8 @@ void OppSoManager::LoadOpMasterSo(gert::OppImplVersionTag version, std::vector<s
     // 加载built-in算子so
     std::string root_path = path.substr(0, idx) + kBuiltIn;
     bool is_sub_pkg = false;
-    root_path = metadef::PluginManager::GetOppPkgPath(root_path, kOpMasterPath, kOpHostPath, os_type + "/" + cpu_type + "/",
-                                             is_sub_pkg);
+    root_path = metadef::PluginManager::GetOppPkgPath(root_path, kOpMasterPath, kOpHostPath,
+                                                      os_type + "/" + cpu_type + "/", is_sub_pkg);
     if (is_sub_pkg) {
       GetOppSoList(root_path, {kSoSuffix}, package_to_opp_so_desc, version);
     } else {
