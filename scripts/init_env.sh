@@ -16,7 +16,6 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
 
-CANN_VERSION="9.0.0"
 CHIP_TYPE="910b"
 INSTALL_OPS=false
 INSTALL_PATH="${INSTALL_PATH:-/usr/local/Ascend}"
@@ -56,6 +55,16 @@ install_cann() {
     local arch=$(get_arch)
     local cann_url=$(get_cann_url)
     local download_dir="/tmp/cann_install"
+
+    CANN_VERSION=$(wget -q --no-check-certificate -O - "${cann_url}/" | \
+                    grep -Eo "Ascend-cann-toolkit_[0-9.]+_linux-${arch}\.run" | \
+                    head -n 1 | \
+                    sed -E "s/Ascend-cann-toolkit_([0-9.]+)_linux-.*/\1/")
+    if [[ -z "$CANN_VERSION" ]]; then
+        log_error "Failed to get CANN version from ${cann_url}"
+        return 1
+    fi
+    log_info "CANN version: ${CANN_VERSION}"
     mkdir -p "$download_dir"
     cd "$download_dir"
 
@@ -108,7 +117,7 @@ install_system_deps() {
     log_info "Checking system dependencies..."
 
     if check_command apt-get; then
-        apt-get update 2>/dev/null
+        apt-get update 2>/dev/null || log_warn "apt-get update had errors (continuing)"
         local pkgs=""
         check_command curl || pkgs="$pkgs curl"
         check_command wget || pkgs="$pkgs wget"
@@ -294,7 +303,7 @@ main() {
     echo "=================================="
     echo ""
     echo "Configuration:"
-    echo "  CANN Version:  ${CANN_VERSION}"
+    echo "  CANN Version:  ${CANN_VERSION:-auto-detect}"
     echo "  Chip Type:     ${CHIP_TYPE}"
     echo "  Install cann:  ${INSTALL_CANN}"
     echo "  Install ops:   ${INSTALL_OPS}"

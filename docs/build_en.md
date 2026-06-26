@@ -49,11 +49,12 @@ Developers can download the source code of this repository through the following
 
 - CMake >= 3.16.0 (version 3.20.0 recommended)
 
-- ccache/cov/asan
+- ccache/asan/patch
+
+- lcov (optional，for ut coverage)
 
 - graph-easy (optional)
 
-- patch
 
   ```bash
   # Ubuntu/Debian OS installation command examples are shown below. For other OS, install yourself.
