@@ -78,16 +78,9 @@ function(install_public_packages)
         ${COMMON_FILES}
         ${CANN_CMAKE_DIR}/scripts/install/multi_version.inc
     )
-    set(CONF_FILES
-        ${CANN_CMAKE_DIR}/scripts/package/cfg/path.cfg
-    )
     install(FILES ${CMAKE_BINARY_DIR}/version.metadef.info
         DESTINATION share/info/metadef
         RENAME version.info
-        COMPONENT metadef
-    )
-    install(FILES ${CONF_FILES}
-        DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/conf
         COMPONENT metadef
     )
     install(FILES ${PACKAGE_FILES}
