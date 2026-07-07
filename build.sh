@@ -1,10 +1,10 @@
 #!/bin/bash
 # -----------------------------------------------------------------------------------------------------------
 # Copyright (c) 2025 Huawei Technologies Co., Ltd.
-# This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+# This program is free software, you can redistribute it and/or modify it under the terms and conditions of
 # CANN Open Software License Agreement Version 2.0 (the "License").
 # Please refer to the License for details. You may not use this file except in compliance with the License.
-# THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+# THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
 # INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 # See LICENSE in the root of the software repository for the full text of the License.
 # -----------------------------------------------------------------------------------------------------------
@@ -15,6 +15,7 @@ BASEPATH=$(cd "$(dirname $0)"; pwd)
 OUTPUT_PATH="${BASEPATH}/output"
 BUILD_OUT_PATH="${BASEPATH}/build_out"
 BUILD_RELATIVE_PATH="build"
+RULE_LAUNCH_ARG=""
 
 # MDC build para
 ENABLE_BUILD_DEVICE=ON
@@ -46,8 +47,8 @@ usage() {
   echo "                   Specify package type (TYPE option: run/rpm/deb), Default: run"
   echo "    --cann_3rd_lib_path=<PATH>"
   echo "                      Set third_party package install path, default ./output/third_party"
-  echo "                      (Third_party package will cost a little time during the first compilation," 
-  echo "                      it will skip compilation to save time during subsequent builds)" 
+  echo "                      (Third_party package will cost a little time during the first compilation,"
+  echo "                      it will skip compilation to save time during subsequent builds)"
   echo ""
 }
 
@@ -112,7 +113,7 @@ checkopts() {
   PACKAGE_TYPE="run"
 
   # Process the options
-  parsed_args=$(getopt -a -o j:hv -l help,verbose,enable_symengine,cann_3rd_lib_path:,extra-cmake-args:,build-type:,pkg-type:,asan,tsan,cov,output_path: -- "$@") || {
+  parsed_args=$(getopt -a -o j:hv -l help,verbose,enable_symengine,cann_3rd_lib_path:,extra-cmake-args:,build-type:,pkg-type:,asan,tsan,cov,rule_launch:,output_path: -- "$@") || {
     usage
     exit 1
   }
@@ -175,6 +176,10 @@ checkopts() {
         ENABLE_GCOV="on"
         shift
         ;;
+      --rule_launch)
+        RULE_LAUNCH_ARG="-D RULE_LAUNCH=$2"
+        shift 2
+        ;;
       --)
         shift
         if [ $# -ne 0 ]; then
@@ -228,7 +233,7 @@ copy_pkg() {
       local runtime_file=$(basename "$(echo "$(ls ${BUILD_PATH}_CPack_Packages/makeself_staging/cann-*.run)" | sed "s/metadef_/metadef-/g; s/_linux-/${ubuntu_version}/g")")
       mv ${BUILD_PATH}_CPack_Packages/makeself_staging/cann-*.run ${BUILD_OUT_PATH}/${runtime_file}
     else
-      echo "Error: operate enviroment is not ubuntu."
+      echo "Error: operate environment is not ubuntu."
       exit 1
     fi
   fi
@@ -259,7 +264,8 @@ build_metadef() {
               -D USE_CXX11_ABI=${USE_CXX11_ABI} \
               -D LLVM_PATH=${LLVM_PATH} \
               -D CMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE_VAL} \
-              -D PACKAGE_TYPE=${PACKAGE_TYPE}"
+              -D PACKAGE_TYPE=${PACKAGE_TYPE} \
+              ${RULE_LAUNCH_ARG}"
 
   echo "CMAKE_ARGS is: $CMAKE_ARGS"
   mk_dir "${BUILD_PATH}"
