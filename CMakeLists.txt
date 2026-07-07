@@ -1,9 +1,9 @@
 # -----------------------------------------------------------------------------------------------------------
 # Copyright (c) 2025 Huawei Technologies Co., Ltd.
-# This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+# This program is free software, you can redistribute it and/or modify it under the terms and conditions of
 # CANN Open Software License Agreement Version 2.0 (the "License").
 # Please refer to the License for details. You may not use this file except in compliance with the License.
-# THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+# THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
 # INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 # See LICENSE in the root of the software repository for the full text of the License.
 # -----------------------------------------------------------------------------------------------------------
@@ -17,6 +17,8 @@ set(CMAKE_CXX_FLAGS_RELEASE "")
 set(PRODUCT_SIDE "host" CACHE STRING "Build target: host or device")
 set(METADEF_DEVICE_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/device_output)
 init_cann_project()
+set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ${RULE_LAUNCH})
+set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ${RULE_LAUNCH})
 add_cann_target_options()
 include(cmake/intf_pub_linux.cmake)
 
@@ -154,7 +156,7 @@ if (ENABLE_OPEN_SRC AND "${PRODUCT_SIDE}" STREQUAL "host")
     else()
         set(RUNTIME_PKG_PATH "${ASCEND_INSTALL_PATH}/runtime")
     endif()
-    
+
     if(NOT ENABLE_METADEF_UT)
         include(cmake/package.cmake)
     endif()
