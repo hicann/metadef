@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
  * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
@@ -12,7 +12,7 @@
 #define METADEF_CXX_INC_EXE_GRAPH_RUNTIME_OP_EXECUTE_CONTEXT_H_
 #include <type_traits>
 #include "exe_graph/runtime/shape.h"
-#include "exe_graph/runtime/tensor.h"
+#include "exe_graph/runtime/runtime_tensor.h"
 #include "exe_graph/runtime/runtime_attrs.h"
 #include "exe_graph/runtime/extended_kernel_context.h"
 #include "ge/ge_allocator.h"

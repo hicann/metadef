@@ -21,7 +21,7 @@
 #include <memory>
 #include "graph/tensor.h"
 #include "graph/types.h"
-#include "exe_graph/runtime/tensor.h"
+#include "exe_graph/runtime/runtime_tensor.h"
 
 #ifndef GE_API_TYPES_DEF
 #define GE_API_TYPES_DEF
@@ -569,7 +569,7 @@ struct OutputTensorInfo {
   int64_t length{};                 // tensor length
   OutputTensorInfo() : dims({}), data(nullptr) {}
   OutputTensorInfo(OutputTensorInfo &&out) noexcept = default;
-  OutputTensorInfo &operator=(OutputTensorInfo &&out) &noexcept {
+  OutputTensorInfo &operator=(OutputTensorInfo &&out) & noexcept {
     if (this != &out) {
       data_type = out.data_type;
       dims = out.dims;

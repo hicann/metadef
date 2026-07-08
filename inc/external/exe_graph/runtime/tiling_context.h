@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
  * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
@@ -11,11 +11,11 @@
 #ifndef METADEF_CXX_INC_EXE_GRAPH_TILING_CONTEXT_H_
 #define METADEF_CXX_INC_EXE_GRAPH_TILING_CONTEXT_H_
 #include "storage_shape.h"
-#include "tensor.h"
+#include "runtime_tensor.h"
 #include "continuous_vector.h"
 #include "extended_kernel_context.h"
 #include "tiling_data.h"
-#include "external/ge_common/ge_api_error_codes.h"
+#include "external/ge_common/api_error_codes.h"
 
 namespace fe {
 class PlatFormInfos;

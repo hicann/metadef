@@ -11,7 +11,7 @@
 #ifndef METADEF_CXX_INC_EXE_GRAPH_RUNTIME_INFER_DATATYPE_CONTEXT_H_
 #define METADEF_CXX_INC_EXE_GRAPH_RUNTIME_INFER_DATATYPE_CONTEXT_H_
 #include <type_traits>
-#include "tensor.h"
+#include "runtime_tensor.h"
 #include "runtime_attrs.h"
 #include "extended_kernel_context.h"
 #include "graph/types.h"

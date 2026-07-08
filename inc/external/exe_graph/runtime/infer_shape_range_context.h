@@ -12,7 +12,7 @@
 #define METADEF_CXX_INC_EXE_GRAPH_RUNTIME_INFER_SHAPE_RANGE_CONTEXT_H_
 #include <type_traits>
 #include "range.h"
-#include "tensor.h"
+#include "runtime_tensor.h"
 #include "runtime_attrs.h"
 #include "extended_kernel_context.h"
 namespace gert {
