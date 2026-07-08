@@ -8,8 +8,8 @@
  * See LICENSE in the root of the software repository for the full text of the License.
  */
 
-#ifndef METADEF_CXX_INC_EXE_GRAPH_TENSOR_H_
-#define METADEF_CXX_INC_EXE_GRAPH_TENSOR_H_
+#ifndef METADEF_CXX_INC_EXE_GRAPH_RUNTIME_TENSOR_H_
+#define METADEF_CXX_INC_EXE_GRAPH_RUNTIME_TENSOR_H_
 
 #include <cstring>
 
@@ -674,4 +674,4 @@ class TensorV2 {
 static_assert(std::is_standard_layout<TensorV2>::value, "The class TensorV2 must be a POD");
 }  // namespace gert
 
-#endif  // METADEF_CXX_INC_EXE_GRAPH_TENSOR_H_
+#endif  // METADEF_CXX_INC_EXE_GRAPH_RUNTIME_TENSOR_H_

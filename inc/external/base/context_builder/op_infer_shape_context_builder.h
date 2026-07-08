@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
  * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
@@ -14,7 +14,7 @@
 #include <vector>
 #include "base/context_builder/op_context_builder_base.h"
 #include "base/context_builder/context_holder.h"
-#include "exe_graph/runtime/tensor.h"
+#include "exe_graph/runtime/runtime_tensor.h"
 #include "exe_graph/runtime/infer_shape_context.h"
 
 namespace gert {

@@ -8,8 +8,8 @@
  * See LICENSE in the root of the software repository for the full text of the License.
  */
 
-#ifndef EXECUTE_GRAPH_TYPE_UTILS_H
-#define EXECUTE_GRAPH_TYPE_UTILS_H
+#ifndef EXECUTE_GRAPH_TYPE_ID_H
+#define EXECUTE_GRAPH_TYPE_ID_H
 #include <type_traits>
 #include "graph/types.h"
 
@@ -111,4 +111,4 @@ GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<std::vector<Name
 template <>
 GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<std::vector<DataType>>();
 }  // namespace ge
-#endif  // EXECUTE_GRAPH_TYPE_UTILS_H
+#endif  // EXECUTE_GRAPH_TYPE_ID_H

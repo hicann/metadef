@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (c) 2025 Huawei Technologies Co., Ltd.
  * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
  * CANN Open Software License Agreement Version 2.0 (the "License").
@@ -17,7 +17,7 @@
 #include <securec.h>
 #include "graph/ge_error_codes.h"
 #include "utils/extern_math_util.h"
-#include "external/ge_common/ge_api_error_codes.h"
+#include "external/ge_common/api_error_codes.h"
 
 namespace gert {
 class ContinuousVector {

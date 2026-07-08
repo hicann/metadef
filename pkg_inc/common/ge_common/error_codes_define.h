@@ -1,4 +1,4 @@
-/* Copyright (c) 2025 Huawei Technologies Co., Ltd.
+﻿/* Copyright (c) 2025 Huawei Technologies Co., Ltd.
  * This file is a part of the CANN Open Software.
  * Licensed under CANN Open Software License Agreement Version 1.0 (the "License").
  * Please refer to the License for details. You may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
 
 #include <map>
 #include <string>
-#include "ge_common/ge_api_error_codes.h"
+#include "ge_common/api_error_codes.h"
 
 // Each module defines error codes using the following macros, name cannot be modified to (name)
 #define GE_ERRORNO_COMMON(name, value, desc)                                                                \

@@ -10,105 +10,12 @@
 
 #ifndef EXECUTE_GRAPH_TYPE_UTILS_H
 #define EXECUTE_GRAPH_TYPE_UTILS_H
-#include <type_traits>
-#include "graph/types.h"
 
-namespace ge {
-class GeTensor;
-class GeTensorDesc;
-class Buffer;
-class NamedAttrs;
-namespace proto {
-class GraphDef;
-}
-
-template <typename T>
-struct GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeIdHolder {
-  static char_t id;
-};
-
-template <typename T>
-char_t TypeIdHolder<T>::id = static_cast<char_t>(0);
-
-using TypeId = void *;
-constexpr TypeId kInvalidTypeId = nullptr;
-
-template <typename T>
-GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId(const T &obj) {
-  (void)obj;
-  return GetTypeId<T>();
-}
-
-template <typename T>
-GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId() {
-  using PureT = typename std::remove_cv<typename std::remove_reference<T>::type>::type;
-  return &(TypeIdHolder<PureT>::id);
-}
-
-template <>
-GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<bool>();
-
-template <>
-GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<std::string>();
-
-template <>
-GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<float>();
-
-template <>
-GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<int64_t>();
-
-template <>
-GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<GeTensorDesc>();
-
-template <>
-GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<GeTensor>();
-
-template <>
-GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<Buffer>();
-
-template <>
-GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<proto::GraphDef>();
-
-template <>
-GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<NamedAttrs>();
-
-template <>
-GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<std::vector<std::vector<int64_t>>>();
-
-template <>
-GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<DataType>();
-
-template <>
-GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<std::vector<std::vector<float>>>();
-
-template <>
-GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<std::vector<std::string>>();
-
-template <>
-GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<std::vector<float>>();
-
-template <>
-GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<std::vector<bool>>();
-
-template <>
-GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<std::vector<int64_t>>();
-
-template <>
-GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<std::vector<GeTensorDesc>>();
-
-template <>
-GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<std::vector<GeTensor>>();
-
-template <>
-GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<std::vector<Buffer>>();
-
-template <>
-GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<std::vector<proto::GraphDef>>();
-
-template <>
-GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<std::vector<NamedAttrs>>();
-
-template <>
-GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TypeId GetTypeId<std::vector<DataType>>();
-}  // namespace ge
+#pragma message("Warning: type_utils.h is deprecated and will be removed after 2027-06. Include \"type_id.h\" instead.")
+#include "graph/type_id.h"
+/*
+ * @deprecated This compatibility header keeps old include path.
+ * Use pkg_inc/graph/type_id.h instead.
+ * Planned removal after 2027-06.
+ */
 #endif  // EXECUTE_GRAPH_TYPE_UTILS_H

@@ -14,7 +14,7 @@
 #include <map>
 #include <string>
 #include "ge_error_codes.h"
-#include "config_options.h"
+#include "ge_api_types.h"
 #include "graph/ascend_string.h"
 
 #ifdef __GNUC__
@@ -43,7 +43,7 @@
 #endif
 
 #ifndef GE_ERRORNO_EXTERNAL
-#define GE_ERRORNO_EXTERNAL(name, desc) const ErrorNoRegisterar g_errorno_##name((name), (desc))
+#define GE_ERRORNO_EXTERNAL(name, desc) const ge::ErrorNoRegisterar g_errorno_##name((name), (desc))
 #endif
 
 #ifndef GE_ERRORNO

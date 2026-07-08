@@ -14,7 +14,7 @@
 #include <type_traits>
 #include <cstddef>
 #include "continuous_vector.h"
-#include "tensor.h"
+#include "runtime_tensor.h"
 
 namespace gert {
 class RuntimeAttrs {
