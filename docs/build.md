@@ -18,7 +18,7 @@ cat /usr/local/Ascend/cann/<arch>-linux/ascend_toolkit_install.info
 根据实际场景，选择合适的命令：
 
 ```bash
-  # 默认路径安装，以root用户为例（非root用户，将/usr/local替换为${HOME}） 
+  # 默认路径安装，以root用户为例（非root用户，将/usr/local替换为${HOME}）
   source /usr/local/Ascend/cann/set_env.sh
   # 指定路径安装
   source ${install_path}/cann/set_env.sh
@@ -31,7 +31,7 @@ cat /usr/local/Ascend/cann/<arch>-linux/ascend_toolkit_install.info
 开发者可通过如下命令下载本仓源码：
 
   ```bash
-  # 下载项目源码，以master分支为例 
+  # 下载项目源码，以master分支为例
   git clone https://gitcode.com/cann/metadef.git
   ```
 
@@ -53,12 +53,15 @@ cat /usr/local/Ascend/cann/<arch>-linux/ascend_toolkit_install.info
 
 - lcov（可选，用于本地验证覆盖率统计）
 
+- pybind11/coverage（可选，用于本地验证覆盖率统计）
+
 - graph-easy（可选）
 
   ```bash
   # Ubuntu/Debian操作系统安装命令示例如下，其他操作系统请自行安装
   # asan以gcc 7.5.0版本为例，其他版本请安装对应版本asan
   sudo apt-get install cmake ccache lcov libasan4 libgraph-easy-perl patch
+  pip3 install "pybind11>=2.13.6,<3.0.0" coverage
   ```
 
 #### 检查编译环境
@@ -83,7 +86,7 @@ bash scripts/check_env.sh
 ### 4.3 编译
 
 > [!NOTE] 注意
-> 若您的编译环境无法访问网络，由于无法通过`git`指令下载代码，须在联网环境中下载源码及三方库依赖后，手动上传至目标环境，参见[离线编译指导](offline_compile.md)。 
+> 若您的编译环境无法访问网络，由于无法通过`git`指令下载代码，须在联网环境中下载源码及三方库依赖后，手动上传至目标环境，参见[离线编译指导](offline_compile.md)。
 > 若您的编译环境可以访问网络，通过`git`指令下载代码后，编译过程中将自动下载开源第三方软件。
 
 若您的编译环境可以访问网络，或已经完成[离线编译指导](offline_compile.md)，`metadef`提供一键式编译能力，可通过如下命令进行编译：
