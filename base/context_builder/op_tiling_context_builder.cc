@@ -10,7 +10,6 @@
 #include "base/context_builder/op_tiling_context_builder.h"
 #include "base/context_builder/op_context_builder_impl.h"
 #include "base/context_builder/context_holder_builder.h"
-#include "op_info.h"
 #include "common/ge_common/util.h"
 #include <memory>
 #include "graph/debug/ge_util.h"

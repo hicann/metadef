@@ -8,8 +8,6 @@
  * See LICENSE in the root of the software repository for the full text of the License.
  */
 #include "base/context_builder/op_context_builder_impl.h"
-#include "base/context_builder/op_kernel_run_context_builder.h"
-#include "base/context_builder/op_tiling_context_builder.h"
 
 #include "graph/debug/ge_util.h"
 #include "base/attr/attrs_to_buffer.h"

@@ -13,7 +13,6 @@
 #include "common/ge_common/util.h"
 #include "op_info.h"
 #include <memory>
-#include "securec.h"
 #include "graph/debug/ge_util.h"
 
 namespace gert {

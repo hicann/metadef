@@ -24,7 +24,6 @@
 #include <dlfcn.h>
 #include <elf.h>
 #include "op_bin_info_utils.h"
-#include "dlog_pub.h"
 #include "common/ge_common/debug/ge_log.h"
 
 namespace ops {

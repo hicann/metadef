@@ -9,7 +9,6 @@
  */
 
 #include "register/op_check_register.h"
-#include "common/ge_common/debug/ge_log.h"
 #include "base/asc/opcheck/op_check_register_impl.h"
 
 namespace optiling {

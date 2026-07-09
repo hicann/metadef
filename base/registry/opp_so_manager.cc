@@ -13,7 +13,6 @@
 #include "inc/common/plugin/plugin_manager.h"
 #include "common/ge_common/debug/ge_log.h"
 #include "mmpa/mmpa_api.h"
-#include "register/op_impl_space_registry.h"
 #include "register/opp_so_manager.h"
 #include "base/registry/op_impl_space_registry_v2.h"
 #include "external/ge_common/ge_api_types.h"

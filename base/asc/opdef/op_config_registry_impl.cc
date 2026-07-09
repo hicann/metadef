@@ -10,7 +10,6 @@
 
 #include "base/asc/opdef/op_config_registry_impl.h"
 #include "common/ge_common/debug/ge_log.h"
-#include "base/asc/opdef/op_def_impl.h"
 
 namespace ops {
 

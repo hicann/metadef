@@ -9,7 +9,6 @@
  */
 
 #include <memory>
-#include "exe_graph/runtime/runtime_tensor.h"
 #include "common/ge_common/util.h"
 #include "graph/debug/ge_util.h"
 #include "base/context_builder/op_context_builder_base.h"
