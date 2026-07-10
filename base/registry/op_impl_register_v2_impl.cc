@@ -8,7 +8,6 @@
  * See LICENSE in the root of the software repository for the full text of the License.
  */
 
-#include "graph/any_value.h"
 #include "base/registry/op_impl_register_v2_impl.h"
 
 namespace gert {

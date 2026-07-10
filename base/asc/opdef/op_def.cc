@@ -10,9 +10,7 @@
 
 #include <vector>
 #include "base/asc/opdef/op_def_impl.h"
-#include "common/ge_common/debug/ge_log.h"
 #include "register/op_def.h"
-#include "register/op_config_registry.h"
 
 namespace ops {
 OpDef::OpDef(const char *type) : impl_(new (std::nothrow) OpDefImpl) {

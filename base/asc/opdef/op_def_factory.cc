@@ -13,7 +13,6 @@
 #include <map>
 #include <set>
 #include "register/op_def.h"
-#include "base/asc/opdef/op_def_impl.h"
 #include "register/op_def_factory.h"
 #include "base/asc/opdef/op_def_factory_impl.h"
 

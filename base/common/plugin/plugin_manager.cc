@@ -22,7 +22,6 @@
 
 #include "common/checker.h"
 #include "common/ge_common/debug/ge_log.h"
-#include "common/ge_common/util.h"
 #include "graph/def_types.h"
 #include "inc/graph/utils/file_utils.h"
 #include "common/ge_common/string_util.h"
@@ -462,7 +461,7 @@ bool PluginManager::CheckOppAndCompilerVersions(const std::string &opp_version, 
 // 需要打包进om的so优先级：
 // 1. ASCEND_CUSTOM_OPP_PATH
 // 2. ASCEND_OPP_PATH + vendors + 厂商名
-// 3. ASCEND_OPP_PATH + build-in
+// 3. ASCEND_OPP_PATH + built-in
 void PluginManager::GetPackageSoPath(std::vector<std::string> &vendors) {
   std::string custom_opp_path;
   PluginManager::GetPluginPathFromCustomOppPath("", custom_opp_path);

@@ -13,7 +13,6 @@
 #ifndef ASCENDC_DEVICE_REG_STATIC
 #include "common/ge_common/debug/ge_log.h"
 #endif
-#include "graph/ascend_string.h"
 #include "register/tilingdata_base.h"
 #include "base/asc/tilingdata_base_impl.h"
 
@@ -209,8 +208,8 @@ TilingDataStructBaseImpl &TilingDataStructBaseImpl::GetInstance() {
   return instance;
 }
 
-uint32_t __attribute__((weak))
-TilingDataStructBaseImpl::RecordTilingStruct(const char *name, const char *file, uint32_t line) {
+uint32_t __attribute__((weak)) TilingDataStructBaseImpl::RecordTilingStruct(const char *name, const char *file,
+                                                                            uint32_t line) {
   // 只记录头文件的冲突
   const char *file_name = GetFileName(file);
   if (!CheckPathIsHeader(std::string(file_name))) {
@@ -234,8 +233,8 @@ TilingDataStructBaseImpl::TilingDataStructBaseImpl()
 
 /*--------------------TilingDataStructBase-------------------------*/
 
-uint32_t __attribute__((weak))
-TilingDataStructBase::RecordTilingStruct(const char *name, const char *file, uint32_t line) {
+uint32_t __attribute__((weak)) TilingDataStructBase::RecordTilingStruct(const char *name, const char *file,
+                                                                        uint32_t line) {
   return TilingDataStructBaseImpl::GetInstance().RecordTilingStruct(name, file, line);
 }
 }  // end of namespace optiling

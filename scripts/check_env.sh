@@ -1,10 +1,10 @@
 #!/bin/bash
 # -----------------------------------------------------------------------------------------------------------
 # Copyright (c) 2026 Huawei Technologies Co., Ltd.
-# This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+# This program is free software, you can redistribute it and/or modify it under the terms and conditions of
 # CANN Open Software License Agreement Version 2.0 (the "License").
 # Please refer to the License for details. You may not use this file except in compliance with the License.
-# THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+# THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
 # INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 # See LICENSE in the root of the software repository for the full text of the License.
 # -----------------------------------------------------------------------------------------------------------
@@ -41,13 +41,17 @@ PASS_COUNT=0
 #   - GCC >= 7.3.x
 #   - Python3 >= 3.9.x
 #   - CMake >= 3.16.0 （建议使用3.20.0版本）
-#   - ccache/cov/asan
-#   - graph-easy(可选)
+#   - ccache/asan/patch
+#   - lcov（可选，用于本地验证覆盖率统计）
+#   - pybind11/coverage（可选，用于本地验证覆盖率统计）
+#   - graph-easy（可选）
 # ==============================================================================
 REQUIRED_GCC_MIN="7.3.0"         # build.md: GCC >= 7.3.x
 REQUIRED_PYTHON_MIN="3.9.0"     # build.md: Python3 >= 3.9.x
 REQUIRED_CMAKE_MIN="3.16.0"     # build.md: CMake >= 3.16.0
 REQUIRED_CMAKE_RECOMMEND="3.20.0"  # build.md: 建议使用 3.20.0
+REQUIRED_PYBIND11_MIN="2.13.6"     # build.md: pybind11 >= 2.13.6
+REQUIRED_PYBIND11_MAX="3.0.0"      # build.md: pybind11 < 3.0.0
 
 # ==================== 工具函数 ====================
 log_pass() {
@@ -470,9 +474,62 @@ else
     pkg_install_hint "libgraph-easy-perl" "perl-Graph-Easy"
 fi
 
-# ==================== 9. CANN Toolkit ====================
+# ==================== 9. pybind11 / coverage ====================
+# build.md: pybind11/coverage (可选, 用于本地验证覆盖率统计)
+# build.md: pip3 install "pybind11>=2.13.6,<3.0.0" coverage
+print_header "9. pybind11 / coverage [build.md: 可选 (用于覆盖率统计)]"
+
+# pybind11/coverage 为 Python 包, 依赖 Python 环境, 若未检测到 Python 则跳过检查
+if [ -n "$PYTHON_CMD" ]; then
+    # ---- pybind11 ----
+    # 获取pybind11版本信息: import pybind11 并输出 __version__ 属性
+    # 2>/dev/null 屏蔽导入失败时的错误输出; || true 确保命令失败时不中断脚本
+    PYBIND11_RAW=$($PYTHON_CMD -c "import pybind11; print(pybind11.__version__)" 2>/dev/null || true)
+    # 判断是否成功获取pybind11版本号（-n 表示变量非空）
+    if [ -n "$PYBIND11_RAW" ]; then
+        # 提取标准化版本号: 调用extract_version函数将原始版本转为x.x.x格式
+        PYBIND11_VER=$(extract_version "$PYBIND11_RAW")
+        log_info "pybind11: $PYBIND11_RAW → $PYBIND11_VER"
+        # 版本约束 (build.md): >= 2.13.6 且 < 3.0.0
+        # version_ge "$PYBIND11_VER" "$REQUIRED_PYBIND11_MIN"   → PYBIND11_VER >= 2.13.6
+        # ! version_ge "$PYBIND11_VER" "$REQUIRED_PYBIND11_MAX" → PYBIND11_VER < 3.0.0
+        if version_ge "$PYBIND11_VER" "$REQUIRED_PYBIND11_MIN" && ! version_ge "$PYBIND11_VER" "$REQUIRED_PYBIND11_MAX"; then
+            log_pass "pybind11 $PYBIND11_VER (>= $REQUIRED_PYBIND11_MIN, < $REQUIRED_PYBIND11_MAX)"
+        elif version_ge "$PYBIND11_VER" "$REQUIRED_PYBIND11_MAX"; then
+            log_warn "pybind11 版本过高: $PYBIND11_VER (build.md 要求 < $REQUIRED_PYBIND11_MAX)"
+            log_info "安装: pip3 install \"pybind11>=$REQUIRED_PYBIND11_MIN,<$REQUIRED_PYBIND11_MAX\""
+        else
+            log_warn "pybind11 版本过低: $PYBIND11_VER (build.md 要求 >= $REQUIRED_PYBIND11_MIN)"
+            log_info "安装: pip3 install \"pybind11>=$REQUIRED_PYBIND11_MIN,<$REQUIRED_PYBIND11_MAX\""
+        fi
+    else
+        # pybind11 为可选依赖, 未安装不影响核心编译
+        log_warn "未安装 pybind11 (可选, 用于覆盖率统计, 不影响编译)"
+        log_info "安装: pip3 install \"pybind11>=$REQUIRED_PYBIND11_MIN,<$REQUIRED_PYBIND11_MAX\""
+    fi
+
+    # ---- coverage ----
+    # 获取coverage版本信息: import coverage 并输出 __version__ 属性
+    COVERAGE_RAW=$($PYTHON_CMD -c "import coverage; print(coverage.__version__)" 2>/dev/null || true)
+    # 判断是否成功获取coverage版本号（-n 表示变量非空）
+    if [ -n "$COVERAGE_RAW" ]; then
+        # 提取标准化版本号
+        COVERAGE_VER=$(extract_version "$COVERAGE_RAW")
+        log_info "coverage: $COVERAGE_RAW → $COVERAGE_VER"
+        log_pass "coverage $COVERAGE_VER"
+    else
+        # coverage 为可选依赖, build.md 未指定版本约束, 未安装不影响核心编译
+        log_warn "未安装 coverage (可选, 用于覆盖率统计, 不影响编译)"
+        log_info "安装: pip3 install coverage"
+    fi
+else
+    # 未检测到 Python 环境, 无法检查 Python 包依赖
+    log_warn "未检测到 Python, 跳过 pybind11/coverage 检查"
+fi
+
+# ==================== 10. CANN Toolkit ====================
 # build.md 步骤二: 安装社区版 CANN Toolkit 包
-print_header "9. CANN Toolkit [build.md: 步骤二, 必需]"
+print_header "10. CANN Toolkit [build.md: 步骤二, 必需]"
 
 ASCEND_HOME=""
 # 判断ASCEND_HOME_PATH环境变量是否非空（-n 表示变量非空）：优先使用用户指定的路径
@@ -556,8 +613,8 @@ else
     log_info "然后: source /usr/local/Ascend/cann/set_env.sh"
 fi
 
-# ==================== 10. 基础构建工具 ====================
-print_header "10. 基础构建工具"
+# ==================== 11. 基础构建工具 ====================
+print_header "11. 基础构建工具"
 
 # make
 if check_command make; then
@@ -611,8 +668,8 @@ else
     pkg_install_hint "patch" "patch"
 fi
 
-# ==================== 11. 系统资源 ====================
-print_header "11. 系统资源 [可选]"
+# ==================== 12. 系统资源 ====================
+print_header "12. 系统资源 [可选]"
 
 # 获取磁盘可用空间（单位GB）：
 #   df -BG：以GB为单位显示磁盘使用情况
@@ -700,12 +757,14 @@ if [ $ERROR_COUNT -gt 0 ]; then
             echo "      build-essential cmake ccache lcov $APT_ASAN_PKG \\"
             echo "      python3 python3-dev python3-pip \\"
             echo "      git make patch"
+            echo "    pip3 install \"pybind11>=2.13.6,<3.0.0\" coverage"
             ;;
         centos|rhel|fedora|euleros|openeuler)
             echo "  完整依赖一键安装 (CentOS/EulerOS/openEuler):"
             echo "    sudo $PKG_MGR install -y \\"
             echo "      gcc gcc-c++ make cmake ccache lcov libasan \\"
             echo "      python3 python3-devel python3-pip git patch"
+            echo "    pip3 install \"pybind11>=2.13.6,<3.0.0\" coverage"
             ;;
         *)
             echo "  build.md 安装命令 (Ubuntu/Debian, libasan 按 GCC 版本适配):"
@@ -714,6 +773,7 @@ if [ $ERROR_COUNT -gt 0 ]; then
             echo "  完整依赖一键安装 (CentOS/EulerOS/openEuler):"
             echo "    sudo yum install -y gcc gcc-c++ make cmake ccache lcov libasan \\"
             echo "      python3 python3-devel python3-pip git patch"
+            echo "    pip3 install \"pybind11>=2.13.6,<3.0.0\" coverage"
             ;;
     esac
     echo ""

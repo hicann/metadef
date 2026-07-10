@@ -17,7 +17,6 @@
 #include "mmpa/mmpa_api.h"
 #include "graph/def_types.h"
 #include "common/checker.h"
-#include "graph/debug/ge_util.h"
 #include "base/err_msg.h"
 #include "inc/graph/utils/file_utils.h"
 

@@ -9,7 +9,6 @@
  */
 #include "register/op_def.h"
 #include "base/asc/opdef/op_def_impl.h"
-#include "common/ge_common/debug/ge_log.h"
 
 namespace ops {
 OpHostCPUDef::OpHostCPUDef() : impl_(new (std::nothrow) OpHostCPUDefImpl) {

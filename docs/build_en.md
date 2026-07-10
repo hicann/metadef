@@ -53,6 +53,8 @@ Developers can download the source code of this repository through the following
 
 - lcov (optional，for ut coverage)
 
+- pybind11/coverage (optional，for ut coverage)
+
 - graph-easy (optional)
 
 
@@ -60,6 +62,7 @@ Developers can download the source code of this repository through the following
   # Ubuntu/Debian OS installation command examples are shown below. For other OS, install yourself.
   # asan uses gcc 7.5.0 version as example. For other versions, install the corresponding version asan.
   sudo apt-get install cmake ccache lcov libasan4 libgraph-easy-perl patch
+  pip3 install "pybind11>=2.13.6,<3.0.0" coverage
   ```
 
 #### Check Build Environment
