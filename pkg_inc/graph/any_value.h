@@ -16,7 +16,7 @@
 
 #include "graph/types.h"
 #include "graph/type_id.h"
-#include "graph/ge_error_codes.h"
+#include "graph/error_codes.h"
 #include "graph/def_types.h"
 namespace ge {
 class ComputeGraph;

@@ -2,37 +2,45 @@
 
 ## 1. Environment Preparation
 
-This project supports source code compilation. Before compiling from source, ensure CANN software (Ascend-cann-toolkit and Ascend-cann-ops (optional)) is installed. If running samples, NPU driver and firmware also need to be installed.
+This project supports source code compilation. Before source code compilation, you need to ensure that CANN software (Toolkit development suite package and ops package (optional)) has been installed. If running samples, you also need to install NPU driver and firmware.
 
-Select software installation method according to the following description:
+Please choose the software installation method according to the following description:
 
 | Installation Method | Description | Usage Scenario |
-| :-- | :-- | :-- |
-| Using WebIDE Installation | WebIDE provides an online directly runnable Ascend environment. Currently provides single-machine computing power, default installation of latest commercial release CANN software package (currently CANN 8.5.0) and firmware/driver package. | Suitable for developers without Ascend devices. |
-| Docker | Docker image is an efficient deployment method, one-click deployment of CANN package and essential dependencies.<br>Currently OS only supports Ubuntu. | Suitable for developers with Ascend devices who need to quickly set up environment. |
-| Manual Software Package Installation | - | Suitable for developers with Ascend devices who want to experience manual CANN package installation or experience latest master branch capabilities. |
+| :------------- | :----------------------------------------------------------- | :----------------------------------------------------------- |
+| CANNLab | One-stop development platform, providing online directly runnable Ascend environment, no manual installation required.<br>Currently provides single-machine computing power, **installs the latest commercial release CANN package by default**. | Suitable for developers without Ascend devices. |
+| Docker | Docker image is an efficient deployment method, one-click deployment of CANN package and essential dependencies.<br>Currently OS only supports Ubuntu operating system, **installs the latest commercial release CANN package by default**. | Suitable for developers with Ascend devices who need to quickly set up the environment. |
+| Manual Installation | Manual installation of CANN package and basic dependencies, high flexibility. | Suitable for developers with Ascend devices who want to experience manual CANN package installation or experience the latest master branch capabilities. |
 
-### Method 1: Using WebIDE Installation
+### Method 1: CANNLab
 
-For users without an environment, directly use the WebIDE development platform, namely "**Operator One-Stop Development Platform**". This platform provides an online directly runnable Ascend environment with essential software packages already installed, no manual installation needed. For more platform introduction, refer to [LINK](https://gitcode.com/org/cann/discussions/54).
+For developers without Ascend devices, you can directly use CANNLab cloud development environment, which is a "**one-stop development platform**". This platform provides online directly runnable Ascend environment for you, with essential driver firmware, software packages and dependencies already installed, no manual installation required.
 
-1. Enter the open source project, click the "`Cloud Development`" button, and log in with a certified Huawei Cloud account. If not registered or certified, follow page prompts for registration and certification.
+> [!NOTE]NOTE
+> The environment installs the latest commercial release CANN package by default. Please note the software compatibility when downloading source code. To experience master version capabilities or develop based on master version, please refer to [**Method 3 - Scenario 1**](#method-3-manual-software-package-installation) to install the latest CANN package dependencies.<br>For more introduction about the development platform, please refer to [CANNLab Guide](https://gitcode.com/org/cann/discussions/54).
 
-   <img src="../figures/cloudIDE.png" alt="Cloud Platform"  width="750px" height="90px">
+1. Enter the open source project and click the "`CANNLab`" button, log in with a certified Huawei Cloud account. If not registered or certified, please follow the page prompts to register and certify.
 
-2. Follow page prompts to create and start cloud development environment, click "`Connect > WebIDE`" to enter the operator one-stop development platform. Open source project resources default in `/mnt/workspace` directory.
+   <img src="./figures/cloudIDE_en.png" alt="Cloud Platform"  width="750px" height="90px">
 
-   <img src="../figures/webIDE.png" alt="Cloud Platform"  width="1000px" height="150px">
+2. Create NPU environment and configure specifications according to page prompts. After starting the cloud development environment, click "`Connect > WebIDE`" to enter the one-stop development platform.
+
+   Currently, the open source project resource directory depends on how the environment was created:
+   - If created from the CANN community repository, resources are located in `/mnt/workspace/gitCode/cann`.
+   - If created from a personally forked CANN repository, resources are located in `/mnt/workspace/gitCode/{forked_repository}`.
+
+   <img src="./figures/webIDE.png" alt="Cloud Platform"  width="1000px" height="150px">
 
 ### Method 2: Docker Deployment
 
 For developers not dependent on Ascend devices, if you want to quickly set up compilation build environment, use Docker image deployment.
 
-> **Note**: Image file is relatively large, download takes some time, please wait patiently. For docker command option introduction, query through `docker --help`.
+> [!NOTE]NOTE
+> Image file is relatively large, download takes some time, please wait patiently. For docker command option introduction, query through `docker --help`.
 
 1.**Install Driver and Firmware (Runtime Dependency)**
 
-For Ascend driver and firmware download and installation on host machine, refer to "[CANN Software Installation Guide](https://www.hiascend.com/document/redirect/CannCommunityInstWizard)" sections "Prepare Software Packages" and "Install NPU Driver and Firmware". Driver and firmware are runtime dependencies. If only compiling operators, installation is not required.
+For Ascend driver and firmware download and installation on host machine, refer to "[CANN Software Installation Guide](https://www.hiascend.com/document/redirect/CannCommunityInstWizard)" sections "Prepare Software Packages" and "Install NPU Driver and Firmware". Driver and firmware are runtime dependencies.
 
 2.**Download Image**
 
@@ -61,44 +69,43 @@ Select different startup methods according to usage scenario:
 
   If running samples or tests is needed, container needs to access host NPU device. Using Atlas A2 series products as example:
 
-```bash
-docker run --name cann_container \
-  --device /dev/davinci0 \
-  --device /dev/davinci_manager \
-  --device /dev/devmm_svm \
-  --device /dev/hisi_hdc \
-  -v /usr/local/dcmi:/usr/local/dcmi \
-  -v /usr/local/bin/npu-smi:/usr/local/bin/npu-smi \
-  -v /usr/local/Ascend/driver/lib64/:/usr/local/Ascend/driver/lib64/ \
-  -v /usr/local/Ascend/driver/version.info:/usr/local/Ascend/driver/version.info \
-  -v /etc/ascend_install.info:/etc/ascend_install.info \
-  -it -u root --privileged=true \
-  swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.0.0-beta.1-910-ubuntu22.04-py3.11 bash
-```
+  ```bash
+  docker run --name cann_container \
+    --device /dev/davinci0 \
+    --device /dev/davinci_manager \
+    --device /dev/devmm_svm \
+    --device /dev/hisi_hdc \
+    -v /usr/local/dcmi:/usr/local/dcmi \
+    -v /usr/local/bin/npu-smi:/usr/local/bin/npu-smi \
+    -v /usr/local/Ascend/driver/lib64/:/usr/local/Ascend/driver/lib64/ \
+    -v /usr/local/Ascend/driver/version.info:/usr/local/Ascend/driver/version.info \
+    -v /etc/ascend_install.info:/etc/ascend_install.info \
+    -it -u root --privileged=true \
+    swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.0.0-beta.1-910-ubuntu22.04-py3.11 bash
+  ```
 
-| Parameter | Description | Note |
-| :-- | :-- | :-- |
-| `--name cann_container` | Specify name for container, convenient for management. | Optional (value can be customized). |
-| `--device /dev/davinci0` | Map NPU device file into container. | Required (when running samples). For multiple devices, use this parameter multiple times, such as `/dev/davinci0` `/dev/davinci1`. |
-| `--device /dev/davinci_manager` | Ascend device manager, responsible for device resource management. | Required (when running samples). |
-| `--device /dev/devmm_svm` | Device memory management unit. | Required (when running samples). |
-| `--device /dev/hisi_hdc` | Ascend high-definition codec device. | Required (when running samples). |
-| `-v /usr/local/dcmi:/usr/local/dcmi` | Mount DCMI (Device Communication Management Interface) directory. | Required (when running samples). |
-| `-v /usr/local/bin/npu-smi:...` | Mount NPU monitoring tool, for viewing NPU status. | Required (when running samples). |
-| `-v /usr/local/Ascend/driver/...` | Mount NPU driver library and version information. | Required (when running samples). |
-| `-v /etc/ascend_install.info:...` | Mount Ascend software installation information. | Required (when running samples). |
-| `-it` | Combination parameter of `-i` (interactive) and `-t` (allocate pseudo terminal). | Required |
-| `-u root` | Enter container as root (administrator). | Recommended |
-| `--privileged=true` | Enable container highest privilege mode. | Recommended |
-| `swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:...` | Specify Docker image to run. | Required, ensure this image name and tag (tag) exactly match the image you pulled through `docker pull`. |
-| `bash` | Command executed immediately after container starts. | Required |
+  | Parameter | Description | Note |
+  | :-- | :-- | :-- |
+  | `--name cann_container` | Specify name for container, convenient for management. | Optional (value can be customized). |
+  | `--device /dev/davinci0` | Map NPU device file into container. | Required (when running samples). For multiple devices, use this parameter multiple times, such as `/dev/davinci0` `/dev/davinci1`. |
+  | `--device /dev/davinci_manager` | Ascend device manager, responsible for device resource management. | Required (when running samples). |
+  | `--device /dev/devmm_svm` | Device memory management unit. | Required (when running samples). |
+  | `--device /dev/hisi_hdc` | Ascend high-definition codec device. | Required (when running samples). |
+  | `-v /usr/local/dcmi:/usr/local/dcmi` | Mount DCMI (Device Communication Management Interface) directory. | Required (when running samples). |
+  | `-v /usr/local/bin/npu-smi:...` | Mount NPU monitoring tool, for viewing NPU status. | Required (when running samples). |
+  | `-v /usr/local/Ascend/driver/...` | Mount NPU driver library and version information. | Required (when running samples). |
+  | `-v /etc/ascend_install.info:...` | Mount Ascend software installation information. | Required (when running samples). |
+  | `-it` | Combination parameter of `-i` (interactive) and `-t` (allocate pseudo terminal). | Required |
+  | `-u root` | Enter container as root (administrator). | Recommended |
+  | `--privileged=true` | Enable container highest privilege mode. | Recommended |
+  | `swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:...` | Specify Docker image to run. | Required, ensure this image name and tag (tag) exactly match the image you pulled through `docker pull`. |
+  | `bash` | Command executed immediately after container starts. | Required |
 
-> **Note**:
-
-> - Scenario 1 is suitable for compilation build only of metadef, without NPU device support
-
-> - Scenario 2 is suitable for running samples or performing NPU-related tests, requires host machine already installed NPU driver and firmware
-> - If using other model chips (such as 950, Atlas A3 series products), please accordingly adjust device names in `--device` parameter
+  > [!NOTE]NOTE
+  > - Scenario 1 is suitable for compilation build only of metadef, without NPU device support
+  >
+  > - Scenario 2 is suitable for running samples or performing NPU-related tests, requires host machine already installed NPU driver and firmware
+  > - If using other model chips (such as 950, Atlas A3 series products), please accordingly adjust device names in `--device` parameter
 
 4.**Initialize Environment**
 After entering container, execute the following commands to initialize environment:
@@ -115,9 +122,8 @@ After entering container, execute the following commands to initialize environme
     curl -fsSL https://raw.gitcode.com/cann/metadef/raw/master/scripts/init_env.sh | bash -s -- --chip-type 910b
     ```
 
-> **Note**:
->
-> - For other chip models, replace `--chip-type` parameter with corresponding model (such as `950`, `A3`)
+  > [!NOTE]NOTE
+  > For other chip models, replace `--chip-type` parameter with corresponding model (such as `950`, `A3`)
 
 ### Method 3: Manual Software Package Installation
 

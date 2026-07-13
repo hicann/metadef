@@ -17,7 +17,7 @@
 #include <vector>
 #include <utility>
 
-#include "./ge_error_codes.h"
+#include "./error_codes.h"
 #include "./types.h"
 #include "ascend_string.h"
 

@@ -18,7 +18,7 @@
 #include "graph.h"
 #include "types.h"
 #include "tensor.h"
-#include "ge_error_codes.h"
+#include "error_codes.h"
 #include "ge_api_types.h"
 #include "ge_api.h"
 #include "nonlinear_fuc_ops.h"

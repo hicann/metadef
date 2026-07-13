@@ -246,7 +246,7 @@
 <td class="cellrowborder" valign="top" width="27.139999999999997%" headers="mcps1.2.4.1.2 "><p id="p230210506487"><a name="p230210506487"></a><a name="p230210506487"></a><a href="ge-graphStatus.md">ge::graphStatus</a></p>
 </td>
 <td class="cellrowborder" valign="top" width="59.01%" headers="mcps1.2.4.1.3 "><p id="p1184310301483"><a name="p1184310301483"></a><a name="p1184310301483"></a>返回码状态说明。</p>
-<p id="p66519312519"><a name="p66519312519"></a><a name="p66519312519"></a>头文件位于<span id="ph166519315515"><a name="ph166519315515"></a><a name="ph166519315515"></a>CANN toolkit安装路径</span>下的include/graph/ge_error_codes.h。</p>
+<p id="p66519312519"><a name="p66519312519"></a><a name="p66519312519"></a>头文件位于<span id="ph166519315515"><a name="ph166519315515"></a><a name="ph166519315515"></a>CANN toolkit安装路径</span>下的include/graph/error_codes.h。</p>
 </td>
 </tr>
 <tr id="row1805311488"><td class="cellrowborder" rowspan="2" valign="top" width="13.850000000000001%" headers="mcps1.2.4.1.1 "><p id="p077146185018"><a name="p077146185018"></a><a name="p077146185018"></a>枚举</p>
@@ -522,4 +522,3 @@
 </tr>
 </tbody>
 </table>
-

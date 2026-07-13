@@ -18,7 +18,7 @@
 #include <functional>
 
 #include "graph/ascend_string.h"
-#include "graph/ge_error_codes.h"
+#include "graph/error_codes.h"
 #include "register/op_def.h"
 
 namespace ge {

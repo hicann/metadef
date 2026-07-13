@@ -11,7 +11,7 @@
 #ifndef INC_BASE_OPP_PACKAGE_UTILS_H_
 #define INC_BASE_OPP_PACKAGE_UTILS_H_
 #include "graph/ascend_string.h"
-#include "graph/ge_error_codes.h"
+#include "graph/error_codes.h"
 
 namespace gert {
 enum class OppImplVersionTag {

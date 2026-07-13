@@ -2,25 +2,32 @@
 
 ## 1. 环境准备
 
-本项目支持源码编译，在源码编译前，需要确保已经安装CANN软件（Ascend-cann-toolkit和Ascend-cann-ops（可选）），若运行样例，还需要安装NPU驱动和固件。
+本项目支持源码编译，在源码编译前，需要确保已经安装CANN软件（Toolkit开发套件包和ops包（可选）），若运行样例，还需要安装NPU驱动和固件。
 
 软件安装方式请根据如下描述进行选择：
 
 | 安装方式       | 说明                                                         | 使用场景                                                     |
 | :------------- | :----------------------------------------------------------- | :----------------------------------------------------------- |
-| 使用WebIDE安装 | WebIDE可提供在线直接运行的昇腾环境，当前可提供单机算力，默认安装最新商发版CANN软件包（目前是CANN 8.5.0）和固件/驱动包。 | 适用于没有昇腾设备的开发者。                                 |
-|  Docker  | Docker镜像是一种高效部署方式，一键部署CANN包和必备依赖。<br>当前OS仅支持Ubuntu操作系统。 |适用有昇腾设备，需要快速搭建环境的开发者。|
-| 手动安装软件包 | -                                                            | 适用有昇腾设备，想体验手动安装CANN包或体验最新master分支能力的开发者。 |
+| CANNLab | 一站式开发平台，提供在线直接运行的昇腾环境，无需手动安装。<br>当前可提供单机算力，**默认安装最新商发版CANN包**。 | 适用于没有昇腾设备的开发者。                                 |
+|  Docker  | Docker镜像是一种高效部署方式，一键部署CANN包和必备依赖。<br>当前OS仅支持Ubuntu操作系统，**默认安装最新商发版CANN包**。 |适用有昇腾设备，需要快速搭建环境的开发者。|
+| 手动安装 | 手动安装CANN包和基础依赖，灵活性高。 | 适用有昇腾设备，想体验手动安装CANN包或体验最新master分支能力的开发者。 |
 
-### 方式一：使用WebIDE安装
+### 方式一：CANNLab
 
-对于无环境的用户，可直接使用WebIDE开发平台，即“**算子一站式开发平台**”，该平台为您提供在线可直接运行的昇腾环境，环境中已安装必备的软件包，无需手动安装。更多关于开发平台的介绍请参考[LINK](https://gitcode.com/org/cann/discussions/54)。
+对于无昇腾设备的开发者，可直接使用CANNLab云开发环境，即“**一站式开发平台**”，该平台为您提供在线可直接运行的昇腾环境，环境中已安装必备的驱动固件、软件包和依赖，无需手动安装。
 
-1. 进入开源项目，单击“`云开发`”按钮，使用已认证过的华为云账号登录。若未注册或认证，请根据页面提示进行注册和认证。
+> [!NOTE]说明
+> 环境默认安装最新商发版CANN包，源码下载时注意与软件配套。体验master版本能力或基于master版本进行开发，请参考[**方式三-场景1**](#方式三手动安装软件包)安装最新CANN包依赖。<br>更多关于开发平台的介绍请参考[CANNLab指导](https://gitcode.com/org/cann/discussions/54)。
+
+1. 进入开源项目，单击“`CANNLab`”按钮，使用已认证过的华为云账号登录。若未注册或认证，请根据页面提示进行注册和认证。
 
    <img src="./figures/cloudIDE.png" alt="云平台"  width="750px" height="90px">
 
-2. 根据页面提示创建并启动云开发环境，单击“`连接 > WebIDE`”进入算子一站式开发平台，开源项目的资源默认在`/mnt/workspace`目录下。
+2. 根据页面提示创建NPU环境并配置规格，启动云开发环境后，单击“`连接 > WebIDE`”进入一站式开发平台。
+
+   当前开源项目资源目录根据环境创建方式有所不同：
+   - 如果是从CANN社区仓库创建的环境，资源默认在`/mnt/workspace/gitCode/cann`目录下。
+   - 如果是从个人仓库fork的CANN仓库创建的环境，资源默认在`/mnt/workspace/gitCode/{fork仓库}`目录下。
 
    <img src="./figures/webIDE.png" alt="云平台"  width="1000px" height="150px">
 
@@ -28,11 +35,12 @@
 
 对于不依赖昇腾设备的开发者，若您想快速搭建编译构建环境，可使用Docker镜像部署。
 
-> **说明**： 镜像文件比较大，下载需要一定时间，请您耐心等待。关于docker命令的选项介绍可通过`docker --help`查询。
+> [!NOTE]说明
+> 镜像文件比较大，下载需要一定时间，请您耐心等待。关于docker命令的选项介绍可通过`docker --help`查询。
 
 1.**安装驱动与固件（运行态依赖）**
 
-宿主机上昇腾驱动与固件的下载和安装操作请参考《[CANN软件安装指南](https://www.hiascend.com/document/redirect/CannCommunityInstWizard)》中“准备软件包”和“安装NPU驱动和固件”章节。驱动与固件是运行态依赖，若仅编译算子，可以不安装。
+宿主机上昇腾驱动与固件的下载和安装操作请参考《[CANN软件安装指南](https://www.hiascend.com/document/redirect/CannCommunityInstWizard)》中“准备软件包”和“安装NPU驱动和固件”章节。
 
 2.**下载镜像**
 
@@ -61,58 +69,60 @@
 
   如果需要运行样例或测试，容器需要访问宿主机的NPU设备。以Atlas A2系列产品为例：
 
-```bash
-docker run --name cann_container \
-  --device /dev/davinci0 \
-  --device /dev/davinci_manager \
-  --device /dev/devmm_svm \
-  --device /dev/hisi_hdc \
-  -v /usr/local/dcmi:/usr/local/dcmi \
-  -v /usr/local/bin/npu-smi:/usr/local/bin/npu-smi \
-  -v /usr/local/Ascend/driver/lib64/:/usr/local/Ascend/driver/lib64/ \
-  -v /usr/local/Ascend/driver/version.info:/usr/local/Ascend/driver/version.info \
-  -v /etc/ascend_install.info:/etc/ascend_install.info \
-  -it -u root --privileged=true \
-  swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.0.0-beta.1-910-ubuntu22.04-py3.11 bash
-```
+  ```bash
+  docker run --name cann_container \
+    --device /dev/davinci0 \
+    --device /dev/davinci_manager \
+    --device /dev/devmm_svm \
+    --device /dev/hisi_hdc \
+    -v /usr/local/dcmi:/usr/local/dcmi \
+    -v /usr/local/bin/npu-smi:/usr/local/bin/npu-smi \
+    -v /usr/local/Ascend/driver/lib64/:/usr/local/Ascend/driver/lib64/ \
+    -v /usr/local/Ascend/driver/version.info:/usr/local/Ascend/driver/version.info \
+    -v /etc/ascend_install.info:/etc/ascend_install.info \
+    -it -u root --privileged=true \
+    swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.0.0-beta.1-910-ubuntu22.04-py3.11 bash
+  ```
 
-| 参数 | 说明 | 注意事项 |
-| :--- | :--- | :--- |
-| `--name cann_container` | 为容器指定名称，便于管理。 | 可选（取值可自定义）。 |
-| `--device /dev/davinci0` | 将NPU设备文件映射到容器内。 | 必选（运行样例时）。多个设备可多次使用此参数，如 `/dev/davinci0` `/dev/davinci1`。 |
-| `--device /dev/davinci_manager` | 昇腾设备管理器，负责设备资源管理。 | 必选（运行样例时）。 |
-| `--device /dev/devmm_svm` | 设备内存管理单元。 | 必选（运行样例时）。 |
-| `--device /dev/hisi_hdc` | 昇腾高清编解码设备。 | 必选（运行样例时）。 |
-| `-v /usr/local/dcmi:/usr/local/dcmi` | 挂载DCMI（Device Communication Management Interface）目录。 | 必选（运行样例时）。 |
-| `-v /usr/local/bin/npu-smi:...` | 挂载NPU监控工具，用于查看NPU状态。 | 必选（运行样例时）。 |
-| `-v /usr/local/Ascend/driver/...` | 挂载NPU驱动库和版本信息。 | 必选（运行样例时）。 |
-| `-v /etc/ascend_install.info:...` | 挂载昇腾软件安装信息。 | 必选（运行样例时）。 |
-| `-it` | `-i`（交互式）和 `-t`（分配伪终端）的组合参数。 | 必选 |
-| `-u root` | 以 root（管理员）身份进入容器。 | 建议 |
-| `--privileged=true` | 开启容器最高特权模式。 | 建议 |
-| `swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:...` | 指定要运行的Docker镜像。 | 必选，请确保此镜像名和标签（tag）与你通过`docker pull`拉取的镜像完全一致。 |
-| `bash` | 容器启动后立即执行的命令。 | 必选 |
+  | 参数 | 说明 | 注意事项 |
+  | :--- | :--- | :--- |
+  | `--name cann_container` | 为容器指定名称，便于管理。 | 可选（取值可自定义）。 |
+  | `--device /dev/davinci0` | 将NPU设备文件映射到容器内。 | 必选（运行样例时）。多个设备可多次使用此参数，如 `/dev/davinci0` `/dev/davinci1`。 |
+  | `--device /dev/davinci_manager` | 昇腾设备管理器，负责设备资源管理。 | 必选（运行样例时）。 |
+  | `--device /dev/devmm_svm` | 设备内存管理单元。 | 必选（运行样例时）。 |
+  | `--device /dev/hisi_hdc` | 昇腾高清编解码设备。 | 必选（运行样例时）。 |
+  | `-v /usr/local/dcmi:/usr/local/dcmi` | 挂载DCMI（Device Communication Management Interface）目录。 | 必选（运行样例时）。 |
+  | `-v /usr/local/bin/npu-smi:...` | 挂载NPU监控工具，用于查看NPU状态。 | 必选（运行样例时）。 |
+  | `-v /usr/local/Ascend/driver/...` | 挂载NPU驱动库和版本信息。 | 必选（运行样例时）。 |
+  | `-v /etc/ascend_install.info:...` | 挂载昇腾软件安装信息。 | 必选（运行样例时）。 |
+  | `-it` | `-i`（交互式）和 `-t`（分配伪终端）的组合参数。 | 必选 |
+  | `-u root` | 以 root（管理员）身份进入容器。 | 建议 |
+  | `--privileged=true` | 开启容器最高特权模式。 | 建议 |
+  | `swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:...` | 指定要运行的Docker镜像。 | 必选，请确保此镜像名和标签（tag）与你通过`docker pull`拉取的镜像完全一致。 |
+  | `bash` | 容器启动后立即执行的命令。 | 必选 |
 
-> **说明**：
-> - 场景1适用于仅编译构建metadef的场合，无需NPU设备支持
-> - 场景2适用于需要运行样例或进行NPU相关测试的场合，需要宿主机已安装NPU驱动和固件
-> - 如果使用其他型号芯片（如950、Atlas A3系列产品），请相应调整 `--device` 参数中的设备名称
+  > [!NOTE]说明
+  > - 场景1适用于仅编译构建metadef的场合，无需NPU设备支持
+  > - 场景2适用于需要运行样例或进行NPU相关测试的场合，需要宿主机已安装NPU驱动和固件
+  > - 如果使用其他型号芯片（如950、Atlas A3系列产品），请相应调整 `--device` 参数中的设备名称
 
 4.**初始化环境**
 进入容器后，执行以下命令初始化环境：
 
 - **场景1（仅编译构建）**：
+
     ```bash
     curl -fsSL https://raw.gitcode.com/cann/metadef/raw/master/scripts/init_env.sh | bash
     ```
 
 - **场景2（需要运行样例，以Atlas A2系列产品为例）**：
+
     ```bash
     curl -fsSL https://raw.gitcode.com/cann/metadef/raw/master/scripts/init_env.sh | bash -s -- --chip-type 910b
     ```
 
-> **说明**：
-> - 对于其他芯片型号，请将 `--chip-type` 参数替换为对应的型号（如 `950`、`A3` ）
+  > [!NOTE]说明
+  > 对于其他芯片型号，请将 `--chip-type` 参数替换为对应的型号（如 `950`、`A3` ）
 
 ### 方式三：手动安装软件包
 
