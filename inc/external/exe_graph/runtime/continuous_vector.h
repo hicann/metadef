@@ -15,7 +15,7 @@
 #include <memory>
 #include <type_traits>
 #include <securec.h>
-#include "graph/ge_error_codes.h"
+#include "graph/error_codes.h"
 #include "utils/extern_math_util.h"
 #include "external/ge_common/api_error_codes.h"
 

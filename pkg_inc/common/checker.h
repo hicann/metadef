@@ -13,7 +13,7 @@
 #include <securec.h>
 #include <sstream>
 #include <mutex>
-#include "graph/ge_error_codes.h"
+#include "graph/error_codes.h"
 #include "common/ge_common/debug/ge_log.h"
 
 struct ErrorResult {

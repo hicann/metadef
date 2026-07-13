@@ -18,7 +18,7 @@
 #include <memory>
 #include "exe_graph/runtime/continuous_vector.h"
 #include "exe_graph/runtime/runtime_attrs.h"
-#include "graph/ge_error_codes.h"
+#include "graph/error_codes.h"
 #include "utils/extern_math_util.h"
 
 namespace gert {

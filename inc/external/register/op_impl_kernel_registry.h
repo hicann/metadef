@@ -12,7 +12,7 @@
 #define INC_50EA5B1AAF3341A28036E698708ADB64_H
 #include <cstdint>
 #include <unordered_set>
-#include "graph/ge_error_codes.h"
+#include "graph/error_codes.h"
 #include "exe_graph/runtime/base_type.h"
 #include "exe_graph/runtime/infer_shape_context.h"
 #include "exe_graph/runtime/infer_shape_range_context.h"

@@ -12,7 +12,7 @@
 #define METADEF_CXX_INC_EXE_GRAPH_RUNTIME_EXPAND_DIMS_TYPE_H_
 #include <cstdint>
 #include <cstddef>
-#include "graph/ge_error_codes.h"
+#include "graph/error_codes.h"
 #include "graph/types.h"
 #include "shape.h"
 

@@ -14,7 +14,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <cstring>
-#include "graph/ge_error_codes.h"
+#include "graph/error_codes.h"
 
 namespace gert {
 using TensorAddress = void *;
