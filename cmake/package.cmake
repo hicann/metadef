@@ -128,7 +128,6 @@ set(EXTERNAL_RUNTIME_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/storage_format.h
     ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/stride.h
     ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/tensor.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/runtime_tensor.h
     ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/continuous_vector.h
     ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/exe_res_generation_context.h
     ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/exe_graph/runtime/infer_shape_context.h
@@ -154,7 +153,6 @@ set(EXTERNAL_GRAPH_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/graph/tensor.h
     ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/graph/c_types.h
     ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/graph/ge_error_codes.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/graph/error_codes.h
     ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/graph/infer_format_context.h
     ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/graph/compiler_def.h
     ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/graph/ascend_string.h
@@ -178,7 +176,6 @@ install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/ge/ge_allocator.h
 )
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/ge_common/ge_api_types.h
               ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/ge_common/ge_api_error_codes.h
-              ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/ge_common/api_error_codes.h
               ${CMAKE_CURRENT_SOURCE_DIR}/inc/external/ge_common/ge_error_codes.h
     DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/include/external/ge_common
     COMPONENT metadef
@@ -245,7 +242,6 @@ install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/pkg_inc/exe_graph/runtime/gert_mem_all
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/pkg_inc/graph/any_value.h
               ${CMAKE_CURRENT_SOURCE_DIR}/pkg_inc/graph/def_types.h
               ${CMAKE_CURRENT_SOURCE_DIR}/pkg_inc/graph/type_utils.h
-              ${CMAKE_CURRENT_SOURCE_DIR}/pkg_inc/graph/type_id.h
         DESTINATION ${CMAKE_SYSTEM_PROCESSOR}-linux/pkg_inc/graph
         COMPONENT metadef
 )
