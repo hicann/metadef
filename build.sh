@@ -28,8 +28,8 @@ usage() {
   echo "Usage:"
   echo "  sh build.sh [-h | --help] [-v | --verbose] [-j<N>]"
   echo "              [--output_path=<PATH>] [--cann_3rd_lib_path=<PATH>]"
-  echo "              [--enable_symengine] [--build-type]"
-  echo "              [--pkg-type=<TYPE>] [--asan] [--cov]"
+  echo "              [--build-type] [--pkg-type=<TYPE>]"
+  echo "              [--asan] [--cov]"
   echo ""
   echo "Options:"
   echo "    -h, --help     Print usage"
@@ -39,8 +39,6 @@ usage() {
   echo "    --cov          Enable Coverage"
   echo "    --output_path=<PATH>"
   echo "                   Set output path, default ./output"
-  echo "    --enable_symengine"
-  echo "                   find symengine and boost"
   echo "    --build-type=<TYPE>"
   echo "                   Specify build type (TYPE option: Release/Debug), Default: Release"
   echo "    --pkg-type=<TYPE>"
@@ -103,17 +101,15 @@ checkopts() {
   VERBOSE=""
   THREAD_NUM=$(grep -c ^processor /proc/cpuinfo)
   ENABLE_METADEF_UT="off"
-  ENABLE_SYMENGINE="off"
   ENABLE_METADEF_ST="off"
   ENABLE_METADEF_COV="off"
-  ENABLE_BENCHMARK="off"
   GE_ONLY="on"
   CANN_3RD_LIB_PATH="$BASEPATH/output/third_party"
   CMAKE_BUILD_TYPE="Release"
   PACKAGE_TYPE="run"
 
   # Process the options
-  parsed_args=$(getopt -a -o j:hv -l help,verbose,enable_symengine,cann_3rd_lib_path:,extra-cmake-args:,build-type:,pkg-type:,asan,tsan,cov,rule_launch:,output_path: -- "$@") || {
+  parsed_args=$(getopt -a -o j:hv -l help,verbose,cann_3rd_lib_path:,extra-cmake-args:,build-type:,pkg-type:,asan,tsan,cov,rule_launch:,output_path: -- "$@") || {
     usage
     exit 1
   }
@@ -141,10 +137,6 @@ checkopts() {
       --output_path)
         OUTPUT_PATH="$(realpath $2)"
         shift 2
-        ;;
-      --enable_symengine)
-        ENABLE_SYMENGINE="on"
-        shift
         ;;
       --build-type)
         if [ "X$2" != "XRelease" ] && [ "X$2" != "XDebug" ]; then
@@ -250,7 +242,6 @@ build_metadef() {
               -D ENABLE_METADEF_UT=${ENABLE_METADEF_UT} \
               -D ENABLE_METADEF_ST=${ENABLE_METADEF_ST} \
               -D ENABLE_METADEF_COV=${ENABLE_METADEF_COV} \
-              -D ENABLE_BENCHMARK=${ENABLE_BENCHMARK} \
               -D ENABLE_ASAN=${ENABLE_ASAN} \
               -D ENABLE_TSAN=${ENABLE_TSAN} \
               -D ENABLE_GCOV=${ENABLE_GCOV} \
@@ -259,7 +250,6 @@ build_metadef() {
               -D CANN_3RD_LIB_PATH=${CANN_3RD_LIB_PATH} \
               -D CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
               -D CMAKE_INSTALL_PREFIX=${OUTPUT_PATH} \
-              -D ENABLE_SYMENGINE=${ENABLE_SYMENGINE} \
               -D ENABLE_BUILD_DEVICE=${ENABLE_BUILD_DEVICE} \
               -D USE_CXX11_ABI=${USE_CXX11_ABI} \
               -D LLVM_PATH=${LLVM_PATH} \

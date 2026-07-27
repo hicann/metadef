@@ -43,15 +43,11 @@ PASS_COUNT=0
 #   - CMake >= 3.16.0 （建议使用3.20.0版本）
 #   - ccache/asan/patch
 #   - lcov（可选，用于本地验证覆盖率统计）
-#   - pybind11/coverage（可选，用于本地验证覆盖率统计）
 #   - graph-easy（可选）
 # ==============================================================================
 REQUIRED_GCC_MIN="7.3.0"         # build.md: GCC >= 7.3.x
-REQUIRED_PYTHON_MIN="3.9.0"     # build.md: Python3 >= 3.9.x
 REQUIRED_CMAKE_MIN="3.16.0"     # build.md: CMake >= 3.16.0
 REQUIRED_CMAKE_RECOMMEND="3.20.0"  # build.md: 建议使用 3.20.0
-REQUIRED_PYBIND11_MIN="2.13.6"     # build.md: pybind11 >= 2.13.6
-REQUIRED_PYBIND11_MAX="3.0.0"      # build.md: pybind11 < 3.0.0
 
 # ==================== 工具函数 ====================
 log_pass() {
@@ -276,64 +272,10 @@ else
     pkg_install_hint "g++" "gcc-c++"
 fi
 
-# ==================== 3. Python3 ====================
-# build.md: Python3 >= 3.9.x
-print_header "3. Python3 [build.md: >= $REQUIRED_PYTHON_MIN]"
 
-PYTHON_CMD=""
-# 优先检查python3命令是否存在
-if check_command python3; then
-    PYTHON_CMD="python3"
-    # 获取Python原始版本信息：2>&1 将标准错误重定向到标准输出（--version默认输出到stderr）
-    PYTHON_RAW=$($PYTHON_CMD --version 2>&1)
-    # 提取标准化版本号：调用extract_version函数从版本字符串中提取x.x.x格式版本号
-    PYTHON_VER=$(extract_version "$PYTHON_RAW")
-# 其次检查python命令是否存在
-elif check_command python; then
-    PYTHON_CMD="python"
-    # 获取Python原始版本信息：2>&1 将标准错误重定向到标准输出（--version默认输出到stderr）
-    PYTHON_RAW=$($PYTHON_CMD --version 2>&1)
-    # 提取标准化版本号：调用extract_version函数从版本字符串中提取x.x.x格式版本号
-    PYTHON_VER=$(extract_version "$PYTHON_RAW")
-fi
-
-# 判断是否获取到有效的Python命令（-n 表示变量非空）
-if [ -n "$PYTHON_CMD" ]; then
-    log_info "$PYTHON_CMD --version: $PYTHON_RAW → $PYTHON_VER"
-
-    # 判断Python版本是否满足最低要求：调用version_ge函数比较版本号（PYTHON_VER >= REQUIRED_PYTHON_MIN）
-    if version_ge "$PYTHON_VER" "$REQUIRED_PYTHON_MIN"; then
-        log_pass "Python $PYTHON_VER (>= $REQUIRED_PYTHON_MIN)"
-    else
-        log_error "Python 版本过低: $PYTHON_VER (build.md 要求 >= $REQUIRED_PYTHON_MIN)"
-        log_info "请安装 Python 3.9 或更高版本"
-    fi
-
-    # 获取Python头文件（include）路径：用于编译C扩展
-    # 说明：
-    #   $PYTHON_CMD -c：执行单行Python代码
-    #   sysconfig.get_path('include')：获取Python头文件的安装路径
-    #   2>/dev/null：将标准错误重定向到空（避免无权限/环境异常时输出错误信息）
-    #   || true：确保命令执行失败时返回值为0，不中断脚本
-    PYTHON_INCLUDE=$($PYTHON_CMD -c "import sysconfig; print(sysconfig.get_path('include'))" 2>/dev/null || true)
-    # 判断Python头文件路径是否有效：
-    #   -z "$PYTHON_INCLUDE"：判断变量是否为空（无路径）
-    #   && [ "$PYTHON_INCLUDE" != "None" ]：同时判断路径是否不等于"None"（排除无效返回值）
-    #   业务目的：校验是否存在有效的Python头文件路径（编译C扩展必需）
-    if [ -n "$PYTHON_INCLUDE" ] && [ -f "$PYTHON_INCLUDE/Python.h" ]; then
-        log_pass "Python 开发头文件: $PYTHON_INCLUDE/Python.h"
-    else
-        log_error "缺少 Python.h"
-        pkg_install_hint "python3-dev" "python3-devel"
-    fi
-else
-    log_error "未安装 Python3 (build.md 要求 >= $REQUIRED_PYTHON_MIN)"
-    pkg_install_hint "python3 python3-dev" "python3 python3-devel"
-fi
-
-# ==================== 4. CMake ====================
+# ==================== 3. CMake ====================
 # build.md: CMake >= 3.16.0 (建议使用 3.20.0 版本)
-print_header "4. CMake [build.md: >= $REQUIRED_CMAKE_MIN, 建议 $REQUIRED_CMAKE_RECOMMEND]"
+print_header "3. CMake [build.md: >= $REQUIRED_CMAKE_MIN, 建议 $REQUIRED_CMAKE_RECOMMEND]"
 
 # 检查cmake命令是否存在
 if check_command cmake; then
@@ -361,9 +303,9 @@ else
     log_info "安装 (pip):    pip install cmake"
 fi
 
-# ==================== 5. ccache ====================
+# ==================== 4. ccache ====================
 # build.md: ccache (列为必需依赖)
-print_header "5. ccache [build.md: 必需]"
+print_header "4. ccache [build.md: 必需]"
 
 # 检查ccache版本（build.md 必需依赖）
 if check_command ccache; then
@@ -378,9 +320,9 @@ else
     pkg_install_hint "ccache" "ccache"
 fi
 
-# ==================== 6. lcov (cov) ====================
+# ==================== 5. lcov (cov) ====================
 # build.md: cov → lcov (非必需, 仅用于代码覆盖率统计)
-print_header "6. lcov [build.md: 非必需 (cov, 用于代码覆盖率)]"
+print_header "5. lcov [build.md: 非必需 (cov, 用于代码覆盖率)]"
 
 # 检查lcov版本（非必需依赖，仅用于代码覆盖率统计）
 if check_command lcov; then
@@ -401,9 +343,9 @@ else
     log_warn "genhtml 未找到 (通常随 lcov 一起安装)"
 fi
 
-# ==================== 7. libasan (asan) ====================
+# ==================== 6. libasan (asan) ====================
 # build.md: asan → libasan (以 gcc 7.5.0 为例: libasan4)
-print_header "7. libasan [build.md: 必需 (asan)]"
+print_header "6. libasan [build.md: 必需 (asan)]"
 
 # 检查 libasan 动态库
 ASAN_FOUND=false
@@ -463,9 +405,9 @@ else
     esac
 fi
 
-# ==================== 8. graph-easy ====================
+# ==================== 7. graph-easy ====================
 # build.md: graph-easy (可选)
-print_header "8. graph-easy [build.md: 可选]"
+print_header "7. graph-easy [build.md: 可选]"
 
 if check_command graph-easy; then
     log_pass "graph-easy 已安装"
@@ -474,62 +416,9 @@ else
     pkg_install_hint "libgraph-easy-perl" "perl-Graph-Easy"
 fi
 
-# ==================== 9. pybind11 / coverage ====================
-# build.md: pybind11/coverage (可选, 用于本地验证覆盖率统计)
-# build.md: pip3 install "pybind11>=2.13.6,<3.0.0" coverage
-print_header "9. pybind11 / coverage [build.md: 可选 (用于覆盖率统计)]"
-
-# pybind11/coverage 为 Python 包, 依赖 Python 环境, 若未检测到 Python 则跳过检查
-if [ -n "$PYTHON_CMD" ]; then
-    # ---- pybind11 ----
-    # 获取pybind11版本信息: import pybind11 并输出 __version__ 属性
-    # 2>/dev/null 屏蔽导入失败时的错误输出; || true 确保命令失败时不中断脚本
-    PYBIND11_RAW=$($PYTHON_CMD -c "import pybind11; print(pybind11.__version__)" 2>/dev/null || true)
-    # 判断是否成功获取pybind11版本号（-n 表示变量非空）
-    if [ -n "$PYBIND11_RAW" ]; then
-        # 提取标准化版本号: 调用extract_version函数将原始版本转为x.x.x格式
-        PYBIND11_VER=$(extract_version "$PYBIND11_RAW")
-        log_info "pybind11: $PYBIND11_RAW → $PYBIND11_VER"
-        # 版本约束 (build.md): >= 2.13.6 且 < 3.0.0
-        # version_ge "$PYBIND11_VER" "$REQUIRED_PYBIND11_MIN"   → PYBIND11_VER >= 2.13.6
-        # ! version_ge "$PYBIND11_VER" "$REQUIRED_PYBIND11_MAX" → PYBIND11_VER < 3.0.0
-        if version_ge "$PYBIND11_VER" "$REQUIRED_PYBIND11_MIN" && ! version_ge "$PYBIND11_VER" "$REQUIRED_PYBIND11_MAX"; then
-            log_pass "pybind11 $PYBIND11_VER (>= $REQUIRED_PYBIND11_MIN, < $REQUIRED_PYBIND11_MAX)"
-        elif version_ge "$PYBIND11_VER" "$REQUIRED_PYBIND11_MAX"; then
-            log_warn "pybind11 版本过高: $PYBIND11_VER (build.md 要求 < $REQUIRED_PYBIND11_MAX)"
-            log_info "安装: pip3 install \"pybind11>=$REQUIRED_PYBIND11_MIN,<$REQUIRED_PYBIND11_MAX\""
-        else
-            log_warn "pybind11 版本过低: $PYBIND11_VER (build.md 要求 >= $REQUIRED_PYBIND11_MIN)"
-            log_info "安装: pip3 install \"pybind11>=$REQUIRED_PYBIND11_MIN,<$REQUIRED_PYBIND11_MAX\""
-        fi
-    else
-        # pybind11 为可选依赖, 未安装不影响核心编译
-        log_warn "未安装 pybind11 (可选, 用于覆盖率统计, 不影响编译)"
-        log_info "安装: pip3 install \"pybind11>=$REQUIRED_PYBIND11_MIN,<$REQUIRED_PYBIND11_MAX\""
-    fi
-
-    # ---- coverage ----
-    # 获取coverage版本信息: import coverage 并输出 __version__ 属性
-    COVERAGE_RAW=$($PYTHON_CMD -c "import coverage; print(coverage.__version__)" 2>/dev/null || true)
-    # 判断是否成功获取coverage版本号（-n 表示变量非空）
-    if [ -n "$COVERAGE_RAW" ]; then
-        # 提取标准化版本号
-        COVERAGE_VER=$(extract_version "$COVERAGE_RAW")
-        log_info "coverage: $COVERAGE_RAW → $COVERAGE_VER"
-        log_pass "coverage $COVERAGE_VER"
-    else
-        # coverage 为可选依赖, build.md 未指定版本约束, 未安装不影响核心编译
-        log_warn "未安装 coverage (可选, 用于覆盖率统计, 不影响编译)"
-        log_info "安装: pip3 install coverage"
-    fi
-else
-    # 未检测到 Python 环境, 无法检查 Python 包依赖
-    log_warn "未检测到 Python, 跳过 pybind11/coverage 检查"
-fi
-
-# ==================== 10. CANN Toolkit ====================
+# ==================== 8. CANN Toolkit ====================
 # build.md 步骤二: 安装社区版 CANN Toolkit 包
-print_header "10. CANN Toolkit [build.md: 步骤二, 必需]"
+print_header "8. CANN Toolkit [build.md: 步骤二, 必需]"
 
 ASCEND_HOME=""
 # 判断ASCEND_HOME_PATH环境变量是否非空（-n 表示变量非空）：优先使用用户指定的路径
@@ -613,8 +502,8 @@ else
     log_info "然后: source /usr/local/Ascend/cann/set_env.sh"
 fi
 
-# ==================== 11. 基础构建工具 ====================
-print_header "11. 基础构建工具"
+# ==================== 9. 基础构建工具 ====================
+print_header "9. 基础构建工具"
 
 # make
 if check_command make; then
@@ -668,8 +557,8 @@ else
     pkg_install_hint "patch" "patch"
 fi
 
-# ==================== 12. 系统资源 ====================
-print_header "12. 系统资源 [可选]"
+# ==================== 10. 系统资源 ====================
+print_header "10. 系统资源 [可选]"
 
 # 获取磁盘可用空间（单位GB）：
 #   df -BG：以GB为单位显示磁盘使用情况
@@ -755,16 +644,13 @@ if [ $ERROR_COUNT -gt 0 ]; then
             echo "  完整依赖一键安装:"
             echo "    sudo apt-get update && sudo apt-get install -y \\"
             echo "      build-essential cmake ccache lcov $APT_ASAN_PKG \\"
-            echo "      python3 python3-dev python3-pip \\"
             echo "      git make patch"
-            echo "    pip3 install \"pybind11>=2.13.6,<3.0.0\" coverage"
             ;;
         centos|rhel|fedora|euleros|openeuler)
             echo "  完整依赖一键安装 (CentOS/EulerOS/openEuler):"
             echo "    sudo $PKG_MGR install -y \\"
             echo "      gcc gcc-c++ make cmake ccache lcov libasan \\"
-            echo "      python3 python3-devel python3-pip git patch"
-            echo "    pip3 install \"pybind11>=2.13.6,<3.0.0\" coverage"
+            echo "      git patch"
             ;;
         *)
             echo "  build.md 安装命令 (Ubuntu/Debian, libasan 按 GCC 版本适配):"
@@ -772,8 +658,7 @@ if [ $ERROR_COUNT -gt 0 ]; then
             echo ""
             echo "  完整依赖一键安装 (CentOS/EulerOS/openEuler):"
             echo "    sudo yum install -y gcc gcc-c++ make cmake ccache lcov libasan \\"
-            echo "      python3 python3-devel python3-pip git patch"
-            echo "    pip3 install \"pybind11>=2.13.6,<3.0.0\" coverage"
+            echo "      git patch"
             ;;
     esac
     echo ""

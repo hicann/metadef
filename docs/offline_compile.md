@@ -14,9 +14,7 @@ metadef在编译时，依赖的第三方开源软件列表如下：
 |---|---|---|
 | protobuf | 25.1 | [protobuf-25.1.tar.gz](https://gitcode.com/cann-src-third-party/protobuf/releases/download/v25.1/protobuf-25.1.tar.gz) |
 | abseil-cpp | 20230802.1 | [abseil-cpp-20230802.1.tar.gz](https://gitcode.com/cann-src-third-party/abseil-cpp/releases/download/20230802.1/abseil-cpp-20230802.1.tar.gz) |
-| benchmark | 1.8.3 | [benchmark-1.8.3.tar.gz](https://gitcode.com/cann-src-third-party/benchmark/releases/download/v1.8.3/benchmark-1.8.3.tar.gz) |
 | googletest | 1.14.0 | [googletest-1.14.0.tar.gz](https://gitcode.com/cann-src-third-party/googletest/releases/download/v1.14.0/googletest-1.14.0.tar.gz) |
-| json | 3.11.3 | [json-3.11.3.tar.gz](https://gitcode.com/cann-src-third-party/json/releases/download/v3.11.3/json-3.11.3.tar.gz) |
 | makeself | 2.5.0 | [makeself-release-2.5.0-patch1.tar.gz](https://gitcode.com/cann-src-third-party/makeself/releases/download/release-2.5.0-patch1.0/makeself-release-2.5.0-patch1.tar.gz) |
 | cann-cmake | master | [cmake-master.tar.gz](https://raw.gitcode.com/cann/cmake/archive/refs/heads/master.tar.gz) |
 
@@ -45,7 +43,6 @@ bash scripts/download_third_party_source.sh
 │  └── ...
 ├── opensource                       # 三方软件依赖解压后目录
 │  └── abseil-cpp-20230802.1.tar.gz
-│  └── benchmark-1.8.3.tar.gz
 │  └── ...
 ```
 
@@ -67,7 +64,6 @@ bash scripts/download_third_party_source.sh
 │  └── output                        # 三方软件默认目录
 │     └── third_party
 │         └── abseil-cpp-20230802.1.tar.gz
-│         └── benchmark-1.8.3.tar.gz
 │         └── ...
 ```
 
@@ -93,7 +89,6 @@ bash scripts/download_third_party_source.sh
 │  └── output                        # 三方软件默认目录
 │     └── third_party
 │        ├── abseil-cpp-20230802.1.tar.gz
-│        ├── benchmark-1.8.3.tar.gz
 │        └── ...
 ```
 
