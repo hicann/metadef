@@ -51,7 +51,7 @@ cmake_print_variables(CMAKE_BUILD_TYPE)
 cmake_print_variables(CMAKE_INSTALL_PREFIX)
 cmake_print_variables(CMAKE_PREFIX_PATH)
 cmake_print_variables(CMAKE_MODULE_PATH)
-cmake_print_variables(ENABLE_OPEN_SRC ENABLE_METADEF_UT ENABLE_METADEF_ST ENABLE_METADEF_COV ENABLE_BENCHMARK GE_ONLY)
+cmake_print_variables(ENABLE_OPEN_SRC ENABLE_METADEF_UT ENABLE_METADEF_ST ENABLE_METADEF_COV GE_ONLY)
 cmake_print_variables(ENABLE_BUILD_DEVICE USE_CXX11_ABI CMAKE_TOOLCHAIN_FILE)
 cmake_print_variables(CMAKE_CXX_COMPILER_ID)
 
@@ -90,11 +90,8 @@ if (ENABLE_OPEN_SRC)
 
     if(ENABLE_METADEF_UT)
         add_cann_third_party(protobuf)
-        add_cann_third_party(json)
         add_cann_third_party(gtest)
         find_cann_package(msprof MODULE REQUIRED)
-    else()
-        add_cann_third_party(json)
     endif()
 
     # 自研软件包
@@ -112,8 +109,7 @@ include(cmake/common_funcs.cmake)
 add_subdirectory(inc)
 add_subdirectory(base)
 
-if (ENABLE_METADEF_UT OR ENABLE_METADEF_ST OR ENABLE_BENCHMARK)
-    add_cann_third_party(benchmark)
+if (ENABLE_METADEF_UT OR ENABLE_METADEF_ST)
     add_subdirectory(tests)
 endif()
 

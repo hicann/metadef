@@ -126,13 +126,7 @@ install_system_deps() {
         check_command make || pkgs="$pkgs make"
         check_command g++ || pkgs="$pkgs g++"
         check_command ccache || pkgs="$pkgs ccache"
-        check_command autoconf || pkgs="$pkgs autoconf"
-        check_command automake || pkgs="$pkgs automake"
-        check_command libtoolize || pkgs="$pkgs libtool"
-        check_command gperf || pkgs="$pkgs gperf"
         check_command sshd || check_command ssh || pkgs="$pkgs openssh-server"
-        # Python dev packages needed for compiling Python extensions (coverage, etc.)
-        dpkg -l | grep -q "^ii  python3-dev " 2>/dev/null || pkgs="$pkgs python3-dev"
 
         if [ -n "$pkgs" ]; then
             log_info "Installing:$pkgs"
@@ -146,13 +140,7 @@ install_system_deps() {
         check_command cmake || pkgs="$pkgs cmake"
         check_command make || pkgs="$pkgs make"
         check_command g++ || pkgs="$pkgs gcc-c++"
-        check_command autoconf || pkgs="$pkgs autoconf"
-        check_command automake || pkgs="$pkgs automake"
-        check_command libtoolize || pkgs="$pkgs libtool"
-        check_command gperf || pkgs="$pkgs gperf"
         check_command sshd || check_command ssh || pkgs="$pkgs openssh-server"
-        # Python dev packages needed for compiling Python extensions (coverage, etc.)
-        rpm -q python3-devel &>/dev/null || pkgs="$pkgs python3-devel"
 
         if [ -n "$pkgs" ]; then
             log_info "Installing:$pkgs"
@@ -163,10 +151,6 @@ install_system_deps() {
     log_info "cmake: $(cmake --version 2>&1 | head -1)"
     log_info "g++: $(g++ --version 2>&1 | head -1)"
     check_command ccache && log_info "ccache: available" || log_warn "ccache: not installed"
-    check_command autoconf && log_info "autoconf: $(autoconf --version 2>&1 | head -1)" || log_warn "autoconf: not installed"
-    check_command automake && log_info "automake: $(automake --version 2>&1 | head -1)" || log_warn "automake: not installed"
-    check_command libtoolize && log_info "libtool: $(libtoolize --version 2>&1 | head -1)" || log_warn "libtool: not installed"
-    check_command gperf && log_info "gperf: $(gperf --version 2>&1 | head -1)" || log_warn "gperf: not installed"
     check_command sshd && log_info "sshd: available" || log_warn "sshd: not installed"
 
     # Fix libz.so.1 issue
@@ -199,55 +183,6 @@ install_system_deps() {
             log_info "SSH service is already running"
         fi
     fi
-}
-
-install_python_deps() {
-    log_info "Checking Python dependencies..."
-
-    local python="python3"
-    check_command python3 || python="python"
-
-    log_info "Python: $($python --version 2>&1)"
-
-    # Configure pip to use faster mirror (Tsinghua University mirror)
-    local pip_index_url="https://pypi.tuna.tsinghua.edu.cn/simple"
-    local pip_trusted_host="pypi.tuna.tsinghua.edu.cn"
-    log_info "Using pip mirror: $pip_index_url"
-
-    local required=("pytest>=9.0.1" "coverage>=7.10.0" "pytest-cov>=7.0.0" "pybind11>=2.13.0")
-    local to_install=()
-
-    for pkg in "${required[@]}"; do
-        local name=$(echo "$pkg" | sed 's/>=.*//')
-        $python -c "import $name" 2>/dev/null || to_install+=("$pkg")
-    done
-
-     if [ ${#to_install[@]} -ne 0 ]; then
-        log_info "Installing Python packages: ${to_install[*]}"
-        $python -m pip install --upgrade pip --index-url "$pip_index_url" --trusted-host "$pip_trusted_host" 2>/dev/null || true
-
-        local failed=()
-        for pkg in "${to_install[@]}"; do
-            echo "  Installing $pkg..."
-            if $python -m pip install --default-timeout=180 "$pkg" --index-url "$pip_index_url" --trusted-host "$pip_trusted_host"; then
-                echo "  ✓ $pkg installed"
-            else
-                echo "  ✗ $pkg failed"
-                failed+=("$pkg")
-            fi
-        done
-
-        if [ ${#failed[@]} -ne 0 ]; then
-            log_warn "Failed to install: ${failed[*]}, try again or install manually."
-        else
-            log_info "All Python packages installed successfully"
-        fi
-    else
-        log_info "All Python dependencies satisfied"
-    fi
-
-    check_command pytest && log_info "pytest: $(pytest --version 2>&1 | head -1)" || true
-    check_command coverage && log_info "coverage: $(coverage --version 2>&1 | head -1)" || true
 }
 
 show_help() {
@@ -321,8 +256,6 @@ main() {
     else
         install_cann
     fi
-
-    install_python_deps
 
     echo ""
     log_info "=========================================="

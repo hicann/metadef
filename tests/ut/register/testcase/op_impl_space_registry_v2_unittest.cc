@@ -11,18 +11,12 @@
 #include <fstream>
 #include "register/op_impl_registry.h"
 #include "graph/any_value.h"
-#include "common/util/mem_utils.h"
 #include "mmpa/mmpa_api.h"
 #include "tests/depends/mmpa/src/mmpa_stub.h"
 #include <gtest/gtest.h>
-#include "register/op_impl_registry_base.h"
 #include "base/registry/op_impl_register_v2_impl.h"
 #include "base/registry/op_impl_space_registry_v2.h"
 #include "base/registry/op_impl_space_registry_v2_impl.h"
-#include "graph/utils/file_utils.h"
-#include "base/err_msg.h"
-#include "base/err_mgr.h"
-#include "nlohmann/json.hpp"
 
 namespace gert_test {
 namespace {

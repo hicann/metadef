@@ -9,34 +9,26 @@
  */
 
 #include <gtest/gtest.h>
-#include <nlohmann/json.hpp>
 
 #include "register/tilingdata_base.h"
 
 using namespace optiling;
 
-std::string AscendCPyInterfaceGetTilingDefInfo(std::shared_ptr<TilingDef> tiling_def) {
-  nlohmann::json json_obj;
-  json_obj["class_name"] = tiling_def->GetTilingClassName();
-  json_obj["data_size"] = tiling_def->GetDataSize();
-  const auto &field_list = tiling_def->GetFieldInfo();
-  nlohmann::json json_field_list;
-  for (const auto &field : field_list) {
-    nlohmann::json json_field;
-    json_field["classType"] = field.classType_;
-    json_field["name"] = field.name_;
-    json_field["dtype"] = field.dtype_;
-    if (json_field["classType"] == "1") {
-      json_field["arrSize"] = field.arrSize_;
-    } else if (json_field["classType"] == "2") {
-      json_field["structType"] = field.structType_;
-      json_field["structSize"] = field.structSize_;
-    }
-    json_field_list.emplace_back(json_field);
+namespace {
+void VerifyField(const FieldInfo &field, const char *class_type, const char *dtype, const char *name,
+                 size_t arr_size = 0, const char *struct_type = nullptr, size_t struct_size = 0) {
+  EXPECT_STREQ(field.classType_, class_type);
+  EXPECT_STREQ(field.dtype_, dtype);
+  EXPECT_STREQ(field.name_, name);
+  if (std::string(class_type) == "1") {
+    EXPECT_EQ(field.arrSize_, arr_size);
   }
-  json_obj["fields"] = json_field_list;
-  return json_obj.dump();
+  if (std::string(class_type) == "2") {
+    EXPECT_STREQ(field.structType_, struct_type);
+    EXPECT_EQ(field.structSize_, struct_size);
+  }
 }
+}  // namespace
 
 class UtestRegister : public testing::Test {
  protected:
@@ -69,24 +61,6 @@ END_TILING_DATA_DEF
 
 // register class
 REGISTER_TILING_DATA_CLASS(TestMaxPoolStruct, TestMaxPoolTilingDataStruct)
-
-TEST_F(UtestRegister, ascendC_py_interface_get_tiling_def_ok) {
-  setenv("ENABLE_RUNTIME_V2", "1", 0);
-  std::string op_type = "TestMaxPool";
-  std::shared_ptr<TilingDef> tiling_def =
-      CTilingDataClassFactory::GetInstance().CreateTilingDataInstance(op_type.c_str());
-  EXPECT_NE(tiling_def, nullptr);
-  EXPECT_NO_THROW(tiling_def->GeLogError("test log error"));
-  std::string res_info = AscendCPyInterfaceGetTilingDefInfo(tiling_def);
-  const nlohmann::json result =
-      R"({"class_name":"TestMaxPoolTilingData","data_size":40,"fields":[{"classType":"0","dtype":"int8_t","name":"dim_0"},{"arrSize":1,"classType":"1","dtype":"uint8_t","name":"dim_1PH"},{"classType":"0","dtype":"int16_t","name":"dim_1"},{"classType":"0","dtype":"int32_t","name":"dim_2"},{"classType":"0","dtype":"int64_t","name":"dim_3"},{"classType":"0","dtype":"uint8_t","name":"dim_4"},{"arrSize":1,"classType":"1","dtype":"uint8_t","name":"dim_5PH"},{"classType":"0","dtype":"uint16_t","name":"dim_5"},{"classType":"0","dtype":"uint32_t","name":"dim_6"},{"classType":"0","dtype":"uint64_t","name":"dim_7"},{"classType":"0","dtype":"int32_t","name":"act_core_num"},{"arrSize":4,"classType":"1","dtype":"uint8_t","name":"TestMaxPoolTilingDataPH"}]})"_json;
-  std::string result_str = result.dump();
-  EXPECT_EQ(result_str, res_info);
-  op_type = "TestMaxPoolStruct";
-  tiling_def = CTilingDataClassFactory::GetInstance().CreateTilingDataInstance(op_type.c_str());
-  EXPECT_NE(tiling_def, nullptr);
-  unsetenv("ENABLE_RUNTIME_V2");
-}
 
 namespace test1 {
 BEGIN_TILING_DATA_DEF(TestMaxPoolTilingStruct)
@@ -141,54 +115,61 @@ std::shared_ptr<TilingDef> Test_api5() {
   return std::make_shared<test5::TestMaxPoolTilingStruct>();
 }
 
-TEST_F(UtestRegister, test_register_tiling_data) {
+TEST_F(UtestRegister, ascendC_py_interface_get_tiling_def_ok) {
   setenv("ENABLE_RUNTIME_V2", "1", 0);
-  std::string op_type = "Test_MaxPool";
-  CTilingDataClassFactory::GetInstance().RegisterTilingData("Test_MaxPool", Test_api1);
+  std::string op_type = "TestMaxPool";
   std::shared_ptr<TilingDef> tiling_def =
       CTilingDataClassFactory::GetInstance().CreateTilingDataInstance(op_type.c_str());
   EXPECT_NE(tiling_def, nullptr);
-  std::string res_info = AscendCPyInterfaceGetTilingDefInfo(tiling_def);
-  const nlohmann::json result1 =
-      R"({"class_name":"TestMaxPoolTilingStruct","data_size":48,"fields":[{"arrSize":5,"classType":"1","dtype":"int8_t","name":"dim_0"},{"arrSize":3,"classType":"1","dtype":"uint8_t","name":"dim_1PH"},{"classType":"2","dtype":"struct","name":"dim_1","structSize":40,"structType":"TestMaxPoolTilingData"}]})"_json;
-  std::string result_str1 = result1.dump();
-  EXPECT_EQ(result_str1, res_info);
+  EXPECT_NO_THROW(tiling_def->GeLogError("test log error"));
 
+  EXPECT_STREQ(tiling_def->GetTilingClassName(), "TestMaxPoolTilingData");
+  EXPECT_EQ(tiling_def->GetDataSize(), 40U);
+
+  const auto &fields = tiling_def->GetFieldInfo();
+  EXPECT_EQ(fields.size(), 12U);
+  VerifyField(fields[0], "0", "int8_t", "dim_0");
+  VerifyField(fields[1], "1", "uint8_t", "dim_1PH", 1U);
+  VerifyField(fields[2], "0", "int16_t", "dim_1");
+  VerifyField(fields[3], "0", "int32_t", "dim_2");
+  VerifyField(fields[4], "0", "int64_t", "dim_3");
+  VerifyField(fields[5], "0", "uint8_t", "dim_4");
+  VerifyField(fields[6], "1", "uint8_t", "dim_5PH", 1U);
+  VerifyField(fields[7], "0", "uint16_t", "dim_5");
+  VerifyField(fields[8], "0", "uint32_t", "dim_6");
+  VerifyField(fields[9], "0", "uint64_t", "dim_7");
+  VerifyField(fields[10], "0", "int32_t", "act_core_num");
+  VerifyField(fields[11], "1", "uint8_t", "TestMaxPoolTilingDataPH", 4U);
+
+  op_type = "TestMaxPoolStruct";
+  tiling_def = CTilingDataClassFactory::GetInstance().CreateTilingDataInstance(op_type.c_str());
+  EXPECT_NE(tiling_def, nullptr);
+  unsetenv("ENABLE_RUNTIME_V2");
+}
+
+TEST_F(UtestRegister, test_register_tiling_data) {
+  setenv("ENABLE_RUNTIME_V2", "1", 0);
+  std::string op_type = "Test_MaxPool";
+
+  CTilingDataClassFactory::GetInstance().RegisterTilingData("Test_MaxPool", Test_api1);
   CTilingDataClassFactory::GetInstance().RegisterTilingData("Test_MaxPool", Test_api2);
-  tiling_def = CTilingDataClassFactory::GetInstance().CreateTilingDataInstance(op_type.c_str());
-  EXPECT_NE(tiling_def, nullptr);
-  res_info = AscendCPyInterfaceGetTilingDefInfo(tiling_def);
-  const nlohmann::json result2 =
-      R"({"class_name":"TestMaxPoolTilingStruct","data_size":48,"fields":[{"arrSize":5,"classType":"1","dtype":"int8_t","name":"dim_0"},{"arrSize":3,"classType":"1","dtype":"uint8_t","name":"dim_1PH"},{"classType":"2","dtype":"struct","name":"dim_1","structSize":40,"structType":"TestMaxPoolTilingData"}]})"_json;
-  std::string result_str2 = result2.dump();
-  EXPECT_EQ(result_str1, res_info);
-
   CTilingDataClassFactory::GetInstance().RegisterTilingData("Test_MaxPool", Test_api3);
-  tiling_def = CTilingDataClassFactory::GetInstance().CreateTilingDataInstance(op_type.c_str());
-  EXPECT_NE(tiling_def, nullptr);
-  res_info = AscendCPyInterfaceGetTilingDefInfo(tiling_def);
-  const nlohmann::json result3 =
-      R"({"class_name":"TestMaxPoolTilingStruct","data_size":48,"fields":[{"arrSize":5,"classType":"1","dtype":"int8_t","name":"dim_0"},{"arrSize":3,"classType":"1","dtype":"uint8_t","name":"dim_1PH"},{"classType":"2","dtype":"struct","name":"dim_1","structSize":40,"structType":"TestMaxPoolTilingData"}]})"_json;
-  std::string result_str3 = result3.dump();
-  EXPECT_EQ(result_str1, res_info);
-
   CTilingDataClassFactory::GetInstance().RegisterTilingData("Test_MaxPool", Test_api4);
-  tiling_def = CTilingDataClassFactory::GetInstance().CreateTilingDataInstance(op_type.c_str());
-  EXPECT_NE(tiling_def, nullptr);
-  res_info = AscendCPyInterfaceGetTilingDefInfo(tiling_def);
-  const nlohmann::json result4 =
-      R"({"class_name":"TestMaxPoolTilingStruct","data_size":48,"fields":[{"arrSize":5,"classType":"1","dtype":"int8_t","name":"dim_0"},{"arrSize":3,"classType":"1","dtype":"uint8_t","name":"dim_1PH"},{"classType":"2","dtype":"struct","name":"dim_1","structSize":40,"structType":"TestMaxPoolTilingData"}]})"_json;
-  std::string result_str4 = result4.dump();
-  EXPECT_EQ(result_str1, res_info);
-
   CTilingDataClassFactory::GetInstance().RegisterTilingData("Test_MaxPool", Test_api5);
-  tiling_def = CTilingDataClassFactory::GetInstance().CreateTilingDataInstance(op_type.c_str());
+
+  std::shared_ptr<TilingDef> tiling_def =
+      CTilingDataClassFactory::GetInstance().CreateTilingDataInstance(op_type.c_str());
   EXPECT_NE(tiling_def, nullptr);
-  res_info = AscendCPyInterfaceGetTilingDefInfo(tiling_def);
-  const nlohmann::json result5 =
-      R"({"class_name":"TestMaxPoolTilingStruct","data_size":48,"fields":[{"arrSize":5,"classType":"1","dtype":"int8_t","name":"dim_0"},{"arrSize":3,"classType":"1","dtype":"uint8_t","name":"dim_1PH"},{"classType":"2","dtype":"struct","name":"dim_1","structSize":40,"structType":"TestMaxPoolTilingData"}]})"_json;
-  std::string result_str5 = result5.dump();
-  EXPECT_EQ(result_str1, res_info);
+
+  EXPECT_STREQ(tiling_def->GetTilingClassName(), "TestMaxPoolTilingStruct");
+  EXPECT_EQ(tiling_def->GetDataSize(), 48U);
+
+  const auto &fields = tiling_def->GetFieldInfo();
+  EXPECT_EQ(fields.size(), 3U);
+  VerifyField(fields[0], "1", "int8_t", "dim_0", 5U);
+  VerifyField(fields[1], "1", "uint8_t", "dim_1PH", 3U);
+  VerifyField(fields[2], "2", "struct", "dim_1", 0U, "TestMaxPoolTilingData", 40U);
+
   unsetenv("ENABLE_RUNTIME_V2");
 }
 
