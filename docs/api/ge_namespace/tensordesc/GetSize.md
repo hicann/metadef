@@ -1,0 +1,27 @@
+# GetSize
+
+## 函数功能
+
+获取TensorDesc所描述Tensor的数据大小。
+
+## 函数原型
+
+```cpp
+int64_t GetSize() const
+```
+
+## 参数说明
+
+无。
+
+## 返回值
+
+TensorDesc所描述的Tensor的数据大小信息。
+
+## 异常处理
+
+无。
+
+## 约束说明
+
+无。
