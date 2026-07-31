@@ -18,7 +18,9 @@ atomic clean是指在算子执行前对GM（Global Memory）上输出内存进�
 
 ## 函数原型
 
-**ge::graphStatus SetNeedAtomic\(const bool atomic\)**
+```cpp
+ge::graphStatus SetNeedAtomic(const bool atomic)
+```
 
 ## 参数说明
 

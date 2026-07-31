@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**void SetOriginFormat\(const ge::Format origin\_format\)**
+```cpp
+void SetOriginFormat(const ge::Format origin_format)
+```
 
 ## 参数说明
 

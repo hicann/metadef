@@ -2,7 +2,7 @@
 
 C\_DataType枚举值定义如下：
 
-```cpp
+```c
 typedef enum {
   C_DT_FLOAT = 0,            // float type
   C_DT_FLOAT16 = 1,          // fp16 type

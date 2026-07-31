@@ -8,11 +8,15 @@
 
 - 传入元素个数和数据类型，创建Tensor
 
-  **static std::unique\_ptr<uint8\_t\[\]\> CreateFollowing\(const int64\_t shape\_size, const ge::DataType dt, size\_t &total\_size\)**
+  ```cpp
+  static std::unique_ptr<uint8_t[]> CreateFollowing(const int64_t shape_size, const ge::DataType dt, size_t &total_size)
+  ```
 
 - 传入数据类型和Tensor长度，创建Tensor
 
-  **static std::unique\_ptr<uint8\_t\[\]\> CreateFollowing\(const ge::DataType dt, const size\_t tensor\_size, size\_t &total\_size\)**
+  ```cpp
+  static std::unique_ptr<uint8_t[]> CreateFollowing(const ge::DataType dt, const size_t tensor_size, size_t &total_size)
+  ```
 
 ## 参数说明
 

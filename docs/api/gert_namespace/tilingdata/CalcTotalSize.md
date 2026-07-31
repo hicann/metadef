@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**static ge::graphStatus CalcTotalSize\(const size\_t cap\_size, size\_t &total\_size\)**
+```cpp
+static ge::graphStatus CalcTotalSize(const size_t cap_size, size_t &total_size)
+```
 
 ## 参数说明
 

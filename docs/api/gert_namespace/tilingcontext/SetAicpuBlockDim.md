@@ -10,7 +10,9 @@
 
 ## 函数原型
 
-**ge::graphStatus SetAicpuBlockDim\(uint32\_t block\_dim\)**
+```cpp
+ge::graphStatus SetAicpuBlockDim(uint32_t block_dim)
+```
 
 ## 参数说明
 

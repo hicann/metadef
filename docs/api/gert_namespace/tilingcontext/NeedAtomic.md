@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**bool NeedAtomic\(\) const**
+```cpp
+bool NeedAtomic() const
+```
 
 ## 参数说明
 

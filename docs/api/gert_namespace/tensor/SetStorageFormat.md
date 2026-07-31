@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**void SetStorageFormat\(const ge::Format storage\_format\)**
+```cpp
+void SetStorageFormat(const ge::Format storage_format)
+```
 
 ## 参数说明
 

@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**ge::DataType GetDataType\(\) const**
+```cpp
+ge::DataType GetDataType() const
+```
 
 ## 参数说明
 

@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**uint32\_t** **GetScheduleMode\(\)** **const**
+```cpp
+uint32_t GetScheduleMode() const
+```
 
 ## 参数说明
 

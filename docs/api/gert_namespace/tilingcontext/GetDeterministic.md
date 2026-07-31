@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**int32\_t GetDeterministic\(\) const**
+```cpp
+int32_t GetDeterministic() const
+```
 
 ## 参数说明
 

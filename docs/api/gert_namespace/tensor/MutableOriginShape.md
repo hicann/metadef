@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**Shape &MutableOriginShape\(\)**
+```cpp
+Shape &MutableOriginShape()
+```
 
 ## 参数说明
 

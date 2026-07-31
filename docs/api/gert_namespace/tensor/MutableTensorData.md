@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**TensorData &MutableTensorData\(\)**
+```cpp
+TensorData &MutableTensorData()
+```
 
 ## 参数说明
 

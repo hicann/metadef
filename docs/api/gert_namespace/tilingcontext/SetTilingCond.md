@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**ge::graphStatus SetTilingCond\(int32\_t tiling\_cond\)**
+```cpp
+ge::graphStatus SetTilingCond(int32_t tiling_cond)
+```
 
 ## 参数说明
 

@@ -8,7 +8,9 @@ SIMT算子用于设置需要使用的Dynamic Unified Buffer大小。不设置的
 
 ## 函数原型
 
-**ge::graphStatus SetLocalMemorySize\(const uint32\_t local\_memory\_size\)**
+```cpp
+ge::graphStatus SetLocalMemorySize(const uint32_t local_memory_size)
+```
 
 ## 参数说明
 

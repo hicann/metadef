@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**template<typename T\> auto GetTilingData\(\) -\> T\***
+```cpp
+template<typename T> auto GetTilingData() -> T*
+```
 
 ## 参数说明
 

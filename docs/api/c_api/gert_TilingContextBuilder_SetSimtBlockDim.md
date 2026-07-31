@@ -6,7 +6,7 @@
 
 ## 函数原型
 
-```cpp
+```c
 uint32_t __attribute__((weak)) gert_TilingContextBuilder_SetSimtBlockDim(void *builder, const gert::Dim3 *block_dim)
 ```
 

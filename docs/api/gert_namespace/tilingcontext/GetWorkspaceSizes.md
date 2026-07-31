@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**size\_t \*GetWorkspaceSizes\(const size\_t workspace\_count\)**
+```cpp
+size_t *GetWorkspaceSizes(const size_t workspace_count)
+```
 
 ## 参数说明
 

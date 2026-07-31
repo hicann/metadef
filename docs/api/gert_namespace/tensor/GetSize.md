@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**size\_t GetSize\(\) const**
+```cpp
+size_t GetSize() const
+```
 
 ## 参数说明
 

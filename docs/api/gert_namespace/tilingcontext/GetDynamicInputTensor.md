@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**const Tensor \*GetDynamicInputTensor\(const size\_t ir\_index, const size\_t relative\_index\) const**
+```cpp
+const Tensor *GetDynamicInputTensor(const size_t ir_index, const size_t relative_index) const
+```
 
 ## 参数说明
 

@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**void Init\(const size\_t cap\_size, void \*const data\)**
+```cpp
+void Init(const size_t cap_size, void *const data)
+```
 
 ## 参数说明
 

@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**ge::Format GetOriginFormat\(\) const**
+```cpp
+ge::Format GetOriginFormat() const
+```
 
 ## 参数说明
 

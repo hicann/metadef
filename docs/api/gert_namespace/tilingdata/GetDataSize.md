@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**size\_t GetDataSize\(\) const**
+```cpp
+size_t GetDataSize() const
+```
 
 ## 参数说明
 

@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**TensorPlacement GetPlacement\(\) const**
+```cpp
+TensorPlacement GetPlacement() const
+```
 
 ## 参数说明
 

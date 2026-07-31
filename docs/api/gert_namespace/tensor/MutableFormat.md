@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**StorageFormat &MutableFormat\(\)**
+```cpp
+StorageFormat &MutableFormat()
+```
 
 ## 参数说明
 

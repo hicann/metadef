@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**void SetExpandDimsType\(const ExpandDimsType &expand\_dims\_type\)**
+```cpp
+void SetExpandDimsType(const ExpandDimsType &expand_dims_type)
+```
 
 ## 参数说明
 

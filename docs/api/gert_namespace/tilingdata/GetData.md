@@ -6,9 +6,11 @@
 
 ## 函数原型
 
-**void \*GetData\(\)**
+```cpp
+void *GetData()
 
-**const void \*GetData\(\) const**
+const void *GetData() const
+```
 
 ## 参数说明
 

@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**ge::graphStatus** **SetScheduleMode\(const** **uint32\_t** **schedule\_mode\)**
+```cpp
+ge::graphStatus SetScheduleMode(const uint32_t schedule_mode)
+```
 
 ## 参数说明
 

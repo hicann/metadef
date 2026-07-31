@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**const TensorData &GetTensorData\(\) const**
+```cpp
+const TensorData &GetTensorData() const
+```
 
 ## 参数说明
 

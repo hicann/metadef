@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**const StorageFormat &GetFormat\(\) const**
+```cpp
+const StorageFormat &GetFormat() const
+```
 
 ## 参数说明
 

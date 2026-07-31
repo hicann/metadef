@@ -8,7 +8,9 @@
 
 ## 函数原型
 
-**ge::graphStatus SetBlockDim\(const uint32\_t block\_dim\)**
+```cpp
+ge::graphStatus SetBlockDim(const uint32_t block_dim)
+```
 
 ## 参数说明
 

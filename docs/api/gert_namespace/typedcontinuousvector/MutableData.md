@@ -8,7 +8,9 @@
 
 ## 函数原型
 
-**T \*MutableData\(\)**
+```cpp
+T *MutableData()
+```
 
 ## 参数说明
 
