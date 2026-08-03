@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**TilingData \*GetRawTilingData\(\)**
+```cpp
+TilingData *GetRawTilingData()
+```
 
 ## 参数说明
 

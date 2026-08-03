@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**int32\_t GetTilingCond\(\) const**
+```cpp
+int32_t GetTilingCond() const
+```
 
 ## 参数说明
 

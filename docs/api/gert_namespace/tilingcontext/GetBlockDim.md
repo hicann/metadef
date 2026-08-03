@@ -8,7 +8,9 @@
 
 ## 函数原型
 
-**uint32\_t GetBlockDim\(\) const**
+```cpp
+uint32_t GetBlockDim() const
+```
 
 ## 参数说明
 

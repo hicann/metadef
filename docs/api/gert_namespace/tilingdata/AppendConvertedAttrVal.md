@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**ge::graphStatus AppendConvertedAttrVal\(const RuntimeAttrs \*attrs, const size\_t attr\_index, const AttrDataType src\_type, const AttrDataType dst\_type\)**
+```cpp
+ge::graphStatus AppendConvertedAttrVal(const RuntimeAttrs *attrs, const size_t attr_index, const AttrDataType src_type, const AttrDataType dst_type)
+```
 
 ## 参数说明
 

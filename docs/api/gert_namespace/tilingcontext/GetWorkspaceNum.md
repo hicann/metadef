@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**size\_t** **GetWorkspaceNum\(\) const**
+```cpp
+size_t GetWorkspaceNum() const
+```
 
 ## 参数说明
 

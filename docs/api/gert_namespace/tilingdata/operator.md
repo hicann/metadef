@@ -8,9 +8,11 @@
 
 ## 函数原型
 
-**template<typename T\>**
+```cpp
+template<typename T>
 
-**TilingData &operator<<\(TilingData &out, const T &data\)**
+TilingData &operator<<(TilingData &out, const T &data)
+```
 
 ## 参数说明
 

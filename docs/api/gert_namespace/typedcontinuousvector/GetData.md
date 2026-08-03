@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**const T \*GetData\(\) const**
+```cpp
+const T *GetData() const
+```
 
 ## 参数说明
 

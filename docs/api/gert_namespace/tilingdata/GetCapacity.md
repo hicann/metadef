@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**size\_t GetCapacity\(\) const**
+```cpp
+size_t GetCapacity() const
+```
 
 ## 参数说明
 

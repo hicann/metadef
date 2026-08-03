@@ -6,9 +6,11 @@
 
 ## 函数原型
 
-**template<typename T, typename std::enable\_if<std::is\_standard\_layout<T\>::value, int\>::type = 0\>  ge::graphStatus Append\(const T &data\)**
+```cpp
+template<typename T, typename std::enable_if<std::is_standard_layout<T>::value, int>::type = 0>  ge::graphStatus Append(const T &data)
 
-**template<typename T, typename std::enable\_if<std::is\_standard\_layout<T\>::value, int\>::type = 0\>  ge::graphStatus Append\(const T \*data, size\_t append\_num\)**
+template<typename T, typename std::enable_if<std::is_standard_layout<T>::value, int>::type = 0>  ge::graphStatus Append(const T *data, size_t append_num)
+```
 
 ## 参数说明
 

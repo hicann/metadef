@@ -1,6 +1,6 @@
 # C\_Format
 
-```cpp
+```c
 typedef enum {
   C_FORMAT_NCHW = 0,   // NCHW
   C_FORMAT_NHWC,       // NHWC

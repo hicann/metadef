@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**Shape &MutableStorageShape\(\)**
+```cpp
+Shape &MutableStorageShape()
+```
 
 ## 参数说明
 

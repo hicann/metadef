@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**const StorageShape \*GetOptionalInputShape\(const size\_t ir\_index\) const**
+```cpp
+const StorageShape *GetOptionalInputShape(const size_t ir_index) const
+```
 
 ## 参数说明
 

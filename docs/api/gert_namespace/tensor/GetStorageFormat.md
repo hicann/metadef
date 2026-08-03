@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**ge::Format GetStorageFormat\(\) const**
+```cpp
+ge::Format GetStorageFormat() const
+```
 
 ## 参数说明
 

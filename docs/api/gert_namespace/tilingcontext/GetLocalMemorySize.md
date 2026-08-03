@@ -8,7 +8,9 @@ SIMT算子获取所需的Dynamic Unified Buffer大小。
 
 ## 函数原型
 
-**uint32\_t GetLocalMemorySize\(\)**
+```cpp
+uint32_t GetLocalMemorySize()
+```
 
 ## 参数说明
 

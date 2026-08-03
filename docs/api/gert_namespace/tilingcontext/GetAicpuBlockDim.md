@@ -8,7 +8,9 @@
 
 ## 函数原型
 
-**uint32\_t GetAicpuBlockDim\(\) const**
+```cpp
+uint32_t GetAicpuBlockDim() const
+```
 
 ## 参数说明
 

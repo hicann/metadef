@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**fe::PlatFormInfos \*GetPlatformInfo\(\) const**
+```cpp
+fe::PlatFormInfos *GetPlatformInfo() const
+```
 
 ## 参数说明
 

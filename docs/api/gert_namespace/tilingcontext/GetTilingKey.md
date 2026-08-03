@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**uint64\_t GetTilingKey\(\) const**
+```cpp
+uint64_t GetTilingKey() const
+```
 
 ## 参数说明
 

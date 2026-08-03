@@ -15,9 +15,11 @@ struct AddCompileInfo {
 
 ## 函数原型
 
-**template<typename T\> const T \*GetCompileInfo\(\) const**
+```cpp
+template<typename T> const T *GetCompileInfo() const
 
-**const void \*GetCompileInfo\(\) const**
+const void *GetCompileInfo() const
+```
 
 ## 参数说明
 

@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**void SetPlacement\(const TensorPlacement placement\)**
+```cpp
+void SetPlacement(const TensorPlacement placement)
+```
 
 ## 参数说明
 

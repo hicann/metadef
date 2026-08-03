@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**const Shape &GetOriginShape\(\) const**
+```cpp
+const Shape &GetOriginShape() const
+```
 
 ## 参数说明
 

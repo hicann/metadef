@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**void SetSize\(const size\_t size\)**
+```cpp
+void SetSize(const size_t size)
+```
 
 ## 参数说明
 

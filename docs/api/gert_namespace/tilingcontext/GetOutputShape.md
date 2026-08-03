@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**const StorageShape \*GetOutputShape\(size\_t index\) const**
+```cpp
+const StorageShape *GetOutputShape(size_t index) const
+```
 
 ## 参数说明
 

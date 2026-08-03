@@ -6,13 +6,15 @@ TilingData类的构造函数。
 
 ## 函数原型
 
-**TilingData\(const TilingData &\) = delete**
+```cpp
+TilingData(const TilingData &) = delete
 
-**TilingData\(TilingData &&\) = delete**
+TilingData(TilingData &&) = delete
 
-**TilingData operator=\(const TilingData &\) = delete**
+TilingData operator=(const TilingData &) = delete
 
-**TilingData operator=\(TilingData &&\) = delete**
+TilingData operator=(TilingData &&) = delete
+```
 
 ## 参数说明
 

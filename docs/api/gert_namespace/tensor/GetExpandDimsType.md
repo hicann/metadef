@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**ExpandDimsType GetExpandDimsType\(\) const**
+```cpp
+ExpandDimsType GetExpandDimsType() const
+```
 
 ## 参数说明
 

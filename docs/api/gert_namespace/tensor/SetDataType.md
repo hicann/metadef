@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**void SetDataType\(const ge::DataType data\_type\)**
+```cpp
+void SetDataType(const ge::DataType data_type)
+```
 
 ## 参数说明
 

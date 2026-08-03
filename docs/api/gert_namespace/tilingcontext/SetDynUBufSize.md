@@ -6,7 +6,9 @@ SIMT算子用于设置需要使用的Dynamic Unified Buffer大小。不设置的
 
 ## 函数原型
 
-**ge::graphStatus SetDynUBufSize\(const uint32\_t dyn\_ubuf\_size\)**
+```cpp
+ge::graphStatus SetDynUBufSize(const uint32_t dyn_ubuf_size)
+```
 
 ## 参数说明
 

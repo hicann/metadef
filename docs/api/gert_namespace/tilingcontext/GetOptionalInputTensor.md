@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**const Tensor \*GetOptionalInputTensor\(const size\_t ir\_index\) const**
+```cpp
+const Tensor *GetOptionalInputTensor(const size_t ir_index) const
+```
 
 ## 参数说明
 

@@ -8,7 +8,9 @@
 
 ## 函数原型
 
-**ge::graphStatus SetTilingKey\(const uint64\_t tiling\_key\)**
+```cpp
+ge::graphStatus SetTilingKey(const uint64_t tiling_key)
+```
 
 ## 参数说明
 

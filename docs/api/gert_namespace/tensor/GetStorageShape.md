@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**const Shape &GetStorageShape\(\) const**
+```cpp
+const Shape &GetStorageShape() const
+```
 
 ## 参数说明
 

@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**static std::unique\_ptr<uint8\_t\[\]\> CreateCap\(const size\_t cap\_size\)**
+```cpp
+static std::unique_ptr<uint8_t[]> CreateCap(const size_t cap_size)
+```
 
 ## 参数说明
 

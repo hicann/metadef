@@ -6,7 +6,9 @@
 
 ## 函数原型
 
-**const StorageShape \*GetRequiredInputShape\(const size\_t ir\_index\) const**
+```cpp
+const StorageShape *GetRequiredInputShape(const size_t ir_index) const
+```
 
 ## 参数说明
 

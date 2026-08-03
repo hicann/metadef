@@ -6,7 +6,7 @@
 
 ## 函数原型
 
-```cpp
+```c
 uint32_t __attribute__((weak)) gert_TilingContextBuilder_SetDeterministicLevel(void *builder, int32_t deterministic_level)
 ```
 
