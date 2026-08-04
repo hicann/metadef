@@ -14,7 +14,7 @@ OpTilingContextBuilder &DeterministicLevel(int32_t deterministic_level)
 
 |参数|输入/输出|说明|
 |--|--|--|
-|deterministic_level|输入|确定性计算级别（0为非确定性，1为确定性，2为强一致性）。|
+|deterministic_level|输入|确定性计算级别（0为非确定性，1为确定性，2为强一致性，3为Batch一致性）。|
 
 ## 返回值说明
 
