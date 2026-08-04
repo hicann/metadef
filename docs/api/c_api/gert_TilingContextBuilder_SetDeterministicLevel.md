@@ -2,7 +2,7 @@
 
 ## 函数功能
 
-使用OpTilingContextBuilder构造TilingContext时设置确定性计算级别，对应弱符号C接口，与OpTilingContextBuilder::DeterministicLevel等价。
+使用OpTilingContextBuilder构造TilingContext时设置确定性计算级别，对应弱符号C接口，与[OpTilingContextBuilder::DeterministicLevel](../gert_namespace/optilingcontextbuilder/DeterministicLevel.md)等价。
 
 ## 函数原型
 
@@ -15,7 +15,7 @@ uint32_t __attribute__((weak)) gert_TilingContextBuilder_SetDeterministicLevel(v
 |参数|输入/输出|说明|
 |--|--|--|
 |builder|输入|OpTilingContextBuilder指针。|
-|deterministic_level|输入|确定性计算级别。|
+|deterministic_level|输入|确定性计算级别（0为非确定性，1为确定性，2为强一致性，3为Batch一致性）。|
 
 ## 返回值说明
 

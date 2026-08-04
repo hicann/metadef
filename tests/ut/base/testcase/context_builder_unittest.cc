@@ -984,6 +984,12 @@ TEST_F(UtestContextBuilder, OpTilingContextBuilderCStyleApiTest) {
   auto holder1 = ctx_builder1.Build();
   EXPECT_EQ(holder1.GetContext()->GetDeterministicLevel(), 1);
 
+  OpTilingContextBuilder ctx_builder_level3;
+  BuildContext(ctx_builder_level3);
+  ctx_builder_level3.DeterministicLevel(3);
+  auto holder_level3 = ctx_builder_level3.Build();
+  EXPECT_EQ(holder_level3.GetContext()->GetDeterministicLevel(), 3);
+
   OpTilingContextBuilder ctx_builder2;
   BuildContext(ctx_builder2);
   auto ret = gert_TilingContextBuilder_SetDeterministicLevel(nullptr, 1);
@@ -994,6 +1000,13 @@ TEST_F(UtestContextBuilder, OpTilingContextBuilderCStyleApiTest) {
   EXPECT_EQ(ret, 0);
   auto holder2 = ctx_builder2.Build();
   EXPECT_EQ(holder2.GetContext()->GetDeterministicLevel(), 2);
+
+  OpTilingContextBuilder ctx_builder_c_level3;
+  BuildContext(ctx_builder_c_level3);
+  ret = gert_TilingContextBuilder_SetDeterministicLevel(reinterpret_cast<void *>(&ctx_builder_c_level3), 3);
+  EXPECT_EQ(ret, 0);
+  auto holder_c_level3 = ctx_builder_c_level3.Build();
+  EXPECT_EQ(holder_c_level3.GetContext()->GetDeterministicLevel(), 3);
 
   OpTilingContextBuilder ctx_builder3;
   BuildContext(ctx_builder3);

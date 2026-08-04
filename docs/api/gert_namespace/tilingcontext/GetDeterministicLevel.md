@@ -2,7 +2,7 @@
 
 ## 函数功能
 
-获取确定性计算级别配置选项。
+获取确定性计算级别配置选项，设置接口参见[DeterministicLevel](../optilingcontextbuilder/DeterministicLevel.md)。
 
 ## 函数原型
 
@@ -21,6 +21,8 @@ int32_t GetDeterministicLevel() const
 1：开启确定性配置选项。
 
 2：开启强一致性配置选项。
+
+3：开启Batch一致性配置选项。
 
 ## 约束说明
 

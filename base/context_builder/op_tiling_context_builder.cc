@@ -77,8 +77,8 @@ OpTilingContextBuilder &OpTilingContextBuilder::Deterministic(int32_t determinis
 }
 
 OpTilingContextBuilder &OpTilingContextBuilder::DeterministicLevel(int32_t deterministic_level) {
-  if (deterministic_level != 0 && deterministic_level != 1 && deterministic_level != 2) {
-    GELOGE(ge::PARAM_INVALID, "Deterministic level value is invalid, expect 0 or 1 or 2, but got %d",
+  if (deterministic_level != 0 && deterministic_level != 1 && deterministic_level != 2 && deterministic_level != 3) {
+    GELOGE(ge::PARAM_INVALID, "Deterministic level value is invalid, expect 0 or 1 or 2 or 3, but got %d",
            deterministic_level);
     return *this;
   }
@@ -171,8 +171,8 @@ uint32_t gert_TilingContextBuilder_SetDeterministicLevel(void *builder, int32_t 
     return ge::GRAPH_PARAM_INVALID;
   }
 
-  if (deterministic_level < 0 || deterministic_level > 2) {
-    GELOGE(ge::PARAM_INVALID, "Deterministic level value is invalid, expect 0, 1 or 2, but got %d",
+  if (deterministic_level < 0 || deterministic_level > 3) {
+    GELOGE(ge::PARAM_INVALID, "Deterministic level value is invalid, expect 0, 1, 2 or 3, but got %d",
            deterministic_level);
     return ge::GRAPH_PARAM_INVALID;
   }
