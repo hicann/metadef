@@ -1,4 +1,4 @@
-name: staticcheck_action
+name: staticheck_action
 
 on:
   workflow_call:
@@ -19,7 +19,7 @@ jobs:
         identifier: process_checkout
         uses: checkout
         with:
-          ref: ${{ atomgit.event.pull_request.merge_commit_sha || atomgit.sha }}
+          ref: ${{ atomgit.event.pull_request.merge_commit_sha }}
           token: ${{secrets.GIT_TOKEN}}
       -
         name: download
@@ -33,16 +33,12 @@ jobs:
             ${{ env.obs_path }}/pr_filelist.txt
             ${{ env.obs_path }}/pr_filelist_mod.txt
             ${{ env.obs_path }}/update_file_detail.txt
+            ${{ env.obs_path }}/gitdiff.txt
           path: ${{ steps.process_checkout.outputs.path }}
       -
         name: staticcheck
         identifier: staticcheck
         uses: cann/.gitcode/actions/staticcheck@master
-        env:
-          TARGET_BRANCH: ${{ env.TARGET_BRANCH }}
-          MERGE_ID: ${{ env.MERGE_ID }}
-          repo_name: ${{ env.repo_name }}
-          obs_path: ${{ env.obs_path }}
         with:
           check_type: ${{ inputs.check_type }}
           target_branch: ${{ env.TARGET_BRANCH }}
@@ -50,10 +46,11 @@ jobs:
           merge_id: ${{ env.MERGE_ID }}
           commit_id: '0'
           workspace: ${{ steps.process_checkout.outputs.path }}
+          org_name: ${{ env.org_name }}
       -
         name: upload
-        if: ${{ always() }}
         uses: obs-upload
+        if: ${{ always() }}
         with:
           endpoint: "https://obs.cn-north-4.myhuaweicloud.com"
           bucket: "ascend-ci"
@@ -64,6 +61,6 @@ jobs:
             ${{ steps.process_checkout.outputs.path }}/StaticCheck_*.json
           object-prefix: ${{ env.obs_path }}/
     if: "${{ default() }}"
-    runs-on: [dedicate-hosted, x64, small]
+    runs-on: [dedicate-hosted, x64, medium]
     container:
       image: swr.cn-north-4.myhuaweicloud.com/static_check/${{ inputs.image_version }}
