@@ -15,7 +15,7 @@ on:
       arm_run_key:
         value: ${{jobs.JOB_compile.outputs.primary-key}}
 jobs:
-  JOB_compile:
+  JOB_Compile:
     name: compile
     steps:
       -
