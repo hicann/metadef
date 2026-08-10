@@ -45,12 +45,12 @@ TEST_F(OpAttrDefUT, AttrTest) {
   EXPECT_EQ(attr.GetAttrDefaultVal("[]"), "10");
   attr.AttrType(Option::OPTIONAL).String("test");
   EXPECT_EQ(attr.GetAttrDefaultVal("[]"), "test");
-  attr.AttrType(Option::OPTIONAL).Float(0.1);
-  EXPECT_EQ(attr.GetAttrDefaultVal("[]"), "0.1");
+  attr.AttrType(Option::OPTIONAL).Float(0.5F);
+  EXPECT_EQ(attr.GetAttrDefaultVal("[]"), "0.5");
   attr.AttrType(Option::OPTIONAL).ListBool({true, false});
   EXPECT_EQ(attr.GetAttrDefaultVal("[]"), "[true,false]");
-  attr.AttrType(Option::OPTIONAL).ListFloat({0.1, 0.1});
-  EXPECT_EQ(attr.GetAttrDefaultVal("[]"), "[0.1,0.1]");
+  attr.AttrType(Option::OPTIONAL).ListFloat({0.5F, 0.25F});
+  EXPECT_EQ(attr.GetAttrDefaultVal("[]"), "[0.5,0.25]");
   attr.AttrType(Option::OPTIONAL).ListInt({1, 2});
   EXPECT_EQ(attr.GetAttrDefaultVal("[]"), "[1,2]");
   attr.AttrType(Option::OPTIONAL).ListListInt({{1, 2}, {3, 4}});
@@ -58,6 +58,22 @@ TEST_F(OpAttrDefUT, AttrTest) {
   attr.Version(1);
   EXPECT_EQ(attr.GetVersion(), 1);
 }
+
+TEST_F(OpAttrDefUT, FloatDefaultValKeepsFp32Precision) {
+  OpAttrDef attr("Test");
+  constexpr float kFloatValue = 1.2345678F;
+  attr.AttrType(Option::OPTIONAL).Float(kFloatValue);
+  EXPECT_FLOAT_EQ(std::stof(attr.GetAttrDefaultVal("[]").GetString()), kFloatValue);
+
+  constexpr float kListFloatValue = 1.414213562373F;
+  attr.AttrType(Option::OPTIONAL).ListFloat({kListFloatValue});
+  const std::string list_float_value(attr.GetAttrDefaultVal("[]").GetString());
+  ASSERT_GE(list_float_value.size(), 2U);
+  ASSERT_EQ(list_float_value.front(), '[');
+  ASSERT_EQ(list_float_value.back(), ']');
+  EXPECT_FLOAT_EQ(std::stof(list_float_value.substr(1, list_float_value.size() - 2)), kListFloatValue);
+}
+
 TEST_F(OpAttrDefUT, CommentSingleTest) {
   OpAttrDef attr("Test");
   attr.Comment("").Comment("comment of Attr Test");

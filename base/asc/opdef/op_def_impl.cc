@@ -10,12 +10,18 @@
 
 #include <vector>
 #include <algorithm>
+#include <iomanip>
+#include <limits>
 #include "base/asc/opdef/op_def_impl.h"
 #include "common/ge_common/debug/ge_log.h"
 #include "register/op_def.h"
 #include "register/op_config_registry.h"
 
 namespace ops {
+namespace {
+constexpr int kFp32MaxDigits10 = 9;  // float 往返安全所需的十进制有效数字数
+}  // namespace
+
 OpDef &OpDefImpl::Comment(OpDef *parent_this, CommentSection section, const char *comment) {
   if (section >= CommentSection::SECTION_MAX) {
     GELOGE(ge::PARAM_INVALID, "Ops %s : Comment Section is Invalid", parent_this->GetOpType().GetString());
@@ -424,11 +430,11 @@ void OpDefImpl::Construct(OpDef *parent_this, const char *type) {
   auto regConfigs = GetOpAllAICoreConfig(type);
   GELOGD("Aicore op[%s] configs size: %zu", type, regConfigs.size());
   for (auto it = regConfigs.cbegin(); it != regConfigs.cend(); ++it) {
-    GELOGD("Found aicore op[%s] at socVersion[%s] registerd by REGISTER_OP_AICORE_CONFIG.", type,
+    GELOGD("Found aicore op[%s] at socVersion[%s] registered by REGISTER_OP_AICORE_CONFIG.", type,
            it->first.GetString());
     if (it->second == nullptr) {
       GELOGE(ge::PARAM_INVALID,
-             "Aicore func of op[%s] at socVersion[%s] registerd by REGISTER_OP_AICORE_CONFIG is nullptr.");
+             "Aicore func of op[%s] at socVersion[%s] registered by REGISTER_OP_AICORE_CONFIG is nullptr.");
       return;
     }
     auto config = it->second();
@@ -646,7 +652,7 @@ ge::AscendString &OpAttrDefImpl::GetAttrDefaultVal(OpAttrDef *parent_this, const
     sstream << (parent_this->impl_->bool_value ? "true" : "false");
     parent_this->impl_->value = sstream.str().c_str();
   } else if (parent_this->impl_->data_type == AttrDataType::ATTR_DT_FLOAT) {
-    sstream << parent_this->impl_->float_value;
+    sstream << std::setprecision(kFp32MaxDigits10) << parent_this->impl_->float_value;
     parent_this->impl_->value = sstream.str().c_str();
   } else if (parent_this->impl_->data_type == AttrDataType::ATTR_DT_INT) {
     sstream << parent_this->impl_->int_value;
@@ -660,7 +666,7 @@ ge::AscendString &OpAttrDefImpl::GetAttrDefaultVal(OpAttrDef *parent_this, const
   } else if (parent_this->impl_->data_type == AttrDataType::ATTR_DT_LIST_FLOAT) {
     parent_this->impl_->value =
         GetListStr<float>(parent_this->impl_->list_float, brac, [](std::stringstream &s, float v) {
-          s << v << ",";
+          s << std::setprecision(kFp32MaxDigits10) << v << ",";
         }).c_str();
   } else if (parent_this->impl_->data_type == AttrDataType::ATTR_DT_LIST_INT) {
     parent_this->impl_->value =
