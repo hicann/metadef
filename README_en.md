@@ -62,7 +62,7 @@ Typically, developers do not need to directly modify the metadef repository, bec
 
 ## Quick Start
 
-To quickly build this project, visit [Source Code Build](docs/build_en.md) to learn how to compile, install, and perform basic verification tests.
+To quickly build this project, visit [Source Code Build](docs/en/build.md) to learn how to compile, install, and perform basic verification tests.
 
 ## Learning Tutorials
 
@@ -94,7 +94,7 @@ Before submitting metadef modifications, ensure:
 
 ### Detailed API Reference
 
-For detailed information about all interfaces in this repository, visit [API Reference](docs/api/README.md).
+For detailed information about all interfaces in this repository, visit [API Reference](docs/zh/api/README.md).
 
 ## Related Information
 

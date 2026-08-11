@@ -13,7 +13,7 @@ For details, refer to [cann-community](https://gitcode.com/cann/community).
 Additionally, developers should pay attention to the following points when preparing local code and submitting PRs:
 
 1. When submitting a PR, carefully fill in the PR template with information about the business background, purpose, and solution.
-2. Before submitting code using git, refer to the [pre-commit tool usage guide](docs/precommit_guide.md) to make your code submission more compliant and efficient.
+2. Before submitting code using git, refer to the [pre-commit tool usage guide](docs/en/contributions/precommit_guide.md) to make your code submission more compliant and efficient.
 3. If your modification is not a simple bug fix but involves adding features, interfaces, configuration parameters, or modifying code flow, you must discuss the solution through an Issue first to avoid your code being rejected. If you are unsure whether your modification qualifies as a "simple bug fix," you can also submit an Issue for discussion.
 4. When submitting a PR, ensure your code follows the project's code standards. Refer to Google's [Open Source Code Standards](https://google.github.io/styleguide/), including but not limited to:
    - Code formatting
@@ -63,4 +63,3 @@ Developer contribution scenarios mainly include:
   If you have appropriate solutions for problems encountered by others in the community, you are welcome to comment and communicate in the Issue to help others solve problems and improve usability.
 
   If the corresponding Issue requires code modification, you can enter `/assign` or `/assign @yourself` in the Issue comment box to assign the Issue to yourself and track assistance in resolving the problem.
-  
