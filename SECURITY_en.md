@@ -7,8 +7,8 @@ For security reasons, it is not recommended to use root or other administrator a
 ## File Permission Control
 
 - It is recommended that users set the system umask value to 0027 or higher on hosts (including bare metal hosts) and containers. This ensures that new folders have a default maximum permission of 750 and new files have a default maximum permission of 640.
-- It is recommended that users implement proper permission control and other security measures for sensitive content such as personal privacy data, commercial assets, source files, and various files saved during operator development. For example, for permission control of the project installation directory and input public data files, refer to [A-Recommended Maximum Permissions for Files (Folders) in Various Scenarios](#A-Recommended Maximum Permissions for Files (Folders) in Various Scenarios).
-- Users should implement proper permission control during installation and usage. Refer to [A-Recommended Maximum Permissions for Files (Folders) in Various Scenarios](#A-Recommended Maximum Permissions for Files (Folders) in Various Scenarios) for file permission settings.
+- It is recommended that users implement proper permission control and other security measures for sensitive content such as personal privacy data, commercial assets, source files, and various files saved during operator development. For example, for permission control of the project installation directory and input public data files, refer to [A-Recommended Maximum Permissions for Files (Folders) in Various Scenarios](#a-recommended-maximum-permissions-for-files-folders-in-various-scenarios).
+- Users should implement proper permission control during installation and usage. Refer to [A-Recommended Maximum Permissions for Files (Folders) in Various Scenarios](#a-recommended-maximum-permissions-for-files-folders-in-various-scenarios) for file permission settings.
 
 ## Build Security Statement
 
@@ -24,10 +24,10 @@ The public network addresses contained in this project code are as follows:
 
 | Type | Open Source Code Address | File Name | Public IP Address/Public URL Address/Domain Name/Email Address/Compressed File Address | Usage Description |
 | :--: | :--: | :-- | :-- | :-- |
-| Dependency | Not applicable | cmake/third_party/build/modules/makeself-fetch.cmake | https://gitcode.com/cann-src-third-party/makeself/releases/download/release-2.5.0-patch1.0/makeself-release-2.5.0-patch1.tar.gz | Download makeself source code from gitcode as compilation dependency |
-| Dependency | Not applicable | cmake/third_party/build/modules/gtest.cmake | https://gitcode.com/cann-src-third-party/googletest/releases/download/v1.14.0/googletest-1.14.0.tar.gz | Download googletest source code from gitcode as compilation dependency |
-| Dependency | Not applicable | cmake | https://apt.kitware.com/keys/kitware-archive-latest.asc | Download cmake software from kitware as compilation dependency |
-| Dependency | Not applicable | cmake | https://apt.kitware.com/ubuntu/ | Download cmake software from kitware as compilation dependency |
+| Dependency | Not applicable | cmake/third_party/build/modules/makeself-fetch.cmake | <https://gitcode.com/cann-src-third-party/makeself/releases/download/release-2.5.0-patch1.0/makeself-release-2.5.0-patch1.tar.gz> | Download makeself source code from gitcode as compilation dependency |
+| Dependency | Not applicable | cmake/third_party/build/modules/gtest.cmake | <https://gitcode.com/cann-src-third-party/googletest/releases/download/v1.14.0/googletest-1.14.0.tar.gz> | Download googletest source code from gitcode as compilation dependency |
+| Dependency | Not applicable | cmake | <https://apt.kitware.com/keys/kitware-archive-latest.asc> | Download cmake software from kitware as compilation dependency |
+| Dependency | Not applicable | cmake | <https://apt.kitware.com/ubuntu/> | Download cmake software from kitware as compilation dependency |
 
 ## Vulnerability Mechanism Description
 

@@ -1,6 +1,7 @@
 # 贡献指南
 
 本项目欢迎广大开发者体验并参与贡献，在参与社区贡献之前，请参见[cann-community](https://gitcode.com/cann/community)了解行为准则，进行CLA协议签署，了解源码仓的贡献流程，该仓详细介绍了如何参与CANN开源项目的贡献的前置条件，包括但不限于：
+
 1. 如何提交PR
 2. gitcode工作流
 3. 流水线触发命令（[交互参考](https://gitcode.com/cann/infrastructure/blob/main/docs/robot/robot%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97.md)）
@@ -11,7 +12,7 @@
 除此之外，开发者准备本地代码与提交PR时需要重点关注如下几点：
 
 1. 提交PR时，请按照PR模板仔细填写本次PR的业务背景、目的、方案等信息。
-2. 使用git进行代码提交前，可以参考[pre-commit工具使用说明](docs/precommit_guide.md)来使您的代码提交更合规高效。
+2. 使用git进行代码提交前，可以参考[pre-commit工具使用说明](docs/zh/contributions/precommit_guide.md)来使您的代码提交更合规高效。
 3. 若您的修改不是简单的bug修复，而是涉及到新增特性、新增接口、新增配置参数或者修改代码流程等，请务必先通过Issue进行方案讨论，以避免您的代码被拒绝合入。若您不确定本次修改是否可被归为“简单的bug修复”，亦可通过提交Issue进行方案讨论。
 4. 提交pr时，请确保您的代码符合项目的代码规范，具体参考google的[开源代码规范](https://google.github.io/styleguide/)，包括但不限于：
    - 代码格式化
@@ -44,7 +45,6 @@
 
   您可以按照[提交Issue/处理Issue任务](https://gitcode.com/cann/community#提交Issue处理Issue任务)指引新建 `Bug-Report|缺陷反馈` 类Issue对Bug进行描述，然后在评论框中输入“/assign”或“/assign @yourself”，将该Issue分配给您进行处理。
 
-
 - 贡献新功能
 
   如果您在本项目中发现了某些功能缺失，希望对其进行新增，欢迎您新建Issue进行反馈和跟踪处理。
@@ -52,13 +52,12 @@
   您可以按照[提交Issue/处理Issue任务](https://gitcode.com/cann/community#提交Issue处理Issue任务)指引新建 `Requirement|需求建议` 类Issue对新增功能进行说明，并提供您的设计方案，
   然后在评论框中输入“/assign”或“/assign @yourself”，将该Issue分配给您进行跟踪实现。
 
-
 - 文档纠错
 
   如果您在本项目中发现某些文档描述错误，欢迎您新建Issue进行反馈和修复。
 
   您可以按照[提交Issue/处理Issue任务](https://gitcode.com/cann/community#提交Issue处理Issue任务)指引新建 `Documentation|文档反馈` 类Issue指出对应文档的问题，然后在评论框中输入“/assign”或“/assign @yourself”，将该Issue分配给您纠正对应文档描述。
-  
+
 - 帮助解决他人Issue
 
   如果社区中他人遇到的问题您有合适的解决方法，欢迎您在Issue中发表评论交流，帮助他人解决问题和痛点，共同优化易用性。

@@ -1,0 +1,16 @@
+# 简介
+
+用于构建一个通用的KernelContext对象，该上下文作为算子Host实现实际执行阶段的输入上下文。
+
+OpKernelContextBuilder继承关系图如下：
+
+![](../../figures/opkernel_context_builder.png)
+
+> [!NOTE]说明
+> 该类继承自OpContextBuilderBase类，在Build构建ContextHolder对象之前，需要调用OpContextBuilderBase的OpType、OpName、IONum或IOInstanceNum，以及AppendAttr接口，分别设置算子的类型、名称、输入输出个数、以及算子的属性。
+
+## 需要包含的头文件
+
+```cpp
+#include "base/context_builder/op_kernel_run_context_builder.h"
+```
