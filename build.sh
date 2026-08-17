@@ -11,7 +11,7 @@
 
 set -e
 
-BASEPATH=$(cd "$(dirname $0)"; pwd)
+BASEPATH=$(cd "$(dirname "$0")"; pwd)
 OUTPUT_PATH="${BASEPATH}/output"
 BUILD_OUT_PATH="${BASEPATH}/build_out"
 BUILD_RELATIVE_PATH="build"
@@ -29,13 +29,15 @@ usage() {
   echo "  sh build.sh [-h | --help] [-v | --verbose] [-j<N>]"
   echo "              [--output_path=<PATH>] [--cann_3rd_lib_path=<PATH>]"
   echo "              [--build-type] [--pkg-type=<TYPE>]"
-  echo "              [--asan] [--cov]"
+  echo "              [--asan] [--tsan] [--cov]"
+  echo "              [--extra-cmake-args=<ARGS>] [--rule_launch=<PATH>]"
   echo ""
   echo "Options:"
   echo "    -h, --help     Print usage"
   echo "    -v, --verbose  Show detailed build commands during the build process"
   echo "    -j<N>          Set the number of threads used for building Metadef, default is 8"
   echo "    --asan         Enable AddressSanitizer"
+  echo "    --tsan         Enable ThreadSanitizer"
   echo "    --cov          Enable Coverage"
   echo "    --output_path=<PATH>"
   echo "                   Set output path, default ./output"
@@ -47,6 +49,11 @@ usage() {
   echo "                      Set third_party package install path, default ./output/third_party"
   echo "                      (Third_party package will cost a little time during the first compilation,"
   echo "                      it will skip compilation to save time during subsequent builds)"
+  echo "    --extra-cmake-args=<ARGS>"
+  echo "                       Pass extra cmake arguments (comma-separated key=value pairs,"
+  echo "                       supported keys: ENABLE_BUILD_DEVICE, USE_CXX11_ABI, CMAKE_TOOLCHAIN_FILE)"
+  echo "    --rule_launch=<PATH>"
+  echo "                    Set the rule launch script path"
   echo ""
 }
 
@@ -204,10 +211,9 @@ mk_dir() {
 }
 
 execute_command() {
-  local cmd=$1
-  ${cmd}
+  "$@"
   if [ 0 -ne $? ]; then
-    echo "Failed command: '${cmd}'."
+    echo "Failed command: $*"
     exit 1
   fi
 }
@@ -260,10 +266,10 @@ build_metadef() {
   echo "CMAKE_ARGS is: $CMAKE_ARGS"
   mk_dir "${BUILD_PATH}"
   cd ${BUILD_PATH}
-  execute_command "cmake ${CMAKE_ARGS} .."
-  execute_command "make all -j${THREAD_NUM} ${VERBOSE}"
-  execute_command "make install"
-  execute_command "make package"
+  execute_command cmake ${CMAKE_ARGS} ..
+  execute_command make all -j${THREAD_NUM} ${VERBOSE}
+  execute_command make install
+  execute_command make package
   copy_pkg
   echo "Metadef build success!"
 }
