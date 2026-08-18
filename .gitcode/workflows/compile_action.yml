@@ -9,11 +9,15 @@ on:
       image_version:
         required: true
         type: string
+      arch:
+        required: true
+        type: string
     outputs:
       arm_run_url:
-        value: ${{jobs.JOB_compile.outputs.primary-url}}
+        value: ${{jobs.JOB_Compile.outputs.primary-url}}
       arm_run_key:
-        value: ${{jobs.JOB_compile.outputs.primary-key}}
+        value: ${{jobs.JOB_Compile.outputs.primary-key}}
+
 jobs:
   JOB_Compile:
     name: compile
@@ -25,19 +29,6 @@ jobs:
         with:
           ref: ${{ atomgit.event.pull_request.merge_commit_sha }}
           token: ${{secrets.GIT_TOKEN}}
-      -
-        name: download
-        uses: obs-download
-        with:
-          endpoint: "https://obs.cn-north-4.myhuaweicloud.com"
-          bucket: "ascend-ci"
-          access-key: ${{ secrets.AK }}
-          secret-key: ${{ secrets.SK }}
-          key: |
-            ${{ env.obs_path }}/pr_filelist.txt
-            ${{ env.obs_path }}/pr_filelist_mod.txt
-            ${{ env.obs_path }}/update_file_detail.txt
-          path: ${{ steps.process_checkout.outputs.path }}
       -
         name: download
         uses: obs-download
@@ -92,9 +83,6 @@ jobs:
           artifact-path: "${{ steps.process_checkout.outputs.path }}/output/*.run"
           object-prefix: ${{ env.obs_path }}/
     if: "${{ default() }}"
-    runs-on:
-      - dedicate-hosted
-      - ${{ inputs.arch }}
-      - xlarge
+    runs-on: ['self-hosted', "arch=${{ inputs.arch }}", 'spec=xlarge']
     container:
       image: swr.cn-north-4.myhuaweicloud.com/ci_cann/${{ inputs.image_version }}

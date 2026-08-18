@@ -7,39 +7,41 @@ on:
         required: true
         type: string
       ut_package:
+        required: false
         type: string
-        default: '*.tar.gz'
+        default: 'ut_cov_*.tar.gz'
       image_version:
         required: true
         type: string
 
 jobs:
-  JOB_UT:
-    name: UT_Test
+  JOB_ut:
+    name: ut
     steps:
-      -
-        name: Checkout
+      - name: Checkout
         identifier: process_checkout
         uses: checkout
         with:
           ref: ${{ atomgit.event.pull_request.merge_commit_sha }}
-          token: ${{secrets.GIT_TOKEN}}
-      -
-        name: download
+          token: ${{ secrets.GIT_TOKEN }}
+
+      - name: download
         uses: obs-download
         with:
           endpoint: "https://obs.cn-north-4.myhuaweicloud.com"
           bucket: "ascend-ci"
+          access-key: ${{ secrets.AK }}
+          secret-key: ${{ secrets.SK }}
           key: |
             ${{ env.obs_path }}/pr_filelist.txt
             ${{ env.obs_path }}/pr_filelist_mod.txt
             ${{ env.obs_path }}/ut.sh
           path: ${{ steps.process_checkout.outputs.path }}
-      -
-        name: redis-cache
+
+      - name: redis-cache
         uses: cann/.gitcode/actions/redis-cache@master
-      -
-        name: UT_Test
+
+      - name: ut_acc
         identifier: ut
         run: |
           export WORKSPACE=${{ steps.process_checkout.outputs.path }}
@@ -49,8 +51,8 @@ jobs:
           export MERGE_ID=${{ env.MERGE_ID }}
           export repo_name=${{ env.repo_name }}
           bash ut.sh
-      -
-        name: UT_Cov
+
+      - name: UT_Cov
         identifier: ut_cov
         uses: cann/.gitcode/actions/ut-cov-report@master
         with:
@@ -59,18 +61,17 @@ jobs:
           ut_type: ${{ inputs.ut_type }}
           target_branch: ${{ env.TARGET_BRANCH }}
           git_token: ${{secrets.GIT_TOKEN}}
-      -
-        name: upload
+
+      - name: upload
         uses: obs-upload
         with:
           endpoint: "https://obs.cn-north-4.myhuaweicloud.com"
           bucket: "ascend-ci"
-          access-key: ${{secrets.AK}}
-          secret-key: ${{secrets.SK}}
-          artifact-path: |
-            ${{ steps.process_checkout.outputs.path }}/${{ inputs.ut_package }}
+          access-key: ${{ secrets.AK }}
+          secret-key: ${{ secrets.SK }}
+          artifact-path: "${{ steps.process_checkout.outputs.path }}/${{ inputs.ut_package }}"
           object-prefix: ${{ env.obs_path }}/
     if: "${{ default() }}"
-    runs-on: [dedicate-hosted, x64, xlarge]
+    runs-on: ['self-hosted', 'arch=x64', 'spec=xlarge']
     container:
       image: swr.cn-north-4.myhuaweicloud.com/ci_cann/${{ inputs.image_version }}

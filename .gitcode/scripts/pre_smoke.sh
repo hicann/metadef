@@ -12,8 +12,7 @@
 set -euo pipefail
 
 echo "start run test case, please wait ..."
-cd /home/taskspace
-WORKSPACE=/home/taskspace
+cd ${WORKSPACE}
 
 export ASCEND_GLOBAL_LOG_LEVEL=2
 export ASCEND_SLOG_PRINT_TO_STDOUT=0
@@ -74,12 +73,13 @@ cd - || exit 1
 # ==============================
 mkdir -p /root/ascend
 slog_name="slog.tar.gz"
+cd ${WORKSPACE}
 tar -zcf "${slog_name}" -C /root/ascend log
 
 # upload plog
-if python3 /home/upload.py --bucket-name "ascend-ci" --action upload  --local-file "slog.tar.gz" --obs-object-key "${repo_name}/package/${pr_id}/${slog_name}"; then
-  echo "::set-output var=plog_url:https://ascend-ci.obs.cn-north-4.myhuaweicloud.com/${repo_name}/package/${pr_id}/slog.tar.gz"
-fi
+# if python3 /home/upload.py --bucket-name "ascend-ci" --action upload  --local-file "slog.tar.gz" --obs-object-key "${repo_name}/package/${pr_id}/${slog_name}"; then
+#   echo "::set-output var=plog_url:https://ascend-ci.obs.cn-north-4.myhuaweicloud.com/${repo_name}/package/${pr_id}/slog.tar.gz"
+# fi
 
 # ==============================
 # 检查 NPU 状态
