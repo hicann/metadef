@@ -43,14 +43,14 @@
 #endif
 
 #ifndef GE_ERRORNO_EXTERNAL
-#define GE_ERRORNO_EXTERNAL(name, desc) const ge::ErrorNoRegisterar g_errorno_##name((name), (desc))
+#define GE_ERRORNO_EXTERNAL(name, desc) const ge::ErrorNoRegisterar g_errorno_##name(name, (desc))
 #endif
 
 #ifndef GE_ERRORNO
 // Code compose(4 byte), runtime: 2 bit,  type: 2 bit,   level: 3 bit,  sysid: 8 bit, modid: 5 bit, value: 12 bit
-#define GE_ERRORNO(runtime, type, level, sysid, modid, name, value, desc) \
-  GE_ERRORNO_DEFINE(runtime, type, level, sysid, modid, name, value);     \
-  GE_ERRORNO_EXTERNAL(name, desc)
+#define GE_ERRORNO(runtime, type, level, sysid, modid, name, value, desc)         \
+  GE_ERRORNO_DEFINE((runtime), (type), (level), (sysid), (modid), name, (value)); \
+  GE_ERRORNO_EXTERNAL(name, (desc))
 
 namespace ge {
 class GE_FUNC_VISIBILITY StatusFactory {

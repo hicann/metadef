@@ -8,8 +8,8 @@
  * See LICENSE in the root of the software repository for the full text of the License.
  */
 
-#ifndef METADEF_INC_EXTERNAL_BASE_CONTEXT_BUILDER_TILING_PARSE_CONTEXT_BUILDER_H_
-#define METADEF_INC_EXTERNAL_BASE_CONTEXT_BUILDER_TILING_PARSE_CONTEXT_BUILDER_H_
+#ifndef METADEF_INC_EXTERNAL_BASE_CONTEXT_BUILDER_OP_TILING_PARSE_CONTEXT_BUILDER_H_
+#define METADEF_INC_EXTERNAL_BASE_CONTEXT_BUILDER_OP_TILING_PARSE_CONTEXT_BUILDER_H_
 #include "base/context_builder/context_holder.h"
 #include "exe_graph/runtime/continuous_vector.h"
 #include "exe_graph/runtime/tiling_parse_context.h"
@@ -83,4 +83,4 @@ class OpTilingParseContextBuilder : public OpContextBuilderBase<OpTilingParseCon
   ContextHolder<TilingParseContext> Build();
 };
 }  // namespace gert
-#endif  // METADEF_INC_EXTERNAL_BASE_CONTEXT_BUILDER_TILING_PARSE_CONTEXT_BUILDER_H_
+#endif  // METADEF_INC_EXTERNAL_BASE_CONTEXT_BUILDER_OP_TILING_PARSE_CONTEXT_BUILDER_H_
