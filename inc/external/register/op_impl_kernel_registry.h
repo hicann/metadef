@@ -8,8 +8,8 @@
  * See LICENSE in the root of the software repository for the full text of the License.
  */
 
-#ifndef INC_50EA5B1AAF3341A28036E698708ADB64_H
-#define INC_50EA5B1AAF3341A28036E698708ADB64_H
+#ifndef INC_EXTERNAL_REGISTER_OP_IMPL_KERNEL_REGISTRY_H
+#define INC_EXTERNAL_REGISTER_OP_IMPL_KERNEL_REGISTRY_H
 #include <cstdint>
 #include <unordered_set>
 #include "graph/error_codes.h"
@@ -217,4 +217,4 @@ struct OpImplKernelRegistry {
   };
 };
 }  // namespace gert
-#endif
+#endif  // INC_EXTERNAL_REGISTER_OP_IMPL_KERNEL_REGISTRY_H

@@ -8,8 +8,8 @@
  * See LICENSE in the root of the software repository for the full text of the License.
  */
 
-#ifndef METADEF_INC_EXTERNAL_BASE_CONTEXT_BUILDER_TILING_CONTEXT_BUILDER_H_
-#define METADEF_INC_EXTERNAL_BASE_CONTEXT_BUILDER_TILING_CONTEXT_BUILDER_H_
+#ifndef METADEF_INC_EXTERNAL_BASE_CONTEXT_BUILDER_OP_TILING_CONTEXT_BUILDER_H_
+#define METADEF_INC_EXTERNAL_BASE_CONTEXT_BUILDER_OP_TILING_CONTEXT_BUILDER_H_
 #include <memory>
 #include <vector>
 #include "base/context_builder/context_holder.h"
@@ -174,4 +174,4 @@ uint32_t __attribute__((weak)) gert_TilingContextBuilder_SetSimtGridDim(void *bu
 }
 #endif
 
-#endif  // METADEF_INC_EXTERNAL_BASE_CONTEXT_BUILDER_TILING_CONTEXT_BUILDER_H_
+#endif  // METADEF_INC_EXTERNAL_BASE_CONTEXT_BUILDER_OP_TILING_CONTEXT_BUILDER_H_

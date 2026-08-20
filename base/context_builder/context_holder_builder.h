@@ -9,8 +9,8 @@
  */
 #include "base/context_builder/context_holder.h"
 #include "common/checker.h"
-#ifndef METADEF_CXX_BASE_CONTEXT_BUILDER_CTX_HOLDER_BUILDER_H_
-#define METADEF_CXX_BASE_CONTEXT_BUILDER_CTX_HOLDER_BUILDER_H_
+#ifndef METADEF_BASE_CONTEXT_BUILDER_CONTEXT_HOLDER_BUILDER_H_
+#define METADEF_BASE_CONTEXT_BUILDER_CONTEXT_HOLDER_BUILDER_H_
 namespace gert {
 class ContextHolderBuilder {
  public:
@@ -22,4 +22,4 @@ class ContextHolderBuilder {
   }
 };
 }  // namespace gert
-#endif  // METADEF_CXX_BASE_CONTEXT_BUILDER_CTX_HOLDER_BUILDER_H_
+#endif  // METADEF_BASE_CONTEXT_BUILDER_CONTEXT_HOLDER_BUILDER_H_
