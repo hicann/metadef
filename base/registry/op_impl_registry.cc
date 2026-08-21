@@ -19,6 +19,33 @@
 
 namespace gert {
 namespace {
+template <typename T>
+void RegisterFunction(T &registered_func, const T new_func, const char *op_type, const char *func_name) {
+  if (new_func == nullptr) {
+    return;
+  }
+  if (registered_func != nullptr) {
+    if (registered_func != new_func) {
+      GELOGW("LocalRegistry op type[%s] %s has already been registered with another implementation", op_type,
+             func_name);
+    }
+  }
+  registered_func = new_func;
+}
+
+template <typename T>
+void RegisterBitmask(T &registered_value, const T new_value, const char *op_type, const char *field_name) {
+  if (new_value == 0) {
+    return;
+  }
+  if (registered_value != 0) {
+    if (registered_value != new_value) {
+      GELOGW("LocalRegistry op type[%s] %s has already been registered with another value", op_type, field_name);
+    }
+  }
+  registered_value = new_value;
+}
+
 void RegisterOpImplToRegistry(const OpImplRegisterV2Impl *rd) {
   if (rd == nullptr) {
     GELOGW("The register data is invalid, the impl is nullptr");
@@ -28,92 +55,124 @@ void RegisterOpImplToRegistry(const OpImplRegisterV2Impl *rd) {
   std::stringstream ss;
   if (rd->functions.infer_shape != nullptr) {
     ss << "[InferShape]";
-    funcs.infer_shape = rd->functions.infer_shape;
+    RegisterFunction(funcs.infer_shape, rd->functions.infer_shape, rd->op_type.GetString(), "InferShape");
   }
   if (rd->functions.infer_shape_range != nullptr) {
     ss << "[InferShapeRange]";
-    funcs.infer_shape_range = rd->functions.infer_shape_range;
+    RegisterFunction(funcs.infer_shape_range, rd->functions.infer_shape_range, rd->op_type.GetString(),
+                     "InferShapeRange");
   }
   if (rd->functions.infer_datatype != nullptr) {
     ss << "[InferDataType]";
-    funcs.infer_datatype = rd->functions.infer_datatype;
+    RegisterFunction(funcs.infer_datatype, rd->functions.infer_datatype, rd->op_type.GetString(), "InferDataType");
   }
   if (rd->functions.tiling != nullptr) {
     ss << "[Tiling]";
+    if ((funcs.tiling != nullptr) && ((funcs.tiling != rd->functions.tiling) ||
+                                      (funcs.max_tiling_data_size != rd->functions.max_tiling_data_size))) {
+      GELOGW("LocalRegistry op type[%s] Tiling has already been registered with another implementation",
+             rd->op_type.GetString());
+    }
     funcs.tiling = rd->functions.tiling;
     funcs.max_tiling_data_size = rd->functions.max_tiling_data_size;
   }
   if (rd->functions.gen_simplifiedkey != nullptr) {
     ss << "[GenSimplifiedKey]";
-    funcs.gen_simplifiedkey = rd->functions.gen_simplifiedkey;
+    RegisterFunction(funcs.gen_simplifiedkey, rd->functions.gen_simplifiedkey, rd->op_type.GetString(),
+                     "GenSimplifiedKey");
   }
   if (rd->functions.inputs_dependency != 0U) {
     ss << "[InputsDependency]";
-    funcs.inputs_dependency = rd->functions.inputs_dependency;
+    RegisterBitmask(funcs.inputs_dependency, rd->functions.inputs_dependency, rd->op_type.GetString(),
+                    "InputsDependency");
   }
   if (rd->functions.host_inputs != 0U) {
     ss << "[HostInputs]";
-    funcs.host_inputs = rd->functions.host_inputs;
+    RegisterBitmask(funcs.host_inputs, rd->functions.host_inputs, rd->op_type.GetString(), "HostInputs");
   }
   if (rd->functions.tiling_dependency != 0U) {
     ss << "[TilingDependency]";
-    funcs.tiling_dependency = rd->functions.tiling_dependency;
+    RegisterBitmask(funcs.tiling_dependency, rd->functions.tiling_dependency, rd->op_type.GetString(),
+                    "TilingDependency");
   }
   if (rd->functions.tiling_dependency_placements != 0U) {
     ss << "[TilingDependencyPlacement]";
-    funcs.tiling_dependency_placements = rd->functions.tiling_dependency_placements;
+    RegisterBitmask(funcs.tiling_dependency_placements, rd->functions.tiling_dependency_placements,
+                    rd->op_type.GetString(), "TilingDependencyPlacement");
   }
   if (rd->functions.op_execute_func != nullptr) {
     ss << "[OpExecuteFunc]";
-    funcs.op_execute_func = rd->functions.op_execute_func;
+    RegisterFunction(funcs.op_execute_func, rd->functions.op_execute_func, rd->op_type.GetString(), "OpExecuteFunc");
   }
   if ((rd->functions.op_execute_prepare_func != nullptr) && (rd->functions.op_execute_launch_func != nullptr)) {
     ss << "[Op2StageExecuteFuncs]";
+    if ((funcs.op_execute_prepare_func != nullptr) || (funcs.op_execute_launch_func != nullptr)) {
+      if ((funcs.op_execute_prepare_func != rd->functions.op_execute_prepare_func) ||
+          (funcs.op_execute_launch_func != rd->functions.op_execute_launch_func)) {
+        GELOGW("LocalRegistry op type[%s] Op2StageExecuteFuncs has already been registered with another implementation",
+               rd->op_type.GetString());
+      }
+    }
     funcs.op_execute_prepare_func = rd->functions.op_execute_prepare_func;
     funcs.op_execute_launch_func = rd->functions.op_execute_launch_func;
   }
   if (rd->functions.tiling_parse != nullptr) {
     ss << "[TilingParse]";
+    if ((funcs.tiling_parse != nullptr) || (funcs.compile_info_creator != nullptr) ||
+        (funcs.compile_info_deleter != nullptr)) {
+      if ((funcs.tiling_parse != rd->functions.tiling_parse) ||
+          (funcs.compile_info_creator != rd->functions.compile_info_creator) ||
+          (funcs.compile_info_deleter != rd->functions.compile_info_deleter)) {
+        GELOGW("LocalRegistry op type[%s] TilingParse has already been registered with another implementation",
+               rd->op_type.GetString());
+      }
+    }
     funcs.tiling_parse = rd->functions.tiling_parse;
     funcs.compile_info_creator = rd->functions.compile_info_creator;
     funcs.compile_info_deleter = rd->functions.compile_info_deleter;
   }
   if (rd->is_private_attr_registered) {
-    ss << "[PrivateAtrr]";
+    ss << "[PrivateAttr]";
+    if (!funcs.private_attrs.empty() && !rd->functions.private_attrs.empty()) {
+      GELOGW("LocalRegistry op type[%s] PrivateAttr has already been registered with another definition",
+             rd->op_type.GetString());
+    }
     funcs.private_attrs = rd->functions.private_attrs;
     funcs.unique_private_attrs = rd->functions.unique_private_attrs;
   }
   if (rd->functions.output_shape_depend_compute != 0U) {
     ss << "[OutputShapeDependCompute]";
-    funcs.output_shape_depend_compute = rd->functions.output_shape_depend_compute;
+    RegisterBitmask(funcs.output_shape_depend_compute, rd->functions.output_shape_depend_compute,
+                    rd->op_type.GetString(), "OutputShapeDependCompute");
   }
   if (rd->functions.infer_format_func != nullptr) {
     ss << "[InferFormat]";
-    funcs.infer_format_func = rd->functions.infer_format_func;
+    RegisterFunction(funcs.infer_format_func, rd->functions.infer_format_func, rd->op_type.GetString(), "InferFormat");
   }
   if (rd->functions.calc_op_param != nullptr) {
     ss << "[CalcOpParam]";
-    funcs.calc_op_param = rd->functions.calc_op_param;
+    RegisterFunction(funcs.calc_op_param, rd->functions.calc_op_param, rd->op_type.GetString(), "CalcOpParam");
   }
   if (rd->functions.gen_task != nullptr) {
     ss << "[GenTask]";
-    funcs.gen_task = rd->functions.gen_task;
+    RegisterFunction(funcs.gen_task, rd->functions.gen_task, rd->op_type.GetString(), "GenTask");
   }
   if (rd->functions.check_support != nullptr) {
     ss << "[CheckSupport]";
-    funcs.check_support = rd->functions.check_support;
+    RegisterFunction(funcs.check_support, rd->functions.check_support, rd->op_type.GetString(), "CheckSupport");
   }
   if (rd->functions.op_select_format != nullptr) {
     ss << "[OpSelectFormat]";
-    funcs.op_select_format = rd->functions.op_select_format;
+    RegisterFunction(funcs.op_select_format, rd->functions.op_select_format, rd->op_type.GetString(), "OpSelectFormat");
   }
   if (rd->functions.exception_func != nullptr) {
     ss << "[ExceptionFunc]";
-    funcs.exception_func = rd->functions.exception_func;
+    RegisterFunction(funcs.exception_func, rd->functions.exception_func, rd->op_type.GetString(), "ExceptionFunc");
   }
   if (rd->functions.nullable_outputs_ != 0UL) {
     ss << "[NullableOutputs]";
-    funcs.nullable_outputs_ = rd->functions.nullable_outputs_;
+    RegisterBitmask(funcs.nullable_outputs_, rd->functions.nullable_outputs_, rd->op_type.GetString(),
+                    "NullableOutputs");
   }
 
   GELOGI("LocalRegistry[%zu] Op type[%s] register OP_IMPL : %s",
