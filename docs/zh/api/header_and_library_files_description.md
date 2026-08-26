@@ -12,7 +12,7 @@
 - Context Builder与Runtime定义类接口：$\{INSTALL\_DIR\}/include/base/
 - 算子注册类接口：$\{INSTALL\_DIR\}/include/register/
 
-库文件在`$\{INSTALL\_DIR\}/lib64/`目录下，`$\{INSTALL\_DIR\}`请替换为CANN软件安装后文件存储路径。以root用户安装为例，安装后文件默认存储路径为：/usr/local/Ascend/cann。
+库文件在`${INSTALL_DIR}/lib64/`目录下，`${INSTALL_DIR}`请替换为CANN软件安装后文件存储路径。以root用户安装为例，安装后文件默认存储路径为：/usr/local/Ascend/cann。
 
 ## Graph运行时相关接口
 

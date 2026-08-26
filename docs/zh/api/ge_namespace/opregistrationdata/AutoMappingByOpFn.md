@@ -17,6 +17,8 @@ Status AutoMappingByOpFn(const ge::Operator &op_src, ge::Operator &op);
 |op_src|输入|转换前原始模型中的算子，包含原始模型中算子的属性。|
 |op|输入|适配AI处理器的算子。|
 
+关于Operator类详细说明请参见《[GE图引擎 API](https://gitcode.com/cann/ge/blob/9.2.0-beta.2/docs/zh/api/graph_engine_api/README.md)》。
+
 ## 调用示例
 
 原始TensorFlow算子与适配AI处理器的算子属性一一映射的场景：

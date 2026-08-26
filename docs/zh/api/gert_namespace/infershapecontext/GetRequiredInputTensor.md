@@ -26,6 +26,9 @@ const Tensor *GetRequiredInputTensor(const size_t ir_index) const
 
 仅在设置数据依赖时可以获取tensor的数据地址。如果输入没有被设置为数据依赖，调用此接口获取tensor时，只能在tensor中获取到正确的shape、format、datatype信息，无法获取到真实的tensor数据地址（获取到的地址为nullptr）。
 
+数据依赖：一般来说，具备输入shape后，算子可以通过InferShape推导出输出shape。然而部分算子在InferShape时，需要依赖某个输入的具体值才可以进行，
+这类算子被称为“数据依赖算子”，对应的输入被称为“数据依赖输入”。
+
 ## 调用示例
 
 ```cpp

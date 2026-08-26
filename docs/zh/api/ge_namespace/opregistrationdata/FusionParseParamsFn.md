@@ -34,3 +34,5 @@ Status FusionParseParamFunc(const  vector<const google::protobuf::Message *> &v_
 |--|--|--|
 |v_op_origin|输入|一组scope内的protobuf格式的数据结构（来源于原始模型的prototxt文件），包含算子属性信息。|
 |op_dest|输出|融合算子数据结构，保存融合算子信息。|
+
+关于Operator类详细说明请参见《[GE图引擎 API](https://gitcode.com/cann/ge/blob/9.2.0-beta.2/docs/zh/api/graph_engine_api/README.md)》。

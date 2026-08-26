@@ -71,9 +71,6 @@ enum Format {
 FORMAT\_FRACTAL\_NZ\_C0\_16、FORMAT\_FRACTAL\_NZ\_C0\_32、FORMAT\_FRACTAL\_NZ\_C0\_2、FORMAT\_FRACTAL\_NZ\_C0\_4、FORMAT\_FRACTAL\_NZ\_C0\_8：仅在Ascend 950PR/Ascend 950DT支持。
 
 <!-- end id1 -->
-<!-- npu="IPV350" id2 -->
-IPV350：FORMAT_FRACTAL_NZ_C0_16、FORMAT_FRACTAL_NZ_C0_32、FORMAT_FRACTAL_NZ_C0_2、FORMAT_FRACTAL_NZ_C0_4、FORMAT_FRACTAL_NZ_C0_8：当前版本不支持该类型。
-<!-- end id2 -->
 
 <!-- @ref: metadef/res/docs/api/Format_res.md#id1 -->
 

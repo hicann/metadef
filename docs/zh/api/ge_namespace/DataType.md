@@ -54,7 +54,4 @@ enum DataType {
 DT\_HIFLOAT8、DT\_FLOAT8\_E5M2、DT\_FLOAT8\_E4M3FN、DT\_FLOAT8\_E8M0、DT\_FLOAT6\_E3M2、DT\_FLOAT6\_E2M3、DT\_FLOAT4\_E2M1、DT\_FLOAT4\_E1M2：仅在Ascend 950PR/Ascend 950DT支持。
 <!-- end id1 -->
 
-<!-- npu="IPV350" id2 -->
-IPTV350：DT_HIFLOAT8、DT_FLOAT8_E5M2、DT_FLOAT8_E4M3FN、DT_FLOAT8_E8M0、DT_FLOAT6_E3M2、DT_FLOAT6_E2M3、DT_FLOAT4_E2M1、DT_FLOAT4_E1M2：当前版本不支持该类型。
-<!-- end id2 -->
 <!-- @ref: metadef/res/docs/api/DataType_res.md#id1 -->

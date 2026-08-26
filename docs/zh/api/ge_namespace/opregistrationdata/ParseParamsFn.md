@@ -34,4 +34,4 @@ using ParseParamFunc = std::function<domi::Status(const google::protobuf::Messag
 ```
 
 - 第一个参数为输入，protobuf格式的数据结构（来源于原始模型的prototxt文件），包含算子属性信息。
-- 第二个参数为输出，适配AI处理器的模型的算子数据结构，保存算子信息。
+- 第二个参数为输出，适配AI处理器的模型的算子数据结构，保存算子信息。关于Operator类详细说明请参见《[GE图引擎 API](https://gitcode.com/cann/ge/blob/9.2.0-beta.2/docs/zh/api/graph_engine_api/README.md)》。
