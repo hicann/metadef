@@ -31,6 +31,8 @@ Status FusionParseParamByOpFunc(const std::vector<ge::Operator> &op_src,  ge::Op
 |op_src|输入|一组scope内存储原始模型中算子属性的融合算子数据结构。|
 |op_dest|输出|融合算子数据结构，保存融合算子信息。|
 
+关于Operator类详细说明请参见《[GE图引擎 API](https://gitcode.com/cann/ge/blob/master/docs/zh/api/graph_engine_api/README.md)》。
+
 ## 调用示例
 
 ```cpp

@@ -18,6 +18,8 @@ Status AutoMappingByOpFnDynamic(const ge::Operator &op_src, ge::Operator &op, co
 |op|输入|适配AI处理器的算子。|
 |dynamic_name_attr_value|输入|描述动态输入输出实际个数，**DynamicInputOutputInfo**数据结构请参见DynamicInputOutputInfo数据结构说明。|
 
+关于Operator类详细说明请参见《[GE图引擎 API](https://gitcode.com/cann/ge/blob/master/docs/zh/api/graph_engine_api/README.md)》。
+
 ## DynamicInputOutputInfo数据结构说明
 
 ```cpp

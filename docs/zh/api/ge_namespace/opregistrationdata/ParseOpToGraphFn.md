@@ -24,7 +24,7 @@ OpRegistrationData &ParseOpToGraphFn(const ParseOpToGraphFunc &parse_op_to_graph
 
 ## 回调函数ParseOpToGraphFunc
 
-用户自定义并实现ParseOpToGraphFunc函数，通过IR模型构建方式完成一对多子图的构造，构图详细介绍请参考《图开发》。
+用户自定义并实现ParseOpToGraphFunc函数，通过IR模型构建方式完成一对多子图的构造，构图详细介绍请参考《[图开发](https://gitcode.com/cann/ge/blob/master/docs/zh/user_guides/graph_dev/README.md)》。
 
 回调函数原型定义如下：
 

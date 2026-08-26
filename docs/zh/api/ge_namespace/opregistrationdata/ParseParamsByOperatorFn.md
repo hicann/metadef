@@ -31,6 +31,8 @@ Status ParseParamByOpFunc(const ge::Operator &op_origin, ge::Operator &op_dest)
 |op_origin|输入|框架定义的Operator类对象，包含解析出的原始模型中自定义算子属性信息，|
 |op_dest|输出|适配AI处理器的模型中的算子数据结构，保存算子信息。|
 
+关于Operator类详细说明请参见《[GE图引擎 API](https://gitcode.com/cann/ge/blob/master/docs/zh/api/graph_engine_api/README.md)》。
+
 ## 约束说明
 
 无。
