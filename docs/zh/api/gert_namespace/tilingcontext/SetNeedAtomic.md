@@ -12,9 +12,12 @@ atomic clean是指在算子执行前对GM（Global Memory）上输出内存进�
 
 算子可以选择自行执行初始化操作，或者通过设置此接口让框架通过自动插入清零算子等方式来完成初始化操作。使用框架进行初始化可以利用框架的优化能力，例如在图模式下集中分配清零地址，从而提高资源管理和分配的效率。
 
-<!-- @ref: metadef/res/docs/api/SetNeedAtomic_res.md#id1 -->
-
+<!-- npu="950,A3,910b,910,310p,310b" id1 -->
 **SetNeedAtomic和InitValue接口配合使用，通过InitValue接口来配置初始化哪些输出和具体的初始化值。**
+InitValue接口介绍请参见《[Ascend C API](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/README.md)》。
+<!-- end id1 -->
+
+<!-- @ref: metadef/res/docs/api/SetNeedAtomic_res.md#id1 -->
 
 ## 函数原型
 

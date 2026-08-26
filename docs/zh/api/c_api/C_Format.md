@@ -72,4 +72,5 @@ C\_FORMAT\_FRACTAL\_NZ\_C0\_16、C\_FORMAT\_FRACTAL\_NZ\_C0\_32、C\_FORMAT\_FRA
 <!-- end id1 -->
 <!-- npu="IPV350" id2 -->
 IPV350：C_FORMAT_FRACTAL_NZ_C0_16、C_FORMAT_FRACTAL_NZ_C0_32、C_FORMAT_FRACTAL_NZ_C0_2、C_FORMAT_FRACTAL_NZ_C0_4、C_FORMAT_FRACTAL_NZ_C0_8：当前版本不支持该类型。
-<!-- end id2 --><!-- @ref: metadef/res/docs/api/C_Format_res.md#id1 -->
+<!-- end id2 -->
+<!-- @ref: metadef/res/docs/api/C_Format_res.md#id1 -->

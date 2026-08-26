@@ -4,7 +4,9 @@
 
 设置可以调度的AI CPU核数。
 
-在使用HCCL高阶API的接口时，可以通过合理设置AI CPU核数获得更好的性能。
+在使用HCCL高阶API的BatchWrite接口时，可以通过合理设置AI CPU核数获得更好的性能。
+
+BatchWrite接口详细说明请参见《[Ascend C API](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/README.md)》> SIMD API > 高阶API > HCCL通信类章节。
 
 ## 函数原型
 

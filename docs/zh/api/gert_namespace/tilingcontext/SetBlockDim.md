@@ -29,6 +29,12 @@ ge::graphStatus SetBlockDim(const uint32_t block_dim)
 - 在设置Device资源限制的场景下，设置的blockDim核数不能超过通过GetCoreNumAiv等接口获取的物理核数。例如，如果使用aclrtSetStreamResLimit设置Stream级别的Device资源限制为8个核，那么blockDim不能超过8，否则会抢占其他Stream的资源，导致资源限制失效。
 - 如果开发者使用了Device资源限制特性，那么算子设置的blockDim不应超过PlatformAscendC提供核数的API（GetCoreNum/GetCoreNumAic/GetCoreNumAiv等）返回的核数。例如，使用aclrtSetStreamResLimit设置Stream级别的Vector核数为8，那么GetCoreNumAiv接口返回值为8，针对Vector算子设置的blockDim不应超过8，否则会抢占其他Stream的资源，导致资源限制失效。
 
+> [!NOTE]说明
+>
+> - GetCoreNumAiv、PlatformAscendC接口的详细说明请参见《[Ascend C API](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/README.md)》。
+>
+> - aclrtSetStreamResLimit接口的详细说明请参见《[Runtime运行时API](https://gitcode.com/cann/runtime/blob/master/docs/zh/api_ref/README.md)》。
+
 ## 返回值说明
 
 设置成功时返回“ge::GRAPH\_SUCCESS”。
