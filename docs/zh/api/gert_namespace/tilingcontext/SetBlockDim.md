@@ -31,7 +31,7 @@ ge::graphStatus SetBlockDim(const uint32_t block_dim)
 
 > [!NOTE]说明
 >
-> - GetCoreNumAiv、PlatformAscendC接口的详细说明请参见《[Ascend C API](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/README.md)》。
+> - GetCoreNumAiv、PlatformAscendC等获取核数接口的详细说明请参见《[Ascend C API](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/README.md)》。
 >
 > - aclrtSetStreamResLimit接口的详细说明请参见《[Runtime运行时API](https://gitcode.com/cann/runtime/blob/master/docs/zh/api_ref/README.md)》。
 

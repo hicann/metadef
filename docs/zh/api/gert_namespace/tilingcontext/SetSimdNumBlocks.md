@@ -19,13 +19,19 @@ ge::graphStatus SetSimdNumBlocks(const uint32_t num_blocks)
 该参数补充说明如下：
 
 - 对于耦合模式和分离模式，num_blocks在运行时的意义和设置规则有一些区别，具体说明如下：
-  - 耦合模式：由于其Vector、Cube单元是集成在一起的，num_blocks用于设置启动多个AICore核实例执行，不区分Vector、Cube。AI Core的核数可以通过或者获取。
+  - 耦合模式：由于其Vector、Cube单元是集成在一起的，num_blocks用于设置启动多个AICore核实例执行，不区分Vector、Cube。AI Core的核数可以通过GetCoreNumAiv或者GetCoreNumAic获取。
   - 分离模式：针对仅包含Vector计算的算子，num_blocks用于设置启动多少个Vector（AIV）实例执行，比如某款AI处理器上有40个Vector核，建议设置为40。
   - 分离模式：针对仅包含Cube计算的算子，num_blocks用于设置启动多少个Cube（AIC）实例执行，比如某款AI处理器上有20个Cube核，建议设置为20。
   - 分离模式：针对Vector/Cube融合计算的算子，启动时，按照AIV和AIC组合启动，num_blocks用于设置启动多少个组合执行，比如某款AI处理器上有40个Vector核和20个Cube核，一个组合是2个Vector核和1个Cube核，建议设置为20，此时会启动20个组合，即40个Vector核和20个Cube核。注意：该场景下，设置的num_blocks逻辑核的核数不能超过物理核（2个Vector核和1个Cube核组合为1个物理核）的核数。
-  - 分离模式：AIC/AIV的核数分别通过和接口获取。
-- 在设置Device资源限制的场景下，设置的num_blocks核数不能超过通过GetCoreNumAiv等接口获取的物理核数。例如，如果使用设置Stream级别的Device资源限制为8个核，那么num_blocks不能超过8，否则会抢占其他Stream的资源，导致资源限制失效。
-- 如果开发者使用了Device资源限制特性，那么算子设置的num_blocks不应超过提供核数的API（GetCoreNum/GetCoreNumAic/GetCoreNumAiv等）返回的核数。例如，使用aclrtSetStreamResLimit设置Stream级别的Vector核数为8，那么GetCoreNumAiv接口返回值为8，针对Vector算子设置的num_blocks不应超过8，否则会抢占其他Stream的资源，导致资源限制失效。
+  - 分离模式：AIC/AIV的核数分别通过GetCoreNumAiv或者GetCoreNumAic接口获取。
+- 在设置Device资源限制的场景下，设置的num_blocks核数不能超过通过GetCoreNumAiv等接口获取的物理核数。例如，如果使用aclrtSetStreamResLimit设置Stream级别的Device资源限制为8个核，那么num_blocks不能超过8，否则会抢占其他Stream的资源，导致资源限制失效。
+- 如果开发者使用了Device资源限制特性，那么算子设置的num_blocks不应超过PlatformAscendC提供核数的API（GetCoreNum/GetCoreNumAic/GetCoreNumAiv等）返回的核数。例如，使用aclrtSetStreamResLimit设置Stream级别的Vector核数为8，那么GetCoreNumAiv接口返回值为8，针对Vector算子设置的num_blocks不应超过8，否则会抢占其他Stream的资源，导致资源限制失效。
+
+> [!NOTE]说明
+>
+> - GetCoreNumAiv、PlatformAscendC等获取核数接口的详细说明请参见《[Ascend C API](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/README.md)》。
+>
+> - aclrtSetStreamResLimit接口的详细说明请参见《[Runtime运行时API](https://gitcode.com/cann/runtime/blob/master/docs/zh/api_ref/README.md)》。
 
 ## 返回值说明
 
