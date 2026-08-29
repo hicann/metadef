@@ -29,7 +29,7 @@
   } else if (((merged_funcs).func_name) != nullptr and ((src_funcs).func_name != nullptr)) { \
     GELOGW("op type %s %s func has been registered.", (op_type), #func_name);                \
   } else {                                                                                   \
-    /* 空分支，无需操作 */                                                           \
+    /* 空分支，无需操作 */                                                                   \
   }
 
 #define MERGE_SCALAR(merged, src, member)                                    \
@@ -39,7 +39,7 @@
     } else if ((merged).member != 0 && (src).member != 0) {                  \
       GELOGW("op type %s " #member " has been registered", op_type.c_str()); \
     } else {                                                                 \
-      /* 已经注册且没有重复注册 */                                \
+      /* 已经注册且没有重复注册 */                                           \
     }                                                                        \
   } while (0)
 
@@ -114,7 +114,6 @@ ge::graphStatus OpImplSpaceRegistryImpl::AddSoToRegistry(const OppSoDesc &so_des
            << std::endl;
         ss << "Error detail: " << mmDlerror() << std::endl;
         GELOGE(ge::GRAPH_FAILED, "%s", ss.str().c_str());
-        std::cout << "[ERROR] " << ss.str() << std::endl;
         return nullptr;
       }
       const std::function<void()> callback = [&handle]() { CloseHandle(handle); };

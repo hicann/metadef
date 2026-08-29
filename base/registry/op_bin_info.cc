@@ -125,7 +125,7 @@ bool GetBasePath(std::string &basePath, const std::string &opType) {
 bool CreateDirectory(const std::string &path) {
   GELOGD("Running CreateDirectory.");
   if (DirectoryExists(path)) {
-    GELOGD("Directory is existed.");
+    GELOGD("Directory already exists.");
     return true;
   } else {
     std::string currentPath = path;
@@ -178,7 +178,7 @@ bool CreateSymlink(const std::string &targetPath, const std::string &linkPath) {
   std::string parentDir = GetParentPath(linkPath);
   if (!DirectoryExists(parentDir)) {
     if (!CreateDirectory(parentDir)) {
-      GELOGE(ge::FAILED, "Failed create directory: %s", parentDir.c_str());
+      GELOGE(ge::FAILED, "Failed to create directory: %s", parentDir.c_str());
       return false;
     }
   }
