@@ -493,6 +493,25 @@ class TilingContext : public ExtendedKernelContext {
   }
 
   /**
+   * 查询当前上下文是否启用PCIE Through
+   * @return 任意一个输入为pcie，该接口返回true
+   */
+  bool GetPcieThroughFlag() const {
+    const auto compute_node_info = GetComputeNodeInfo();
+    if (compute_node_info == nullptr) {
+      return false;
+    }
+    const size_t index = compute_node_info->GetInputsNum() + compute_node_info->GetOutputsNum();
+    // 此处按照tiling内存排布，将PCIE Through的字段添加在
+    // inputshape outputshape compileinfo platform tiling_func deterministic pcie_through之后
+    const auto av = GetInput(index + 5U);
+    if (av == nullptr) {
+      return false;
+    }
+    return av->GetValue<bool>();
+  }
+
+  /**
    * 设置 local memory size, 默认值为0
    * @param local_memory_size
    * @return 成功返回ge::GRAPH_SUCCESS

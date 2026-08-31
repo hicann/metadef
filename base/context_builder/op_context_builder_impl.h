@@ -28,6 +28,7 @@ struct TilingInfo {
   std::pair<const void *, gert::Chain::Deleter> tiling_data_ = {nullptr, nullptr};
   int32_t deterministic_ = 0;
   int32_t deterministic_level_ = 0;
+  bool pcie_through_flag_ = false;
   const gert::ContinuousVector *workspace_ = nullptr;
   const gert::Dim3 *simt_block_dim = nullptr;
   const gert::Dim3 *simt_grid_dim = nullptr;
@@ -96,6 +97,10 @@ class ContextBuilderImpl {
 
   void SetDeterministicLevel(int32_t deterministic_level) {
     tiling_info_.deterministic_level_ = deterministic_level;
+  }
+
+  void SetPcieThroughFlag(bool flag) {
+    tiling_info_.pcie_through_flag_ = flag;
   }
 
   void SetCompiledJson(const ge::char_t *compiled_json) {

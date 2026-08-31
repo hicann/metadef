@@ -32,7 +32,7 @@ namespace ge {
 class AnyValue;
 }  // namespace ge
 
-//直接引入rts的头文件会引入额外的include path，导致用户侧代码编译失败，因此重新定义了rts头文件中的结构体
+// 直接引入rts的头文件会引入额外的include path，导致用户侧代码编译失败，因此重新定义了rts头文件中的结构体
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -125,6 +125,7 @@ class OpImplRegisterV2 {
   OpImplRegisterV2 &OpSelectFormat(OP_CHECK_FUNC_V2 op_select_format_func);
   OpImplRegisterV2 &ExceptionDumpParseFunc(ExceptionDumpFunc exception_func);
   OpImplRegisterV2 &NullableOutputs(std::initializer_list<int32_t> outputs);
+  OpImplRegisterV2 &SetSupportPcieThrough();
 
  private:
   OpImplRegisterV2 &TilingParse(KernelFunc tiling_parse_func, CompileInfoCreatorFunc creator_func,

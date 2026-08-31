@@ -192,4 +192,22 @@ TEST_F(OpImplSpaceRegistryV2UT, DefaultOpImplSpaceRegistry_SetSpaceRegistry_Succ
   EXPECT_NE(gert::DefaultOpImplSpaceRegistryV2::GetInstance().GetSpaceRegistry(), nullptr);
   gert::DefaultOpImplSpaceRegistryV2::GetInstance().ClearSpaceRegistry();
 }
+
+TEST_F(OpImplSpaceRegistryV2UT, MergeFunctions_PcieThroughFlag_Succeed) {
+  gert::OpImplSpaceRegistry space_registry;
+  auto holder_a = std::make_shared<gert::OmOpImplRegistryHolder>();
+  gert::OpImplKernelRegistry::OpImplFunctionsV2 funcs_a;
+  holder_a->AddTypesToImpl("PcieThrough_merge", funcs_a);
+  EXPECT_EQ(space_registry.AddRegistry(holder_a), ge::GRAPH_SUCCESS);
+
+  auto holder_b = std::make_shared<gert::OmOpImplRegistryHolder>();
+  gert::OpImplKernelRegistry::OpImplFunctionsV2 funcs_b;
+  funcs_b.SetSupportPcieThrough();
+  holder_b->AddTypesToImpl("PcieThrough_merge", funcs_b);
+  EXPECT_EQ(space_registry.AddRegistry(holder_b), ge::GRAPH_SUCCESS);
+
+  const auto *impl = space_registry.GetOpImpl("PcieThrough_merge");
+  ASSERT_NE(impl, nullptr);
+  EXPECT_TRUE(impl->IsSupportPcieThrough());
+}
 }  // namespace gert_test

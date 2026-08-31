@@ -273,9 +273,11 @@ OpImplFunctions的子类，可扩展，本类用于保存算子注册的Generate
 
 **表 16**  OpImplFunctionsV2类成员函数
 
-|函数名称含义|含义|
-|--|--|
-|OpImplFunctionsV2|默认构造函数|
-|operator=|拷贝赋值函数|
-|NullableOutput|设置算子的第index个输出可以为空|
-|IsNullableOutput|获取算子的第index输出是否可以为空|
+|函数名称含义| 含义                   |
+|--|----------------------|
+|OpImplFunctionsV2| 默认构造函数               |
+|operator=| 拷贝赋值函数               |
+|NullableOutput| 设置算子的第index个输出可以为空   |
+|IsNullableOutput| 获取算子的第index输出是否可以为空  |
+|SetSupportPcieThrough| 声明算子是支持PCIE Through的 |
+|IsSupportPcieThrough| 获取算子是否支持PCIE Through |

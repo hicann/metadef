@@ -179,6 +179,8 @@ TEST_F(OpImplRegistryUT, Register_Success_RegisterAll) {
 
   IMPL_OP(TestFoo_nullableOutputs).NullableOutputs({0, 1, 4, 128, 3});
 
+  IMPL_OP(TestFoo_SupportPcieThrough).SetSupportPcieThrough();
+
   funcs = gert::OpImplRegistry::GetInstance().GetOpImpl("TestFoo_tilingDepend");
   EXPECT_TRUE(funcs->IsTilingInputDataDependency(0U));
   EXPECT_TRUE(funcs->IsTilingInputDataDependency(1U));
@@ -1002,5 +1004,35 @@ TEST_F(OpImplRegistryUT, GetOpImplFunctionsWithExceptionFuncTest) {
     }
   }
   EXPECT_TRUE(found);
+}
+
+TEST_F(OpImplRegistryUT, Register_SetSupportPcieThrough_success) {
+  auto funcs = gert::OpImplRegistry::GetInstance().GetOpImpl("TestFooPcieThrough");
+  ASSERT_EQ(funcs, nullptr);
+
+  IMPL_OP(TestFooPcieThrough).InferShape(TestInferShapeFunc1).SetSupportPcieThrough();
+
+  funcs = gert::OpImplRegistry::GetInstance().GetOpImpl("TestFooPcieThrough");
+  ASSERT_NE(funcs, nullptr);
+  EXPECT_TRUE(funcs->IsSupportPcieThrough());
+}
+
+TEST_F(OpImplRegistryUT, Register_NotSetSupportPcieThrough_default_false) {
+  auto funcs = gert::OpImplRegistry::GetInstance().GetOpImpl("TestFooNoPcieThrough");
+  ASSERT_EQ(funcs, nullptr);
+
+  IMPL_OP(TestFooNoPcieThrough).InferShape(TestInferShapeFunc1);
+
+  funcs = gert::OpImplRegistry::GetInstance().GetOpImpl("TestFooNoPcieThrough");
+  ASSERT_NE(funcs, nullptr);
+  EXPECT_FALSE(funcs->IsSupportPcieThrough());
+}
+
+TEST_F(OpImplRegistryUT, OpImplFunctionsV2_PcieThroughFlag_UnitTest) {
+  gert::OpImplKernelRegistry::OpImplFunctionsV2 funcs;
+  EXPECT_FALSE(funcs.IsSupportPcieThrough());
+  funcs.SetSupportPcieThrough();
+  EXPECT_TRUE(funcs.IsSupportPcieThrough());
+  EXPECT_NE(funcs.reserved_[gert::kPcieThroughFlagIdx], 0U);
 }
 }  // namespace gert_test

@@ -36,6 +36,8 @@ class OpTilingContextBuilderImpl : public ContextBuilderImpl {
     (void)input_values_.emplace_back(reinterpret_cast<void *>(tiling_info_.deterministic_), nullptr);  // Deterministic
     (void)input_values_.emplace_back(reinterpret_cast<void *>(tiling_info_.deterministic_level_),
                                      nullptr);  // DeterministicLevel
+    (void)input_values_.emplace_back(reinterpret_cast<void *>(static_cast<uintptr_t>(tiling_info_.pcie_through_flag_)),
+                                     nullptr);  // PcieThroughFlag
     output_values_.resize(TilingContext::kOutputNum);
     output_values_[TilingContext::kOutputTilingData] =
         std::make_pair(tiling_info_.tiling_data_.first, tiling_info_.tiling_data_.second);
@@ -84,6 +86,12 @@ OpTilingContextBuilder &OpTilingContextBuilder::DeterministicLevel(int32_t deter
   }
   GE_CHECK_NOTNULL_EXEC(impl_, return *this);
   impl_->SetDeterministicLevel(deterministic_level);
+  return *this;
+}
+
+OpTilingContextBuilder &OpTilingContextBuilder::SetPcieThroughFlag(bool flag) {
+  GE_CHECK_NOTNULL_EXEC(impl_, return *this);
+  impl_->SetPcieThroughFlag(flag);
   return *this;
 }
 

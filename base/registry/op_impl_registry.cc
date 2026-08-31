@@ -174,6 +174,10 @@ void RegisterOpImplToRegistry(const OpImplRegisterV2Impl *rd) {
     RegisterBitmask(funcs.nullable_outputs_, rd->functions.nullable_outputs_, rd->op_type.GetString(),
                     "NullableOutputs");
   }
+  if (rd->functions.IsSupportPcieThrough()) {
+    ss << "[SetSupportPcieThrough]";
+    funcs.SetSupportPcieThrough();
+  }
 
   GELOGI("LocalRegistry[%zu] Op type[%s] register OP_IMPL : %s",
          std::hash<std::string>()(metadef::GetModelPathByAddr(&OpImplRegistry::GetInstance())), rd->op_type.GetString(),
@@ -297,6 +301,7 @@ OpImplRegisterV2::OpImplRegisterV2(const ge::char_t *op_type) : impl_(new (std::
   impl_->functions.output_shape_depend_compute = 0U;
   impl_->functions.infer_format_func = nullptr;
   impl_->functions.nullable_outputs_ = 0UL;
+  impl_->functions.reserved_[kPcieThroughFlagIdx] = 0UL;
 
   // private attr controlled by is_private_attr_registered
   (void)OpImplRegistry::GetInstance().CreateOrGetOpImpl(op_type);
@@ -537,6 +542,13 @@ OpImplRegisterV2 &OpImplRegisterV2::NullableOutputs(std::initializer_list<int32_
 OpImplRegisterV2 &OpImplRegisterV2::InferFormat(InferFormatFunc infer_format_func) {
   if (impl_ != nullptr) {
     impl_->functions.infer_format_func = infer_format_func;
+  }
+  return *this;
+}
+
+OpImplRegisterV2 &OpImplRegisterV2::SetSupportPcieThrough() {
+  if (impl_ != nullptr) {
+    impl_->functions.SetSupportPcieThrough();
   }
   return *this;
 }
