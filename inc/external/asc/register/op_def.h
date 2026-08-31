@@ -420,6 +420,7 @@ class OpAICoreDef {
   ~OpAICoreDef();
   OpAICoreDef &operator=(const OpAICoreDef &aicore_def);
   OpAICoreDef &SetTiling(gert::OpImplRegisterV2::TilingKernelFunc func);
+  OpAICoreDef &SetGenSimplifiedKey(gert::OpImplRegisterV2::GenSimplifiedKeyKernelFunc func);
   OpAICoreDef &SetCheckSupport(optiling::OP_CHECK_FUNC func);
   OpAICoreDef &SetOpSelectFormat(optiling::OP_CHECK_FUNC func);
   OpAICoreDef &SetOpSupportInfo(optiling::OP_CHECK_FUNC func);
@@ -427,6 +428,7 @@ class OpAICoreDef {
   OpAICoreDef &SetParamGeneralize(optiling::PARAM_GENERALIZE_FUNC func);
   OpAICoreDef &LaunchWithZeroEleOutputTensors(bool launchFlag);
   gert::OpImplRegisterV2::TilingKernelFunc &GetTiling(void);
+  gert::OpImplRegisterV2::GenSimplifiedKeyKernelFunc &GetGenSimplifiedKey(void);
   optiling::OP_CHECK_FUNC &GetCheckSupport(void);
   optiling::OP_CHECK_FUNC &GetOpSelectFormat(void);
   optiling::OP_CHECK_FUNC &GetOpSupportInfo(void);

@@ -1112,7 +1112,7 @@ void PluginManager::GetFileListWithSuffix(const std::string &path, const std::st
 
   const INT32 is_dir = mmIsDir(&(resolved_path[0U]));
   if (is_dir != EN_OK) {
-    GELOGW("[FindSo][Check] Open directory %s failed, maybe it is not exit or not a dir, errmsg:%s",
+    GELOGW("[FindSo][Check] Open directory %s failed, maybe it does not exist or is not a dir, errmsg:%s",
            &(resolved_path[0U]), strerror(errno));
     return;
   }

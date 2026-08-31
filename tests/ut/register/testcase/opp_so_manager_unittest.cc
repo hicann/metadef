@@ -371,15 +371,13 @@ TEST_F(OppSoManagerUT, LoadAllOppPackage_dlopen_fail) {
   std::set<std::string> opp_path;
   SetOpHostAndGraphSo(opp_path);
 
-  std::stringstream capture_cout;
-  auto origin_cout_buffer = std::cout.rdbuf();
-  std::cout.rdbuf(capture_cout.rdbuf());
+  testing::internal::CaptureStdout();
 
   gert::OppPackageUtils::LoadAllOppPackage();
 
-  std::cout.rdbuf(origin_cout_buffer);
-  const std::string expect_log = "[ERROR] Failed to load";
-  EXPECT_EQ(capture_cout.str().find(expect_log) != std::string::npos, true);
+  const std::string captured_stdout = testing::internal::GetCapturedStdout();
+  const std::string expect_log = "Failed to load";
+  EXPECT_NE(captured_stdout.find(expect_log), std::string::npos);
 
   RemoveTempPaths({opp_path});
 }

@@ -33,3 +33,22 @@ OpImplRegisterV2 &GenSimplifiedKey(GenSimplifiedKeyKernelFunc gen_simplifiedkey_
 ## 约束说明
 
 无。
+
+## 通过OpDef注册
+
+使用`OpDef`定义AscendC算子时，可通过`OpAICoreDef::SetGenSimplifiedKey`注册回调，`OP_ADD`会在生成Tiling注册库时将该回调转交给`OpImplRegisterV2`。
+
+```cpp
+class AddCustom : public OpDef {
+ public:
+  explicit AddCustom(const char *name) : OpDef(name) {
+    this->AICore()
+        .SetTiling(TilingFunc)
+        .SetGenSimplifiedKey(GenSimplifiedKeyFunc)
+        .AddConfig("ascend910b");
+  }
+};
+OP_ADD(AddCustom);
+```
+
+该接口仅注册用户自定义key片段生成函数。完整Simplified Key中的算子类型、确定性模式和实现模式仍由运行时框架组装。
