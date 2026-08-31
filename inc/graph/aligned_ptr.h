@@ -13,6 +13,7 @@
 
 #include <memory>
 #include <functional>
+#include <cstdint>
 
 namespace metadef {
 class AlignedPtr {
