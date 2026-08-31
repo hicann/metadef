@@ -28,6 +28,7 @@ class InferSymbolShapeContext;
 class ExeResGenerationContext;
 class OpCheckContext;
 #define OP_IMPL_MAIN_VERSION 2
+constexpr size_t kPcieThroughFlagIdx = 0U;
 struct OpImplKernelRegistry {
   // for other code repo, they use those alias, but will delete later
   using InferShapeKernelFunc = UINT32 (*)(InferShapeContext *);
@@ -199,6 +200,14 @@ struct OpImplKernelRegistry {
       }
       nullable_outputs_ |= 1UL << index;
       return ge::GRAPH_SUCCESS;
+    }
+
+    bool IsSupportPcieThrough() const {
+      return reserved_[kPcieThroughFlagIdx] != 0U;
+    }
+
+    void SetSupportPcieThrough() {
+      reserved_[kPcieThroughFlagIdx] = 1U;
     }
 
     uint32_t st_size = sizeof(OpImplFunctionsV2);

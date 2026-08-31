@@ -209,6 +209,7 @@
     - [OutputShapeDependOnCompute](gert_namespace/opimplregisterv2/OutputShapeDependOnCompute.md)
     - [ExceptionDumpParseFunc](gert_namespace/opimplregisterv2/ExceptionDumpParseFunc.md)
     - [NullableOutputs](gert_namespace/opimplregisterv2/NullableOutputs.md)
+    - [SetSupportPcieThrough](gert_namespace/opimplregisterv2/SetSupportPcieThrough.md)
 
   - [OpInferDataTypeContextBuilder](gert_namespace/opinferdatatypecontextbuilder/OpInferDataTypeContextBuilder.md)
     - [简介](gert_namespace/opinferdatatypecontextbuilder/introduction.md)
@@ -246,6 +247,7 @@
     - [PlatformInfo](gert_namespace/optilingcontextbuilder/PlatformInfo.md)
     - [Deterministic](gert_namespace/optilingcontextbuilder/Deterministic.md)
     - [DeterministicLevel](gert_namespace/optilingcontextbuilder/DeterministicLevel.md)
+    - [SetPcieThroughFlag](gert_namespace/optilingcontextbuilder/SetPcieThroughFlag.md)
     - [TilingData](gert_namespace/optilingcontextbuilder/TilingData.md)
     - [TilingDataSize](gert_namespace/optilingcontextbuilder/TilingDataSize.md)
     - [Workspace](gert_namespace/optilingcontextbuilder/Workspace.md)
@@ -460,6 +462,7 @@
     - [GetDynUBufSize](gert_namespace/tilingcontext/GetDynUBufSize.md)
     - [GetDeterministic](gert_namespace/tilingcontext/GetDeterministic.md)
     - [GetDeterministicLevel](gert_namespace/tilingcontext/GetDeterministicLevel.md)
+    - [GetPcieThroughFlag](gert_namespace/tilingcontext/GetPcieThroughFlag.md)
     - [InputIsView](gert_namespace/tilingcontext/InputIsView.md)
     - [GetInputStride](gert_namespace/tilingcontext/GetInputStride.md)
     - [GetInputOffset](gert_namespace/tilingcontext/GetInputOffset.md)

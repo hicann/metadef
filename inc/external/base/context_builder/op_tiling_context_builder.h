@@ -64,6 +64,15 @@ class OpTilingContextBuilder : public OpContextBuilderBase<OpTilingContextBuilde
   OpTilingContextBuilder &DeterministicLevel(int32_t deterministic_level);
 
   /**
+   * @brief 设置Op的PcieThroughFlag标志
+   * @note
+   * 该标志用于告知Tiling算子当前是否启用PCIE Through，不调用此接口时默认为false
+   * @param flag 是否启用pcie through
+   * @return TilingContextBuilder对象用于链式调用
+   */
+  OpTilingContextBuilder &SetPcieThroughFlag(bool flag);
+
+  /**
    * @brief 设置Op的tilingData指针, 用于构造TilingContext的中的TilingData字段
    * @note
    * 设置的所有输入数据类型，所有权归调用者管理，调用者需要保证输入指针生命周期指针长于Build产生的ContextHolder对象

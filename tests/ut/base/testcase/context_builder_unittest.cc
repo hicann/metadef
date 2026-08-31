@@ -1040,3 +1040,61 @@ TEST_F(UtestContextBuilder, OpTilingContextBuilderCStyleApiTest) {
   EXPECT_EQ(ctx4->GetSimtGridDim()->y, grid_dim.y);
   EXPECT_EQ(ctx4->GetSimtGridDim()->z, grid_dim.z);
 }
+
+TEST_F(UtestContextBuilder, CreateTilingContext_GetPcieThroughFlag_true) {
+  auto workspace_size_holder = gert::ContinuousVector::Create<size_t>(4096);
+  auto ws_ptr = reinterpret_cast<gert::ContinuousVector *>(workspace_size_holder.get());
+
+  gert::StorageShape x({1, 1, 1, 1, 1}, {1, 1, 1, 1, 1});
+  gert::StorageShape result({10, 10, 10, 10, 20}, {10, 10, 10, 10, 20});
+  gert::Tensor x_tensor(x, {ge::FORMAT_NCDHW, ge::FORMAT_RESERVED, ExpandDimsType()}, TensorPlacement::kOnHost,
+                        ge::DT_FLOAT, nullptr);
+  gert::Tensor result_tensor(result, {ge::FORMAT_NCDHW, ge::FORMAT_RESERVED, ExpandDimsType()},
+                             TensorPlacement::kOnHost, ge::DT_FLOAT, nullptr);
+
+  auto tmp_tiling_data = gert::TilingData::CreateCap(100);
+  uint8_t tmp_compile_info[] = {1, 2, 3, 4, 5, 6, 7};
+  uint8_t tmp_platform_info[] = {1, 2, 3, 4, 5, 6, 7};
+  int32_t deterministic = 1;
+
+  OpTilingContextBuilder ctx_builder;
+  auto holder = ctx_builder.OpName("tmp")
+                    .OpType("DIY")
+                    .IONum(1, 1)
+                    .TilingData(reinterpret_cast<gert::TilingData *>(tmp_tiling_data.get()))
+                    .Workspace(ws_ptr)
+                    .CompileInfo(tmp_compile_info)
+                    .Deterministic(deterministic)
+                    .PlatformInfo(tmp_platform_info)
+                    .SetPcieThroughFlag(true)
+                    .InputTensors({&x_tensor})
+                    .OutputTensors({&result_tensor})
+                    .Build();
+
+  auto ctx = holder.GetContext();
+  EXPECT_NE(ctx, nullptr);
+  EXPECT_TRUE(ctx->GetPcieThroughFlag());
+}
+
+TEST_F(UtestContextBuilder, GetPcieThroughFlag_NullComputeNodeInfo) {
+  KernelRunContext raw_ctx = {};
+  auto *ctx = reinterpret_cast<TilingContext *>(&raw_ctx);
+  EXPECT_FALSE(ctx->GetPcieThroughFlag());
+}
+
+TEST_F(UtestContextBuilder, GetPcieThroughFlag_InputOutOfRange) {
+  OpKernelContextBuilder ctx_builder;
+  gert::StorageShape shape0({1, 1}, {1, 1});
+  auto holder = ctx_builder.OpType("Add")
+                    .OpName("add_1")
+                    .IONum(2, 1)
+                    .InputTensorDesc(0, ge::DT_FLOAT16, ge::FORMAT_ND, ge::FORMAT_ND)
+                    .InputTensorDesc(1, ge::DT_FLOAT16, ge::FORMAT_ND, ge::FORMAT_ND)
+                    .OutputTensorDesc(0, ge::DT_FLOAT16, ge::FORMAT_ND, ge::FORMAT_ND)
+                    .Inputs({&shape0, &shape0})
+                    .Outputs({&shape0})
+                    .Build();
+  auto *ctx = reinterpret_cast<TilingContext *>(holder.GetContext());
+  ASSERT_NE(ctx, nullptr);
+  EXPECT_FALSE(ctx->GetPcieThroughFlag());
+}

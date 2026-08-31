@@ -12,6 +12,8 @@
 
 - [DeterministicLevel](DeterministicLevel.md)
 
+- [SetPcieThroughFlag](SetPcieThroughFlag.md)
+
 - [TilingData](TilingData.md)
 
 - [TilingDataSize](TilingDataSize.md)

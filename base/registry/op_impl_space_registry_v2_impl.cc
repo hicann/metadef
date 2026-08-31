@@ -201,6 +201,11 @@ void OpImplSpaceRegistryImpl::MergeFunctions(OpImplKernelRegistry::OpImplFunctio
   MERGE_SCALAR(merged_funcs, src_funcs, tiling_dependency);
   MERGE_SCALAR(merged_funcs, src_funcs, tiling_dependency_placements);
 
+  if (src_funcs.IsSupportPcieThrough() && !merged_funcs.IsSupportPcieThrough()) {
+    merged_funcs.SetSupportPcieThrough();
+    GELOGD("op type %s pcie_through_flag registered.", op_type.c_str());
+  }
+
   if (merged_funcs.private_attrs.size() == 0U) {
     merged_funcs.private_attrs = src_funcs.private_attrs;
   } else if (src_funcs.private_attrs.size() != 0U) {
