@@ -23,6 +23,26 @@ class OpDefAICoreUT : public testing::Test {
   void TearDown() {}
 };
 
+ge::graphStatus TestGenSimplifiedKey(gert::TilingContext *context, ge::char_t *simplified_key) {
+  (void)context;
+  (void)simplified_key;
+  return ge::GRAPH_SUCCESS;
+}
+
+TEST_F(OpDefAICoreUT, GenSimplifiedKeyTest) {
+  OpAICoreDef aicore_def;
+  EXPECT_EQ(aicore_def.GetGenSimplifiedKey(), nullptr);
+  EXPECT_EQ(&aicore_def.SetGenSimplifiedKey(TestGenSimplifiedKey), &aicore_def);
+  EXPECT_EQ(aicore_def.GetGenSimplifiedKey(), &TestGenSimplifiedKey);
+
+  OpAICoreDef copied(aicore_def);
+  EXPECT_EQ(copied.GetGenSimplifiedKey(), &TestGenSimplifiedKey);
+
+  OpAICoreDef assigned;
+  assigned = aicore_def;
+  EXPECT_EQ(assigned.GetGenSimplifiedKey(), &TestGenSimplifiedKey);
+}
+
 TEST_F(OpDefAICoreUT, AICoreTest) {
   OpAICoreDef aicoreDef;
   OpAICoreConfig config;

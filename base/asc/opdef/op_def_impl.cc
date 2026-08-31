@@ -1396,6 +1396,7 @@ void OpAICoreConfigImpl::AddCfgItem(OpAICoreConfig *parent_this, const char *key
 
 void OpAICoreDefImpl::Construct(OpAICoreDef *parent_this, const OpAICoreDef &aicore_def) {
   parent_this->impl_->tiling_func = aicore_def.impl_->tiling_func;
+  parent_this->impl_->gen_simplified_key_func = aicore_def.impl_->gen_simplified_key_func;
   parent_this->impl_->tiling_parse = aicore_def.impl_->tiling_parse;
   parent_this->impl_->ci_creator = aicore_def.impl_->ci_creator;
   parent_this->impl_->ci_deleter = aicore_def.impl_->ci_deleter;

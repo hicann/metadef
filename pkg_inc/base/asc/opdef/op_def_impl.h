@@ -201,6 +201,7 @@ class OpAICoreDefImpl {
   optiling::PARAM_GENERALIZE_FUNC op_generlize_func = nullptr;
   bool zero_ele_output_launch_flag = false;
   std::map<ge::AscendString, OpAICoreConfig> aicore_configs = {};
+  gert::OpImplRegisterV2::GenSimplifiedKeyKernelFunc gen_simplified_key_func = nullptr;
 
   static void Construct(OpAICoreDef *parent_this, const OpAICoreDef &aicore_def);
   OpAICoreDef &Eq(OpAICoreDef *parent_this, const OpAICoreDef &aicore_def);

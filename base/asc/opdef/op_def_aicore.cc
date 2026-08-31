@@ -110,6 +110,11 @@ OpAICoreDef &OpAICoreDef::SetTiling(gert::OpImplRegisterV2::TilingKernelFunc fun
   return *this;
 }
 
+OpAICoreDef &OpAICoreDef::SetGenSimplifiedKey(gert::OpImplRegisterV2::GenSimplifiedKeyKernelFunc func) {
+  this->impl_->gen_simplified_key_func = func;
+  return *this;
+}
+
 OpAICoreDef &OpAICoreDef::SetCheckSupport(optiling::OP_CHECK_FUNC func) {
   return this->impl_->SetCheckSupport(this, func);
 }
@@ -152,6 +157,10 @@ std::map<ge::AscendString, OpAICoreConfig> &OpAICoreDef::GetAICoreConfigs(void) 
 
 gert::OpImplRegisterV2::TilingKernelFunc &OpAICoreDef::GetTiling(void) {
   return this->impl_->tiling_func;
+}
+
+gert::OpImplRegisterV2::GenSimplifiedKeyKernelFunc &OpAICoreDef::GetGenSimplifiedKey(void) {
+  return this->impl_->gen_simplified_key_func;
 }
 
 optiling::OP_CHECK_FUNC &OpAICoreDef::GetCheckSupport(void) {

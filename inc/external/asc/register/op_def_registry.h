@@ -36,6 +36,7 @@
     opType op(#opType);                                                                             \
     gert::OpImplRegisterV2 impl(#opType);                                                           \
     impl.Tiling(op.AICore().GetTiling());                                                           \
+    impl.GenSimplifiedKey(op.AICore().GetGenSimplifiedKey());                                       \
     impl.TilingParse<OpAddCompilerInfoPlaceholder##opType>(TilingPrepare##opType);                  \
     optiling::OpCheckFuncHelper(FUNC_CHECK_SUPPORTED, #opType, op.AICore().GetCheckSupport());      \
     optiling::OpCheckFuncHelper(FUNC_OP_SELECT_FORMAT, #opType, op.AICore().GetOpSelectFormat());   \
