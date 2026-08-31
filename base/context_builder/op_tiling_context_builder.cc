@@ -14,6 +14,24 @@
 #include <memory>
 #include "graph/debug/ge_util.h"
 
+namespace {
+constexpr int32_t kDisableDeterministic = 0;
+constexpr int32_t kEnableDeterministic = 1;
+constexpr int32_t kEnableStrongConsistency = 2;
+constexpr int32_t kEnableBatchConsistency = 3;
+
+uint32_t ValidateDeterministicLevel(const int32_t deterministic_level) {
+  if (deterministic_level == kDisableDeterministic || deterministic_level == kEnableDeterministic ||
+      deterministic_level == kEnableStrongConsistency || deterministic_level == kEnableBatchConsistency) {
+    return ge::GRAPH_SUCCESS;
+  }
+  GELOGE(ge::PARAM_INVALID, "Deterministic level value is invalid, expect %d, %d, %d or %d, but got %d",
+         kDisableDeterministic, kEnableDeterministic, kEnableStrongConsistency, kEnableBatchConsistency,
+         deterministic_level);
+  return ge::GRAPH_PARAM_INVALID;
+}
+}  // namespace
+
 namespace gert {
 class OpTilingContextBuilderImpl : public ContextBuilderImpl {
  public:
@@ -69,8 +87,9 @@ OpTilingContextBuilder &OpTilingContextBuilder::PlatformInfo(const void *platfor
   return *this;
 }
 OpTilingContextBuilder &OpTilingContextBuilder::Deterministic(int32_t deterministic) {
-  if (deterministic != 0 && deterministic != 1) {
-    GELOGE(ge::PARAM_INVALID, "Deterministic value is invalid, expect 0 or 1, but got %d", deterministic);
+  if (deterministic != kDisableDeterministic && deterministic != kEnableDeterministic) {
+    GELOGE(ge::PARAM_INVALID, "Deterministic value is invalid, expect %d or %d, but got %d", kDisableDeterministic,
+           kEnableDeterministic, deterministic);
     return *this;
   }
   GE_CHECK_NOTNULL_EXEC(impl_, return *this);
@@ -79,9 +98,7 @@ OpTilingContextBuilder &OpTilingContextBuilder::Deterministic(int32_t determinis
 }
 
 OpTilingContextBuilder &OpTilingContextBuilder::DeterministicLevel(int32_t deterministic_level) {
-  if (deterministic_level != 0 && deterministic_level != 1 && deterministic_level != 2 && deterministic_level != 3) {
-    GELOGE(ge::PARAM_INVALID, "Deterministic level value is invalid, expect 0 or 1 or 2 or 3, but got %d",
-           deterministic_level);
+  if (ValidateDeterministicLevel(deterministic_level) != ge::GRAPH_SUCCESS) {
     return *this;
   }
   GE_CHECK_NOTNULL_EXEC(impl_, return *this);
@@ -179,10 +196,9 @@ uint32_t gert_TilingContextBuilder_SetDeterministicLevel(void *builder, int32_t 
     return ge::GRAPH_PARAM_INVALID;
   }
 
-  if (deterministic_level < 0 || deterministic_level > 3) {
-    GELOGE(ge::PARAM_INVALID, "Deterministic level value is invalid, expect 0, 1, 2 or 3, but got %d",
-           deterministic_level);
-    return ge::GRAPH_PARAM_INVALID;
+  const auto validate_result = ValidateDeterministicLevel(deterministic_level);
+  if (validate_result != ge::GRAPH_SUCCESS) {
+    return validate_result;
   }
 
   auto *tiling_builder = static_cast<gert::OpTilingContextBuilder *>(builder);
