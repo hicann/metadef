@@ -159,7 +159,8 @@ gert::OpImplRegisterV2::TilingKernelFunc &OpAICoreDef::GetTiling(void) {
   return this->impl_->tiling_func;
 }
 
-gert::OpImplRegisterV2::GenSimplifiedKeyKernelFunc &OpAICoreDef::GetGenSimplifiedKey(void) {
+gert::OpImplRegisterV2::GenSimplifiedKeyKernelFunc & __attribute__((weak))
+OpAICoreDef::GetGenSimplifiedKey(void) {
   return this->impl_->gen_simplified_key_func;
 }
 
