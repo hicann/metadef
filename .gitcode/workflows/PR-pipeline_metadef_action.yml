@@ -11,7 +11,7 @@ concurrency:
 on:
   pull_request_comment:
     types: [created]
-    branches: [ '*' ]
+    branches: [ '**' ]
     comments: [ '^(?:\/)?compile*' ]
   pr_comment:
     types: [ created ]
@@ -21,7 +21,7 @@ env:
   org_name: "${{ vars.ORG_NAME }}"
   repo_name: ${{atomgit.event.repository.name}}
   MERGE_ID: ${{atomgit.event.pull_request.number}}
-  TARGET_BRANCH: ${{atomgit.ref_name}}
+  TARGET_BRANCH: ${{atomgit.base_ref}}
   SOURCE_BRANCH: ${{atomgit.head_ref}}
   obs_path: "${{ env.org_name }}/${{ env.repo_name }}/ci/package/${{ env.MERGE_ID }}"
   obs_smoke_path: "${{ env.obs_path }}/presmoke/2"
@@ -40,7 +40,8 @@ stages:
             with:
               repo_name: ${{ env.repo_name }}
               target_branch: ${{ env.TARGET_BRANCH }}
-              repo_url: ${{ vars.CI_PATH }}
+              comment: ${{ atomgit.event.comment.body }}
+              token: ${{ secrets.TESTTOKEN }}
           -
             name: show_output
             run: |
@@ -70,6 +71,13 @@ stages:
         with:
           task_name: 'Compile_Ascend_X86'
           image_version: ${{ jobs.JOB_image.outputs.Compile_Ascend_X86 }}
+          arch: 'x64'
+      JOB_Compile_Ascend_X86:
+        name: Compile_Ascend_X86_ubuntu24
+        uses: .gitcode/workflows/compile_action.yml
+        with:
+          task_name: 'Compile_Ascend_X86_ubuntu24'
+          image_version: ${{ jobs.JOB_image.outputs.Compile_Ascend_X86_ubuntu24 }}
           arch: 'x64'
       JOB_Compile_Ascend_ARM_ubuntu24:
         name: Compile_Ascend_ARM_ubuntu24
