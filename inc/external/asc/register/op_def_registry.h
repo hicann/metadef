@@ -38,7 +38,7 @@
     impl.Tiling(op.AICore().GetTiling());                                                           \
     if (&ops::OpAICoreDef::GetGenSimplifiedKey != nullptr) {                                        \
       impl.GenSimplifiedKey(op.AICore().GetGenSimplifiedKey());                                     \
-    }                                                                                                \
+    }                                                                                               \
     impl.TilingParse<OpAddCompilerInfoPlaceholder##opType>(TilingPrepare##opType);                  \
     optiling::OpCheckFuncHelper(FUNC_CHECK_SUPPORTED, #opType, op.AICore().GetCheckSupport());      \
     optiling::OpCheckFuncHelper(FUNC_OP_SELECT_FORMAT, #opType, op.AICore().GetOpSelectFormat());   \
