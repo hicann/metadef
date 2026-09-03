@@ -5,6 +5,7 @@
 ```tree
 └── zh
     ├── api/                    # API参考文档
+    ├── design/                 # 架构与特性设计分析
     ├── contributions/          # 开发规范与指南
     ├── figures/                # 图片资源
     ├── user_guides/            # 用户指南

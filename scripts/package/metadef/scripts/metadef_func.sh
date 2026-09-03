@@ -1,10 +1,10 @@
 #!/bin/bash
 # -----------------------------------------------------------------------------------------------------------
 # Copyright (c) 2025 Huawei Technologies Co., Ltd.
-# This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+# This program is free software, you can redistribute it and/or modify it under the terms and conditions of
 # CANN Open Software License Agreement Version 2.0 (the "License").
 # Please refer to the License for details. You may not use this file except in compliance with the License.
-# THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+# THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
 # INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
 # See LICENSE in the root of the software repository for the full text of the License.
 # -----------------------------------------------------------------------------------------------------------
@@ -79,7 +79,6 @@ create_stub_softlink() {
         for lib in $(get_stub_libs_from_filelist); do
             [ -f "$lib" ] && ln -sf "$lib" "$(basename $lib)"
         done
-        chmod u-w .
     })
 }
 
@@ -91,7 +90,6 @@ remove_stub_softlink() {
     local arch_name="$pkg_arch_name"
     ([ -d "$install_path/${arch_name}-linux/devlib" ] && cd "$install_path/${arch_name}-linux/devlib" && {
         chmod u+w . && get_stub_libs_from_filelist | while read -r line; do basename "$line"; done | xargs rm -rf
-        chmod u-w .
     })
 }
 
