@@ -61,7 +61,7 @@ stages:
     jobs:
       JOB_CodeCheck:
         name: CodeCheck
-        uses: .gitcode/workflows/codecheck_action.yml
+        uses: cann/.gitcode/.gitcode/workflows/codecheck_action.yml@master
         with:
           precommit_image_version: ${{ jobs.JOB_image.outputs.precommit }}
           codecheck_image_version: ${{ jobs.JOB_image.outputs.codecheck }}
@@ -72,7 +72,7 @@ stages:
           task_name: 'Compile_Ascend_X86'
           image_version: ${{ jobs.JOB_image.outputs.Compile_Ascend_X86 }}
           arch: 'x64'
-      JOB_Compile_Ascend_X86:
+      JOB_Compile_Ascend_X86_ubuntu24:
         name: Compile_Ascend_X86_ubuntu24
         uses: .gitcode/workflows/compile_action.yml
         with:
@@ -136,7 +136,7 @@ stages:
   stage4:
     name: PreSmoke
     jobs:
-      A2_smoke:
+      PreSmoke_A2:
         name: PreSmoke_A2
         steps:
           -

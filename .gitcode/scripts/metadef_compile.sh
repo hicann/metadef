@@ -76,11 +76,7 @@ if [[ -z "${compile_package_name}" ]]; then
     echo "No .run package found in output!"
     exit 1
 fi
-
 if [[ "${task_name}" == *ubuntu24* ]]; then
-    target_name="cann-metadef_linux-aarch64_ubuntu24.run"
-else
-    target_name="cann-metadef_linux-aarch64.run"
+    target_name="${compile_package_name%.run}_ubuntu24.run"
+    mv "${WORKSPACE}/output/${compile_package_name}" "${WORKSPACE}/output/${target_name}"
 fi
-
-mv "${WORKSPACE}/output/${compile_package_name}" "${WORKSPACE}/output/${target_name}"
