@@ -121,7 +121,8 @@ enum DataType {
   DT_FLOAT4_E2M1 = ::C_DT_FLOAT4_E2M1,
   DT_FLOAT4_E1M2 = ::C_DT_FLOAT4_E1M2,
   DT_HIFLOAT4 = ::C_DT_HIFLOAT4,
-  DT_MAX = ::C_DT_MAX,
+  DT_HIFLOAT4_SCALE = ::C_DT_HIFLOAT4_SCALE,
+  DT_MAX,
 };
 
 // used for data type of DT_STRING
@@ -131,7 +132,8 @@ struct StringHead {
 };
 
 inline int GetSizeByDataType(DataType data_type) {
-  static int data_type_size[DT_MAX] = {
+  // Size in bytes for each data type; for bit-typed entries the value is kDataTypeSizeBitOffset + bits.
+  static const int data_type_size[DT_MAX] = {
       4,                           // DT_FLOAT = 0,             float type
       2,                           // DT_FLOAT16 = 1,           fp16 type
       1,                           // DT_INT8 = 2,              int8 type
@@ -175,6 +177,7 @@ inline int GetSizeByDataType(DataType data_type) {
       kDataTypeSizeBitOffset + 4,  // DT_FLOAT4_E2M1,           float4_e2m1 type, 4bit
       kDataTypeSizeBitOffset + 4,  // DT_FLOAT4_E1M2,           float4_e1m2 type, 4bit
       kDataTypeSizeBitOffset + 4,  // DT_HIFLOAT4,              hifloat4 type, 4bit
+      4,                           // DT_HIFLOAT4_SCALE,        hifloat4_scale type, 4 bytes per element
                                    // DT_MAX
   };
   if ((data_type < 0) || (data_type >= DT_MAX)) {
@@ -409,7 +412,7 @@ struct TensorType {
 };
 
 struct ListTensorType {
-  explicit ListTensorType(const TensorType &type) : tensor_type(type){};
+  explicit ListTensorType(const TensorType &type) : tensor_type(type) {}
   TensorType tensor_type;
 };
 

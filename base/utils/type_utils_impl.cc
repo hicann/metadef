@@ -180,6 +180,7 @@ const std::map<DataType, std::string> kDataTypeToStringMap = {
     {DT_HIFLOAT4, "DT_HIFLOAT4"},
     {DT_FLOAT4_E2M1, "DT_FLOAT4_E2M1"},  // mxfp4
     {DT_FLOAT4_E1M2, "DT_FLOAT4_E1M2"},  // mxfp4
+    {DT_HIFLOAT4_SCALE, "DT_HIFLOAT4_SCALE"},
 };
 
 const std::map<std::string, DataType> kStringTodataTypeMap = {
@@ -227,7 +228,8 @@ const std::map<std::string, DataType> kStringTodataTypeMap = {
     {"DT_HIFLOAT4", DT_HIFLOAT4},
     {"DT_FLOAT4_E2M1", DT_FLOAT4_E2M1},  // mxfp4
     {"DT_FLOAT4_E1M2", DT_FLOAT4_E1M2},  // mxfp4
-    {"RESERVED", DT_UNDEFINED},          // RESERVED will be deserialized to DT_UNDEFINED
+    {"DT_HIFLOAT4_SCALE", DT_HIFLOAT4_SCALE},
+    {"RESERVED", DT_UNDEFINED},  // RESERVED will be deserialized to DT_UNDEFINED
 };
 
 const std::map<ge::DataType, uint32_t> kDataTypeToLength = {
