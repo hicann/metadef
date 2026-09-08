@@ -1,5 +1,7 @@
 # metadef
 
+简体中文 | [English](./README_en.md)
+
 ## 🔥Latest News
 
 - [2025/12/26] metadef项目首次上线。
