@@ -428,7 +428,7 @@ class OpAICoreDef {
   OpAICoreDef &SetParamGeneralize(optiling::PARAM_GENERALIZE_FUNC func);
   OpAICoreDef &LaunchWithZeroEleOutputTensors(bool launchFlag);
   gert::OpImplRegisterV2::TilingKernelFunc &GetTiling(void);
-  gert::OpImplRegisterV2::GenSimplifiedKeyKernelFunc &GetGenSimplifiedKey(void);
+  gert::OpImplRegisterV2::GenSimplifiedKeyKernelFunc &GetGenSimplifiedKey(void) __attribute__((weak));
   optiling::OP_CHECK_FUNC &GetCheckSupport(void);
   optiling::OP_CHECK_FUNC &GetOpSelectFormat(void);
   optiling::OP_CHECK_FUNC &GetOpSupportInfo(void);
