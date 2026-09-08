@@ -150,7 +150,14 @@ TEST_F(UtestTypes, GetSizeByDataType) {
   EXPECT_EQ(GetSizeByDataType(DT_FLOAT4_E2M1), kDataTypeSizeBitOffset + 4);
   EXPECT_EQ(GetSizeByDataType(DT_FLOAT4_E1M2), kDataTypeSizeBitOffset + 4);
   EXPECT_EQ(GetSizeByDataType(DT_HIFLOAT4), kDataTypeSizeBitOffset + 4);
-  EXPECT_EQ(DT_MAX, 43);
+  EXPECT_EQ(GetSizeByDataType(DT_HIFLOAT4_SCALE), 4);
+  EXPECT_EQ(DT_MAX, 44);
+}
+
+TEST_F(UtestTypes, DtMaxMatchesCDtMax) {
+  // DT_MAX is declared without an explicit value and must stay consistent with C_DT_MAX.
+  EXPECT_EQ(static_cast<int32_t>(DT_MAX), static_cast<int32_t>(C_DT_MAX));
+  EXPECT_EQ(static_cast<int32_t>(DT_MAX), 44);
 }
 
 TEST_F(UtestTypes, GetSizeInBytes) {
@@ -176,6 +183,8 @@ TEST_F(UtestTypes, GetSizeInBytes) {
   EXPECT_EQ(GetSizeInBytes(10, DT_FLOAT4_E2M1), 5);  // 10 * 4 / 8 = 5
   EXPECT_EQ(GetSizeInBytes(10, DT_FLOAT4_E1M2), 5);  // 10 * 4 / 8 = 5
   EXPECT_EQ(GetSizeInBytes(10, DT_HIFLOAT4), 5);     // 10 * 4 / 8 = 5
+  // 10 * 4 bytes = 40
+  EXPECT_EQ(GetSizeInBytes(10, DT_HIFLOAT4_SCALE), 40);
 }
 
 TEST_F(UtestTypes, GetC0ValueFromFormat) {

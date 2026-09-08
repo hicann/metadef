@@ -65,6 +65,7 @@ TEST_F(UtestTypeUtils, DataTypeToSerialString) {
   ASSERT_EQ(TypeUtils::DataTypeToSerialString(DT_FLOAT4_E2M1), "DT_FLOAT4_E2M1");
   ASSERT_EQ(TypeUtils::DataTypeToSerialString(DT_FLOAT4_E1M2), "DT_FLOAT4_E1M2");
   ASSERT_EQ(TypeUtils::DataTypeToSerialString(DT_HIFLOAT4), "DT_HIFLOAT4");
+  ASSERT_EQ(TypeUtils::DataTypeToSerialString(DT_HIFLOAT4_SCALE), "DT_HIFLOAT4_SCALE");
   ASSERT_EQ(TypeUtils::DataTypeToSerialString(DT_MAX), "UNDEFINED");
 }
 
@@ -80,6 +81,7 @@ TEST_F(UtestTypeUtils, SerialStringToDataType) {
   ASSERT_EQ(TypeUtils::SerialStringToDataType("DT_FLOAT4_E2M1"), DT_FLOAT4_E2M1);
   ASSERT_EQ(TypeUtils::SerialStringToDataType("DT_FLOAT4_E1M2"), DT_FLOAT4_E1M2);
   ASSERT_EQ(TypeUtils::SerialStringToDataType("DT_HIFLOAT4"), DT_HIFLOAT4);
+  ASSERT_EQ(TypeUtils::SerialStringToDataType("DT_HIFLOAT4_SCALE"), DT_HIFLOAT4_SCALE);
   ASSERT_EQ(TypeUtils::SerialStringToDataType("DT_MAX"), DT_UNDEFINED);
 }
 
