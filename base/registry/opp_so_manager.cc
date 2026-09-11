@@ -179,7 +179,7 @@ void OppSoManager::LoadOpsProtoSo(gert::OppImplVersionTag version,
   std::string ops_proto_path;
   auto it = kVersion2GetProtoPathFunc.find(version);
   if (it == kVersion2GetProtoPathFunc.end()) {
-    GELOGW("[LoadOpsProtoSo] Not find get ops proto function with version:%d", static_cast<int32_t>(version));
+    GELOGW("[LoadOpsProtoSo] Failed to find get ops proto function with version:%d", static_cast<int32_t>(version));
     return;
   }
   GELOGI("Start to load ops proto package, opp_impl_version: %d, is_split:[%d].", static_cast<int32_t>(version),
@@ -239,7 +239,7 @@ void OppSoManager::LoadOpMasterSo(gert::OppImplVersionTag version,
   std::string op_tiling_path;
   auto it = kVersion2GetMasterPathFunc.find(version);
   if (it == kVersion2GetMasterPathFunc.end()) {
-    GELOGW("[LoadOpsProtoSo] Not find get ops proto function with version:%d", static_cast<int32_t>(version));
+    GELOGW("[LoadOpsProtoSo] Failed to find get ops proto function with version:%d", static_cast<int32_t>(version));
     return;
   }
   GELOGI("Start to load ops master package, opp_impl_version: %d, is_split:[%d].", static_cast<int32_t>(version),

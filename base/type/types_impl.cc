@@ -119,7 +119,7 @@ int64_t TypeImpl::GetSizeInBytes(int64_t element_count, DataType data_type) {
   }
   uint32_t type_size = 0U;
   if (!TypeUtils::GetDataTypeLength(data_type, type_size)) {
-    GELOGW("[Check][DataType]GetSizeInBytes failed, data_type:%d not support.", data_type);
+    GELOGW("[Check][DataType]GetSizeInBytes failed, data_type:%d is not supported.", data_type);
     return -1;
   } else if (type_size > static_cast<uint32_t>(kDataTypeSizeBitOffset)) {
     const uint32_t bit_size = type_size - static_cast<uint32_t>(kDataTypeSizeBitOffset);
