@@ -304,7 +304,7 @@ bool PluginManager::GetRequiredOppAbiVersion(std::vector<std::pair<uint32_t, uin
 
   std::string version;
   if (!PluginManager::GetVersionFromPathWithName(version_path, version, kRequiredOppAbiVersion)) {
-    GELOGW("Not get required_opp_abi_version from path:%s", version_path.c_str());
+    GELOGW("Failed to get required_opp_abi_version from path:%s", version_path.c_str());
     return true;
   }
 
