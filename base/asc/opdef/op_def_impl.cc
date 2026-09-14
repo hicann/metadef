@@ -1076,7 +1076,7 @@ OpParamDef &OpParamDefImpl::Comment(OpParamDef *parent_this, const char *comment
 
 std::vector<ge::DataType> &OpParamDefImpl::GetDataTypes(OpParamDef *parent_this) {
   if (parent_this->impl_->types.empty()) {
-    GELOGW("GetDataTypes returns types_list because types is empty!");
+    GELOGW("GetDataTypes returns types_list because types are empty!");
     return parent_this->impl_->types_list;
   }
   return parent_this->impl_->types;
@@ -1088,7 +1088,7 @@ bool OpParamDefImpl::IsScalarOrScalarList(const OpParamDef *parent_this) const {
 
 std::vector<ge::DataType> &OpParamDefImpl::GetOriginDataTypes(OpParamDef *parent_this) {
   if (parent_this->impl_->origin_types.empty()) {
-    GELOGE(ge::PARAM_INVALID, "origin types is empty, please check!");
+    GELOGE(ge::PARAM_INVALID, "origin types are empty, please check!");
     return parent_this->impl_->origin_types;
   }
   return parent_this->impl_->origin_types;
@@ -1237,7 +1237,7 @@ void OpParamTrunk::DfsFollow(OpParamDef &op_param_def, OpDef::PortStat stat) {
   std::map<ge::AscendString, OpDef::PortFollowInfo> &flw_mp = this->follow_map;
   OpDef::PortFollowInfo &follow_info = flw_mp[cur_name];
   if (flw_mp.find(follow_name) == flw_mp.end()) {
-    GELOGE(ge::PARAM_INVALID, "PortName %s : FollowPort is Not Exist", cur_name.GetString());
+    GELOGE(ge::PARAM_INVALID, "PortName %s : FollowPort does not exist", cur_name.GetString());
     return;
   }
   if (cur_name == follow_name && flw_mp[cur_name].port_stat != OpDef::PortStat::INOUT) {

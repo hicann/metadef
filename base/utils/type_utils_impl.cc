@@ -241,7 +241,7 @@ AscendString TypeUtilsImpl::DataTypeToAscendString(const DataType data_type) {
   if (it != kDataTypeToStringMap.end()) {
     return it->second.c_str();
   } else {
-    GELOGW("DataTypeToSerialString: datatype not support %d", data_type);
+    GELOGW("DataTypeToSerialString: datatype is not supported %d", data_type);
     return "UNDEFINED";
   }
 }
@@ -251,7 +251,7 @@ DataType TypeUtilsImpl::AscendStringToDataType(const AscendString &str) {
   if (it != kStringTodataTypeMap.end()) {
     return it->second;
   } else {
-    GELOGW("[Check][Param] SerialStringToDataType: datatype not support %s", str.GetString());
+    GELOGW("[Check][Param] SerialStringToDataType: datatype is not supported %s", str.GetString());
     return DT_UNDEFINED;
   }
 }
@@ -264,7 +264,7 @@ AscendString TypeUtilsImpl::FormatToAscendString(const Format format) {
     }
     return it->second.c_str();
   } else {
-    GELOGW("[Check][Param] Format not support %d", format);
+    GELOGW("[Check][Param] Format is not supported %d", format);
     return "RESERVED";
   }
 }
@@ -360,7 +360,7 @@ Format TypeUtilsImpl::AscendStringToFormat(const AscendString &str) {
   if (it != kStringToFormatMap.end()) {
     primary_format = it->second;
   } else {
-    GELOGW("[Check][Param] Format not support %s", str.GetString());
+    GELOGW("[Check][Param] Format is not supported %s", str.GetString());
     return FORMAT_RESERVED;
   }
   return static_cast<Format>(GetFormatFromSub(primary_format, sub_format));
@@ -378,7 +378,7 @@ Format TypeUtilsImpl::DataFormatToFormat(const AscendString &str) {
   if (it != kDataFormatMap.end()) {
     primary_format = it->second;
   } else {
-    GELOGW("[Check][Param] Format not support %s", str.GetString());
+    GELOGW("[Check][Param] Format is not supported %s", str.GetString());
     return FORMAT_RESERVED;
   }
   return static_cast<Format>(GetFormatFromSub(primary_format, sub_format));
@@ -396,8 +396,9 @@ bool TypeUtilsImpl::GetDataTypeLength(const ge::DataType data_type, uint32_t &le
     length = static_cast<uint32_t>(size);
     return true;
   } else {
-    REPORT_INNER_ERR_MSG("E18888", "data_type not support [%s]", DataTypeToAscendString(data_type).GetString());
-    GELOGE(GRAPH_FAILED, "[Check][Param] data_type not support [%s]", DataTypeToAscendString(data_type).GetString());
+    REPORT_INNER_ERR_MSG("E18888", "data_type is not supported [%s]", DataTypeToAscendString(data_type).GetString());
+    GELOGE(GRAPH_FAILED, "[Check][Param] data_type is not supported [%s]",
+           DataTypeToAscendString(data_type).GetString());
     return false;
   }
 }
