@@ -14,7 +14,7 @@ atomic clean是指在算子执行前对GM（Global Memory）上输出内存进�
 
 <!-- npu="950,A3,910b,910,310p,310b" id1 -->
 **SetNeedAtomic和InitValue接口配合使用，通过InitValue接口来配置初始化哪些输出和具体的初始化值。**
-InitValue接口介绍请参见《[Ascend C API](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/README.md)》。
+InitValue接口介绍请参见《[Ascend C API](https://gitcode.com/cann/asc-devkit/blob/9.2.0/docs/zh/api/README.md)》。
 <!-- end id1 -->
 
 <!-- @ref: metadef/res/docs/api/SetNeedAtomic_res.md#id1 -->

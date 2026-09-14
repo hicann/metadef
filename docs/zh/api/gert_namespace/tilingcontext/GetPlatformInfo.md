@@ -18,7 +18,7 @@ fe::PlatFormInfos *GetPlatformInfo() const
 
 PlatformInfos指针承载的是内部的硬件平台信息，这个信息作为PlatformAscendC的输入，开发者通过PlatformAscendC提供的方法获取硬件平台信息。
 
-PlatformAscendC接口详细说明请参见《[Ascend C API](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/README.md)》。
+PlatformAscendC接口详细说明请参见《[Ascend C API](https://gitcode.com/cann/asc-devkit/blob/9.2.0/docs/zh/api/README.md)》。
 
 ## 约束说明
 

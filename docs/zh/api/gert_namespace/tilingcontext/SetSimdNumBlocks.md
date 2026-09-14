@@ -29,9 +29,9 @@ ge::graphStatus SetSimdNumBlocks(const uint32_t num_blocks)
 
 > [!NOTE]说明
 >
-> - GetCoreNumAiv、PlatformAscendC等获取核数接口的详细说明请参见《[Ascend C API](https://gitcode.com/cann/asc-devkit/blob/master/docs/zh/api/README.md)》。
+> - GetCoreNumAiv、PlatformAscendC等获取核数接口的详细说明请参见《[Ascend C API](https://gitcode.com/cann/asc-devkit/blob/9.2.0/docs/zh/api/README.md)》。
 >
-> - aclrtSetStreamResLimit接口的详细说明请参见《[Runtime运行时API](https://gitcode.com/cann/runtime/blob/master/docs/zh/api_ref/README.md)》。
+> - aclrtSetStreamResLimit接口的详细说明请参见《[Runtime运行时API](https://gitcode.com/cann/runtime/blob/9.2.0/docs/zh/api_ref/README.md)》。
 
 ## 返回值说明
 

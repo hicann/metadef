@@ -53,7 +53,4 @@ typedef enum {
 <!-- npu="950" id1 -->
 C\_DT\_HIFLOAT8、C\_DT\_FLOAT8\_E5M2、C\_DT\_FLOAT8\_E4M3FN、C\_DT\_FLOAT8\_E8M0、C\_DT\_FLOAT6\_E3M2、C\_DT\_FLOAT6\_E2M3、C\_DT\_FLOAT4\_E2M1、C\_DT\_FLOAT4\_E1M2：仅Ascend 950PR/Ascend 950DT支持该类型。
 <!-- end id1 -->
-<!-- npu="IPV350" id2 -->
-IPV350：C_DT_HIFLOAT8、C_DT_FLOAT8_E5M2、C_DT_FLOAT8_E4M3FN、C_DT_FLOAT8_E8M0、C_DT_FLOAT6_E3M2、C_DT_FLOAT6_E2M3、C_DT_FLOAT4_E2M1、C_DT_FLOAT4_E1M2：当前版本不支持该类型。
-<!-- end id2 -->
 <!-- @ref: metadef/res/docs/api/C_DataType_res.md#id1 -->
