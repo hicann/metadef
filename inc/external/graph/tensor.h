@@ -100,6 +100,9 @@ class GE_FUNC_DEV_VISIBILITY GE_FUNC_HOST_VISIBILITY TensorDesc {
   DataType GetDataType() const;
   void SetDataType(DataType dt);
 
+  DataType GetOriginDataType() const;
+  void SetOriginDataType(const DataType origin_data_type);
+
   ATTRIBUTED_DEPRECATED(graphStatus GetName(AscendString &))
   std::string GetName() const;
   graphStatus GetName(AscendString &name);

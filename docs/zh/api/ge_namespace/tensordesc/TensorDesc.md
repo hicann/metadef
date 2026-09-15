@@ -10,6 +10,8 @@ TensorDesc的Move构造和Move赋值，会将原有TensorDesc信息移动到新�
 
 - [GetDataType](GetDataType.md)
 
+- [GetOriginDataType](GetOriginDataType.md)
+
 - [GetExpandDimsRule](GetExpandDimsRule.md)
 
 - [GetFormat](GetFormat.md)
@@ -33,6 +35,8 @@ TensorDesc的Move构造和Move赋值，会将原有TensorDesc信息移动到新�
 - [SetConstData](SetConstData.md)
 
 - [SetDataType](SetDataType.md)
+
+- [SetOriginDataType](SetOriginDataType.md)
 
 - [SetExpandDimsRule](SetExpandDimsRule.md)
 
