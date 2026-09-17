@@ -94,6 +94,11 @@ bash build.sh
 
 更多编译参数可以通过`bash build.sh -h`查看，编译成功后，会在`build_out`目录下生成`cann-metadef_<version>_linux.<arch>.run`软件包。
 
+> [!NOTE] 注意
+> 编译过程中会涉及两个输出目录：
+> - `output`：CMake 安装目录（`CMAKE_INSTALL_PREFIX`），`make install` 将编译产物（库文件、头文件等）安装至此目录。构建日志中 `-- Build pkg success` 输出的路径指向该目录。
+> - `build_out`：软件包输出目录，最终的可安装包 `.run` 文件存放于此。
+
 - `<version>`表示版本号。
 - `<arch>`表示操作系统架构，取值包括x86_64与aarch64。
 

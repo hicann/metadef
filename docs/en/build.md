@@ -95,6 +95,11 @@ bash build.sh
 
 For more compilation parameters, check through `bash build.sh -h`. After successful compilation, the `cann-metadef_<version>_linux.<arch>.run` software package will be generated in the `build_out` directory.
 
+> [!NOTE] Note
+> The build process involves two output directories:
+> - `output`: CMake installation directory (`CMAKE_INSTALL_PREFIX`), where `make install` places compiled artifacts (libraries, headers, etc.). The `-- Build pkg success` message in build logs refers to this directory.
+> - `build_out`: Package output directory, where the final installable `.run` package is stored.
+
 - `<version>` indicates the version number.
 - `<arch>` indicates the OS architecture, with values including x86_64 and aarch64.
 
