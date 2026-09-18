@@ -39,12 +39,12 @@ struct TilingParseInfo {
 class ContextHolderImpl {
  public:
   ContextHolderImpl() = default;
-  ContextHolderImpl(ContextHolderImpl &&holder) noexcept {
-    context_holder_ = std::move(holder.context_holder_);
-    value_holder_ = std::move(holder.value_holder_);
-    compute_node_info_holder_ = std::move(holder.compute_node_info_holder_);
-    string_pool_ = holder.string_pool_;
-    context_ = holder.context_;
+  ContextHolderImpl(ContextHolderImpl &&holder) noexcept
+      : context_holder_(std::move(holder.context_holder_)),
+        value_holder_(std::move(holder.value_holder_)),
+        compute_node_info_holder_(std::move(holder.compute_node_info_holder_)),
+        string_pool_(holder.string_pool_),
+        context_(holder.context_) {
     holder.context_ = nullptr;
   }
 
