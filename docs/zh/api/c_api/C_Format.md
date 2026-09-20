@@ -68,6 +68,6 @@ typedef enum {
 ```
 
 <!-- npu="950" id1 -->
-C\_FORMAT\_FRACTAL\_NZ\_C0\_16、C\_FORMAT\_FRACTAL\_NZ\_C0\_32、C\_FORMAT\_FRACTAL\_NZ\_C0\_2、C\_FORMAT\_FRACTAL\_NZ\_C0\_4、C\_FORMAT\_FRACTAL\_NZ\_C0\_8：仅Ascend 950PR/Ascend 950DT支持该类型。
+C\_FORMAT\_FRACTAL\_NZ\_C0\_16、C\_FORMAT\_FRACTAL\_NZ\_C0\_32、C\_FORMAT\_FRACTAL\_NZ\_C0\_2、C\_FORMAT\_FRACTAL\_NZ\_C0\_4、C\_FORMAT\_FRACTAL\_NZ\_C0\_8：仅Ascend 950PR&950DT系列产品支持该类型。
 <!-- end id1 -->
 <!-- @ref: metadef/res/docs/api/C_Format_res.md#id1 -->

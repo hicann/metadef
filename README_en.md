@@ -89,7 +89,7 @@ Before submitting metadef modifications, ensure:
 - [ ] ABI compatibility of external interfaces is maintained.
 - [ ] Corresponding unit tests are added.
 - [ ] All tests pass (`bash tests/run_test.sh -u`).
-- [ ] Relevant documentation is updated (docs/api/README.md).
+- [ ] Relevant documentation is updated (docs/zh/api/README.md).
 - [ ] Commit message follows the Conventional Commits specification.
 
 ### Detailed API Reference

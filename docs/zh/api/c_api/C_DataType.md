@@ -51,6 +51,6 @@ typedef enum {
 ```
 
 <!-- npu="950" id1 -->
-C\_DT\_HIFLOAT8、C\_DT\_FLOAT8\_E5M2、C\_DT\_FLOAT8\_E4M3FN、C\_DT\_FLOAT8\_E8M0、C\_DT\_FLOAT6\_E3M2、C\_DT\_FLOAT6\_E2M3、C\_DT\_FLOAT4\_E2M1、C\_DT\_FLOAT4\_E1M2：仅Ascend 950PR/Ascend 950DT支持该类型。
+C\_DT\_HIFLOAT8、C\_DT\_FLOAT8\_E5M2、C\_DT\_FLOAT8\_E4M3FN、C\_DT\_FLOAT8\_E8M0、C\_DT\_FLOAT6\_E3M2、C\_DT\_FLOAT6\_E2M3、C\_DT\_FLOAT4\_E2M1、C\_DT\_FLOAT4\_E1M2：仅Ascend 950PR&950DT系列产品支持该类型。
 <!-- end id1 -->
 <!-- @ref: metadef/res/docs/api/C_DataType_res.md#id1 -->

@@ -89,7 +89,7 @@ graph LR
 - [ ] 保持对外接口的 ABI 兼容性
 - [ ] 新增了相应的单元测试
 - [ ] 所有测试通过（`bash tests/run_test.sh -u`）
-- [ ] 更新了相关文档（docs/api/README.md）
+- [ ] 更新了相关文档（docs/zh/api/README.md）
 - [ ] Commit message 遵循 Conventional Commits 规范
 
 ### 详细 API 参考
