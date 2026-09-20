@@ -21,7 +21,7 @@ namespace gert {
 class OpImplRegisterV2Impl {
  public:
   OpImplRegisterV2Impl() = default;
-  explicit OpImplRegisterV2Impl(const ge::char_t *register_op_type) : op_type(register_op_type) {}
+  explicit OpImplRegisterV2Impl(const ge::char_t *register_op_type) : op_type(register_op_type), functions() {}
   OpImplRegisterV2Impl &InferSymbolShape(OpImplKernelRegistry::InferSymbolShapeKernelFunc func);
   OpImplRegisterV2::OpType op_type;
   OpImplRegistry::OpImplFunctionsV2 functions;
