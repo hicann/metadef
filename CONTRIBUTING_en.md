@@ -63,3 +63,16 @@ Developer contribution scenarios mainly include:
   If you have appropriate solutions for problems encountered by others in the community, you are welcome to comment and communicate in the Issue to help others solve problems and improve usability.
 
   If the corresponding Issue requires code modification, you can enter `/assign` or `/assign @yourself` in the Issue comment box to assign the Issue to yourself and track assistance in resolving the problem.
+
+## Submission Specifications
+
+- If the branch contains multiple invalid commits, we recommend squashing them before submitting the PR to keep the commit history concise:
+  ```bash
+  git rebase -i upstream/develop   # change extra `pick` entries to `s` (squash)
+  ```
+- The PR target repository and branch must be the `develop` branch of the [cann/metadef](https://gitcode.com/cann/metadef) repository.
+- Rebase onto the latest `develop` branch:
+  ```bash
+  git fetch upstream develop && git rebase upstream/develop
+  ```
+- Commit message format: `<type>: <description>` (for example, `feat: add xxx` or `fix: fix xxx`).
