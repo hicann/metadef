@@ -1,5 +1,7 @@
 # metadef
 
+English | [简体中文](./README.md)
+
 ## Latest News
 
 - [2025/12/26] The metadef project is first released.
