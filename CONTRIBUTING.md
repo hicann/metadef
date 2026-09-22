@@ -63,3 +63,16 @@
   如果社区中他人遇到的问题您有合适的解决方法，欢迎您在Issue中发表评论交流，帮助他人解决问题和痛点，共同优化易用性。
 
   如果对应Issue需要进行代码修改，您可以在Issue评论框中输入“/assign”或“/assign @yourself”，将该Issue分配给您，跟踪协助解决问题。
+
+## 提交规范
+
+- 如果分支包含多个无效 commit，建议在提交 PR 前通过 rebase 进行 squash，以保持提交历史简洁：
+  ```bash
+  git rebase -i upstream/develop   # 多余的 pick → s (squash)
+  ```
+- PR 的目标仓库和目标分支：提交到 [cann/metadef](https://gitcode.com/cann/metadef) 仓库的 `develop` 分支。
+- 基于最新 develop 分支：
+  ```bash
+  git fetch upstream develop && git rebase upstream/develop
+  ```
+- commit message 格式：`<type>: <描述>`（如 `feat: add xxx`, `fix: fix xxx`）
