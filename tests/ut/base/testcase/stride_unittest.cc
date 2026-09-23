@@ -76,4 +76,20 @@ TEST_F(StrideUT, CreateStrideOK) {
   EXPECT_EQ(stride_7.GetStride(24), 25);
 }
 
+TEST_F(StrideUT, SetStrideDoesNotChangeRank) {
+  Stride stride;
+  stride.SetStride(0, 7);
+  EXPECT_EQ(stride.GetDimNum(), 0);
+  EXPECT_EQ(stride.GetStride(0), 7);
+
+  stride.SetStride(2, 9);
+  EXPECT_EQ(stride.GetDimNum(), 0);
+  EXPECT_EQ(stride.GetStride(2), 9);
+
+  stride.SetDimNum(3);
+  stride.SetStride(2, 11);
+  EXPECT_EQ(stride.GetDimNum(), 3);
+  EXPECT_EQ(stride.GetStride(2), 11);
+}
+
 }  // namespace gert

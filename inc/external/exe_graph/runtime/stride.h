@@ -161,7 +161,6 @@ struct Stride {
       return;
     }
     strides_[idx] = stride;
-    this->dim_num_ = (this->dim_num_ < idx) ? idx : this->dim_num_;
   }
 
   /**
