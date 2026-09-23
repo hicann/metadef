@@ -200,11 +200,17 @@ class TensorData {
     manager_ = other.manager_;
     size_ = other.size_;
     placement_ = other.placement_;
-    if (manager_ != nullptr) {
-      return manager_(addr_, kPlusShareCount, nullptr);
-    } else {
+    if (manager_ == nullptr) {
       return ge::GRAPH_SUCCESS;
     }
+    const auto share_ret = manager_(addr_, kPlusShareCount, nullptr);
+    if (share_ret != ge::GRAPH_SUCCESS) {
+      addr_ = nullptr;
+      manager_ = nullptr;
+      size_ = 0U;
+      placement_ = kTensorPlacementEnd;
+    }
+    return share_ret;
   }
 
   /**
