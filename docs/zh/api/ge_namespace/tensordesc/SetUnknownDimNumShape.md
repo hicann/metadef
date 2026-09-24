@@ -16,7 +16,7 @@ graphStatus SetUnknownDimNumShape()
 
 ## 返回值
 
-graphStatus类型：若成功，则该值为GRAPH\_SUCCESS\(即0\)，其他值则为执行失败。
+graphStatus类型：若成功，则该值为GRAPH\_SUCCESS（即0），其他值则为执行失败。
 
 ## 异常处理
 
