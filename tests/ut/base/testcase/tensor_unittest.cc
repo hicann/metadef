@@ -12,6 +12,38 @@
 #include <gtest/gtest.h>
 namespace gert {
 class TensorUT : public testing::Test {};
+
+namespace {
+int g_plus_share_count = 0;
+int g_free_count = 0;
+
+ge::graphStatus ShareFailureManager(TensorAddress, TensorOperateType operate_type, void **) {
+  if (operate_type == kPlusShareCount) {
+    ++g_plus_share_count;
+    return ge::GRAPH_FAILED;
+  }
+  if (operate_type == kFreeTensor) {
+    ++g_free_count;
+  }
+  return ge::GRAPH_SUCCESS;
+}
+}  // namespace
+
+TEST_F(TensorUT, ShareFromRollsBackAfterShareCountFailure) {
+  g_plus_share_count = 0;
+  g_free_count = 0;
+  {
+    TensorData source(reinterpret_cast<TensorAddress>(0x1), ShareFailureManager, 4U, kOnHost);
+    {
+      TensorData target;
+      EXPECT_EQ(target.ShareFrom(source), ge::GRAPH_FAILED);
+      EXPECT_EQ(g_plus_share_count, 1);
+    }
+    EXPECT_EQ(g_free_count, 0);
+  }
+  EXPECT_EQ(g_free_count, 1);
+}
+
 TEST_F(TensorUT, ConstructOk_V2) {
   TensorV2 tensor{{{8, 3, 224, 224}, {16, 3, 224, 224}},       // shape
                   {ge::FORMAT_ND, ge::FORMAT_FRACTAL_NZ, {}},  // format

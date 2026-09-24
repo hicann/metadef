@@ -190,7 +190,6 @@ struct Shape {
       return;
     }
     dims_[idx] = dim_value;
-    this->dim_num_ = (this->dim_num_ < idx) ? idx : this->dim_num_;
   }
 
   /**
