@@ -125,10 +125,7 @@ TEST_F(OpDefUT, OpAICoreConfigUnknownShapeFormatMergeTest) {
   EXPECT_TRUE(inputs[0].GetUnknownShapeFormats().empty());
 
   OpAICoreConfig emptyConfig;
-  emptyConfig.Input("x")
-      .ParamType(Option::OPTIONAL)
-      .DataType({ge::DT_FLOAT})
-      .Format({ge::FORMAT_ND});
+  emptyConfig.Input("x").ParamType(Option::OPTIONAL).DataType({ge::DT_FLOAT}).Format({ge::FORMAT_ND});
   inputs = opDef.GetMergeInputs(emptyConfig);
   ASSERT_EQ(inputs.size(), 1);
   ASSERT_EQ(inputs[0].GetUnknownShapeFormats().size(), 1);
